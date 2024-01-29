@@ -1,1 +1,57 @@
 @charset "UTF-8";
+
+.questionBoard li{
+	cursor: pointer;
+}
+
+ #postList {
+    display: flex;
+    flex-direction: column;
+ }
+ 
+/* 프로필 이미지 원형 */
+.box {
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    float: left;
+    margin: 5px;
+    border-radius: 50%;
+    position: relative; 
+}
+
+.profile {
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+    object-position: center top; 
+    position: absolute;
+    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+    transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
+}
+
+/* 태그, 랭킹 */
+ .tag{
+ 	margin-right:40px;
+ }
+ .rank{
+   margin-top:100px;
+ }
+ .rank table .name {
+     margin-left: 10px; /* 텍스트와 숫자 사이 간격 조절 */
+     /* font-weight : bold; */
+ }
+ .no{
+    margin-left : 70px;
+    color : #3e6ce3;
+    font-weight : bold;
+ }
+ .more{
+    color : #3e6ce3;
+    font-size: small;
+    font-weight : bold;
+    margin-left : 50px;
+ }
+
+
+  
