@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
@@ -26,7 +27,8 @@ public class MemberController {
 	}
 	
 	@GetMapping("/")
-	public String getMainPageForm() {
+	public String getMainPageForm(Model model) {
+		model.addAttribute("main", "1");
 		return "common/mainPage";
 	}
 	
