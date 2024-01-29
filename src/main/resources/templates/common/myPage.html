@@ -3,7 +3,32 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content">
 	<h1>mypage</h1>
+	
 
+	<div class="row row-cols-1 row-cols-md-3 g-4">
+		<div class="col">
+			<div class="card" style="text-align : center;">
+				<th:block th:if="${memberInfo[0].profileImage} == null">
+					<img src="commonResource/default_profile.jpg" class="card-img-top" alt="...">
+				</th:block>
+				<th:block th:unless="${memberInfo[0].profileImage} == null">
+					<img class="card-img-top" alt="...">
+				</th:block>
+				<div class="card-body">
+					<p class="card-text" th:text="${memberInfo[0].nickName}">\</p>
+					<p class="card-text" th:text="${memberInfo[0].email}">\</p>
+					<img src="commonResource/gradeimage/${memberInfo[0].memberLevel}.jpg">
+					<p class="card-text" th:text="${memberInfo[0].memberLevel}">\</p>
+					<p class="card-text" th:text="${memberInfo[0].accumActivityPoint}">\</p>
+
+				</div>
+			</div>
+		</div>
+	<div>
+	
+	</div>
+	
+	</div>
 </div>
 
 

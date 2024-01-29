@@ -12,4 +12,15 @@
 		WHERE MID = #{mid}
 		
 </select>
+
+<select id="selectMemberInfo" resultType="MemberVO">
+	SELECT m.member_no, m.email, m.nickname, m.profile_image, m.topic_hashtag, m.accum_activity_point, m.available_activity_point, m.aco_point, m.member_level, c.sub_code_name, e.emo_name, e.emo_buydate
+	FROM member m 
+		JOIN my_emoticon e ON m.member_no = e.member_no
+		JOIN sub_code_tbl c ON c.sub_code = m.member_level
+	WHERE m.member_no = #{memberNo}
+	ORDER BY e.emo_buydate desc
+
+
+</select>
 </mapper>

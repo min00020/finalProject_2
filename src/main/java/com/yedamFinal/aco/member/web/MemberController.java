@@ -1,5 +1,8 @@
 package com.yedamFinal.aco.member.web;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -7,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 
 @Controller
@@ -37,7 +41,9 @@ public class MemberController {
 		return "common/createAccount";
 	}
 	@GetMapping("/myPage")
-	public String getMyPageForm() {
-		return "common/myPage";
+	public String getMyPageForm(MemberVO memberVO, Model model) {
+		List<MemberVO> list = memberService.getMemberInfo(memberVO);
+		model.addAttribute("memberInfo", list);
+		return "common/myPage"; 
 	}
 }
