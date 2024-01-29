@@ -22,4 +22,5 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return null;
 	}
 	
+	
 }

@@ -34,4 +34,8 @@ public class MemberController {
 	public String getCreateAccountForm() {
 		return "common/createAccount";
 	}
+	@GetMapping("/myPage")
+	public String getMyPageForm() {
+		return "common/myPage";
+	}
 }
