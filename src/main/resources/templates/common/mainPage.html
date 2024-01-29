@@ -1,109 +1,162 @@
-<div 
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="@{/layout/member/mainTemplate.html}"
-	layout:fragment="content"
->
-	
+	layout:fragment="content">
+
 	<div class="slider">
-        <div class="slide">
-            <img id="logoImage" src="commonResource/sideproject.png" alt="side" style="width:100%;">
-        </div>
-        <div class="slide">
-            <img id="logoImage" src="commonResource/banner.png" alt="banner" style="width:100%;">
-        </div>
-       
-    </div>
-	
-	<div id = "board" >
-	<section class = "child" >
-	<button class = "S">사이드 프로젝트</button>
-	</section>
+		<div class="slide">
+			<img id="logoImage" src="commonResource/sideproject.png" alt="side"
+				style="width: 100%;">
+		</div>
+		<div class="slide">
+			<img id="logoImage" src="commonResource/banner.png" alt="banner"
+				style="width: 100%;">
+		</div>
 
-	<section class = "child">
-	<button class = "S">질문&답변</button>
-	</section>
 	</div>
-	
-	<div id = "board" >
-	<section class = "child" >
-	<button class = "S">자유게시판</button>
-	</section>
 
-	<section class = "child">
-	<button class = "S">공지사항</button>
-	</section>
-	</div>
-	
-	<div id = "board" >
-	<section class = "child" >
-	<button class = "S">사이드 프로젝트</button>
-	</section>
+	<div id="board">
+		<section class="child">
+		  <th:block th:each="side : ${list}">
+			<button class="S"><span class="boardname">사이드 프로젝트</span></button>
+			 <section class = "child2">
+			<ul>
+				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
+				<ol class = "title">오류 한번 봐주실수 있나요????</ol><hr>
+			</ul>
+			<ul>
+				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
+				<ol class = "title">게시물 2</ol><hr>
+			</ul>
+			<ul>
+				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
+				<ol class = "title">게시물 3</ol><hr>
+			</ul>
+			<ul>
+				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
+				<ol class = "title">게시물 4</ol><hr>
+			</ul>
+			<ul>
+				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
+				<ol class = "title">게시물 5</ol>
+			</ul>
+			
+			 </section>
+			</th:block>
+		</section>
 
-	<section class = "child">
-	<button class = "S">질문&답변</button>
-	</section>
+		<section class="child">
+			<button class="S"><span class="boardname">질문&답변</span></button>
+		</section>
 	</div>
-	
-	
+
+	<div id="board">
+		<section class="child">
+			<button class="S"><span class="boardname">자유게시판</span></button>
+		</section>
+
+		<section class="child">
+			<button class="S"><span class="boardname">공지사항</span></button>
+		</section>
+	</div>
+
+	<div id="board">
+		<section class="child">
+			<button class="S">사이드 프로젝트</button>
+		</section>
+
+		<section class="child">
+			<button class="S">질문&답변</button>
+		</section>
+	</div>
+
+
 
 </div>
 <style>
-	.S{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    width : 400px;
-    border : 2px solid #808080;
-    border-radius : 10px;
-    font-weight : bold;
-    text-align: left;
-    }
-	#board {
+.boardname{
+margin-left : 20px
+}
+button {
+    border: none;
   
-    display: flex;
-    flex-direction: row;
-    border : 3px solid red;
-    margin-top : 20px;
-    margin-left : 10px;
-    margin-right : 10px;
-	}
+}
+ul{
+margin-top : 10px
+}
+.nickname:hover{
+color: #3e6ce3;
+}
+.activityPoint,.time{
+	margin-left : 10px;
+	font-size : small;
+}
 
-	.child {
-    flex: 1 0 auto;
-    border : 3px solid green;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    
-	}
-        .slider {
-            position: relative;
-            overflow: hidden;
-        }
+.title{
+	font-weight : bold;
+}
+.child2{
+	
+}
+.S {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 50px;
+	width: 400px;
 
-        .slide {
-            display: flex;
-            animation: slideAnimation 2s ease;
-        }
+	border-radius: 10px;
+	font-weight: bold;
+	text-align: left;
+}
 
-        .slide img {
-            width: 100%;
-            transition: transform 2s ease;
-        }
+#board {
+	display: flex;
+	flex-direction: row;
+	border: 3px solid red;
+	margin-top: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
 
-        @keyframes slideAnimation {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(0);
-            }
-          
-        }
-    </style>
+.child {
+	flex: 1 0 auto;
+	border: 3px solid green;
+	display: inline-block;
+	justify-content: center;
+	align-items: center;
+}
+
+.slider {
+	position: relative;
+	overflow: hidden;
+}
+
+.slide {
+	display: flex;
+	animation: slideAnimation 2s ease;
+}
+
+.slide img {
+	width: 100%;
+	transition: transform 2s ease;
+}
+
+@
+keyframes slideAnimation { 0% {
+	transform: translateX(100%);
+}
+100
+%
+{
+transform
+:
+translateX(
+0
+);
+}
+}
+</style>
 
 <script>
 let currentSlide = 0;
