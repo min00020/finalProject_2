@@ -32,7 +32,8 @@
 
 /* 태그, 랭킹 */
  .tag{
- 	margin-right:40px;
+ 	 float: left;
+ 	/* margin-right:40px; */
  }
  .rank{
    margin-top:100px;
@@ -42,7 +43,7 @@
      /* font-weight : bold; */
  }
  .no{
-    margin-left : 70px;
+    /* margin-left : 70px; */
     color : #3e6ce3;
     font-weight : bold;
  }
