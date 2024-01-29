@@ -21,5 +21,4 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }
