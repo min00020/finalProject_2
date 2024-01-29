@@ -23,4 +23,32 @@
 		FROM member
 		WHERE email = #{email}
 </select>
+
+<select id="selectVerifyAuthNumber" resultType="String">
+	SELECT AUTH_CODE
+		FROM AUTH_PHONE
+		WHERE AUTH_CODE = #{authNum} AND PHONE_NUM = #{phoneNum}  
+</select>
+
+<insert id="insertAuthNumber">
+	INSERT INTO AUTH_PHONE (
+		AUTH_PHONE_NO, AUTH_CODE, EXPIRE_DATE, PHONE_NUM
+	)
+	VALUES ( AUTH_PHONE_SEQ.NEXTVAL, #{authNum}, SYSDATE + INTERVAL '3' MINUTE, #{phoneNum})
+</insert>
+  
+<select id="selectAuthNumber" resultType="String">
+	SELECT PHONE_NUM
+		FROM AUTH_PHONE
+		WHERE PHONE_NUM = #{phoneNum}
+</select>
+  
+<delete id="deleteAuthNumber" parameterType="String"> 
+	DELETE FROM AUTH_PHONE WHERE PHONE_NUM = #{phoneNum} 
+</delete>
+
+<select id="selectTagList" resultType="com.yedamFinal.aco.common.TagVO">
+	SELECT TAG_NAME
+		FROM TAG
+</select>    
 </mapper>

@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.member.serviceImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.member.service.MemberService;
@@ -25,7 +27,8 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Service
 public class MemberServiceImpl implements MemberService, UserDetailsService {
-
+	private int test = 1;
+	
 	@Autowired
 	private MemberMapper memberMapper;
 	
@@ -71,14 +74,59 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public Map<String, Object> sendAuthNumberToPhone(String phoneNum) {
 		// TODO Auto-generated method stub
-		Message message = new Message();
 		int randNumber = (int)(Math.random() * 8999) + 1000;
-		message.setFrom(fromNumber);
-        message.setTo(phoneNum);
-        message.setText("[AskCode] 인증번호 "+randNumber+" 를 입력하세요.");
-        
-        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-        System.out.println(response);
-		return new HashMap<String,Object>();
+		Map<String,Object> ret = new HashMap<String,Object>();
+		TestPhoneMessage m = new TestPhoneMessage();
+		
+		String existAuth = memberMapper.selectAuthNumber(phoneNum);
+		if(existAuth != null && !existAuth.isEmpty()) {
+			m.setStatusCode("9999");
+			ret.put("result", m);
+		}
+		else {
+			if(memberMapper.insertAuthNumber(String.valueOf(randNumber), phoneNum) <= 0) {
+				m.setStatusCode("10000");
+				ret.put("result", m);
+			}
+			
+			// 나중에 시연시에는 밑에걸로 바꾸기.
+			if(test == 0) {
+				Message message = new Message();
+				message.setFrom(fromNumber);
+	        	message.setTo(phoneNum);
+	        	message.setText("[AskCode] 인증번호 "+randNumber+" 를 입력하세요.");
+	        
+	        	SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));        
+	        	ret.put("result", response);
+			}
+			else {
+				m.setAuthCode(randNumber);
+				m.setStatusCode("9876");
+				ret.put("result", m);
+			}
+		}
+		        
+		return ret;
 	}
+	@Override
+	public Map<String, Object> verifyAuthNumber(String randNumber, String phoneNum) {
+		// TODO Auto-generated method stub
+		String result = memberMapper.selectVerifyAuthNumber(randNumber, phoneNum);
+		Map<String,Object> ret = new HashMap<String,Object>();
+		if(result == null || result.isEmpty()) {
+			ret.put("result", "400");
+		}
+		else {
+			ret.put("result", "200");
+			memberMapper.deleteAuthNumber(phoneNum);
+		}
+		return ret;
+	}
+	@Override
+	public List<TagVO> getTagList() {
+		// TODO Auto-generated method stub
+		return memberMapper.selectTagList();
+	}
+	
+	
 }

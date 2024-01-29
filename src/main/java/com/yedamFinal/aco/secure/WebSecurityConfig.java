@@ -60,6 +60,8 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/createAccountForm");
 		permitAllUrl.add("/checkId");
 		permitAllUrl.add("/authPhoneNum");
+		permitAllUrl.add("/verifyAuthPhoneNum");
+		permitAllUrl.add("/join");
 	}
 	
 	private void insertPermitAllUrlByChae() {
