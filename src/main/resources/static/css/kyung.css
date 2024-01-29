@@ -1,0 +1,157 @@
+@charset "UTF-8";
+         
+        body.dark-mode {
+            background-color: #2E2E2E;
+            color: #D8D8D8;
+        }
+
+        
+        body.light-mode {
+            background-color: #ffffff;
+            color: #000;
+        }
+
+    
+        .dark-mode-toggle {
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+            display: flex; 
+            align-items: center; 
+        }
+
+        .dark-mode-toggle i {
+            margin: 0 5px; 
+        }
+
+        .dark-mode-toggle:hover {
+            color: #333;
+        }
+
+   
+        .sun-moon-container {
+            padding: 10px;
+            border-radius: 30px; 
+            border: 1px solid #808080; 
+        }
+
+        .sun-icon{
+        font-size: 1.2em; 
+            transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out; 
+            color : #FFBF00;
+        }
+        
+        .moon-icon {
+            font-size: 1.2em; 
+            transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out;
+            color : #808080;
+        }
+
+        .sun-icon.hidden,
+        .moon-icon.hidden {
+            opacity: 0;
+        }
+
+        
+        .login-button,
+        .signup-button {
+            padding: 10px 20px;
+            border-color : hsla(220,9%,46%,.3);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+        }
+
+        .login-button {
+            background-color: transparent;
+            color: #808080;
+        }
+
+        .signup-button {
+            background-color: #3e6ce3;
+            color: #fff;
+        }
+
+        .login-button:hover{
+        background-color: #E6E6E6;
+           
+            border-color: #808080;
+        }
+        .signup-button:hover {
+            background-color: #3157B7;
+            color: #fff;
+            border-color: #808080;
+        }
+
+
+        header {
+            margin-bottom: 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+           
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            font-weight: bolder;
+            font-size: medium;
+            margin: 0;
+             margin-left : -50px;
+        }
+
+        .navbar li {
+            cursor: pointer;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+        }
+
+        .searchInput {
+            margin-right: 10px;
+        }
+        
+        .dark-mode .searchInput {
+      
+        background-color: #BDBDBD; 
+        color: #fff; 
+    }
+        
+    .navbar li:hover {
+        color: #3e6ce3; 
+    }
+    	.search-align-self-center{
+    	width : 200px;
+    	position: relative;
+    	}
+    	
+
+.searchInput {
+    padding-right: 30px; 
+}
+
+.searchImg {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+}
+
+
+
+*{
+	
+	font-family: 'Noto Sans KR', sans-serif;
+/* 	font-family: 'Gowun Dodum', sans-serif; */
+/* font-family: 'Grandiflora One', cursive; */
+/* font-family: 'Nanum Gothic', sans-serif; */
+/* font-family: 'Orbit', sans-serif; */
+
+}
+    	

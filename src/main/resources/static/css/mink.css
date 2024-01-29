@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+#mainBody {
+	min-height : 1200px;
+}
+		
+.common-width {
+	margin: 0 auto;
+	width: 70%;
+}
+.search {
+  	position: relative;
+  	margin-left : 30px;
+  	width: 300px;
+}
+
+.searchInput {
+  	width: 100%;
+  	border: 1px solid #bbb;
+  	border-radius: 38px;
+  	padding: 10px 12px;
+  	font-size: 14px;
+}
+
+.searchImg {
+  	position : absolute;
+  	width: 17px;
+  	top: 10px;
+  	right: 12px;
+  	margin: 0;
+}

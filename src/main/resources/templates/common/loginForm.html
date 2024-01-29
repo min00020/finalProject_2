@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:th="http://www.thymeleaf.org"
+	  lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>AskCode</title>
+	<link th:href="@{/css/mink.css}" rel="stylesheet" type="text/css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	
+	<!-- sweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+	<script type="text/javascript" th:src="@{js/commonMethod.js}"></script>
+	<!-- sweetAlert2 -->
+	<style>
+		img {
+    		margin: auto;
+    		display: block;
+		}
+		.center {
+			margin: 0 auto;
+    		display: block;
+		}
+		.default-right-mg {
+			margin-right : 1rem;
+		}
+		.rounded {
+			padding-left: 3rem;
+			padding-right: 3rem;
+			padding-top : 0.5rem;
+			padding-bottom : 0.5rem;
+			background-color: white;
+			border-radius: 0.5rem;
+			border : 0.5px solid black;
+			border-color : hsla(220,9%,46%,.3);
+		}
+		.small-rounded {
+			padding-left: 1rem;
+			padding-right: 1rem;
+			padding-top : 0.5rem;
+			padding-bottom : 0.5rem;
+			background-color: white;
+			border-radius: 0.5rem;
+			border : 0.5px solid black;
+			border-color : hsla(220,9%,46%,.3);
+		}
+		.default-color {
+			background-color:#3e6ce3;
+			color:white;
+		}
+		
+	</style>
+	<!-- 제이쿼리 -->
+		<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div style="margin-top:180px; margin-bottom:180px;" class="container">
+		<a href="/">
+			<img src="commonResource/askcodeLogo.png" alt="logo" class="w-25 d-flex justify-content-center">
+		</a>
+		<div>
+			<h3 class="text-center"><b>AskCode에 오신것을 환영합니다.</b></h3>
+			<p class="text-center">AskCode는 IT 전문 지식공유 웹테크 커뮤니티 입니다.</p>
+			<p class="text-center">SNS 로그인</p>
+		</div>
+		<div class="d-flex justify-content-center">
+			<button class="default-right-mg rounded">
+				<svg style="width:2rem;" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+					<path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
+				</svg>
+			</button>
+			<button class="rounded">
+				<svg style="width:2rem;" viewBox="0 0 22 21" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					<path d="M11 0C4.92473 0 0 4.04523 0 9.03544C0 12.2837 2.08683 15.1299 5.2182 16.7227C4.98798 17.6156 4.38507 19.9561 4.26426 20.457C4.11553 21.0787 4.48366 21.0705 4.72471 20.9029C4.9139 20.772 7.73926 18.7767 8.95819 17.9152C9.6198 18.017 10.3019 18.0709 11 18.0709C17.0753 18.0709 22 14.0251 22 9.03544C22 4.04582 17.0753 0 11 0Z" fill="currentColor"></path><path d="M6.57195 6.37451H3.35566C3.05306 6.37451 2.80859 6.62911 2.80859 6.94293C2.80859 7.25674 3.05363 7.51134 3.35566 7.51134H4.40135V11.5151C4.40135 11.6608 4.45834 11.8041 4.55863 11.9077C4.65665 12.0107 4.79398 12.0699 4.93474 12.0699H5.05156C5.19175 12.0699 5.32851 12.0107 5.4271 11.9077C5.52739 11.8041 5.58438 11.6614 5.58438 11.5151V7.51134H6.57195C6.87454 7.51134 7.11958 7.25674 7.11958 6.94293C7.11958 6.62911 6.87454 6.37451 6.57195 6.37451Z" fill="white" class="block dark:hidden"></path><path d="M14.3034 11.0004H12.8075V6.9114C12.8075 6.57035 12.542 6.29443 12.2143 6.29443C11.8866 6.29443 11.6211 6.57035 11.6211 6.9114V11.319C11.6211 11.3533 11.6251 11.3853 11.6302 11.4179C11.6245 11.4498 11.6211 11.483 11.6211 11.5162C11.6211 11.8016 11.8428 12.0325 12.1174 12.0325H14.3034C14.5787 12.0325 14.7998 11.8016 14.7998 11.5162C14.7998 11.2308 14.5781 11.0004 14.3034 11.0004Z" fill="white" class="block dark:hidden"></path><path d="M19.0842 11.1881L17.4174 8.91329L18.9235 7.34778C19.1275 7.1364 19.1275 6.79239 18.9235 6.58042C18.7195 6.36845 18.389 6.36845 18.1844 6.58042L16.3198 8.51777V6.9114C16.3198 6.57035 16.0543 6.29443 15.7266 6.29443C15.3989 6.29443 15.1328 6.57035 15.1328 6.9114V11.4546C15.1328 11.7956 15.3984 12.0716 15.7266 12.0716C16.0548 12.0716 16.3198 11.7962 16.3198 11.4546V10.0531L16.6589 9.70138L18.2357 11.8513C18.4112 12.0946 18.7446 12.145 18.9788 11.9608C19.213 11.7779 19.2603 11.4321 19.0842 11.1881Z" fill="white" class="block dark:hidden"></path><path d="M11.1745 11.3357L9.57146 6.77887C9.57146 6.77887 9.56747 6.77532 9.56633 6.77355C9.46375 6.49585 9.168 6.29395 8.81525 6.29395C8.42376 6.29395 8.10008 6.54263 8.03568 6.86769C8.02486 6.89197 8.01403 6.91624 8.00491 6.94229L6.42868 11.3357C6.33124 11.624 6.47712 11.939 6.7535 12.0403C7.03045 12.1415 7.33419 11.9899 7.43163 11.7022L7.7046 10.8934H9.89856L10.1709 11.7022C10.2684 11.9899 10.5721 12.1415 10.8491 12.0403C11.126 11.939 11.2719 11.624 11.1745 11.3357ZM8.05278 9.86016L8.79018 7.67413C8.79873 7.67413 8.80557 7.6765 8.81411 7.6765L9.55094 9.86016H8.05335H8.05278Z" fill="white" class="block dark:hidden"></path><path d="M6.57195 6.37451H3.35566C3.05306 6.37451 2.80859 6.62911 2.80859 6.94293C2.80859 7.25674 3.05363 7.51134 3.35566 7.51134H4.40135V11.5151C4.40135 11.6608 4.45834 11.8041 4.55863 11.9077C4.65665 12.0107 4.79398 12.0699 4.93474 12.0699H5.05156C5.19175 12.0699 5.32851 12.0107 5.4271 11.9077C5.52739 11.8041 5.58438 11.6614 5.58438 11.5151V7.51134H6.57195C6.87454 7.51134 7.11958 7.25674 7.11958 6.94293C7.11958 6.62911 6.87454 6.37451 6.57195 6.37451Z" fill="rgb(17 24 39 / var(--tw-bg-opacity))" class="hidden dark:block"></path><path d="M14.3034 11.0004H12.8075V6.9114C12.8075 6.57035 12.542 6.29443 12.2143 6.29443C11.8866 6.29443 11.6211 6.57035 11.6211 6.9114V11.319C11.6211 11.3533 11.6251 11.3853 11.6302 11.4179C11.6245 11.4498 11.6211 11.483 11.6211 11.5162C11.6211 11.8016 11.8428 12.0325 12.1174 12.0325H14.3034C14.5787 12.0325 14.7998 11.8016 14.7998 11.5162C14.7998 11.2308 14.5781 11.0004 14.3034 11.0004Z" fill="rgb(17 24 39 / var(--tw-bg-opacity))" class="hidden dark:block"></path><path d="M19.0842 11.1881L17.4174 8.91329L18.9235 7.34778C19.1275 7.1364 19.1275 6.79239 18.9235 6.58042C18.7195 6.36845 18.389 6.36845 18.1844 6.58042L16.3198 8.51777V6.9114C16.3198 6.57035 16.0543 6.29443 15.7266 6.29443C15.3989 6.29443 15.1328 6.57035 15.1328 6.9114V11.4546C15.1328 11.7956 15.3984 12.0716 15.7266 12.0716C16.0548 12.0716 16.3198 11.7962 16.3198 11.4546V10.0531L16.6589 9.70138L18.2357 11.8513C18.4112 12.0946 18.7446 12.145 18.9788 11.9608C19.213 11.7779 19.2603 11.4321 19.0842 11.1881Z" fill="rgb(17 24 39 / var(--tw-bg-opacity))" class="hidden dark:block"></path><path d="M11.1745 11.3357L9.57146 6.77887C9.57146 6.77887 9.56747 6.77532 9.56633 6.77355C9.46375 6.49585 9.168 6.29395 8.81525 6.29395C8.42376 6.29395 8.10008 6.54263 8.03568 6.86769C8.02486 6.89197 8.01403 6.91624 8.00491 6.94229L6.42868 11.3357C6.33124 11.624 6.47712 11.939 6.7535 12.0403C7.03045 12.1415 7.33419 11.9899 7.43163 11.7022L7.7046 10.8934H9.89856L10.1709 11.7022C10.2684 11.9899 10.5721 12.1415 10.8491 12.0403C11.126 11.939 11.2719 11.624 11.1745 11.3357ZM8.05278 9.86016L8.79018 7.67413C8.79873 7.67413 8.80557 7.6765 8.81411 7.6765L9.55094 9.86016H8.05335H8.05278Z" fill="rgb(17 24 39 / var(--tw-bg-opacity))" class="hidden dark:block"></path></g><defs><clipPath id="clip0_1394_6217"><rect width="22" height="21" fill="white"></rect></clipPath></defs>
+				</svg>
+			</button>
+		</div>
+		<div class="mt-4">
+			<div class="my-3 center">
+				<label for="userid" style="margin-left:27rem;" class="w-50">아이디</label>
+				<div class="mt-1 d-flex justify-content-center">
+					<input id="userid" type="text" class="px-3 py-2 rounded" style="width:33%;" name="userid">
+				</div>
+			</div>
+			
+			<div class="my-3 center">
+				<label for="userpw" style="margin-left:27rem;" class="w-50">비밀번호</label>
+				<div class="mt-1 d-flex justify-content-center">
+					<input id="userpw" type="password" class="px-3 py-2 rounded" style="width:33%;" name="userpw" autoComplete="off">
+				</div>
+			</div>
+		</div>
+		<div class="my-3 d-flex justify-content-center">
+			<a class="gap-3" style="color:#3e6ce3; text-decoration:none; font-size:1.1rem; margin-left:22rem;" href="/"><b>계정 찾기</b></a>
+		</div>
+		<div style="margin-top:3rem;">
+			<div class="my-3 d-flex justify-content-center">
+				<button class="px-3 py-2 rounded" style="width:33%; background-color:#3e6ce3; color:white;" onclick="showInfoAlert('로그인');">로그인</button>
+			</div>
+			<div class="my-3 d-flex justify-content-center">
+				<p>아직 회원이 아니신가요? <a href="/createAccountForm">회원가입</a></p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

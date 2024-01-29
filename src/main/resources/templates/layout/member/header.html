@@ -1,0 +1,63 @@
+
+    <div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        class="common-width">
+        <header>
+            <div class="navbar">
+               <a href="/" style="width:15%">
+    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:80%">
+				</a>
+                
+                
+                <ul class="list-unstyled d-flex gap-3 align-self-center ml-3">
+                    <li>사이드 프로젝트</li>
+                    <li>질문&답변</li>
+                    <li>자유게시판</li>
+                    <li>고객센터</li>
+                    <li>이모티콘 상점</li>
+                    <li>포인트 충전</li>
+                </ul>
+                <div class="search-align-self-center">
+  					<input type="text" placeholder="검색어 입력" class="searchInput">
+  					<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="searchImg">
+				</div>
+                <div class="align-self-center">
+                    <!-- 다크 모드/라이트 모드 토글 버튼 추가 -->
+                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+                        <div class="sun-moon-container">
+                            <i class="fas fa-sun sun-icon"></i><i class="fas fa-moon moon-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="align-self-center">
+                    <button class="login-button" onclick="location.href='/loginForm'">로그인</button>
+                    <button class="signup-button" onclick="location.href='/createAccountForm'">회원가입</button>
+                </div>
+            </div>
+        </header>
+
+        <script>
+            // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
+            function toggleDarkMode() {
+                const body = document.body;
+                const sunIcon = document.querySelector('.sun-icon');
+                const moonIcon = document.querySelector('.moon-icon');
+                const logoImage = document.getElementById('logoImage');
+
+                // body 요소에 'dark-mode' 클래스가 있는지 확인하여 토글
+                body.classList.toggle('dark-mode');
+
+                // dark-mode일 때는 라이트 모드로, 그 반대일 때는 다크 모드로 설정
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('light-mode');
+                    moonIcon.classList.remove('hidden');
+                    sunIcon.classList.add('hidden');
+                    logoImage.src = "commonResource/askcodeLogo_dark.png";
+                } else {
+                    body.classList.add('light-mode');
+                    moonIcon.classList.add('hidden');
+                    sunIcon.classList.remove('hidden');
+                    logoImage.src = "commonResource/askcodeLogo.png";
+                }
+            }
+        </script>
+    </div>
