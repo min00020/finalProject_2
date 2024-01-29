@@ -34,4 +34,9 @@ public class MemberController {
 	public String getCreateAccountForm() {
 		return "common/createAccount";
 	}
+	
+	@GetMapping("/admin")
+	public String getAdminPageForm() {
+		return "layout/admin/adminTemplate";
+	}
 }

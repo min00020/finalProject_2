@@ -65,7 +65,7 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByHa() {
-		
+		permitAllUrl.add("/admin");
 	}
 	
 	private void insertPermitAllUrlByKyung() {
