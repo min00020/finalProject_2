@@ -36,4 +36,9 @@ public class MemberController {
 	public String getCreateAccountForm() {
 		return "common/createAccount";
 	}
+	
+	@GetMapping("/zxc")
+	public String zxc() {
+		return "common/zxzx";
+	}
 }

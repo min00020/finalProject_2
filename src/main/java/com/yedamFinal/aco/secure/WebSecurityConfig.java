@@ -69,7 +69,7 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByKyung() {
-		
+		permitAllUrl.add("/zxc");
 	}
 	
 	private void insertPermitAllUrlByTae() {

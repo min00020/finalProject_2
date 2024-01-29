@@ -66,23 +66,112 @@
 	
 	<!-- 전체적용 style  -->
 	<style>
-		
+/* 프로필 이미지 원형 */
+.box {
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    float: left;
+    margin: 5px;
+    border-radius: 50%;
+    position: relative; 
+}
+
+.profile {
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+    object-position: center top; 
+    position: absolute;
+    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+    transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
+}
+
+/* 랭킹 */
+ .rank{
+   margin-top:100px
+ }
+ .rank table .name {
+     margin-left: 10px; /* 텍스트와 숫자 사이 간격 조절 */
+     /* font-weight : bold; */
+ }
+ .no{
+    margin-left : 70px;
+    color : #3e6ce3;
+    font-weight : bold;
+ }
+ .more{
+    color : #3e6ce3;
+    font-size: small;
+    font-weight : bold;
+    margin-left : 50px;
+ }
+    
 	</style>
 
 </head>
 <body class="light-mode">
 	<header th:replace="@{/layout/member/header.html}"></header>
 	<section class="d-flex justify-content-between common-width">
-		
 		<th:block th:if="${main} == 1">
 			<aside style="width:15%;">
-				<p>광고<p>
+				<img id="sidebanner" src="commonResource/sidebanner.png" alt="sidebanner" style="width:90%">
+				<section class = "rank">
+            <h5>실시간 랭킹 <span class="more"> +더보기</span></h5>
+               <!-- <p style="margin:0;">실시간 랭킹 <span class="more"> +더보기</span></p> -->
+               <hr style="margin:5;">
+               <table>
+                  <tr>
+                     <td>
+                        <span class="box">
+                          <img class="profile" src="commonResource/mann.png" alt="profile">
+                        </span>
+                        <span class="name">user01</span><span class="no">300</span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <span class="box">
+                          <img class="profile" src="commonResource/mann2.png" alt="profile">
+                        </span>
+                        <span class="name">user01</span><span class="no">300</span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <span class="box">
+                          <img class="profile" src="commonResource/mann.png" alt="profile">
+                        </span>
+                        <span class="name">user01</span><span class="no">300</span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <span class="box">
+                          <img class="profile" src="commonResource/mann2.png" alt="profile">
+                        </span>
+                        <span class="name">user01</span><span class="no">300</span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <span class="box">
+                          <img class="profile" src="commonResource/mann.png" alt="profile">
+                        </span>
+                        <span class="name">user01</span><span class="no">300</span>
+                     </td>
+                  </tr>
+                  
+                </table>
+            </section>
 			</aside>
 			<section layout:fragment="content" id="mainBody" style="width:70%">
 		
 			</section>
+			
 			<aside style="width:15%;">
-				<p>광고<p>
+				<img id="sidebanner2" src="commonResource/sidebanner2.png" alt="sidebanner2" style="width:90%; margin-left:20px">
+				<img id="sidebanner3" src="commonResource/sidebanner3.png" alt="sidebanner3" style="width:90%; margin-left:20px; margin-top : 100px">
 			</aside>
 		</th:block>
 		<th:block th:unless="${main} == 1">
