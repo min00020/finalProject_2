@@ -12,4 +12,15 @@
 		WHERE MID = #{mid}
 		
 </select>
+
+<select id="selectCheckDuplicateId" resultType="MemberVO">
+	SELECT id
+		FROM member
+		WHERE ID = #{id}
+</select>
+<select id="selectCheckDuplicateEmail" resultType="MemberVO">
+	SELECT id
+		FROM member
+		WHERE email = #{email}
+</select>
 </mapper>

@@ -58,6 +58,8 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/js/**");
 		permitAllUrl.add("/");
 		permitAllUrl.add("/createAccountForm");
+		permitAllUrl.add("/checkId");
+		permitAllUrl.add("/authPhoneNum");
 	}
 	
 	private void insertPermitAllUrlByChae() {

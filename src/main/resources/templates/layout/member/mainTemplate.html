@@ -72,24 +72,17 @@
 </head>
 <body class="light-mode">
 	<header th:replace="@{/layout/member/header.html}"></header>
+	
 	<section class="d-flex justify-content-between common-width">
+		<aside style="width:15%;" >
+			<p>광고<p>
+		</aside>
+		<section layout:fragment="content" id="mainBody" style="width:70%">
 		
-		<th:block th:if="${main} == 1">
-			<aside style="width:15%;">
-				<p>광고<p>
-			</aside>
-			<section layout:fragment="content" id="mainBody" style="width:70%">
-		
-			</section>
-			<aside style="width:15%;">
-				<p>광고<p>
-			</aside>
-		</th:block>
-		<th:block th:unless="${main} == 1">
-			<section layout:fragment="content" id="mainBody">
-		
-			</section>
-		</th:block>
+		</section>
+		<aside style="width:15%;">
+			<p>광고<p>
+		</aside>
 	</section>
 	<footer th:replace="@{/layout/member/footer.html}"></footer>
 

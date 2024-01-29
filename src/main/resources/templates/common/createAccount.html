@@ -119,7 +119,7 @@
 				<label for="userid" style="margin-left:27rem;">아이디</label>
 				<div class="mt-1 d-flex justify-content-center">
 					<input id="userid" type="text" class="px-3 py-2 w-25 rounded" placeholder="4~15자 이내로 입력해주세요" name="userid">
-					<button class="small-rounded default-color" style="margin-left:0.3rem" type="button">중복체크</button>
+					<button class="small-rounded default-color" style="margin-left:0.3rem" type="button" onclick="checkDuplicateId()">중복체크</button>
 				</div>
 			</div>
 			
@@ -143,7 +143,7 @@
 				<label for="email" style="margin-left:27rem;">이메일</label>
 				<div class="mt-1 d-flex justify-content-center">
 					<input id="email" type="text" class="px-3 py-2 w-25 rounded" placeholder="ask@help.com" name="email">
-					<button class="small-rounded default-color" style="margin-left:0.3rem;" type="button">중복체크</button>
+					<button class="small-rounded default-color" style="margin-left:0.3rem;" type="button" onclick="checkDuplicateEmail()">중복체크</button>
 				</div>
 			</div>
 			
@@ -151,7 +151,7 @@
 				<label for="phone" style="margin-left:27rem;">휴대폰</label>
 				<div class="mt-1 d-flex justify-content-center">
 					<input id="phone" type="text" class="px-3 py-2 w-25 rounded" placeholder="010-1234-4567" name="phone">
-					<button class="small-rounded default-color" style="margin-left:0.3rem;" onclick="sendAuthNumber()" type="button">번호인증</button>
+					<button class="small-rounded default-color" style="margin-left:0.3rem;" onclick="sendAuthNumberRequest()" type="button">번호인증</button>
 				</div>
 				<div class="mt-1 d-flex justify-content-center">
 					<input id="phoneCheck" type="text" class="px-3 py-2 w-25 rounded" placeholder="인증번호 입력" name="phone">
@@ -204,26 +204,93 @@
 	</div>
 </form>
 
-<script>
-	const allowImgExtension = ['jpg','jpeg','png'];
-	$("#profileImg").on('change', (e) => {
-		const fileName = $("#profileImg")[0].files[0].name;
-		const extensionName = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase();
-		
-		if(allowImgExtension.indexOf(extensionName) < 0) {
-			showSuccessAlert('이미지파일만 삽입해주세요');
-			return;
-		}
-		
-		$('#customFileInput').val($("#profileImg")[0].files[0].name);
-	})
+<script th:inline="javascript">
+const allowImgExtension = ['jpg','jpeg','png'];
+$("#profileImg").on('change', (e) => {
+	const fileName = $("#profileImg")[0].files[0].name;
+	const extensionName = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase();
 	
-	function sendAuthNumber() {
-		console.log($('input[name="phone"]').val());
+	if(allowImgExtension.indexOf(extensionName) < 0) {
+		showSuccessAlert('이미지파일만 삽입해주세요');
+		return;
 	}
+	
+	$('#customFileInput').val($("#profileImg")[0].files[0].name);
+})
+
+function sendAuthNumber() {
+	console.log($('input[name="phone"]').val());
+}
+
+// 아이디 중복체크
+function checkDuplicateId() {
+	const reqId = $('input[name="userid"]').val();
+	const url = "/checkId?id="+reqId;
+	
+	$.ajax(url,{
+        type : "GET",
+    })
+    .done(res => {
+    	if(!res.result) {
+    		showSuccessAlert('사용가능한 아이디 입니다.');
+    	}
+    	else {
+    		showFailAlert('사용불가능한 아이디 입니다.');
+    	}
+    })
+    .fail(err => {
+    	showWarningAlert('다시 시도해주세요.');
+    })
+}
+
+function checkDuplicateEmail() {
+	const reqEmail = $('input[name="email"]').val();
+	const url = "/checkEmail?email="+reqEmail;	
+	
+	$.ajax(url,{
+        type : "GET",
+    })
+    .done(res => {
+    	if(!res.result) {
+    		showSuccessAlert('사용가능한 이메일 입니다.');
+    	}
+    	else {
+    		showFailAlert('사용불가능한 이메일 입니다.');
+    	}
+    })
+    .fail(err => {
+    	showWarningAlert('다시 시도해주세요.');
+    })
+}
+
+function sendAuthNumberRequest() {
+	const reqPhoneNum = $('input[name="phone"]').val();
+	const url = "/authPhoneNum?phoneNum="+reqPhoneNum;
+	
+	$.ajax(url,{
+        type : "GET",
+    })
+    .done(res => {
+    	if(!res.result) {
+    		showSuccessAlert('인증번호 발송 완료');
+    	}
+    	else {
+    		showFailAlert('인증번호 발송 실패');
+    	}
+    })
+    .fail(err => {
+    	showWarningAlert('다시 시도해주세요.');
+    })
+}
 
 
+function sendJoinRequest() {
+	
+}
 
+</script>
+
+<script th:inline="javascript">
 	//tagify
 	var inputElm = document.querySelector('input[name=tags]');
 	
