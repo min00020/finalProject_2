@@ -9,64 +9,60 @@
 				style="width: 100%;">
 		</div>
 		<div class="slide">
-			<img id="logoImage" src="commonResource/banner.png" alt="banner"
+			<img id="logoImage2" src="commonResource/banner.png" alt="banner"
 				style="width: 100%;">
 		</div>
 
 	</div>
-
 	<div id="board">
 		<section class="child">
-		  <th:block th:each="side : ${list}">
-			<button class="S"><span class="boardname">사이드 프로젝트</span></button>
-			 <section class = "child2">
-			<ul>
-				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
-				<ol class = "title">오류 한번 봐주실수 있나요????</ol><hr>
-			</ul>
-			<ul>
-				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
-				<ol class = "title">게시물 2</ol><hr>
-			</ul>
-			<ul>
-				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
-				<ol class = "title">게시물 3</ol><hr>
-			</ul>
-			<ul>
-				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
-				<ol class = "title">게시물 4</ol><hr>
-			</ul>
-			<ul>
-				<ol><span  class = "nickname">전민교</span><span class = "activityPoint">·105</span></span><span class = "time">· 6분 전</span></ol>
-				<ol class = "title">게시물 5</ol>
-			</ul>
 			
-			 </section>
-			</th:block>
+				<button class="S">
+					<span class="boardname">자유게시판</span>
+				</button>
+				<section class="child2">
+				<div>
+					<ul>
+						<li th:each="free : ${getFreeBoardList}">
+							<span class="nickname">[[${free.nickname}]]</span>
+							<span class="activityPoint"> · <img id="thunder" src="commonResource/thunder.png" alt="acti">[[${free.accumActivityPoint}]]
+								<span th:if="${free.minute < 60}" th:text="' · ' + (${free.minute}) + '분 전'"></span>
+								<span th:if="${free.minute >= 60 && free.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 60.0)}) + '시간 전'"></span>
+								<span th:if="${free.minute >= 1440 && free.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 1440.0)}) + '일 전'"></span>
+								<span th:if="${free.minute >= 43200 && free.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 43200.0)}) + '달 전'"></span>
+								<span th:if="${free.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 518400.0)}) + '년 전'"></span>
+							</span><br>
+							
+							<span class="title" th:if="${#strings.length(free.title) > 30}" th:text="${#strings.substring(free.title, 0, 30)} + '...'"></span>
+								<span class="title" th:unless="${#strings.length(free.title) > 30}" th:text="${free.title}"></span>
+							<hr />
+							
+						</li>
+					</ul>
+				</div>
+			</section>
 		</section>
 
+
 		<section class="child">
-			<button class="S"><span class="boardname">질문&답변</span></button>
+			<button class="S">
+				<span class="boardname">질문&답변</span>
+			</button>
 		</section>
+		
 	</div>
 
 	<div id="board">
 		<section class="child">
-			<button class="S"><span class="boardname">자유게시판</span></button>
+			<button class="S">
+				<span class="boardname">사이드 프로젝트</span>
+			</button>
 		</section>
 
 		<section class="child">
-			<button class="S"><span class="boardname">공지사항</span></button>
-		</section>
-	</div>
-
-	<div id="board">
-		<section class="child">
-			<button class="S">사이드 프로젝트</button>
-		</section>
-
-		<section class="child">
-			<button class="S">질문&답변</button>
+			<button class="S">
+				<span class="boardname">공지사항</span>
+			</button>
 		</section>
 	</div>
 
@@ -74,37 +70,54 @@
 
 </div>
 <style>
-.boardname{
-margin-left : 20px
+ul hr {
+    width: 88%; /* 원하는 길이로 조절 */
+    /* 가운데 정렬을 위한 스타일 */
 }
-button {
-    border: none;
-  
-}
-ul{
-margin-top : 10px
-}
-.nickname:hover{
-color: #3e6ce3;
-}
-.activityPoint,.time{
-	margin-left : 10px;
-	font-size : small;
+.boardname {
+	margin-left: 20px
 }
 
-.title{
-	font-weight : bold;
+button {
+	border: none;
 }
-.child2{
+
+ul {
+	margin-top: 10px;
+	margin-left : -25px;
+	 list-style-type: none;
+}
+ul li{
+display : block;
+}
+
+.nickname:hover {
+	color: #3e6ce3;
+}
+
+.title:hover {
+	color: #3e6ce3;
+}
+
+.activityPoint, .time {
+	margin-left: 10px;
+	font-size: small;
+}
+
+.title {
+	font-weight: bold;
+}
+
+.child2 {
 	
 }
+
 .S {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	height: 50px;
 	width: 400px;
-
 	border-radius: 10px;
 	font-weight: bold;
 	text-align: left;
@@ -113,7 +126,7 @@ color: #3e6ce3;
 #board {
 	display: flex;
 	flex-direction: row;
-	border: 3px solid red;
+/* 	border: 3px solid red; */
 	margin-top: 20px;
 	margin-left: 10px;
 	margin-right: 10px;
@@ -121,10 +134,12 @@ color: #3e6ce3;
 
 .child {
 	flex: 1 0 auto;
-	border: 3px solid green;
+/* 	border: 3px solid green; */
 	display: inline-block;
 	justify-content: center;
 	align-items: center;
+	width : 300px;
+	margin : 10px;
 }
 
 .slider {
@@ -147,13 +162,27 @@ keyframes slideAnimation { 0% {
 	transform: translateX(100%);
 }
 100
+
+
 %
 {
 transform
+
+
 :
-translateX(
+
+
+translateX
+(
+
+
 0
-);
+
+
+)
+;
+
+
 }
 }
 </style>
@@ -182,4 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showSlide(currentSlide);
     setInterval(nextSlide, 3000); // 3초마다 자동 슬라이드                
 });
+
+
 </script>

@@ -88,25 +88,22 @@
 }
 
 /* 랭킹 */
- .rank{
-   margin-top:100px
- }
- .rank table .name {
-     margin-left: 10px; /* 텍스트와 숫자 사이 간격 조절 */
-     /* font-weight : bold; */
- }
- .no{
-    margin-left : 70px;
+.no{
+    float: right;
+    /* margin-left : 70px; */
     color : #3e6ce3;
     font-weight : bold;
- }
- .more{
+}
+.more{
     color : #3e6ce3;
     font-size: small;
     font-weight : bold;
     margin-left : 50px;
- }
-    
+}
+.sidemenu{
+    width: 170px;
+    margin:auto;
+}
 	</style>
 
 </head>
@@ -118,15 +115,14 @@
 				<img id="sidebanner" src="commonResource/sidebanner.png" alt="sidebanner" style="width:90%">
 				<section class = "rank">
             <h5>실시간 랭킹 <span class="more"> +더보기</span></h5>
-               <!-- <p style="margin:0;">실시간 랭킹 <span class="more"> +더보기</span></p> -->
                <hr style="margin:5;">
-               <table>
+               <table class="sidemenu">
                   <tr>
                      <td>
                         <span class="box">
                           <img class="profile" src="commonResource/mann.png" alt="profile">
                         </span>
-                        <span class="name">user01</span><span class="no">300</span>
+                        <span class="name" >user01</span><span class="no">300</span>
                      </td>
                   </tr>
                   <tr>
@@ -134,34 +130,9 @@
                         <span class="box">
                           <img class="profile" src="commonResource/mann2.png" alt="profile">
                         </span>
-                        <span class="name">user01</span><span class="no">300</span>
+                        <span class="name">user0111</span><span class="no">20</span>
                      </td>
                   </tr>
-                  <tr>
-                     <td>
-                        <span class="box">
-                          <img class="profile" src="commonResource/mann.png" alt="profile">
-                        </span>
-                        <span class="name">user01</span><span class="no">300</span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <span class="box">
-                          <img class="profile" src="commonResource/mann2.png" alt="profile">
-                        </span>
-                        <span class="name">user01</span><span class="no">300</span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <span class="box">
-                          <img class="profile" src="commonResource/mann.png" alt="profile">
-                        </span>
-                        <span class="name">user01</span><span class="no">300</span>
-                     </td>
-                  </tr>
-                  
                 </table>
             </section>
 			</aside>

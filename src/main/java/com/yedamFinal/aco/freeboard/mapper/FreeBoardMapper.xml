@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- <mapper namespace="com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper"> -->
+<!-- 	<select id="getSideBoard" resultType="FreeBoardVO"> -->
+<!-- 	SELECT SIDE_BOARD_NO, -->
+<!-- 		PUBLISHING_STATUS, -->
+<!-- 		TITLE, -->
+<!-- 		CONTENT, -->
+<!-- 		WRITER, -->
+<!-- 		WRITE_DATE, -->
+<!-- 		RECRUIT_PERSONNEL, -->
+<!-- 		DEV_PERIOD, -->
+<!-- 		GIT_ADDRESS, -->
+<!-- 		VIEW_CNT, -->
+<!-- 		REPLY_CNT, -->
+<!-- 		TECH_OF_USE, -->
+<!-- 		MEMBER_NO -->
+		
+<!-- 	FROM SIDE_PROJECT_BOARD -->
+<!-- 	WHERE ROWNUM <= 5 -->
+
+<!-- 	</select> -->
+<!-- </mapper> -->
+
+
+<mapper namespace="com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper">
+	<select id="getFreeBoard" resultType="FreeBoardVO">
+	SELECT FBOARD_NO,
+			A.MEMBER_NO,
+			TITLE,
+			CONTENT,
+			B.NICKNAME,
+			WRITE_DATE,
+			VIEW_CNT,
+			RECOMMEND_CNT,
+			REPLY_CNT,
+            B.ACCUM_ACTIVITY_POINT,
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+	FROM FREE_BOARD A LEFT JOIN MEMBER B
+    ON A.MEMBER_NO = B.MEMBER_NO
+    ORDER BY WRITE_DATE DESC
+
+	</select>
+</mapper>
+
