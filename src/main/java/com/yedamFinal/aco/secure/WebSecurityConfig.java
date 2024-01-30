@@ -63,6 +63,7 @@ public class WebSecurityConfig {
 	
 	private void insertPermitAllUrlByChae() {
 		permitAllUrl.add("/questionBoard");
+		permitAllUrl.add("/questionInfo");
 	}
 	
 	private void insertPermitAllUrlByHa() {

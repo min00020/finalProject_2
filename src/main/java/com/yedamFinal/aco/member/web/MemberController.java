@@ -43,4 +43,8 @@ public class MemberController {
 	public String getquestionBoard() {
 		return "question/questionList";
 	}
+	@GetMapping("/questionInfo")
+	public String getquestionInfo() {
+		return "question/questionInfo";
+	}
 }

@@ -4,70 +4,71 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content"
 >
-	<div id="banner">
-		<h1>질문&답변</h1>
+	<div id="qna_banner">
+		<h3>질문&답변</h3>
+		<p>좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
 	</div>
 	<!-- start of question -->
-	<div id="container">
+	<div class="container">
 	<!-- start of sidebar -->
-		<div id="sidebar" style="float:left; width: 250px;">
+		<div id="QNAsidebar" style="float:left; width: 250px;">
 			<br>
 			<aside style="margin-right:30px; margin-top:50px;">
 				<section>
 					<h5>인기 태그</h5>
 		            <hr>
-		            <table class="sidemenu">
+		            <table class="QNAsidemenu">
 		               <tr>
 		                  <td>
-			                  <span class="tag">#spring</span>
-			                  <span class="no">300</span>
+			                  <span class="QNAtag">#spring</span>
+			                  <span class="QNAno">300</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="tag">#springboot</span>
-			                  <span class="no">200</span>
+			                  <span class="QNAtag">#springboot</span>
+			                  <span class="QNAno">200</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="tag">#java</span>
-			                  <span class="no">90</span>
+			                  <span class="QNAtag">#java</span>
+			                  <span class="QNAno">90</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="tag">#node.js</span>
-			                  <span class="no">50</span>
+			                  <span class="QNAtag">#node.js</span>
+			                  <span class="QNAno">50</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="tag">#vue</span>
-			                  <span class="no">10</span>
+			                  <span class="QNAtag">#vue</span>
+			                  <span class="QNAno">10</span>
 		                  </td>
 		               </tr>
 		             </table>
 	            </section>
 				
-				<section class = "rank">
-					<h5>실시간 랭킹 <span class="more"> +더보기</span></h5>
+				<section class = "QNArank">
+					<h5>실시간 랭킹 <span class="QNAmore"> +더보기</span></h5>
 		            <hr>
-		            <table class="sidemenu">
+		            <table class="QNAsidemenu">
 		               <tr>
 		                  <td>
-			                  <span class="box">
-					     			<img class="profile" src="commonResource/cookie.png" alt="profile">
+			                  <span class="qna_box">
+					     			<img class="qna_profile" src="commonResource/cookie.png" alt="profile">
 			                  </span>
-			                  <span class="name" >user01</span><span class="no">300</span>
+			                  <span class="QNAname">user01</span><span class="QNAno">300</span>
 		                  </td>
 		               </tr>
 		         	   <tr>
 		                  <td>
-			                  <span class="box">
-					     			<img class="profile" src="commonResource/cookie.png" alt="profile">
+			                  <span class="qna_box">
+					     			<img class="qna_profile" src="commonResource/cookie.png" alt="profile">
 			                  </span>
-			                  <span class="name">user0111</span><span class="no">20</span>
+			                  <span class="QNAname">cookie123</span><span class="QNAno">20</span>
 		                  </td>
 		               </tr>
 		             </table>
@@ -78,7 +79,7 @@
 		
 		<div class="questionBoard" style="width:1100px;">
 			<!-- 상단 선택 메뉴 -->
-			<ul id="topic" class="list-unstyled d-flex gap-3 align-self-center ml-3">
+			<ul id="qna_topic" class="list-unstyled d-flex gap-3 align-self-center ml-3">
 	             <li>전체</li>
 	             <li>기술</li>
 	             <li>사이드 프로젝트</li>
@@ -104,7 +105,7 @@
 					  </ul>
 				</div>
 				<div style="float: right;">
-					<button type="button" class="btn btn-primary">질문하기</button>
+					<button type="button" class="btn text-white" style="background-color:#3e6ce3">질문하기</button>
 				</div>
 			</div>
 			
@@ -114,8 +115,8 @@
 			<div id="questionList"  class="row">
 				<div id="title" class="col-8">
 					<div id="member" style="height:40px;">
-						<div class="box">
-						    <img class="profile" src="commonResource/cookie.png" alt="profile">
+						<div class="qna_box">
+						    <img class="qna_profile" src="commonResource/cookie.png" alt="profile">
 						</div>
 						<p >cookie123</p>
 					</div>
@@ -133,7 +134,7 @@
 				 	<h6>추천</h6>
 				</div>
 				<div id="answercnt" class="col-1">
-				 	<h6 class="cnt">10</h6>
+				 	<h6 class="QNAcnt">10</h6>
 				 	<h6>답변</h6>
 				</div>
 				<hr style="margin-top:30px; margin-bottom:30px;">
