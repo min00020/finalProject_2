@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.TagVO;
+import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
@@ -50,11 +51,15 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     @Autowired
     private PasswordEncoder bCryptPasswordEncoder;
     
+	@Autowired
+	private FileServiceImpl fileService;
+    
     @PostConstruct
     public void init() {
         // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력해주셔야 합니다!
         this.messageService = NurigoApp.INSTANCE.initialize(coolSmsApiKey, coolSmsApiSecretKey, "https://api.coolsms.co.kr");
     }
+    
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
@@ -141,7 +146,17 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	}
 	@Override
 	public Map<String, Object> joinMember(MemberVO vo, MultipartFile file) {
-		// TODO Auto-generated method stub
+		Map<String,Object> ret = new HashMap<String,Object>();
+		if(file != null) {
+			String profileSaveName = fileService.profileUpload(file);
+			if(profileSaveName == null || profileSaveName.isEmpty()) {
+				ret.put("result", "500");
+				return ret;
+			}
+			
+			vo.setProfileImage(profileSaveName);
+		}
+		
 		vo.setPermission("ROLE_USER");
 		vo.setAccumActivityPoint(0);
 		vo.setAvailableActivityPoint(0);
@@ -150,15 +165,14 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		
 		vo.setPassword(bCryptPasswordEncoder.encode(vo.getPassword()));
 		
-		Map<String,Object> ret = new HashMap<String,Object>();
-		if(memberMapper.insertMember(vo) <= 0) {
+		int insertId = memberMapper.insertMember(vo);
+		if(insertId <= 0) {
 			ret.put("result", "500");
 		}
 		else {
 			ret.put("result", "200");
 			ret.put("vo", vo);
 		}
-		
 		return ret;
 	}
 	@Override

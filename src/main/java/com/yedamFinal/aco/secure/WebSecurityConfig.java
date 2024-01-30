@@ -9,11 +9,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 	private List<String> permitAllUrl = null;
+	
+	@Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
+    }
 	
 	public WebSecurityConfig() {
 		// 로그인하지않아도 허용되는 경로들 삽입.
@@ -44,6 +50,7 @@ public class WebSecurityConfig {
 			.formLogin((form) -> form
 				.loginPage("/loginForm")
 				.usernameParameter("userid")
+				.defaultSuccessUrl("/", true)
 				.permitAll()
 			)
 			.logout((logout) -> logout.permitAll());
