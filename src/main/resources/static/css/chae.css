@@ -211,7 +211,7 @@
 #question_bottom{
 	display:flex;
 	height:50px;
-	margin-bottom:10px;
+	margin:10px;
 	justify-content:space-between;
 }
 
@@ -242,6 +242,26 @@
     flex-direction: column;
     margin-bottom:9px;
 }
+
+#qna_add{
+	display:flex;
+	align-items: flex-start; 
+	justify-content: center;
+}
+
+.qna_add_icon{
+	margin-top:20px;
+	width:35px;
+}
+.qna_add_info{
+	width:800px;
+  	margin : 20px; 
+ 	padding : 30px;
+ 	border : 1px solid lightgray;
+ 	border-radius : 5px;
+	justify-content: right;
+}
+
 /*답변글 프로필 이미지*/
 	.min_answerbox {
 	    width: 60px;
