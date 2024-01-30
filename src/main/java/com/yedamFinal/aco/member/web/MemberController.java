@@ -41,6 +41,6 @@ public class MemberController {
 	//min 질문&답변 게시판
 	@GetMapping("/questionBoard")
 	public String getquestionBoard() {
-		return "question/question";
+		return "question/questionList";
 	}
 }

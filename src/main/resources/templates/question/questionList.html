@@ -1,0 +1,147 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"
+>
+	<div id="banner">
+		<h1>질문&답변</h1>
+	</div>
+	<!-- start of question -->
+	<div id="container">
+	<!-- start of sidebar -->
+		<div id="sidebar" style="float:left; width: 250px;">
+			<br>
+			<aside style="margin-right:30px; margin-top:50px;">
+				<section>
+					<h5>인기 태그</h5>
+		            <hr>
+		            <table class="sidemenu">
+		               <tr>
+		                  <td>
+			                  <span class="tag">#spring</span>
+			                  <span class="no">300</span>
+		                  </td>
+		               </tr>
+		               <tr>
+		                  <td>
+			                  <span class="tag">#springboot</span>
+			                  <span class="no">200</span>
+		                  </td>
+		               </tr>
+		               <tr>
+		                  <td>
+			                  <span class="tag">#java</span>
+			                  <span class="no">90</span>
+		                  </td>
+		               </tr>
+		               <tr>
+		                  <td>
+			                  <span class="tag">#node.js</span>
+			                  <span class="no">50</span>
+		                  </td>
+		               </tr>
+		               <tr>
+		                  <td>
+			                  <span class="tag">#vue</span>
+			                  <span class="no">10</span>
+		                  </td>
+		               </tr>
+		             </table>
+	            </section>
+				
+				<section class = "rank">
+					<h5>실시간 랭킹 <span class="more"> +더보기</span></h5>
+		            <hr>
+		            <table class="sidemenu">
+		               <tr>
+		                  <td>
+			                  <span class="box">
+					     			<img class="profile" src="commonResource/cookie.png" alt="profile">
+			                  </span>
+			                  <span class="name" >user01</span><span class="no">300</span>
+		                  </td>
+		               </tr>
+		         	   <tr>
+		                  <td>
+			                  <span class="box">
+					     			<img class="profile" src="commonResource/cookie.png" alt="profile">
+			                  </span>
+			                  <span class="name">user0111</span><span class="no">20</span>
+		                  </td>
+		               </tr>
+		             </table>
+	            </section>
+			</aside>
+		</div>
+		<!-- end of sidebar -->
+		
+		<div class="questionBoard" style="width:1100px;">
+			<!-- 상단 선택 메뉴 -->
+			<ul id="topic" class="list-unstyled d-flex gap-3 align-self-center ml-3">
+	             <li>전체</li>
+	             <li>기술</li>
+	             <li>사이드 프로젝트</li>
+	             <li id="search" style="margin-left: auto;">
+	             	<div class="search-align-self-center" >
+			  			<input type="text" placeholder="검색어 입력" class="searchInput">
+			  			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="searchImg">
+					</div>
+	             </li>
+	        </ul>
+	        <hr>
+			<!-- 추천순 정렬, 작성버튼 -->
+			<div>
+				<div class="btn-group">
+					  <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+					    추천순
+					  </button>
+					  <ul class="dropdown-menu">
+					    <li><a class="dropdown-item" href="#">추천순</a></li>
+					    <li><a class="dropdown-item" href="#">최신순</a></li>
+					    <li><a class="dropdown-item" href="#">답변순</a></li>
+					    <li><a class="dropdown-item" href="#">조회순</a></li>
+					  </ul>
+				</div>
+				<div style="float: right;">
+					<button type="button" class="btn btn-primary">질문하기</button>
+				</div>
+			</div>
+			
+			
+			<!-- start of postList -->
+			<hr style="margin-bottom:30px">
+			<div id="questionList"  class="row">
+				<div id="title" class="col-8">
+					<div id="member" style="height:40px;">
+						<div class="box">
+						    <img class="profile" src="commonResource/cookie.png" alt="profile">
+						</div>
+						<p >cookie123</p>
+					</div>
+				  	<div id="titleTag">
+					    <h4>node.js에 대한 질문이 있습니다.</h4>
+					    <p style="color:blue">#node.js #mysql</p>
+				 	</div>
+			 	</div>
+				<div class="col-1">
+				 	<h6>2</h6>
+				 	<h6>조회</h6>
+				</div>
+				<div class="col-1">
+				 	<h6>5</h6>
+				 	<h6>추천</h6>
+				</div>
+				<div id="answercnt" class="col-1">
+				 	<h6 class="cnt">10</h6>
+				 	<h6>답변</h6>
+				</div>
+				<hr style="margin-top:30px; margin-bottom:30px;">
+			</div>
+			<!-- end of postList -->
+		</div>
+		<!-- end of questionBoard -->
+	</div>
+	
+
+</div>

@@ -1,14 +1,30 @@
 @charset "UTF-8";
 
+#banner{
+	height:130px;
+	background-color:#e0e4ef;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+#banner h1 {
+	 margin: 50spx 0px;
+     text-align: left;
+}
+
 .questionBoard li{
 	cursor: pointer;
 }
 
- #postList {
-    display: flex;
-    flex-direction: column;
- }
- 
+#topic.list-unstyled li {
+    font-size: 25px;
+	margin-bottom:0;
+	font-weight : bold;
+	/* vertical-align: bottom; */
+}
+#topic.list-unstyled li:hover {
+    color: #3e6ce3; /* 마우스를 가져다 댔을 때의 색상 */
+}
+
 /* 프로필 이미지 원형 */
 .box {
     width: 25px;
@@ -31,28 +47,48 @@
 }
 
 /* 태그, 랭킹 */
- .tag{
+.tag{
  	 float: left;
  	/* margin-right:40px; */
- }
- .rank{
+}
+.rank{
    margin-top:100px;
- }
- .rank table .name {
-     margin-left: 10px; /* 텍스트와 숫자 사이 간격 조절 */
-     /* font-weight : bold; */
- }
- .no{
+}
+.no{
+ 	float: right;
     /* margin-left : 70px; */
     color : #3e6ce3;
     font-weight : bold;
- }
- .more{
+}
+.more{
     color : #3e6ce3;
     font-size: small;
     font-weight : bold;
     margin-left : 50px;
- }
+}
+.sidemenu{
+ 	width: 170px;
+ 	margin:auto;
+}
 
-
-  
+/*답변버튼*/
+.cnt{
+  font-weight : bold;
+}
+.col-1{
+	text-align:center;
+	margin:auto;
+}
+#answercnt{
+	color : #3e6ce3;
+	border-width : 1px;
+    border-style : solid;
+    border-radius: 15%;
+    border-color: #989daa !important;
+    width: 80px; 
+    height: 80px; 
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+}
