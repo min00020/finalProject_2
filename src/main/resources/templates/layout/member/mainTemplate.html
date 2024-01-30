@@ -27,6 +27,9 @@
 		<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
 		<script type="text/javascript" th:src="@{js/commonMethod.js}"></script>
 		<!-- sweetAlert2 -->
+		<meta name="csrf" th:content="${_csrf.token}" />
+		<meta name="csrfPara" th:content="${_csrf.parameterName}" />
+	
 		
 	
 	

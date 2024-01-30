@@ -83,6 +83,12 @@
             <artifactId>sdk</artifactId>
             <version>4.2.7</version>
         </dependency>
+        
+        <!-- WEB CLIENT -->
+        <dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

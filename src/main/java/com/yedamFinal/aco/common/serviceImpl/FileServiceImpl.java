@@ -42,7 +42,9 @@ public class FileServiceImpl implements FileService {
 	     
 		Date date = new Date();
 		long time = date.getTime();
-	    String uploadFileName = profileUploadPath + File.separator + uuid + "_" + time + "_" + file.getOriginalFilename();
+		String serverFileName = uuid + "_" + time + "_" + file.getOriginalFilename();
+	    String uploadFileName = profileUploadPath + File.separator + serverFileName;
+	    
 	    String saveName = uploadFileName;
 	        
 	    Path savePath = Paths.get(saveName);
@@ -56,7 +58,7 @@ public class FileServiceImpl implements FileService {
 	       return null;
 	    }
 		
-		return saveName;
+		return serverFileName;
 	}
 	
 }

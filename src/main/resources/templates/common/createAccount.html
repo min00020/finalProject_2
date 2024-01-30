@@ -399,7 +399,6 @@ function sendJoinRequest() {
 	
 	const formData = new FormData();
 	
-	formData.append(csrfPara, csrfToken);
 	const file = $("#profileImg")[0].files[0];
 	
 	formData.append(csrfPara, csrfToken);
@@ -432,7 +431,7 @@ function sendJoinRequest() {
     })
     .done(res => {
     	//showSuccessAlert("가입 성공!", "애코 포인트 1000 지급 완료!");
-    	window.location.href = "/loginForm?join=1";
+    	window.location.href = "/gitLinkPage?id=" + $('input[name="userid"]').val();
     })
     .fail(err => {
     	console.log(err);

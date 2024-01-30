@@ -3,6 +3,7 @@ package com.yedamFinal.aco.secure;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,12 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 @EnableWebSecurity
 public class WebSecurityConfig {
 	private List<String> permitAllUrl = null;
+	
+	@Autowired
+	private LoginFailHandler loginFailHandler;
+	
+	@Autowired
+	private LoginSuccessHandler loginSuccessHandler;
 	
 	@Bean
     public SpringSecurityDialect springSecurityDialect(){
@@ -44,16 +51,20 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests((requests) -> requests
 				.antMatchers(permitAllUrl.toArray(new String[permitAllUrl.size()])).permitAll() // 해당 경로의 페이지는 모두 접속허용
 				.antMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER")
-				.antMatchers("/test").hasAnyRole("USER")
 				.anyRequest().authenticated() // 그 외는 모두 로그인해야만 접근이 가능
 			)
 			.formLogin((form) -> form
 				.loginPage("/loginForm")
 				.usernameParameter("userid")
-				.defaultSuccessUrl("/", true)
+				.successHandler(loginSuccessHandler)
+				.failureHandler(loginFailHandler)
 				.permitAll()
 			)
-			.logout((logout) -> logout.permitAll());
+			.logout((logout) -> logout.permitAll().logoutUrl("/logout")
+			        .logoutSuccessUrl("/")
+			        .invalidateHttpSession(true)
+			        .deleteCookies("JSESSIONID")
+			);
 
 		return http.build();
 	}
@@ -72,6 +83,9 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/verifyAuthPhoneNum");
 		permitAllUrl.add("/join");
 		permitAllUrl.add("/login");
+		permitAllUrl.add("/logout");
+		permitAllUrl.add("/upload/**");
+		permitAllUrl.add("/gitLinkPage");
 	}
 	
 	private void insertPermitAllUrlByChae() {

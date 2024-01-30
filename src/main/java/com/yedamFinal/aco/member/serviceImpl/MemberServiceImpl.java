@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
+import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
@@ -44,7 +45,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	
 	@Value("${cool.sms.from.number}")
 	private String fromNumber;
-	
 	//
     private DefaultMessageService messageService;
     
@@ -53,6 +53,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     
 	@Autowired
 	private FileServiceImpl fileService;
+	
+	@Autowired
+	private GitHubServiceImpl githubService;
     
     @PostConstruct
     public void init() {
@@ -187,6 +190,19 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 			}
 		}
 		
+		return ret;
+	}
+
+	@Override
+	public Map<String, Object> processGitLink(String userid, String tempUserGitCode) {
+		// TODO Auto-generated method stub
+		Map<String,Object> ret = new HashMap<String, Object>();
+		ret.put("result", "400");
+		
+		MemberVO vo = memberMapper.selectLogin(userid);
+		if(vo != null) {
+			githubService.getAccessTokenByGitLink(tempUserGitCode);
+		}
 		return ret;
 	}
 }

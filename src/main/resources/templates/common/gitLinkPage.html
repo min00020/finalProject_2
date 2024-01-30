@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:th="http://www.thymeleaf.org"
+	  lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>AskCode</title>
+	<link th:href="@{/css/mink.css}" rel="stylesheet" type="text/css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	<meta name="csrf" th:content="${_csrf.token}" />
+	<meta name="csrfPara" th:content="${_csrf.parameterName}" />
+	
+	<!-- sweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+	<script type="text/javascript" th:src="@{js/commonMethod.js}"></script>
+	<!-- sweetAlert2 -->
+	<style>
+	img {
+    		margin: auto;
+    		display: block;
+		}
+		.center {
+			margin: 0 auto;
+    		display: block;
+		}
+		.default-right-mg {
+			margin-right : 1rem;
+		}
+		.rounded {
+			padding-left: 3rem;
+			padding-right: 3rem;
+			padding-top : 0.5rem;
+			padding-bottom : 0.5rem;
+			background-color: white;
+			border-radius: 0.5rem;
+			border : 0.5px solid black;
+			border-color : hsla(220,9%,46%,.3);
+		}
+		.small-rounded {
+			padding-left: 1rem;
+			padding-right: 1rem;
+			padding-top : 0.5rem;
+			padding-bottom : 0.5rem;
+			background-color: white;
+			border-radius: 0.5rem;
+			border : 0.5px solid black;
+			border-color : hsla(220,9%,46%,.3);
+		}
+		.default-color {
+			background-color:#3e6ce3;
+			color:white;
+		}
+	</style>
+	<!-- 제이쿼리 -->
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<div style="margin-top:180px; margin-bottom:180px;" class="container">
+		<a href="/">
+			<img src="commonResource/askcodeLogo.png" alt="logo" class="w-25 d-flex justify-content-center">
+		</a>
+		<div>
+			<h2 class="text-center"><b>추가 설정</b></h2>
+			<p class="text-center">AskCode를 좀 더 다양하게 이용하기 위해서는 깃허브 계정 연동이 필요합니다.</p>
+			<p class="text-center">아래 연동 버튼을 선택할 시 깃허브 계정과 연동이 가능해집니다. </p>
+		</div>
+		<div class="d-flex justify-content-center mt-5">
+			<button class="default-right-mg rounded default-color" onclick="gitLink()">
+				연동하기
+			</button>
+			<button class="default-color rounded" onclick="location.href='/loginForm'">
+				취소하기
+			</button>
+		</div>
+	</div>
+	
+	<script>
+		const cid = "[[${clientId}]]";
+		function gitLink() {
+			const GITHUB_LOGIN_URL = "https://github.com/login/oauth/authorize?client_id=" + cid;
+		    window.location.assign(GITHUB_LOGIN_URL);
+		}
+		
+		const queryString = window.location.search;
+	    const urlParams = new URLSearchParams(queryString);
+	    const gitCodeValue = urlParams.get('code'); //인증코드 가져오기 (10분동안만 유효하므로 굳이 저장x)
+		if(typeof gitCodeValue != "undefined") {
+			// 사용자가 로그인을 하고 다시 페이지로 돌아온 경우.
+			$.ajax('gitLink', {
+				type : "POST",
+				data : gitCodeValue,
+			})
+			.done(res => {
+				console.log(res);
+			})
+			.fail(err => {
+				console.log(err);
+			})
+		}
+		else {
+			// 처음 진입인 경우.
+		}
+		
+	</script>
+</body>
+</html>

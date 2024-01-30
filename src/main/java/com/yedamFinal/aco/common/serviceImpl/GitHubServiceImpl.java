@@ -1,0 +1,57 @@
+package com.yedamFinal.aco.common.serviceImpl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.yedamFinal.aco.common.service.GitHubService;
+
+@Service
+public class GitHubServiceImpl implements GitHubService {
+	@Value("${github.oauth.client.id}")
+	private String gitClientId;
+	
+	@Value("${github.oauth.client.secret.id}")
+	private String gitClientSecretId;
+	
+	
+	private WebClient webClient;
+	
+	public GitHubServiceImpl() {
+		webClient = WebClient.create();
+	}
+
+	@Override
+	public void getAccessTokenByGitLink(String tempGitCode) {
+		Map<String,String> reqBodyContent = new HashMap<String,String>();
+		reqBodyContent.put("client_id", gitClientId);
+		reqBodyContent.put("client_secret", gitClientSecretId);
+		reqBodyContent.put("code", tempGitCode);
+		reqBodyContent.put("redirect_uri", "/gitLinkPage");
+		
+		// TODO Auto-generated method stub
+		String apiUrl = "https://github.com/login/oauth/access_token";
+		String response = webClient.post()
+                .uri(apiUrl)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(BodyInserters.fromValue(reqBodyContent))
+                .retrieve()
+                .bodyToMono(String.class).block();
+		
+		return; 
+	}
+
+	@Override
+	public void getGitHubUserInfo(String userAccessToken) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
