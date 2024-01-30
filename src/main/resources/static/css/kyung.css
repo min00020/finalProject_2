@@ -1,7 +1,15 @@
 @charset "UTF-8";
-         
+		
+		body.dark-mode footer p{
+		color: #D8D8D8;
+		}
+		
+		body.dark-mode .text-muted {
+    color: #fff; /* 흰색으로 변경하거나 다른 원하는 색상으로 지정하세요 */
+}
+		
         body.dark-mode {
-            background-color: #2E2E2E;
+            background-color: #383838;
             color: #D8D8D8;
         }
         
@@ -54,8 +62,8 @@
         }
 
         
-        .login-button,
-        .signup-button {
+        .park_login-button,
+        .park_signup-button {
             padding: 10px 20px;
             border-color : hsla(220,9%,46%,.3);
             border-radius: 30px;
@@ -63,23 +71,23 @@
             transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
         }
 
-        .login-button {
+        .park_login-button {
 
             color: #808080;
         }
 
-        .signup-button {
+        .park_signup-button {
             background-color: #3e6ce3;
             color: #fff;
         }
 
-        .login-button:hover, .logout-button:hover, .MP:hover, {
+        .park_login-button:hover, .logout-button:hover, .MP:hover, {
         background-color: #E6E6E6;
            
             border-color: #808080;
         }
 
-        .signup-button:hover {
+        .park_signup-button:hover {
             background-color: #3157B7;
             color: #fff;
             border-color: #808080;
@@ -90,7 +98,7 @@
             margin-bottom: 20px;
         }
 
-        .navbar {
+        .park_navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -98,7 +106,7 @@
            
         }
 
-        .navbar ul {
+        .park_navbar ul {
             list-style: none;
             display: flex;
             gap: 20px;
@@ -108,7 +116,7 @@
              margin-left : -50px;
         }
 
-        .navbar li {
+        .park_navbar li {
             cursor: pointer;
         }
 
@@ -128,10 +136,10 @@
         color: #fff; 
     }
         
-    .navbar li:hover {
+    .park_navbar li:hover {
         color: #3e6ce3; 
     }
-    	.search-align-self-center{
+    	.park_search-align-self-center{
     	width : 200px;
     	position: relative;
     	}
