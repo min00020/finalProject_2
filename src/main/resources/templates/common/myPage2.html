@@ -1,0 +1,128 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+	<div>
+		<section class="d-flex">
+			<aside style="width: 20%; background-color: #aebfec;">
+				<div class="flex-shrink-0 p-3">
+					<div class="row row-cols-1 row-cols-md-3 g-4">
+						<div class="card" style="text-align: center; width: 100%;">
+							<th:block th:if="${memberInfo[0].profileImage} == null">
+								<img src="commonResource/default_profile.jpg"
+									class="rounded-full" style="width:100%; height:100%;" alt="...">
+							</th:block>
+							<th:block th:unless="${memberInfo[0].profileImage} == null">
+								<img class="rounded-full" style="width:100%; height:100%;" alt="...">
+							</th:block>
+							<div class="card-body">
+								<p class="card-text" th:text="${memberInfo[0].nickName}">\</p>
+								<p class="card-text" th:text="${memberInfo[0].email}">\</p>
+								<img
+									th:src="@{/commonResource/gradeimage/${memberinfo[0].memberLevel}.png}">
+								<p class="card-text" th:text="${memberInfo[0].memberLevel}">\</p>
+								<p class="card-text"
+									th:text="${memberInfo[0].accumActivityPoint}">\</p>
+
+							</div>
+						</div>
+					</div>
+					<div class="card"
+						style="width: 100%; height: 400px; margin-top: 30px;">
+						<h5 style="font-weight: bold; text-align: center;">SUMMARY</h5>
+						<div class="card" style="margin: 15px;">
+							<img class="flex-column" src="commonResource/icon/point.png"
+								style="width: 40px; height: auto; object-fit: cover; object-position: center top; position: absolute; top: 50%; transform: translateY(-50%);">
+							<ul class="list-unstyled ps-0">
+
+								<li class="mb-1"><button
+										class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+										data-bs-toggle="collapse" data-bs-target="#home-collapse"
+										aria-expanded="true">POINT</button>
+									<p class="card-text"
+										th:text="${memberInfo[0].acoPoint} + 정산가능포인트 + ${memberInfo[0].availableActivityPoint}">
+										\</p></li>
+							</ul>
+						</div>
+						<div class="card" style="margin: 15px;">
+							<li class="mb-1"><img class="flex-column"
+								src="commonResource/icon/activity.png"
+								style="width: 40px; height: auto; object-fit: cover; object-position: center top; position: absolute; top: 50%; transform: translateY(-50%);">
+
+								<button
+									class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+									data-bs-toggle="collapse" data-bs-target="#dashboard-collapse"
+									aria-expanded="false">내 활동관리</button>
+								<p class="card-text" th:text="|활동점수 / 등급이 궁금하다면?|">\</p>
+								<div class="collapse" id="dashboard-collapse"></div></li>
+						</div>
+						<div class="card" style="margin: 15px;">
+							<li class="mb-1"><img class="flex-column"
+								src="commonResource/icon/modifyinfo.png"
+								style="width: 40px; height: auto; object-fit: cover; object-position: center top; position: absolute; top: 50%; transform: translateY(-50%);">
+								<button
+									class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+									data-bs-toggle="collapse" data-bs-target="#orders-collapse"
+									aria-expanded="false">회원정보관리</button>
+								<p class="card-text" th:text="|정보, 비밀번호 변경|">\</p>
+								<div class="collapse" id="orders-collapse"></div></li>
+						</div>
+					</div>
+				</div>
+			</aside>
+			<div class="container" id="myTabContent" style="width: 800px;">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item" role="presentation">
+						<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+							data-bs-target="#home-tab-pane" type="button" role="tab"
+							aria-controls="home-tab-pane" aria-selected="true">내가
+							참여한 프로젝트</button>
+					</li>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+							data-bs-target="#profile-tab-pane" type="button" role="tab"
+							aria-controls="profile-tab-pane" aria-selected="false">내
+							질답통계</button>
+					</li>
+				</ul>
+				<div>
+
+					<div class="card" style="width: 18rem;float: left;">
+						<div class="card-body">
+							<h5 class="card-title">Card title</h5>
+							<h6 class="card-subtitle mb-2 text-body-secondary">Card
+								subtitle</h6>
+							<p class="card-text">Some quick example text to build on the
+								card title and make up the bulk of the card's content.</p>
+							<a href="#" class="card-link">Card link</a> <a href="#"
+								class="card-link">Another link</a>
+						</div>
+					</div>
+
+				</div>
+				<div class="card" style="width: 18rem;float: left;">
+					<ul class="tab-ul">
+						<p>내 관심주제</p>
+						<li th:text="${memberInfo[0].topicHashtag}"></li>
+					</ul>
+				</div>
+				<div class="card" style="width: 18rem;float: left;">
+					<ul class="tab-ul">
+						<p>
+							이모티콘 구매내역
+							<button>></button>
+						</p>
+						<li th:each="emo:${emoInfo}">[[ ${emo.emoName} ]]
+							[[${emo.emoBuydate}]]
+							<hr>
+						</li>
+					</ul>
+				</div>
+			</div>
+	</div>
+	</section>
+</div>
+
+<div></div>
+
+</div>

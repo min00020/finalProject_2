@@ -10,10 +10,10 @@
 						<div class="card" style="text-align: center; width: 100%;">
 							<th:block th:if="${memberInfo[0].profileImage} == null">
 								<img src="commonResource/default_profile.jpg"
-									class="card-img-top" alt="...">
+									class="rounded-full" style="width:100%; height:100%;" alt="...">
 							</th:block>
 							<th:block th:unless="${memberInfo[0].profileImage} == null">
-								<img class="card-img-top" alt="...">
+								<img class="rounded-full" style="width:100%; height:100%;" alt="...">
 							</th:block>
 							<div class="card-body">
 								<p class="card-text" th:text="${memberInfo[0].nickName}">\</p>
@@ -67,6 +67,23 @@
 								<p class="card-text" th:text="|정보, 비밀번호 변경|">\</p>
 								<div class="collapse" id="orders-collapse"></div></li>
 						</div>
+						<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSheet">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body py-0">
+        <p>This is a modal sheet, a variation of the modal that docs itself to the bottom of the viewport like the newer share sheets in iOS.</p>
+      </div>
+      <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+        <button type="button" class="btn btn-lg btn-primary">Save changes</button>
+        <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 					</div>
 				</div>
 			</aside>
