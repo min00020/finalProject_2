@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedamFinal.aco.admin.mapper.AdminMapper">
+<select id="getAdMemberList" resultType="AdminMemberVO">
+	SELECT  ID,
+			NAME,
+			NICKNAME,
+			EMAIL,
+			PHONE_NUM,
+			ACCUM_ACTIVITY_POINT,
+			ACO_MONEY,
+			ACO_POINT,
+			LEAVE_DATE
+				FROM MEMBER
+				ORDER BY MEMBER_NO
+</select>
+<select id="getAdReportList" resultType="AdminReportVO">
+	SELECT r.REPORT_TYPE,
+			r.REPORT_CONTENT,
+			m.NAME as reporter_name,
+			r.REPORT_DATE,
+			r.REPORT_STATE,
+			r.BOARD_TYPE,
+			r.BOARD_NO,
+			o.NAME as reportee_name
+				FROM REPORT r
+				JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
+				JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
+				ORDER BY r.REPORT_NO
+</select>
+<select id="getAdQnaList" resultType="AdminQnaVO">
+	SELECT Q.QNA_BOARD_NO, 
+					M.NAME as qna_name, 
+					Q.TITLE, 
+					Q.CONTENT,
+					Q.QNA_ANSWER_CONTENT,
+				  	Q.WRITE_DATE,
+				    Q.CHANGE_DATE,
+				    S.SUB_CODE_NAME as qna_state, 
+				    Q.VIEW_CNT  
+						FROM QNA_BOARD Q 
+						JOIN MEMBER M ON Q.MEMBER_NO = M.MEMBER_NO
+						JOIN SUB_CODE_TBL S ON Q.ANSWER_STATE = S.SUB_CODE
+						ORDER BY Q.QNA_BOARD_NO
+</select>
+<select id="getAdSettleList" resultType="AdminSettleVO">
+	SELECT S.SETTLEMENT_NO,
+					 M.NAME as settle_name, 
+					 S.SETTLEMENT_REQ_POINT, 
+					 S.REQ_ACCOUNT, 
+					 S.REQ_ACCOUNT_NAME, 
+					 S.REQ_ACCOUNT_BANKCODE, 
+					 S.REQ_BANKNAME, 
+					 C.SUB_CODE_NAME as settle_state
+						FROM SETTLEMENT S
+						JOIN MEMBER M ON S.MEMBER_NO = M.MEMBER_NO
+						JOIN SUB_CODE_TBL C ON S.PROCESS_STATUS = C.SUB_CODE
+						ORDER BY S.SETTLEMENT_NO 
+</select>
+<select id="getAdEmoList" resultType="AdminEmoVO">
+	SELECT E.EMO_NO, 
+			E.EMO_NAME, 
+			E.EMO_PRICE, 
+			E.EMO_DESC, 
+			E.EMO_FIRSTIMG, 
+			E.EMO_INNERIMG, 
+			E.EMO_PATH, 
+			C.SUB_CODE_NAME AS EMOTICON_STATE
+				FROM EMOTICON E
+				JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
+				ORDER BY E.EMO_NO
+</select>
+</mapper>

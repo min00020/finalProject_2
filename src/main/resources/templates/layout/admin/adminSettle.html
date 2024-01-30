@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head>
 
@@ -205,7 +205,16 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">정산관리</h1>
-
+                       <div class="dropdown mb-4" style="text-align: right">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            처리상태
+                                        </button>
+                                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                       </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -220,23 +229,22 @@
                                         <tr>
                                             <th>요청자</th>
                                             <th>정산 요청금액</th>
-                                            <th>보유 포인트</th>
                                             <th>처리상태</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                    
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>$320,800</td>
-                                            <td>탈퇴</td>
-                                            <td></td>
+                                        <tr th:each="settles : ${adminSettle}">
+                                            <td th:text=${settles.settleName}></td>
+                                            <td th:text=${settles.settlementReqPoint}></td>
+                                            <td th:text=${settles.settleState}></td>
+                                            <td><div style="text-align: center"><button class="btn btn-success">정산</button></div></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <div style="text-align: right"><button class="btn btn-primary">일괄정산</button></div>
                         </div>
                     </div>
 

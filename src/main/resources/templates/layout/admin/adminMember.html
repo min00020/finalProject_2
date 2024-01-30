@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head>
 
@@ -220,21 +220,22 @@
                                             <th>이름</th>
                                             <th>E-Mail</th>
                                             <th>연락처</th>
-                                            <th>활동점수</th>
+                                            <th>누적활동점수</th>
                                             <th>포인트</th>
                                             <th>탈퇴여부</th>
                                         </tr>
                                     </thead>
                                    
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                            <td>탈퇴</td>
+                                        <tr th:each="members : ${adminMember}">
+                                            <td th:text="${members.id}"></td>
+                                            <td th:text="${members.name}"></td>
+                                            <td th:text="${members.email}"></td>
+                                            <td th:text="${members.phoneNum}"></td>
+                                            <td th:text="${members.accumActivityPoint}"></td>
+                                            <td th:text="${members.acoMoney + members.acoPoint}"></td>
+                                            <td th:text="YES" th:if="${members.leaveDate != null}"></td>
+                                            <td th:text="NO" th:unless="${members.leaveDate != null}"></td>
                                         </tr>
                                     </tbody>
                                 </table>

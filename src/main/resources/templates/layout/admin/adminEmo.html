@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head>
 
@@ -205,7 +205,16 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">이모티콘관리</h1>
-
+					                       <div class="dropdown mb-4" style="text-align: right">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            처리상태
+                                        </button>
+                                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                       </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -219,20 +228,23 @@
                                             <th>이름</th>
                                             <th>설명</th>
                                             <th>가격</th>
+                                            <th>판매상태</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                    
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>$320,800</td>
-                                            <td></td>
+                                        <tr th:each="emo : ${adminEmo}">
+                                            <td th:text="${emo.emoName}"></td>
+                                            <td th:text="${emo.emoDesc}"></td>
+                                            <td th:text="${emo.emoPrice}"></td>
+                                            <td th:text="${emo.emoticonState}"></td>
+                                            <td><div style="text-align: center"><button class="btn btn-danger">판매종료</button></div></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <div style="text-align: right"><button class="btn btn-primary">이모티콘 등록</button></div>
                         </div>
                     </div>
 

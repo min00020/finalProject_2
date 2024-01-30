@@ -37,32 +37,4 @@ public class MemberController {
 		return "common/createAccount";
 	}
 	
-	@GetMapping("/admin")
-	public String getAdminPageForm() {
-		return "layout/admin/adminTemplate";
-	}
-	@GetMapping("/adminMember")
-	public String getAdminMemberPageForm() {
-		return "layout/admin/adminMember";
-	}
-	@GetMapping("/adminStat")
-	public String getAdminStatPageForm() {
-		return "layout/admin/adminStat";
-	}
-	@GetMapping("/adminReport")
-	public String getAdminReportPageForm() {
-		return "layout/admin/adminReport";
-	}
-	@GetMapping("/adminQna")
-	public String getAdminQnaPageForm() {
-		return "layout/admin/adminQna";
-	}
-	@GetMapping("/adminSettle")
-	public String getAdminSettlePageForm() {
-		return "layout/admin/adminSettle";
-	}
-	@GetMapping("/adminEmo")
-	public String getAdminEmoPageForm() {
-		return "layout/admin/adminEmo";
-	}
 }

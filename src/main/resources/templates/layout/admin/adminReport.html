@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://thymeleaf.org">
 
 <head>
 
@@ -205,7 +205,16 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">신고관리</h1>
-
+                       <div class="dropdown mb-4" style="text-align: right">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            처리상태
+                                        </button>
+                                        <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                       </div>
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -216,25 +225,30 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>작성자</th>
-                                            <th>내용</th>
+                                            <th>신고자</th>
                                             <th>신고종류</th>
                                             <th>신고사유</th>
-                                            <th>신고자</th>
+                                            <th>피신고자</th>
                                             <th>신고일</th>
                                             <th>처리상태</th>
                                         </tr>
                                     </thead>
                                    
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                            <td>탈퇴</td>
+                                        <tr th:each="reports : ${adminReport}">
+                                            <td th:text="${reports.reporterName}"></td>
+                                            <td th:text="홍보" th:if="${reports.reportType == 'A001'}"></td>
+                                            <td th:text="도배" th:if="${reports.reportType == 'A002'}"></td>
+                                            <td th:text="불법정보" th:if="${reports.reportType == 'A003'}"></td>
+                                            <td th:text="욕설" th:if="${reports.reportType == 'A004'}"></td>
+                                            <td th:text="개인정보 노출" th:if="${reports.reportType == 'A005'}"></td>
+                                            <td th:text="기타" th:if="${reports.reportType == 'A006'}"></td>
+                                            <td th:text="${reports.reportContent}"></td>
+                                            <td th:text="${reports.reporteeName}"></td>
+                                            <td th:text="${#dates.format(reports.reportDate, 'yyyy/MM/dd')}"></td>
+                                            <td th:text="처리대기중" th:if="${reports.reportState == 'B001'}"></td>
+                                            <td th:text="제재" th:if="${reports.reportState == 'B002'}"></td>
+                                            <td th:text="반려" th:if="${reports.reportState == 'B003'}"></td>
                                         </tr>
                                     </tbody>
                                 </table>
