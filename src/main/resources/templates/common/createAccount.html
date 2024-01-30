@@ -397,13 +397,13 @@ function sendJoinRequest() {
 		return;
 	}
 	
-
-
-	const file = $("#profileImg")[0].files[0];
-	
 	const formData = new FormData();
 	
 	formData.append(csrfPara, csrfToken);
+	const file = $("#profileImg")[0].files[0];
+	
+	formData.append(csrfPara, csrfToken);
+	//formData.append("member", memberObj);
 	formData.append("id", $('input[name="userid"]').val());
 	formData.append("password", $('input[name="userpw"]').val());
 	formData.append("email", $('input[name="email"]').val());
@@ -412,19 +412,17 @@ function sendJoinRequest() {
 	formData.append("nickName", $('input[name="nickname"]').val());
 	formData.append("profileImage", $('#customFileInput').val());
 	formData.append("topicHashTag", insertTagList.join("#"));
-	formData.append("permission", 'ROLE_USER');
-	formData.append("leaveDate", new Date());
-	formData.append("accumActivityPoint", 0);
-	formData.append("availableActivityPoint", 0);
-	formData.append("acoMoney", 0);
+	//formData.append("permission", 'ROLE_USER');
+	//formData.append("leaveDate", new Date());
+	//formData.append("accumActivityPoint", 0);
+	//formData.append("availableActivityPoint", 0);
+	//formData.append("acoMoney", 0);
 	formData.append("acoPoint", 1000);
-	formData.append("memberLevel", 'K001');
-	formData.append("snsType", null);
-	formData.append("banType", null);
-	formData.append("banDate", null);
+	//formData.append("memberLevel", 'K001');
+	
 	
 	if(typeof file != "undefined")
-		formData.append('profileImage', file);
+		formData.append('file', file);
 	
 	$.ajax('/join', {
 		type : "POST",
@@ -433,7 +431,8 @@ function sendJoinRequest() {
 		processData : false  
     })
     .done(res => {
-    	console.log(res);
+    	//showSuccessAlert("가입 성공!", "애코 포인트 1000 지급 완료!");
+    	window.location.href = "/loginForm?join=1";
     })
     .fail(err => {
     	console.log(err);

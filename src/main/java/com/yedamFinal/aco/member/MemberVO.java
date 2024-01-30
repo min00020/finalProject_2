@@ -10,7 +10,7 @@ public class MemberVO {
 	private String email;
 	private String phoneNum;
 	private String name;
-	private String nickName;
+	private String nickname;
 	private String profileImage;
 	private String topicHashtag;
 	private String permission;
@@ -60,11 +60,11 @@ public class MemberVO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getNickName() {
-		return nickName;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public String getProfileImage() {
 		return profileImage;

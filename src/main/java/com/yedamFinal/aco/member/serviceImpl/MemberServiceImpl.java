@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.member.service.MemberService;
 
@@ -41,7 +44,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Value("${cool.sms.from.number}")
 	private String fromNumber;
 	
+	//
     private DefaultMessageService messageService;
+    
+    @Autowired
+    private PasswordEncoder bCryptPasswordEncoder;
     
     @PostConstruct
     public void init() {
@@ -51,7 +58,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		return null;
+		MemberVO vo = memberMapper.selectLogin(username);
+		if(vo == null) {
+			throw new UsernameNotFoundException("no name");
+		}
+		
+		return new UserDetailVO(vo);
 	}
 
 	@Override
@@ -127,6 +139,40 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		// TODO Auto-generated method stub
 		return memberMapper.selectTagList();
 	}
-	
-	
+	@Override
+	public Map<String, Object> joinMember(MemberVO vo, MultipartFile file) {
+		// TODO Auto-generated method stub
+		vo.setPermission("ROLE_USER");
+		vo.setAccumActivityPoint(0);
+		vo.setAvailableActivityPoint(0);
+		vo.setAcoMoney(0);
+		vo.setMemberLevel("K001");
+		
+		vo.setPassword(bCryptPasswordEncoder.encode(vo.getPassword()));
+		
+		Map<String,Object> ret = new HashMap<String,Object>();
+		if(memberMapper.insertMember(vo) <= 0) {
+			ret.put("result", "500");
+		}
+		else {
+			ret.put("result", "200");
+			ret.put("vo", vo);
+		}
+		
+		return ret;
+	}
+	@Override
+	public Map<String,Object> loginMember(String userid, String userpw) {
+		// TODO Auto-generated method stub
+		MemberVO vo = memberMapper.selectLogin(userid);
+		Map<String,Object> ret = new HashMap<String,Object>();
+		ret.put("result", "404");
+		if(vo != null) {
+			if(bCryptPasswordEncoder.matches(userpw, vo.getPassword())) {
+				ret.put("result","200");
+			}
+		}
+		
+		return ret;
+	}
 }

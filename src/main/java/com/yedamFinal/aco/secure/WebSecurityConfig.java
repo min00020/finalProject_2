@@ -38,6 +38,7 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests((requests) -> requests
 				.antMatchers(permitAllUrl.toArray(new String[permitAllUrl.size()])).permitAll() // 해당 경로의 페이지는 모두 접속허용
 				.antMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER")
+				.antMatchers("/test").hasAnyRole("USER")
 				.anyRequest().authenticated() // 그 외는 모두 로그인해야만 접근이 가능
 			)
 			.formLogin((form) -> form
@@ -59,9 +60,11 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/");
 		permitAllUrl.add("/createAccountForm");
 		permitAllUrl.add("/checkId");
+		permitAllUrl.add("/checkEmail");
 		permitAllUrl.add("/authPhoneNum");
 		permitAllUrl.add("/verifyAuthPhoneNum");
 		permitAllUrl.add("/join");
+		permitAllUrl.add("/login");
 	}
 	
 	private void insertPermitAllUrlByChae() {

@@ -18,8 +18,15 @@
 		FROM member
 		WHERE ID = #{id}
 </select>
+<select id="selectLogin" resultType="MemberVO">
+	SELECT MEMBER_NO,ID,PASSWORD,EMAIL,PHONE_NUM,NAME,NICKNAME,PROFILE_IMAGE,TOPIC_HASHTAG,
+	PERMISSION,LEAVE_DATE,ACCUM_ACTIVITY_POINT,AVAILABLE_ACTIVITY_POINT,ACO_MONEY,ACO_POINT,MEMBER_LEVEL,
+	SNS_TYPE,BAN_TYPE,BAN_DATE
+		FROM member
+		WHERE ID = #{id}
+</select>
 <select id="selectCheckDuplicateEmail" resultType="MemberVO">
-	SELECT id
+	SELECT email
 		FROM member
 		WHERE email = #{email}
 </select>
@@ -50,5 +57,17 @@
 <select id="selectTagList" resultType="com.yedamFinal.aco.common.TagVO">
 	SELECT TAG_NAME
 		FROM TAG
-</select>    
+</select>
+<insert id="insertMember" parameterType="MemberVO">
+	INSERT INTO MEMBER (
+		MEMBER_NO,ID,PASSWORD,EMAIL,
+		PHONE_NUM,NAME,NICKNAME,PROFILE_IMAGE,TOPIC_HASHTAG,PERMISSION,LEAVE_DATE,ACCUM_ACTIVITY_POINT,
+		AVAILABLE_ACTIVITY_POINT,ACO_MONEY,ACO_POINT,MEMBER_LEVEL,SNS_TYPE,BAN_TYPE,BAN_DATE
+	)
+	VALUES(
+		member_seq.NEXTVAL,#{id},#{password},#{email},#{phoneNum},#{name},#{nickname},#{profileImage},
+		#{topicHashtag},#{permission},null,#{accumActivityPoint},#{availableActivityPoint},#{acoMoney},#{acoPoint},#{memberLevel},
+		null,null,null
+	)
+</insert>    
 </mapper>

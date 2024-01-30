@@ -3,13 +3,14 @@ package com.yedamFinal.aco.member.web;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,10 @@ public class MemberController {
 	private MemberServiceImpl memberService;
 	
 	@GetMapping("/loginForm")
-	public String getLoginForm() {
+	public String getLoginForm(String join, Model model) {
+		if(join != null && join.equals("1")) {
+			model.addAttribute("join",1);
+		}
 		return "common/loginForm";
 	}
 	
@@ -34,7 +38,7 @@ public class MemberController {
 	}
 	
 	@GetMapping("/createAccountForm")
-	public String getCreateAccountForm(Model model) {
+	public String getCreateAccountForm(HttpServletRequest request, Model model) {
 		var tagList = memberService.getTagList();
 		model.addAttribute("tagList", tagList);
 		return "common/createAccount";
@@ -65,11 +69,26 @@ public class MemberController {
 		return memberService.verifyAuthNumber(authNum,phoneNum);	
 	}
 
-	//RequestParam은 1:1 (보내는 key와 받는 매개변수가) 매핑이지만 ModelAttribute는 객체매핑.
 	@PostMapping("/join")
-	public Map<String, Object> joinMember(MemberVO member, @RequestPart("profileImage") MultipartFile profileImage) {
+	@ResponseBody
+	public Map<String, Object> joinMember(MemberVO member, MultipartFile file) {  
+		if(member == null) {
+			Map<String,Object> ret = new HashMap<String, Object>();
+			ret.put("result", "400");
+			return ret;
+		}
 		
-		int b = 90;
-		return new HashMap<String,Object>();
+		return memberService.joinMember(member, file);
+	}
+	
+	@PostMapping("/login")
+	@ResponseBody
+	public Map<String,Object> login(@RequestParam("userid") String userid, @RequestParam("userid") String userpw) {
+		return memberService.loginMember(userid, userpw);
+	}
+	
+	@GetMapping("/test")
+	public String test() {
+		return "common/test";
 	}
 }
