@@ -1,6 +1,5 @@
 package com.yedamFinal.aco.member.web;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
+import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.questionboard.MyquestionVO;
 
 @Controller
 @PropertySource("classpath:config.properties")
@@ -40,10 +42,26 @@ public class MemberController {
 	public String getCreateAccountForm() {
 		return "common/createAccount";
 	}
+	//회원정보 단건조회
 	@GetMapping("/myPage")
 	public String getMyPageForm(MemberVO memberVO, Model model) {
 		List<MemberVO> list = memberService.getMemberInfo(memberVO);
+		List<MyemoticonVO> emoinfo = memberService.getMyemoList(memberVO);
+		model.addAttribute("emoInfo", emoinfo);
 		model.addAttribute("memberInfo", list);
 		return "common/myPage"; 
 	}
+	// 책갈피목록, 질문글 목록
+	@GetMapping("/myPage2")
+	public String getMyPageForm2(MemberVO memberVO, Model model) {
+		List<MemberVO> list = memberService.getMemberInfo(memberVO);
+		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
+		List<MyquestionVO> myquestion = memberService.getMyqList(memberVO);
+		model.addAttribute("memberInfo", list);
+		model.addAttribute("bmark", bmark);
+		model.addAttribute("mquestion", myquestion);
+		return "common/myPage2";
+	}
+	
+	
 }

@@ -14,13 +14,33 @@
 </select>
 
 <select id="selectMemberInfo" resultType="MemberVO">
-	SELECT m.member_no, m.email, m.nickname, m.profile_image, m.topic_hashtag, m.accum_activity_point, m.available_activity_point, m.aco_point, m.member_level, c.sub_code_name, e.emo_name, e.emo_buydate
+	SELECT m.member_no, m.email, m.nickname, m.profile_image, m.topic_hashtag, m.accum_activity_point, m.available_activity_point, m.aco_point, m.member_level, c.sub_code_name
 	FROM member m 
-		JOIN my_emoticon e ON m.member_no = e.member_no
 		JOIN sub_code_tbl c ON c.sub_code = m.member_level
 	WHERE m.member_no = #{memberNo}
-	ORDER BY e.emo_buydate desc
 
 
 </select>
+
+<select id="selectMyemoticonList" resultType="com.yedamFinal.aco.myemoticon.MyEmoticonJoinVO">
+	SELECT e.emo_name, m.emo_buydate
+	FROM my_emoticon m
+		JOIN emoticon e ON m.emo_no = e.emo_no
+		JOIN member a ON m.member_no = a.member_no
+	WHERE m.member_no= #{memberNo}
+	ORDER BY m.emo_buydate desc
+</select>
+<select id="selectMybmList" resultType="com.yedamFinal.aco.bookmark.MybookmarkVO">
+	SELECT title, regist_date
+	FROM my_bookmark
+	WHERE member_no= #{memberNo}
+	ORDER BY regist_date desc
+</select>
+<select id="selectMyqList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
+	SELECT question_board_no,title,write_date,answer_cnt
+	FROM question_board
+	WHERE member_no=#{memberNo}
+	ORDER BY write_date desc
+</select>
+
 </mapper>
