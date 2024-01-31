@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
+import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 
 @Controller
@@ -27,6 +28,8 @@ public class MemberController {
 	
 	@Autowired
 	private MemberServiceImpl memberService;
+	@Autowired
+	private FreeBoardService freeBoardService;
 	
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
@@ -42,6 +45,9 @@ public class MemberController {
 	@GetMapping("/")
 	public String getMainPageForm(Model model) {
 		model.addAttribute("main", "1");
+		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
+		
+		
 		return "common/mainPage";
 	}
 	
