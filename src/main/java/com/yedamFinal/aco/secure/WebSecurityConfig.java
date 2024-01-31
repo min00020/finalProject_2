@@ -3,17 +3,30 @@ package com.yedamFinal.aco.secure;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 	private List<String> permitAllUrl = null;
+	
+	@Autowired
+	private LoginFailHandler loginFailHandler;
+	
+	@Autowired
+	private LoginSuccessHandler loginSuccessHandler;
+	
+	@Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
+    }
 	
 	public WebSecurityConfig() {
 		// 로그인하지않아도 허용되는 경로들 삽입.
@@ -43,9 +56,15 @@ public class WebSecurityConfig {
 			.formLogin((form) -> form
 				.loginPage("/loginForm")
 				.usernameParameter("userid")
+				.successHandler(loginSuccessHandler)
+				.failureHandler(loginFailHandler)
 				.permitAll()
 			)
-			.logout((logout) -> logout.permitAll());
+			.logout((logout) -> logout.permitAll().logoutUrl("/logout")
+			        .logoutSuccessUrl("/")
+			        .invalidateHttpSession(true)
+			        .deleteCookies("JSESSIONID")
+			);
 
 		return http.build();
 	}
@@ -58,6 +77,16 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/js/**");
 		permitAllUrl.add("/");
 		permitAllUrl.add("/createAccountForm");
+		permitAllUrl.add("/checkId");
+		permitAllUrl.add("/checkEmail");
+		permitAllUrl.add("/authPhoneNum");
+		permitAllUrl.add("/verifyAuthPhoneNum");
+		permitAllUrl.add("/join");
+		permitAllUrl.add("/login");
+		permitAllUrl.add("/logout");
+		permitAllUrl.add("/upload/**");
+		permitAllUrl.add("/gitLink");
+		permitAllUrl.add("/gitLinkPage");
 	}
 	
 	private void insertPermitAllUrlByChae() {

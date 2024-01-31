@@ -75,9 +75,13 @@ body.light-mode {
 
 .park_login-button {
 	color: #808080;
+	border : 0.5px solid black;
+	border-color : hsla(220,9%,46%,.3);
 }
 
 .park_signup-button {
+	border : 0.5px solid black;
+	border-color : hsla(220,9%,46%,.3);
 	background-color: #3e6ce3;
 	color: #fff;
 }
