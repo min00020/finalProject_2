@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  lang="ko">
 <head>
 	<meta charset="UTF-8">
@@ -26,6 +27,9 @@
 		<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
 		<script type="text/javascript" th:src="@{js/commonMethod.js}"></script>
 		<!-- sweetAlert2 -->
+		<meta name="csrf" th:content="${_csrf.token}" />
+		<meta name="csrfPara" th:content="${_csrf.parameterName}" />
+	
 		
 	
 	
@@ -72,6 +76,7 @@
 </head>
 <body class="light-mode">
 	<header th:replace="@{/layout/member/header.html}"></header>
+	
 	<section class="d-flex justify-content-between common-width">
 		<th:block th:if="${main} == 1">
 			<aside style="width:15%;">

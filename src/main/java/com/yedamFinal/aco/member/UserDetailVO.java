@@ -22,6 +22,10 @@ public class UserDetailVO implements UserDetails {
 		this.memberVO = memberVO;
 	}
 	
+	public MemberVO getMemberVO() {
+		return memberVO;
+	}
+	
 	// 페이지 접근권한
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
