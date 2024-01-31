@@ -105,8 +105,9 @@ public class MemberController {
 	}
 	
 	@GetMapping("/gitLinkPage")
-	public String gitLinkPageForm(HttpServletRequest req, @RequestParam String id, Model model) {
-		req.getSession().setAttribute("tempId", id);
+	public String gitLinkPageForm(HttpServletRequest req, String id, Model model) {
+		if(id != null)
+			req.getSession().setAttribute("tempId", id);
 		model.addAttribute("clientId",gitClientId);
 		return "common/gitLinkPage";
 	}

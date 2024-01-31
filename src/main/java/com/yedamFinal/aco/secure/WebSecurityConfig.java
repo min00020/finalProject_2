@@ -85,6 +85,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/login");
 		permitAllUrl.add("/logout");
 		permitAllUrl.add("/upload/**");
+		permitAllUrl.add("/gitLink");
 		permitAllUrl.add("/gitLinkPage");
 	}
 	

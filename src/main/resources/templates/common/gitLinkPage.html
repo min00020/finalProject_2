@@ -87,9 +87,9 @@
 		const queryString = window.location.search;
 	    const urlParams = new URLSearchParams(queryString);
 	    const gitCodeValue = urlParams.get('code'); //인증코드 가져오기 (10분동안만 유효하므로 굳이 저장x)
-		if(typeof gitCodeValue != "undefined") {
+		if(gitCodeValue != null && typeof gitCodeValue != "undefined") {
 			// 사용자가 로그인을 하고 다시 페이지로 돌아온 경우.
-			$.ajax('gitLink', {
+			$.ajax('/gitLink', {
 				type : "POST",
 				data : gitCodeValue,
 			})
