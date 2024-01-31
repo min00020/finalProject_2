@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 
 @Controller
@@ -15,6 +16,8 @@ public class MemberController {
 	
 	@Autowired
 	private MemberServiceImpl memberService;
+	@Autowired
+	private FreeBoardService freeBoardService;
 	
 	@Value("${test}")
 	private int test = 0;
@@ -29,6 +32,9 @@ public class MemberController {
 	@GetMapping("/")
 	public String getMainPageForm(Model model) {
 		model.addAttribute("main", "1");
+		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
+		
+		
 		return "common/mainPage";
 	}
 	
@@ -46,5 +52,10 @@ public class MemberController {
 	@GetMapping("/questionInfo")
 	public String getquestionInfo() {
 		return "question/questionInfo";
+	}
+	@GetMapping("/zxc")
+	public String zxc() {
+		return "common/zxzx";
+
 	}
 }
