@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
+import com.yedamFinal.aco.admin.AdminMainVO;
 import com.yedamFinal.aco.admin.AdminMemberVO;
 import com.yedamFinal.aco.admin.AdminQnaVO;
 import com.yedamFinal.aco.admin.AdminReportVO;
@@ -26,7 +27,11 @@ public class AdminController {
 	private int test = 0;
 	
 	@GetMapping("/admin")
-	public String getAdminPageForm() {
+	public String getAdminPageForm(Model model) {
+		List<AdminMainVO> list = adminService.getAdCntList();
+		List<AdminMainVO> list1 = adminService.getAdNoticeList();
+		model.addAttribute("adminCnt", list);
+		model.addAttribute("adminNotice", list1);
 		return "layout/admin/adminTemplate";
 	}
 	@GetMapping("/adminMember")

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
+import com.yedamFinal.aco.admin.AdminMainVO;
 import com.yedamFinal.aco.admin.AdminMemberVO;
 import com.yedamFinal.aco.admin.AdminQnaVO;
 import com.yedamFinal.aco.admin.AdminReportVO;
@@ -43,5 +44,15 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<AdminEmoVO> getAdEmoList() {
 		return adminMapper.getAdEmoList();
+	}
+
+	@Override
+	public List<AdminMainVO> getAdCntList() {
+		return adminMapper.getAdCntList();
+	}
+
+	@Override
+	public List<AdminMainVO> getAdNoticeList() {
+		return adminMapper.getAdNoticeList();
 	}
 }

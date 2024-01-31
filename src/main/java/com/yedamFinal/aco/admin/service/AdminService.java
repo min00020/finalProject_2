@@ -3,6 +3,7 @@ package com.yedamFinal.aco.admin.service;
 import java.util.List;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
+import com.yedamFinal.aco.admin.AdminMainVO;
 import com.yedamFinal.aco.admin.AdminMemberVO;
 import com.yedamFinal.aco.admin.AdminQnaVO;
 import com.yedamFinal.aco.admin.AdminReportVO;
@@ -15,4 +16,6 @@ public interface AdminService {
 	public List<AdminQnaVO>    getAdQnaList();
 	public List<AdminSettleVO> getAdSettleList();
 	public List<AdminEmoVO> getAdEmoList();
+	public List<AdminMainVO> getAdCntList();
+	public List<AdminMainVO> getAdNoticeList();
 }
