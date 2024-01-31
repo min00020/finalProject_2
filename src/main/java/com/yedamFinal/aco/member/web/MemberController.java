@@ -43,8 +43,14 @@ public class MemberController {
 		return "common/createAccount";
 	}
 	
+	@GetMapping("/zxc")
+	public String zxc() {
+		return "common/zxzx";
+	}
 	
-	//min 질문&답변 게시판
+
+	
+	/*chae 질문&답변 게시판*/
 	@GetMapping("/questionBoard")
 	public String getquestionBoard() {
 		return "question/questionList";
@@ -53,9 +59,12 @@ public class MemberController {
 	public String getquestionInfo() {
 		return "question/questionInfo";
 	}
-	@GetMapping("/zxc")
-	public String zxc() {
-		return "common/zxzx";
-
+	@GetMapping("/questionWrite")
+	public String questionWrite() {
+		return "question/questionWrite";
 	}
+	
+	
+	
 }
+

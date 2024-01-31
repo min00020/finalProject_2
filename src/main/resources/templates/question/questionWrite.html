@@ -1,0 +1,67 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+>
+	<!-- html 태그 작성. -->
+	<section>
+		<!-- <div id="qna_banner">
+			<h3>질문&답변</h3>
+			<p>좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
+		</div> -->
+		<div class="container" style="width:1200px;">
+			<h3 style="font-weight:bold; color:#3e6ce3;margin-left:20px;">질문 작성하기</h3>
+			<hr>
+			<!-- 질문 작성폼 시작 -->
+			<div style="width:900px; margin:0 auto; ">
+				<div class="d-flex justify-content-between">	
+					<div style="width:48%;">
+						<span style="font-weight : bold;">토픽</span>
+						<p style="font-size:14px;">질문과 관련된 토픽을 선택해주세요. </p>
+	                    <select class="form-select" style="border:1px solid #ccc;">
+	                    	<option value="" selected disabled hidden>토픽을 선택해주세요</option>
+	                    	<option value="기술">기술</option>
+	                    	<option value="사이드프로젝트">사이드 프로젝트</option>
+	                    </select>
+					</div>
+					<div style="width:48%;">
+						<span style="font-weight : bold;">포인트</span>
+						<span style="margin-left:5px; font-size:12px;">보유 </span>
+						<span style="font-size:12px;color:#3e6ce3; font-weight:bold;">1000원</span>
+						<p style="font-size:14px;">답변자에게 지급할 포인트 금액을 입력해주세요. </p>
+	                   <!-- 	<input type="text" class="form-control" value="0"> -->
+	                   	<div class="chae_input-container" style="width:100%;">
+						    <input type="text" class="form-control" value="0" style="color:#3e6ce3;">
+						    <button class="chae_pointBtn">전액사용</button>
+						</div>
+					</div>
+				</div>
+				<!-- 토픽, 포인트 끝 -->
+				<br>
+				<div>
+					<div>
+						<h6 style="font-weight : bold;">제목</h6>
+						<input type="text" class="form-control" placeholder="제목을 입력해주세요">
+						<br>
+					</div>
+					<h6 style="font-weight : bold;">태그</h6>
+					<input type="text" class="form-control" placeholder="태그를 입력해주세요">
+					<br>
+					
+					<h6 style="font-weight : bold;">질문 내용</h6>
+					<textarea class="form-control" style="height:300px;"></textarea>
+					<br>
+				</div>
+				
+				
+				<div style="float: right;margin-bottom:10px;">
+					<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+					<button type="button" class="btn text-white" style="background-color:#3e6ce3;">등록</button>
+				</div>
+			</div>
+			<!-- 질문 작성폼 끝 -->
+		</div>
+		
+	</section>
+</div>

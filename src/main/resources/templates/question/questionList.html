@@ -4,6 +4,7 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content"
 >
+<section>
 	<div id="qna_banner">
 		<h3>질문&답변</h3>
 		<p>좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
@@ -20,31 +21,31 @@
 		            <table class="QNAsidemenu">
 		               <tr>
 		                  <td>
-			                  <span class="QNAtag">#spring</span>
+			                  <span class="QNAtag"># spring</span>
 			                  <span class="QNAno">300</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="QNAtag">#springboot</span>
+			                  <span class="QNAtag"># springboot</span>
 			                  <span class="QNAno">200</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="QNAtag">#java</span>
+			                  <span class="QNAtag"># java</span>
 			                  <span class="QNAno">90</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="QNAtag">#node.js</span>
+			                  <span class="QNAtag"># node.js</span>
 			                  <span class="QNAno">50</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
-			                  <span class="QNAtag">#vue</span>
+			                  <span class="QNAtag"># vue</span>
 			                  <span class="QNAno">10</span>
 		                  </td>
 		               </tr>
@@ -85,8 +86,8 @@
 	             <li>사이드 프로젝트</li>
 	             <li id="search" style="margin-left: auto;">
 	             	<div class="search-align-self-center" >
-			  			<input type="text" placeholder="검색어 입력" class="searchInput">
-			  			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="searchImg">
+			  			<input type="text" placeholder="검색어 입력" class="park_searchInput">
+			  			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="park_searchImg">
 					</div>
 	             </li>
 	        </ul>
@@ -125,15 +126,15 @@
 					    <p style="color:blue">#node.js #mysql</p>
 				 	</div>
 			 	</div>
-				<div class="col-1">
+				<div class="col-1" style="text-align:center; margin:auto;">
 				 	<h6>2</h6>
 				 	<h6>조회</h6>
 				</div>
-				<div class="col-1">
+				<div class="col-1" style="text-align:center; margin:auto;">
 				 	<h6>5</h6>
 				 	<h6>추천</h6>
 				</div>
-				<div id="answercnt" class="col-1">
+				<div id="answercnt" class="col-1" style="text-align:center; margin:auto;">
 				 	<h6 class="QNAcnt">10</h6>
 				 	<h6>답변</h6>
 				</div>
@@ -144,5 +145,5 @@
 		<!-- end of questionBoard -->
 	</div>
 	
-
+</section>
 </div>

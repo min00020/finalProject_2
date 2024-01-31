@@ -104,10 +104,7 @@
 	.QNAcnt{
 	  font-weight : bold;
 	}
-	.col-1{
-		text-align:center;
-		margin:auto;
-	}
+
 	#answercnt{
 		color : #3e6ce3;
 		border-width : 1px;
@@ -250,6 +247,7 @@
     margin-bottom:9px;
 }
 
+/*추가 질문답변*/
 #qna_add{
 	display:flex;
 	align-items: flex-start; 
@@ -269,7 +267,7 @@
 	justify-content: right;
 	padding:20px;
 }
-.qna_add_form{
+#qna_add_form{
 	width:800px;
   	margin : 10px; 
  	padding : 30px;
@@ -299,4 +297,51 @@
 	    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
 	    transform: translateY(-50%); 
 	}
+/*포인트 input-전액사용 버튼 만들기*/
+	.chae_input-container {
+		position: relative;
+		display: inline-block;
+	}
 
+	.form-control {
+		width: 100%;
+		padding-right: 40px; /* 버튼을 위한 우측 여백 */
+		border: 1px solid #ccc; /* 입력란 테두리 추가 (선택사항) */
+		border-radius: 4px; /* 입력란 테두리를 둥글게 만듦 (선택사항) */
+		box-sizing: border-box; /* 입력란의 크기를 테두리를 포함한 크기로 설정 (선택사항) */
+	}
+
+	.chae_pointBtn {
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 100%;
+		padding: 7px 15px;
+		border: none;
+		background-color: transparent;
+		color: #76767e; /* 버튼 텍스트 색상 설정 */
+		cursor: pointer;
+		font-size:14px;
+	}
+
+	.separator {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		height: 70%;
+		width: 1px;
+		background-color: #ccc;
+	}
+
+	.chae_input-container::before {
+		content: '';
+		width: 1px;
+		height: 100%;
+		background-color: #ccc;
+		margin-right: 5px;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%); /*수직 중앙 정렬 */
+		right: 18%;
+}

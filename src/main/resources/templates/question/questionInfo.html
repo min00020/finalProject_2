@@ -4,9 +4,10 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content"
 >
+<section>
 	<div id="qna_banner">
 		<h3>질문&답변</h3>
-		<p>좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
+		<p style="color:#76767e">좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
 	</div>
 	<div class="container">
 		<!-- 상단 선택 메뉴 -->
@@ -180,32 +181,31 @@
 					<span class="m-1" style="font-weight:bold;">질문자의 추가질문</span>
 					<span style="float:right;font-size: 15px;color:#76767e;">신고</span>
 					<p class="m-1">추가로 질문할 게 있는데 개념에 대해 더 설명해주실 수 있나요? </p>
-					<span class="m-1" style="color:gray;color:#76767e;">2023.01.27</span>
+					<span class="m-1" style="font-size: 15px; color:#76767e;">2023.01.27</span>
 				</div>
 			</div>
 			<div id="qna_add">				
 				<img class="qna_add_icon" src="commonResource/add_answer.png" alt="profile">
 				<div class="qna_add_info">
 					<span class="m-1" style="font-weight:bold;">답변자의 추가답변</span>
-					<span style="float:right;font-size: 15px;color:#76767e;">신고</span>
+					<span style="float:right; font-size: 15px; color:#76767e;">신고</span>
 					<p class="m-1">추가 답변입니다. 해당 내용은 개념 공부를 좀 더 하시면 좋을 것 같습니다. </p>
 					
-					<span class="m-1" style="color:gray;color:#76767e;">2023.01.27</span>
+					<span class="m-1" style="font-size: 15px; color:#76767e;">2023.01.27</span>
 					<span style="float:right;">
 						<img src="commonResource/icon/check.png" alt="profile" style="width:35px;" >
 						<a style="color:#3e6ce3;font-weight:bold;">채택</a>
 					</span>
-				
-					
-				</div>
-				
+				</div>				
 			</div>
 			<div id="qna_add">				
 				<img class="qna_add_icon" src="commonResource/add_question.png" alt="profile">
-				<div class="qna_add_form">
+				<textarea class="form-control" id="qna_add_form" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
+				<!-- <div class="qna_add_form">
 					<p>답변자에게 추가로 질문을 남겨주세요!</p>
-				</div>
+				</div> -->
 			</div>
+				
 			<div style="float: right;margin-bottom:10px;">
 				<button type="button" class="btn text-white" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
 			</div>
@@ -213,4 +213,5 @@
 		<!-- 답변 리스트 끝 -->
 	</div>
 	<!-- end of container -->
+</section>
 </div>
