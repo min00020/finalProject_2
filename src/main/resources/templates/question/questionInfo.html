@@ -25,7 +25,12 @@
 					<h1 class="qna_logo">Q</h1>
 					<div class="qna_title">
 						<div>
-							<p class="qna_grayBtn">사이드프로젝트</p>
+							<button type="button" class="btn" 
+								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+								사이드프로젝트
+							</button>
+							<!-- <p class="qna_grayBtn">사이드프로젝트</p> -->
 							<h4 style="font-weight:bold">Node.js에 관련된 질문이 있습니다.</h4>
 						</div>
 					</div>
@@ -112,12 +117,16 @@
 
 		<!-- 답변 리스트 -->
 		<div class="questionInfo">
-			<div class="row"><!-- 질문글 제목 / 신고삭제 -->
+			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
 				<div id="questionTitle" class="col-9">  <!-- 사이드 태그 / 질문제목, 포인트 -->
 					<h1 class="qna_logo">A</h1>
 					<div class="qna_title">
 						<div>
-							<p class="qna_grayBtn">질문자채택</p>
+							<button type="button" class="btn" 
+								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+								질문자 채택
+							</button>
 							<h4 style="font-weight:bold">질문에 대한 답변입니다.</h4>
 						</div>
 					</div>
@@ -147,10 +156,6 @@
 				</div>
 				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
 				<div id="qna_iconAll" class="col-3">
-					<button type="button" class="btn text-white" 
-						style="background-color:#6f90e5;font-size:12px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-						추가 질문 작성
-					</button>
 					<span>					
 						<img class="qna_icon" src="commonResource/icon/best.png" alt="best">
 					</span>
@@ -159,20 +164,42 @@
 						<img class="qna_icon" src="commonResource/icon/reply.png" alt="reply">
 					</span>
 					<span>7</span>
+					<button type="button" class="btn text-white" 
+						style="background-color:#80a9e8;font-size:12px; margin-left:15px;
+							   --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+						추가 질문 작성
+					</button>
 				</div>
 			</div>
 			<hr>	
 		</div>
 			<!-- 추가질문답변칸 -->
 			<div id="qna_add">				
-				<img class="qna_add_icon" src="commonResource/cookie.png" alt="profile">
+				<img class="qna_add_icon" src="commonResource/add_question.png" alt="profile">
 				<div class="qna_add_info">
-					<p>질문자의 추가질문</p>
-					<p>추가로 질문할 게 있는데 개념에 대해 더 설명해주실 수 있나요?</p>
+					<p class="m-1" style="font-weight:bold;">질문자의 추가질문</p>
+					<p class="m-1">추가로 질문할 게 있는데 개념에 대해 더 설명해주실 수 있나요?</p>
+					<p class="m-1" style="color:gray;">2023.01.27</p>
+					<p>신고</p>
+				</div>
+			</div>
+			<div id="qna_add">				
+				<img class="qna_add_icon" src="commonResource/add_answer.png" alt="profile">
+				<div class="qna_add_info">
+					<p class="m-1" style="font-weight:bold;">답변자의 추가답변</p>
+					<p class="m-1">추가로 질문할 게 있는데 개념에 대해 더 설명해주실 수 있나요?</p>
+					<p class="m-1" style="color:gray;">2023.01.27</p>
+					<p>신고</p>
+				</div>
+			</div>
+			<div id="qna_add">				
+				<img class="qna_add_icon" src="commonResource/add_question.png" alt="profile">
+				<div class="qna_add_form">
+					<p>답변자에게 추가로 질문을 남겨주세요!</p>
 				</div>
 			</div>
 			<div style="float: right;margin-bottom:10px;">
-				<button type="button" class="btn text-white" style="background-color:#3e6ce3;margin-right:40px;">등록</button>
+				<button type="button" class="btn text-white" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
 			</div>
 			<!-- 추가질문답변칸 끝-->
 		<!-- 답변 리스트 끝 -->

@@ -51,7 +51,10 @@
 		cursor: pointer;
 	}
 	
-	/* 프로필 이미지 원형 */
+	/* 프로필 이미지 */
+	#member{
+		padding:0;
+	}
 	.qna_box {
 	    width: 25px;
 	    height: 25px;
@@ -125,10 +128,14 @@
 	margin: 0 auto ;
 	width: 900px;
 }
+#questionInfo2{
+	justify-content: space-between;
+}
 #questionTitle {
     height: 80px;
     display: flex;
     align-items: flex-end; /* 수직 정렬을 아래쪽으로 설정 */
+    
 }
 #questionTitle p{
 	margin:0;	
@@ -137,7 +144,7 @@
 	font-weight:bold; 
 	color:#3e6ce3; 
 	float: left;
-	margin-right:8px;
+	margin:0 8px;
 	font-size: 60px;
 }
 .qna_logo.p{
@@ -152,16 +159,16 @@
 }
 
 /*버튼색상*/
-.qna_grayBtn{ 
+/* .qna_grayBtn{ 
 	font-size: 13px;
 	background-color: #e0e0e7;
     display: inline-block;
     border-radius: 15%;
-    max-width: 100%; /* 최대 가로 길이를 부모 요소에 맞게 설정 */
-    box-sizing: border-box; /* padding과 border를 포함한 크기 계산 */
+    max-width: 100%; 최대 가로 길이를 부모 요소에 맞게 설정
+    box-sizing: border-box; padding과 border를 포함한 크기 계산
 	margin: 10px 0;
     padding:3px 10px;
-}
+} */
 .qna_blueBtn{ 
 	font-size: 13px;
 	color:white;
@@ -175,7 +182,6 @@
 /* 	margin: 5px; */
 }
 
-
 .qna_second_line{
 	margin-bottom:9px;
 }
@@ -184,12 +190,13 @@
 	text-align:right;
 	float:right;
 	margin:25px 5px 0px;
+	padding-right:30px;
 }
-#qna_deleteBtn span, .qna_deleteBtn p{
+#qna_deleteBtn span, #qna_deleteBtn p{
 	margin-left:10px;
 	margin-bottom:0;
+	color:#76767e;
 }
-
 
 .qna_contents{
 	width:94%;
@@ -251,15 +258,25 @@
 
 .qna_add_icon{
 	margin-top:20px;
-	width:35px;
+	width:45px;
 }
 .qna_add_info{
 	width:800px;
-  	margin : 20px; 
+  	margin : 10px; 
  	padding : 30px;
  	border : 1px solid lightgray;
  	border-radius : 5px;
 	justify-content: right;
+	padding:20px;
+}
+.qna_add_form{
+	width:800px;
+  	margin : 10px; 
+ 	padding : 30px;
+ 	border : 1px solid #3e6ce3;
+ 	border-radius : 5px;
+	justify-content: right;
+	padding:20px;
 }
 
 /*답변글 프로필 이미지*/
