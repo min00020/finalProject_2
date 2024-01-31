@@ -1,31 +1,55 @@
 @charset "UTF-8";
 
-#mainBody {
-	min-height : 1200px;
+
+/* 프로필 이미지 원형 */
+.mink_box {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    float: left;
+    margin: 5px;
+    border-radius: 50%;
+    position: relative; 
+	border : 0.5px solid black;
+	border-color : hsla(220,9%,46%,.3);
+   
 }
+
+.mink_profile {
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+    object-position: center top; 
+    position: absolute;
+    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+    transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
+}
+/* #mainBody { */
+/* 	min-height : 1200px; */
+/* } */
 		
-.common-width {
-	margin: 0 auto;
-	width: 70%;
-}
-.search {
-  	position: relative;
-  	margin-left : 30px;
-  	width: 300px;
-}
+/* .common-width { */
+/* 	margin: 0 auto; */
+/* 	width: 70%; */
+/* } */
+/* .search { */
+/*   	position: relative; */
+/*   	margin-left : 30px; */
+/*   	width: 300px; */
+/* } */
 
-.searchInput {
-  	width: 100%;
-  	border: 1px solid #bbb;
-  	border-radius: 38px;
-  	padding: 10px 12px;
-  	font-size: 14px;
-}
+/* .park_searchInput { */
+/*   	width: 100%; */
+/*   	border: 1px solid #bbb; */
+/*   	border-radius: 38px; */
+/*   	padding: 10px 12px; */
+/*   	font-size: 14px; */
+/* } */
 
-.searchImg {
-  	position : absolute;
-  	width: 17px;
-  	top: 10px;
-  	right: 12px;
-  	margin: 0;
-}
+/* .searchImg { */
+/*   	position : absolute; */
+/*   	width: 17px; */
+/*   	top: 10px; */
+/*   	right: 12px; */
+/*   	margin: 0; */
+/* } */
