@@ -52,8 +52,6 @@ public class MemberController {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
         	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
             MemberVO username = userDetails.getMemberVO();
-            
-            int a = 90;
         }
 		
 		return "common/mainPage";

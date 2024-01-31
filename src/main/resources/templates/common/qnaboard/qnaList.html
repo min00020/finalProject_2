@@ -1,0 +1,71 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+>
+	<div class="questionBoard" style="width:1100px;">
+         <!-- 상단 선택 메뉴 -->
+         <ul id="qna_topic" class="list-unstyled d-flex gap-3 align-self-center ml-3">
+                <li>전체</li>
+                <li>기술</li>
+                <li>사이드 프로젝트</li>
+                <li id="search" style="margin-left: auto;">
+                   <div class="search-align-self-center" >
+                    <input type="text" placeholder="검색어 입력" class="park_searchInput">
+                    <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="park_searchImg">
+               </div>
+                </li>
+           </ul>
+           <hr>
+         <!-- 추천순 정렬, 작성버튼 -->
+         <div>
+            <div class="btn-group">
+                 <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                   추천순
+                 </button>
+                 <ul class="dropdown-menu">
+                   <li><a class="dropdown-item" href="#">추천순</a></li>
+                   <li><a class="dropdown-item" href="#">최신순</a></li>
+                   <li><a class="dropdown-item" href="#">답변순</a></li>
+                   <li><a class="dropdown-item" href="#">조회순</a></li>
+                 </ul>
+            </div>
+            <div style="float: right;">
+               <button type="button" class="btn text-white" style="background-color:#3e6ce3">질문하기</button>
+            </div>
+         </div>
+         
+         <!-- start of postList -->
+         <hr style="margin-bottom:30px">
+         <div id="questionList"  class="row">
+            <div id="title" class="col-8">
+               <div id="member" style="height:40px;">
+                  <div class="qna_box">
+                      <img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+                  </div>
+                  <p >cookie123</p>
+               </div>
+                 <div id="titleTag">
+                   <h4>node.js에 대한 질문이 있습니다.</h4>
+                   <p style="color:blue">#node.js #mysql</p>
+                </div>
+             </div>
+            <div class="col-1" style="text-align:center; margin:auto;">
+                <h6>2</h6>
+                <h6>조회</h6>
+            </div>
+            <div class="col-1" style="text-align:center; margin:auto;">
+                <h6>5</h6>
+                <h6>추천</h6>
+            </div>
+            <div id="answercnt" class="col-1" style="text-align:center; margin:auto;">
+                <h6 class="QNAcnt">10</h6>
+                <h6>답변</h6>
+            </div>
+            <hr style="margin-top:30px; margin-bottom:30px;">
+         </div>
+         <!-- end of postList -->
+      </div>
+      <!-- end of questionBoard -->
+</div>
