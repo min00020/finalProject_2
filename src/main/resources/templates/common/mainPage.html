@@ -3,29 +3,29 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content">
 
-	<div class="slider">
-		<div class="slide">
+	<div class="park_slider">
+		<div class="park_slide">
 			<img id="logoImage" src="commonResource/sideproject.png" alt="side"
 				style="width: 100%;">
 		</div>
-		<div class="slide">
+		<div class="park_slide">
 			<img id="logoImage2" src="commonResource/banner.png" alt="banner"
 				style="width: 100%;">
 		</div>
 
 	</div>
-	<div id="board">
-		<section class="child">
+	<div id="park_board">
+		<section class="park_child">
 			
-				<button class="S">
-					<span class="boardname">자유게시판</span>
+				<button class="park_S">
+					<span class="park_boardname">자유게시판</span>
 				</button>
-				<section class="child2">
+				<section class="park_child2">
 				<div>
-					<ul>
+					<ul class = "park_fb">
 						<li th:each="free : ${getFreeBoardList}">
-							<span class="nickname">[[${free.nickname}]]</span>
-							<span class="activityPoint"> · <img id="thunder" src="commonResource/thunder.png" alt="acti">[[${free.accumActivityPoint}]]
+							<span class="park_nickname">[[${free.nickname}]]</span>
+							<span class="park_activityPoint"> · <img id="thunder" src="commonResource/thunder.png" alt="acti">[[${free.accumActivityPoint}]]
 								<span th:if="${free.minute < 60}" th:text="' · ' + (${free.minute}) + '분 전'"></span>
 								<span th:if="${free.minute >= 60 && free.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 60.0)}) + '시간 전'"></span>
 								<span th:if="${free.minute >= 1440 && free.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 1440.0)}) + '일 전'"></span>
@@ -33,8 +33,8 @@
 								<span th:if="${free.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 518400.0)}) + '년 전'"></span>
 							</span><br>
 							
-							<span class="title" th:if="${#strings.length(free.title) > 30}" th:text="${#strings.substring(free.title, 0, 30)} + '...'"></span>
-								<span class="title" th:unless="${#strings.length(free.title) > 30}" th:text="${free.title}"></span>
+							<span class="park_title" th:if="${#strings.length(free.title) > 30}" th:text="${#strings.substring(free.title, 0, 30)} + '...'"></span>
+								<span class="park_title" th:unless="${#strings.length(free.title) > 30}" th:text="${free.title}"></span>
 							<hr />
 							
 						</li>
@@ -44,24 +44,24 @@
 		</section>
 
 
-		<section class="child">
-			<button class="S">
-				<span class="boardname">질문&답변</span>
+		<section class="park_child">
+			<button class="park_S">
+				<span class="">질문&답변</span>
 			</button>
 		</section>
 		
 	</div>
 
-	<div id="board">
-		<section class="child">
-			<button class="S">
-				<span class="boardname">사이드 프로젝트</span>
+	<div id="park_board">
+		<section class="park_child">
+			<button class="park_S">
+				<span class="">사이드 프로젝트</span>
 			</button>
 		</section>
 
-		<section class="child">
-			<button class="S">
-				<span class="boardname">공지사항</span>
+		<section class="park_child">
+			<button class="park_S">
+				<span class="">공지사항</span>
 			</button>
 		</section>
 	</div>
@@ -70,130 +70,16 @@
 
 </div>
 <style>
-ul hr {
-    width: 88%; /* 원하는 길이로 조절 */
-    /* 가운데 정렬을 위한 스타일 */
-}
-.boardname {
-	margin-left: 20px
-}
 
-button {
-	border: none;
-}
-
-ul {
-	margin-top: 10px;
-	margin-left : -25px;
-	 list-style-type: none;
-}
-ul li{
-display : block;
-}
-
-.nickname:hover {
-	color: #3e6ce3;
-}
-
-.title:hover {
-	color: #3e6ce3;
-}
-
-.activityPoint, .time {
-	margin-left: 10px;
-	font-size: small;
-}
-
-.title {
-	font-weight: bold;
-}
-
-.child2 {
-	
-}
-
-.S {
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	height: 50px;
-	width: 400px;
-	border-radius: 10px;
-	font-weight: bold;
-	text-align: left;
-}
-
-#board {
-	display: flex;
-	flex-direction: row;
-/* 	border: 3px solid red; */
-	margin-top: 20px;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
-.child {
-	flex: 1 0 auto;
-/* 	border: 3px solid green; */
-	display: inline-block;
-	justify-content: center;
-	align-items: center;
-	width : 300px;
-	margin : 10px;
-}
-
-.slider {
-	position: relative;
-	overflow: hidden;
-}
-
-.slide {
-	display: flex;
-	animation: slideAnimation 2s ease;
-}
-
-.slide img {
-	width: 100%;
-	transition: transform 2s ease;
-}
-
-@
-keyframes slideAnimation { 0% {
-	transform: translateX(100%);
-}
-100
-
-
-%
-{
-transform
-
-
-:
-
-
-translateX
-(
-
-
-0
-
-
-)
-;
-
-
-}
-}
 </style>
 
 <script>
 let currentSlide = 0;
-const slides = document.querySelectorAll('.slide');
+const slides = document.querySelectorAll('.park_slide');
 const slideCount = slides.length;
  
 function showSlide(n) {
-    slides.forEach(slide => slide.style.display = 'none');
+    slides.forEach(park_slide => park_slide.style.display = 'none');
     slides[n].style.display = 'block';
 }
  

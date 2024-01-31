@@ -66,44 +66,7 @@
 	
 	<!-- 전체적용 style  -->
 	<style>
-/* 프로필 이미지 원형 */
-.box {
-    width: 25px;
-    height: 25px;
-    overflow: hidden;
-    float: left;
-    margin: 5px;
-    border-radius: 50%;
-    position: relative; 
-}
 
-.profile {
-    width: 100%;
-    height: auto; 
-    object-fit: cover;
-    object-position: center top; 
-    position: absolute;
-    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
-    transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
-}
-
-/* 랭킹 */
-.no{
-    float: right;
-    /* margin-left : 70px; */
-    color : #3e6ce3;
-    font-weight : bold;
-}
-.more{
-    color : #3e6ce3;
-    font-size: small;
-    font-weight : bold;
-    margin-left : 50px;
-}
-.sidemenu{
-    width: 170px;
-    margin:auto;
-}
 	</style>
 
 </head>
@@ -113,24 +76,24 @@
 		<th:block th:if="${main} == 1">
 			<aside style="width:15%;">
 				<img id="sidebanner" src="commonResource/sidebanner.png" alt="sidebanner" style="width:90%">
-				<section class = "rank">
-            <h5>실시간 랭킹 <span class="more"> +더보기</span></h5>
+				<section class = "park_rank">
+            <h5>실시간 랭킹 <span class="park_more"> +더보기</span></h5>
                <hr style="margin:5;">
-               <table class="sidemenu">
+               <table class="park_sidemenu">
                   <tr>
                      <td>
-                        <span class="box">
-                          <img class="profile" src="commonResource/mann.png" alt="profile">
+                        <span class="park_box">
+                          <img class="park_profile" src="commonResource/mann.png" alt="profile">
                         </span>
-                        <span class="name" >user01</span><span class="no">300</span>
+                        <span class="park_name" >user01</span><span class="park_no">300</span>
                      </td>
                   </tr>
                   <tr>
                      <td>
-                        <span class="box">
-                          <img class="profile" src="commonResource/mann2.png" alt="profile">
+                        <span class="park_box">
+                          <img class="park_profile" src="commonResource/mann2.png" alt="profile">
                         </span>
-                        <span class="name">user0111</span><span class="no">20</span>
+                        <span class="park_name">user0111</span><span class="park_no">20</span>
                      </td>
                   </tr>
                 </table>

@@ -1,196 +1,347 @@
 @charset "UTF-8";
-		
-		body.dark-mode footer p{
-		color: #D8D8D8;
-		}
-		
-		body.dark-mode .text-muted {
-    color: #fff; /* 흰색으로 변경하거나 다른 원하는 색상으로 지정하세요 */
-}
-		
-        body.dark-mode {
-            background-color: #383838;
-            color: #D8D8D8;
-        }
-        
 
-
-        
-        body.light-mode {
-            background-color: #ffffff;
-            color: #000;
-        }
-
-    
-        .dark-mode-toggle {
-            cursor: pointer;
-            transition: color 0.3s ease-in-out;
-            display: flex; 
-            align-items: center; 
-        }
-
-        .dark-mode-toggle i {
-            margin: 0 5px; 
-        }
-
-        .dark-mode-toggle:hover {
-            color: #333;
-        }
-
-   
-        .sun-moon-container {
-            padding: 10px;
-            border-radius: 30px; 
-            border:  1px solid #BDBDBD;; 
-        }
-
-        .sun-icon{
-        font-size: 1.2em; 
-            transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out; 
-            color : #FFBF00;
-        }
-        
-        .moon-icon {
-            font-size: 1.2em; 
-            transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out;
-            color : #808080;
-        }
-
-        .sun-icon.hidden,
-        .moon-icon.hidden {
-            opacity: 0;
-        }
-
-        
-        .park_login-button,
-        .park_signup-button {
-            padding: 10px 20px;
-            border-color : hsla(220,9%,46%,.3);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
-        }
-
-        .park_login-button {
-
-            color: #808080;
-        }
-
-        .park_signup-button {
-            background-color: #3e6ce3;
-            color: #fff;
-        }
-
-        .park_login-button:hover, .logout-button:hover, .MP:hover, {
-        background-color: #E6E6E6;
-           
-            border-color: #808080;
-        }
-
-        .park_signup-button:hover {
-            background-color: #3157B7;
-            color: #fff;
-            border-color: #808080;
-        }
-
-
-        header {
-            margin-bottom: 20px;
-        }
-
-        .park_navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            
-           
-        }
-
-        .park_navbar ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-            font-weight: bolder;
-            font-size: medium;
-            margin: 0;
-             margin-left : -50px;
-        }
-
-        .park_navbar li {
-            cursor: pointer;
-        }
-
-        .search {
-            display: flex;
-            align-items: center;
-        }
-
-        .searchInput {
-            margin-right: 10px;
-            border : 1px solid #BDBDBD;
-        }
-        
-        .dark-mode .searchInput {
-      
-        background-color: #BDBDBD; 
-        color: #fff; 
-    }
-        
-    .park_navbar li:hover {
-        color: #3e6ce3; 
-    }
-    	.park_search-align-self-center{
-    	width : 200px;
-    	position: relative;
-    	}
-    	
-
-.searchInput {
-    padding-right: 30px; 
-     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+#mainBody {
+	min-height: 1200px;
 }
 
-.searchImg {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
+.common-width {
+	margin: 0 auto;
+	width: 70%;
 }
 
+body.dark-mode footer p {
+	color: #D8D8D8;
+}
 
+body.dark-mode .text-muted {
+	color: #fff; /* 흰색으로 변경하거나 다른 원하는 색상으로 지정하세요 */
+}
 
-*{
+body.dark-mode {
+	background-color: #383838;
+	color: #D8D8D8;
+}
+
+body.light-mode {
+	background-color: #ffffff;
+	color: #000;
+}
+
+.park_dark-mode-toggle {
+	cursor: pointer;
+	transition: color 0.3s ease-in-out;
+	display: flex;
+	align-items: center;
+}
+
+.park_dark-mode-toggle i {
+	margin: 0 5px;
+}
+
+.park_dark-mode-toggle:hover {
+	color: #333;
+}
+
+.park_sun-moon-container {
+	padding: 10px;
+	border-radius: 30px;
+	border: 1px solid #BDBDBD;;
+}
+
+.sun-icon {
+	font-size: 1.2em;
+	transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out;
+	color: #FFBF00;
+}
+
+.moon-icon {
+	font-size: 1.2em;
+	transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out;
+	color: #808080;
+}
+
+.sun-icon.hidden, .moon-icon.hidden {
+	opacity: 0;
+}
+
+.park_login-button, .park_signup-button {
+	padding: 10px 20px;
+	border-color: hsla(220, 9%, 46%, .3);
+	border-radius: 30px;
+	cursor: pointer;
+	transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+		border-color 0.3s ease-in-out;
+}
+
+.park_login-button {
+	color: #808080;
+}
+
+.park_signup-button {
+	background-color: #3e6ce3;
+	color: #fff;
+}
+
+.park_login-button:hover, .park_logout-button:hover, .park_MP:hover {
+	background-color: #E6E6E6;
+	border-color: #808080;
 	
+}
+
+.park_signup-button:hover {
+	background-color: #3157B7;
+	color: #fff;
+	border-color: #808080;
+}
+
+header {
+	margin-bottom: 20px;
+}
+
+.park_navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.park_navbar ul {
+	list-style: none;
+	display: flex;
+	gap: 20px;
+	font-weight: bolder;
+	font-size: medium;
+	margin: 0;
+	margin-left: -50px;
+}
+
+.park_navbar li {
+	cursor: pointer;
+}
+
+.park_search {
+	display: flex;
+	align-items: center;
+	position: relative;
+	margin-left: 30px;
+	width: 300px;
+}
+
+.park_searchInput {
+	margin-right: 10px;
+	border: 1px solid #BDBDBD;
+}
+
+.dark-mode .park_searchInput {
+	background-color: #BDBDBD;
+	color: #fff;
+}
+
+.park_navbar li:hover {
+	color: #3e6ce3;
+}
+
+.park_search-align-self-center {
+	width: 200px;
+	position: relative;
+}
+
+.park_searchInput {
+	padding-right: 30px;
+	transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+		border-color 0.3s ease-in-out;
+	width: 100%;
+	border: 1px solid #bbb;
+	border-radius: 38px;
+	padding: 10px 12px;
+	font-size: 14px;
+}
+
+.park_searchImg {
+	position: absolute;
+	top: 50%;
+	/*     transform: translateY(-50%); */
+	width: 17px;
+	top: 13px;
+	right: 12px;
+}
+
+* {
 	font-family: 'Noto Sans KR', sans-serif;
-/* 	font-family: 'Gowun Dodum', sans-serif; */
-/* font-family: 'Grandiflora One', cursive; */
-/* font-family: 'Nanum Gothic', sans-serif; */
-/* font-family: 'Orbit', sans-serif; */
-
-}
-.logout-button{
-			padding: 10px 20px;
-            border-color : hsla(220,9%,46%,.3);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
-			border : 1px solid #BDBDBD;
-			background-color : white;
-			
-
-          
-	
+	/* 	font-family: 'Gowun Dodum', sans-serif; */
+	/* font-family: 'Grandiflora One', cursive; */
+	/* font-family: 'Nanum Gothic', sans-serif; */
+	/* font-family: 'Orbit', sans-serif; */
 }
 
-.MP{
-			padding: 10px 20px;
-            border-color : hsla(220,9%,46%,.3);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
-			border : 1px solid #BDBDBD;
-			background-color : white;
+.park_logout-button {
+	padding: 10px 20px;
+	border-color: hsla(220, 9%, 46%, .3);
+	border-radius: 30px;
+	cursor: pointer;
+	transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+		border-color 0.3s ease-in-out;
+	border: 1px solid #BDBDBD;
+	background-color: white;
 }
 
+.park_MP {
+	padding: 10px 20px;
+	border-color: hsla(220, 9%, 46%, .3);
+	border-radius: 30px;
+	cursor: pointer;
+	transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+		border-color 0.3s ease-in-out;
+	border: 1px solid #BDBDBD;
+	background-color: white;
+}
 
-    	
+/*main template*/
+/* 프로필 이미지 원형 */
+.park_box {
+	width: 25px;
+	height: 25px;
+	overflow: hidden;
+	float: left;
+	margin: 5px;
+	border-radius: 50%;
+	position: relative;
+}
+
+.park_profile {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	object-position: center top;
+	position: absolute;
+	top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+	transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
+}
+
+/* 랭킹 */
+.park_no {
+	float: right;
+	/* margin-left : 70px; */
+	color: #3e6ce3;
+	font-weight: bold;
+}
+
+.park_more {
+	color: #3e6ce3;
+	font-size: small;
+	font-weight: bold;
+	margin-left: 50px;
+}
+
+.park_sidemenu {
+	width: 170px;
+	margin: auto;
+}
+
+.park_rank {
+	margin-top: 50px;
+}
+
+/*Mainpage*/
+.park_fb hr {
+	width: 88%; /* 원하는 길이로 조절 */
+	/* 가운데 정렬을 위한 스타일 */
+}
+
+.park_boardname {
+	margin-left: 20px
+}
+
+.park_fb {
+	margin-top: 10px;
+	margin-left: -25px;
+	list-style-type: none;
+}
+
+.park_fb li {
+	display: block;
+}
+
+.park_nickname:hover {
+	color: #3e6ce3;
+}
+
+.park_title:hover {
+	color: #3e6ce3;
+}
+
+.park_activityPoint, .park_time {
+	margin-left: 10px;
+	font-size: small;
+}
+
+.park_title {
+	font-weight: bold;
+}
+
+.park_S {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 50px;
+	width: 400px;
+	border-radius: 10px;
+	font-weight: bold;
+	text-align: left;
+	border: none;
+}
+
+#park_board {
+	display: flex;
+	flex-direction: row;
+	/* 	border: 3px solid red; */
+	margin-top: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.park_child {
+	flex: 1 0 auto;
+	/* 	border: 3px solid green; */
+	display: inline-block;
+	justify-content: center;
+	align-items: center;
+	width: 300px;
+	margin: 10px;
+}
+
+.pakr_slider {
+	position: relative;
+	overflow: hidden;
+}
+
+.park_slide {
+	display: flex;
+	animation: slideAnimation 2s ease;
+}
+
+.park_slide img {
+	width: 100%;
+	transition: transform 2s ease;
+}
+/*슬라이드*/
+/* @keyframes slideAnimation { 0% { */
+/* 	transform: translateX(100%); */
+/* } */
+/* 100 */
+
+/* % */
+/* { */
+/* transform */
+
+/* : */
+
+/* translateX */
+/* ( */
+
+/* 0 */
+
+/* ) */
+/* ; */
+
+/* } */
+/* } */
