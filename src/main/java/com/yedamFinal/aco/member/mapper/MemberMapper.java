@@ -16,5 +16,7 @@ public interface MemberMapper {
 	public String selectVerifyAuthNumber(@Param(value = "authNum") String authNum, @Param(value = "phoneNum") String phoneNum);
 	public int deleteAuthNumber(String phoneNum);
 	public int insertMember(MemberVO memberVO);
+	public int updateMemberGitToken(@Param(value ="gitToken") String gitToken, @Param(value = "id") String id);
+	
 	public List<TagVO> selectTagList();
 }

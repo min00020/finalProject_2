@@ -1,5 +1,29 @@
 @charset "UTF-8";
 
+
+/* 프로필 이미지 원형 */
+.mink_box {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    float: left;
+    margin: 5px;
+    border-radius: 50%;
+    position: relative; 
+	border : 0.5px solid black;
+	border-color : hsla(220,9%,46%,.3);
+   
+}
+
+.mink_profile {
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+    object-position: center top; 
+    position: absolute;
+    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+    transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
+}
 /* #mainBody { */
 /* 	min-height : 1200px; */
 /* } */

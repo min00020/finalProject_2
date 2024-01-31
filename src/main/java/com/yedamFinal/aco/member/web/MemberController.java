@@ -47,14 +47,8 @@ public class MemberController {
 		model.addAttribute("main", "1");
 		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
 		
-		
-		return "common/mainPage";
-	}
-	
-	@GetMapping("/createAccountForm")
-	public String getCreateAccountForm(HttpServletRequest request, Model model) {
+		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
         	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
             MemberVO username = userDetails.getMemberVO();
@@ -62,6 +56,11 @@ public class MemberController {
             int a = 90;
         }
 		
+		return "common/mainPage";
+	}
+	
+	@GetMapping("/createAccountForm")
+	public String getCreateAccountForm(HttpServletRequest request, Model model) {
 		var tagList = memberService.getTagList();
 		model.addAttribute("tagList", tagList);
 		return "common/createAccount";

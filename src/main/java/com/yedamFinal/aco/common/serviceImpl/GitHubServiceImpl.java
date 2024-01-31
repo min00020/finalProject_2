@@ -27,14 +27,41 @@ public class GitHubServiceImpl implements GitHubService {
 	public GitHubServiceImpl() {
 		webClient = WebClient.create();
 	}
+	
+	// 쿼리스트링 파싱
+	private Map<String, String> getQueryMap(String query)
+    {    	
+    	if (query==null) return null;
+    	
+    	int pos1 = query.indexOf("?");
+    	if (pos1 >= 0) {
+    		query=query.substring(pos1+1);
+    	}
+    	
+        String[] params = query.split("&");
+        Map<String, String> map = new HashMap<String, String>();
+        for (String param : params)
+        {
+        	String[] paramSplit = param.split("=");
+        	// key value 한쌍인거만 체크.
+        	if(paramSplit.length == 2) {
+                String name = param.split("=")[0];
+                String value = param.split("=")[1];
+                map.put(name, value);
+        	}
+        }
+        return map;
+    }
+
+
 
 	@Override
-	public void getAccessTokenByGitLink(String tempGitCode) {
+	public Map<String, String> getAccessTokenByGitLink(String tempGitCode) {
 		Map<String,String> reqBodyContent = new HashMap<String,String>();
 		reqBodyContent.put("client_id", gitClientId);
 		reqBodyContent.put("client_secret", gitClientSecretId);
 		reqBodyContent.put("code", tempGitCode);
-		reqBodyContent.put("redirect_uri", "/gitLinkPage");
+		reqBodyContent.put("redirect_uri", "http://localhost/gitLinkPage"); // 이거 나중에 고쳐야함.
 		
 		// TODO Auto-generated method stub
 		String apiUrl = "https://github.com/login/oauth/access_token";
@@ -45,7 +72,7 @@ public class GitHubServiceImpl implements GitHubService {
                 .retrieve()
                 .bodyToMono(String.class).block();
 		
-		return; 
+		return getQueryMap(response); 
 	}
 
 	@Override

@@ -23,7 +23,14 @@ public class MemberVO {
 	private String snsType;
 	private String banType;
 	private String banDate;
+	private String gitToken;
 	
+	public String getGitToken() {
+		return gitToken;
+	}
+	public void setGitToken(String gitToken) {
+		this.gitToken = gitToken;
+	}
 	public int getMemberNo() {
 		return memberNo;
 	}

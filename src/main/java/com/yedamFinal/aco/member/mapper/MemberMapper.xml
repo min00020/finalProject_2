@@ -21,7 +21,7 @@
 <select id="selectLogin" resultType="MemberVO">
 	SELECT MEMBER_NO,ID,PASSWORD,EMAIL,PHONE_NUM,NAME,NICKNAME,PROFILE_IMAGE,TOPIC_HASHTAG,
 	PERMISSION,LEAVE_DATE,ACCUM_ACTIVITY_POINT,AVAILABLE_ACTIVITY_POINT,ACO_MONEY,ACO_POINT,MEMBER_LEVEL,
-	SNS_TYPE,BAN_TYPE,BAN_DATE
+	SNS_TYPE,BAN_TYPE,BAN_DATE,GIT_TOKEN
 		FROM member
 		WHERE ID = #{id}
 </select>
@@ -53,6 +53,10 @@
 <delete id="deleteAuthNumber" parameterType="String"> 
 	DELETE FROM AUTH_PHONE WHERE PHONE_NUM = #{phoneNum} 
 </delete>
+
+<update id="updateMemberGitToken">
+	UPDATE MEMBER SET GIT_TOKEN = '${gitToken}' WHERE id = #{id}
+</update>
 
 <select id="selectTagList" resultType="com.yedamFinal.aco.common.TagVO">
 	SELECT TAG_NAME

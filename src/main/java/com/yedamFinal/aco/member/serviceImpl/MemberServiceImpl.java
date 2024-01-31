@@ -197,11 +197,16 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public Map<String, Object> processGitLink(String userid, String tempUserGitCode) {
 		// TODO Auto-generated method stub
 		Map<String,Object> ret = new HashMap<String, Object>();
+		Map<String,String> map = null;
 		ret.put("result", "400");
 		
 		MemberVO vo = memberMapper.selectLogin(userid);
 		if(vo != null) {
-			githubService.getAccessTokenByGitLink(tempUserGitCode);
+			map = githubService.getAccessTokenByGitLink(tempUserGitCode);
+			String tokenValue = map.get("access_token");
+			if(memberMapper.updateMemberGitToken(tokenValue, userid) > 0) {
+				ret.put("result", "200");
+			}
 		}
 		return ret;
 	}

@@ -4,6 +4,8 @@
 	  lang="ko">
 <head>
 	<meta charset="UTF-8">
+	<meta name="csrf" th:content="${_csrf.token}" />
+	<meta name="csrfPara" th:content="${_csrf.parameterName}" />
 	<title>AskCode</title>
 	<link th:href="@{/css/mink.css}" rel="stylesheet" type="text/css">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -78,6 +80,8 @@
 	</div>
 	
 	<script>
+		const csrfPara = $('meta[name="csrfPara"]').attr("content");
+		const csrfToken = $('meta[name="csrf"]').attr("content");
 		const cid = "[[${clientId}]]";
 		function gitLink() {
 			const GITHUB_LOGIN_URL = "https://github.com/login/oauth/authorize?client_id=" + cid;
@@ -87,16 +91,34 @@
 		const queryString = window.location.search;
 	    const urlParams = new URLSearchParams(queryString);
 	    const gitCodeValue = urlParams.get('code'); //인증코드 가져오기 (10분동안만 유효하므로 굳이 저장x)
+	    
+	    
 		if(gitCodeValue != null && typeof gitCodeValue != "undefined") {
+			const formData = new FormData();
+		    formData.append(csrfPara, csrfToken);
+		    formData.append("gitCode", gitCodeValue);
 			// 사용자가 로그인을 하고 다시 페이지로 돌아온 경우.
 			$.ajax('/gitLink', {
 				type : "POST",
-				data : gitCodeValue,
+				data : formData,
+				contentType: false,
+		        processData: false,
 			})
 			.done(res => {
-				console.log(res);
+				if(res.result == "200") {
+					Swal.fire({
+						title : "연동 완료!",
+					    icon  : "success",
+					    confirmButtonColor: '#3e6ce3', // confrim 버튼 색깔 지정
+					}).then(result => {
+						if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+							window.location.href = "/loginForm";
+						}
+					});						
+				}
 			})
 			.fail(err => {
+				showFailAlert('에러 발생.', '다시 시도해주세요.');
 				console.log(err);
 			})
 		}
