@@ -10,7 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+
 
 @Configuration
 @EnableWebSecurity
@@ -91,7 +93,9 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByChae() {
-		
+		permitAllUrl.add("/questionBoard");
+		permitAllUrl.add("/questionInfo");
+		permitAllUrl.add("/questionWrite");
 	}
 	
 	private void insertPermitAllUrlByHa() {
