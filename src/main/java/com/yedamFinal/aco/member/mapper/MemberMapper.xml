@@ -12,7 +12,6 @@
 		WHERE MID = #{mid}
 		
 </select>
-
 <select id="selectMemberInfo" resultType="MemberVO">
 	SELECT m.member_no, m.email, m.nickname, m.profile_image, m.topic_hashtag, m.accum_activity_point, m.available_activity_point, m.aco_point, m.member_level, c.sub_code_name
 	FROM member m 
@@ -42,5 +41,65 @@
 	WHERE member_no=#{memberNo}
 	ORDER BY write_date desc
 </select>
+<select id="selectCheckDuplicateId" resultType="MemberVO">
+	SELECT id
+		FROM member
+		WHERE ID = #{id}
+</select>
+<select id="selectLogin" resultType="MemberVO">
+	SELECT MEMBER_NO,ID,PASSWORD,EMAIL,PHONE_NUM,NAME,NICKNAME,PROFILE_IMAGE,TOPIC_HASHTAG,
+	PERMISSION,LEAVE_DATE,ACCUM_ACTIVITY_POINT,AVAILABLE_ACTIVITY_POINT,ACO_MONEY,ACO_POINT,MEMBER_LEVEL,
+	SNS_TYPE,BAN_TYPE,BAN_DATE,GIT_TOKEN
+		FROM member
+		WHERE ID = #{id}
+</select>
+<select id="selectCheckDuplicateEmail" resultType="MemberVO">
+	SELECT email
+		FROM member
+		WHERE email = #{email}
+</select>
 
+<select id="selectVerifyAuthNumber" resultType="String">
+	SELECT AUTH_CODE
+		FROM AUTH_PHONE
+		WHERE AUTH_CODE = #{authNum} AND PHONE_NUM = #{phoneNum}  
+</select>
+
+<insert id="insertAuthNumber">
+	INSERT INTO AUTH_PHONE (
+		AUTH_PHONE_NO, AUTH_CODE, EXPIRE_DATE, PHONE_NUM
+	)
+	VALUES ( AUTH_PHONE_SEQ.NEXTVAL, #{authNum}, SYSDATE + INTERVAL '3' MINUTE, #{phoneNum})
+</insert>
+  
+<select id="selectAuthNumber" resultType="String">
+	SELECT PHONE_NUM
+		FROM AUTH_PHONE
+		WHERE PHONE_NUM = #{phoneNum}
+</select>
+  
+<delete id="deleteAuthNumber" parameterType="String"> 
+	DELETE FROM AUTH_PHONE WHERE PHONE_NUM = #{phoneNum} 
+</delete>
+
+<update id="updateMemberGitToken">
+	UPDATE MEMBER SET GIT_TOKEN = '${gitToken}' WHERE id = #{id}
+</update>
+
+<select id="selectTagList" resultType="com.yedamFinal.aco.common.TagVO">
+	SELECT TAG_NAME
+		FROM TAG
+</select>
+<insert id="insertMember" parameterType="MemberVO">
+	INSERT INTO MEMBER (
+		MEMBER_NO,ID,PASSWORD,EMAIL,
+		PHONE_NUM,NAME,NICKNAME,PROFILE_IMAGE,TOPIC_HASHTAG,PERMISSION,LEAVE_DATE,ACCUM_ACTIVITY_POINT,
+		AVAILABLE_ACTIVITY_POINT,ACO_MONEY,ACO_POINT,MEMBER_LEVEL,SNS_TYPE,BAN_TYPE,BAN_DATE
+	)
+	VALUES(
+		member_seq.NEXTVAL,#{id},#{password},#{email},#{phoneNum},#{name},#{nickname},#{profileImage},
+		#{topicHashtag},#{permission},null,#{accumActivityPoint},#{availableActivityPoint},#{acoMoney},#{acoPoint},#{memberLevel},
+		null,null,null
+	)
+</insert>    
 </mapper>
