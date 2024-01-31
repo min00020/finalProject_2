@@ -56,7 +56,7 @@
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="/adminStat">
                     <i class="fas fa-fw fa-table"></i>
                     <span>통계조회</span>
                 </a>
@@ -201,44 +201,50 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-
+      <div class="container-fluid">
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">통계조회</h1>
-
+			<div class="row">
+				<div class="col-lg-12 mb-8">
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">통계 내역</h6>
                         </div>
-                        <!-- <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>이름</th>
-                                            <th>설명</th>
-                                            <th>가격</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                   
-                                    <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>$320,800</td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> -->
-                    </div>
-
+                         <div class="card-body" style="text-align: right">
+                           <button>오늘</button>
+                           <button>7일</button>
+                           <button>1개월</button>
+                           <button>3개월</button>
+                           <button>6개월</button>
+                           <input type="date" name="startday">
+                           <input type="date" name="endday">
+                        </div> 
+                        <div class="row">
+                            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+       						 <div class="col-lg-6 mb-8">
+       						 <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">태그별 게시글</h6>
+                        </div>
+       						<div id="piechart" style="width: 100%; height: 500px;"></div>
                 </div>
+                </div>
+                
+               <div class="col-lg-6 mb-8">
+       					 <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">이모티콘별 판매수</h6>
+                        </div>	
+       						<div id="piechart2" style="width: 100%; height: 500px;"></div>
+                    </div>
+				</div>
+			</div>
+			</div>
+		</div>
+		</div>
+		</div>
                 <!-- /.container-fluid -->
-
             </div>
             <!-- End of Main Content -->
 
@@ -301,5 +307,50 @@
     <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
+<script type="text/javascript">
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
 
+function drawChart() {
+
+  var data = google.visualization.arrayToDataTable([
+    ['Task', 'Hours per Day'],
+    ['Work',     11],
+    ['Eat',      2],
+    ['Commute',  2],
+    ['Watch TV', 2],
+    ['Sleep',    7]
+  ]);
+
+  var options = {
+    title: 'My Daily Activities'
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+  chart.draw(data, options);
+}
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart2);
+
+function drawChart2() {
+
+  var data = google.visualization.arrayToDataTable([
+    ['Task', 'Hours per Day'],
+    ['Work',     11],
+    ['Eat',      2],
+    ['Commute',  2],
+    ['Watch TV', 2],
+    ['Sleep',    7]
+  ]);
+
+  var options = {
+    title: 'My Daily Activities'
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+  chart.draw(data, options);
+}
+</script>
 </html>
