@@ -55,4 +55,9 @@ public class AdminServiceImpl implements AdminService {
 	public List<AdminMainVO> getAdNoticeList() {
 		return adminMapper.getAdNoticeList();
 	}
+	//공지등록
+	@Override
+	public int insertNotice(AdminMainVO adminMainVO) {
+		return adminMapper.insertNotice(adminMainVO);
+	}
 }

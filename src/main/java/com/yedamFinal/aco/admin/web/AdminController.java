@@ -2,11 +2,10 @@ package com.yedamFinal.aco.admin.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
@@ -18,13 +17,10 @@ import com.yedamFinal.aco.admin.service.AdminService;
 
 
 @Controller
-@PropertySource("classpath:config.properties")
 public class AdminController {
 	@Autowired
 	AdminService adminService;
 	
-	@Value("${test}")
-	private int test = 0;
 	
 	@GetMapping("/admin")
 	public String getAdminPageForm(Model model) {
@@ -67,5 +63,11 @@ public class AdminController {
 		List<AdminEmoVO> list = adminService.getAdEmoList();
 		model.addAttribute("adminEmo", list);
 		return "layout/admin/adminEmo";
+	}
+	//공지등록
+	@PostMapping("insertNotice")
+	public String insertNoticeProcess(AdminMainVO adminMainVO) {
+		adminService.insertNotice(adminMainVO);
+		return "redirect:insertNotice";
 	}
 }

@@ -217,8 +217,8 @@
                            <button>1개월</button>
                            <button>3개월</button>
                            <button>6개월</button>
-                           <input type="date" name="startday">
-                           <input type="date" name="endday">
+                           <input type="date" name="startDay">
+                           <input type="date" name="endDay">
                         </div> 
                         <div class="row">
                             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -234,7 +234,7 @@
                <div class="col-lg-6 mb-8">
        					 <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">이모티콘별 판매수</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">이모티콘별 판매수량</h6>
                         </div>	
        						<div id="piechart2" style="width: 100%; height: 500px;"></div>
                     </div>
@@ -314,16 +314,39 @@ google.charts.setOnLoadCallback(drawChart);
 function drawChart() {
 
   var data = google.visualization.arrayToDataTable([
-    ['Task', 'Hours per Day'],
-    ['Work',     11],
-    ['Eat',      2],
-    ['Commute',  2],
-    ['Watch TV', 2],
-    ['Sleep',    7]
+    ['Programming Language Tag', 'Count Per Board'],
+    ['Python',     15],
+    ['C',     11],
+    ['JAVA',      2],
+    ['C++',  2],
+    ['C#', 2],
+    ['JavaScript',    7],
+    ['PHP', 1],
+    ['JSP', 1],
+    ['Oracle', 0],
+    ['Kotlin', 0],
+    ['HTML/CSS', 0],
+    ['Unity', 0],
+    ['Unreal', 0],
+    ['jQuery', 0],
+    ['Vue.js', 0],
+    ['Mysql', 0],
+    ['React', 0],
+    ['Spring boot', 0],
+    ['Node.js', 0],
+    ['MSSQL', 0],
+    ['DirectX11', 0],
+    ['DirectX12', 0],
+    ['Git', 0],
+    ['GitHub', 0],
+    ['Tomcat', 0],
+    ['AWS', 0],
+    ['NOSQL', 0],
+    ['Redis', 0]
   ]);
 
   var options = {
-    title: 'My Daily Activities'
+    title: '태그별 게시글'
   };
 
   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -336,16 +359,16 @@ google.charts.setOnLoadCallback(drawChart2);
 function drawChart2() {
 
   var data = google.visualization.arrayToDataTable([
-    ['Task', 'Hours per Day'],
-    ['Work',     11],
-    ['Eat',      2],
-    ['Commute',  2],
-    ['Watch TV', 2],
-    ['Sleep',    7]
+    ['EmoticonName', 'BuyCount'],
+    ['happy Emoticon',     11],
+    ['Basic',      2],
+    ['Sad Emoticon',  2],
+    ['Cute Dog', 2],
+    ['Big Bear',    7]
   ]);
 
   var options = {
-    title: 'My Daily Activities'
+    title: '이모티콘별 판매수량'
   };
 
   var chart = new google.visualization.PieChart(document.getElementById('piechart2'));

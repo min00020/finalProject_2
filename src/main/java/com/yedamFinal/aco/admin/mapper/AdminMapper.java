@@ -17,4 +17,6 @@ public interface AdminMapper {
 	public List<AdminEmoVO> getAdEmoList();	
 	public List<AdminMainVO> getAdCntList();
 	public List<AdminMainVO> getAdNoticeList();
+	//	공지등록
+	public int insertNotice(AdminMainVO adminMainVO);
 }

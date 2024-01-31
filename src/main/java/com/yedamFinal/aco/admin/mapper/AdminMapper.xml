@@ -82,4 +82,24 @@
 <select id="getAdNoticeList" resultType="AdminMainVO">
 	SELECT NOTICE_BOARD_NO, TITLE, CONTENT, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT FROM NOTICE_BOARD
 </select>
+<!-- 공지등록 -->
+<insert id="insertNotice" parameterType="AdminMainVO">
+		<selectKey keyProperty="noticeBoardNo" order="BEFORE"
+			resultType="int">
+			select nvl(max(NOTICE_BOARD_NO),0)+1 from NOTICE_BOARD
+		</selectKey>
+		INSERT INTO
+		NOTICE_BOARD (
+					NOTICE_BOARD_NO
+					,MEMBER_NO
+					,TITLE
+					,CONTENT
+		)
+		VALUES (
+					#{noticeBoardNo}
+					,#{50}
+					,#{title}
+					,#{content}
+		)
+	</insert>
 </mapper>
