@@ -4,143 +4,231 @@
 	layout:fragment="content">
 	<div>
 		<section class="d-flex">
-			<aside style="width: 20%; background-color: #aebfec;">
+			<aside style="width:30%; background-color: #aebfec;">
 				<div class="flex-shrink-0 p-3">
-					<div class="row row-cols-1 row-cols-md-3 g-4">
-						<div class="card"
-							style="text-align: center; width: 200px; margin: 15px;">
-							<th:block th:if="${memberInfo[0].profileImage} == null">
-								<img src="commonResource/default_profile.jpg"
-									class="rounded-full" style="width: 100%; height: 100%;"
-									alt="...">
-							</th:block>
-							<th:block th:unless="${memberInfo[0].profileImage} == null">
-								<img class="rounded-full" style="width: 100%; height: 100%;" th:text=" ${memberInfo[0].profileImage} "
-									alt="...">
-							</th:block>
+					<!-- 프로필-->
+					<div>
+						<div class="card justify-content-center align-items-center"
+							style="text-align: center; width: 270px; margin: 15px;">
+							<!-- 프사 -->
+							<div class="box-1">
+								<th:block th:if="${memberInfo[0].profileImage} == null">
+									<img class="profile-1" src="commonResource/default_profile.jpg"
+										style="width: 100%; height: 100%;" alt="profile">
+								</th:block>
+								<th:block th:unless="${memberInfo[0].profileImage} == null">
+									<img class="profile-1 mx-auto d-block" style="width: 100%; height: 100%;"
+										th:src="|upload/profile/${session.member.profileImage}|"
+										alt="...">
+								</th:block>
+							</div>
 							<!-- grade image -->
 							<div class="card-body">
-								<p class="card-text" th:text="${memberInfo[0].nickName}">\</p>
+								<p class="card-text" th:text="${memberInfo[0].nickname}">\</p>
 								<p class="card-text" th:text="${memberInfo[0].email}">\</p>
-								<img th:src="|commonResource/gradeimage/${memberInfo[0].memberLevel}.png|" logo="" style="width:30px;"> 
-								<span class="card-text" th:text="${memberInfo[0].memberLevel}">\</span>
+								<img
+									th:src="|commonResource/gradeimage/${memberInfo[0].memberLevel}.png|"
+									logo="" style="width: 30px;"> <span class="card-text"
+									th:text="${memberInfo[0].memberLevel}">\</span>
 								<p class="card-text"
 									th:text="${memberInfo[0].accumActivityPoint}">\</p>
 
 							</div>
 						</div>
 					</div>
+					<!-- summary -->
 					<div class="card"
-						style="width: 200px; height: 400px; margin-top: 30px;">
-						<h5 style="font-weight: bold; text-align: center;">SUMMARY</h5>
-						<div class="card" style="margin: 15px;">
-							<img class="flex-column" src="commonResource/icon/point.png"
-								style="width: 40px; height: auto; object-fit: cover; object-position: center top; position: absolute; top: 50%; transform: translateY(-50%);">
-							<ul class="list-unstyled ps-0">
+						style="width: 270px; height: 100%; margin-top: 30px;margin-left:15px;">
+						<h5
+							style="padding-top: 10px; font-weight: bold; text-align: center;">SUMMARY</h5>
+						<div class="card" style="width: auto; margin: 15px; float: left;">
+							<div class="box-2 d-flex">
+								<img class="profile" src="commonResource/icon/point.png"
+									style="width: 40px; height: auto;">
+							</div>
+							<div style="float: left;">
+								<h6 style="font-weight: bold;">POINT</h6>
+								<p class="card-text"
+									th:text="${memberInfo[0].acoPoint} + 정산가능포인트 + ${memberInfo[0].availableActivityPoint}">
+									\</p>
+							</div>
+							<div>
+								<!-- 모달버튼 -->
+								<button type="button" class="btn btn-modal"
+									data-bs-toggle="modal" data-bs-target="#point"
+									style="text-decoration: none; color: #979da9;">
 
-								<li class="mb-1"><button
-										class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-										data-bs-toggle="collapse" data-bs-target="#home-collapse"
-										aria-expanded="true">POINT</button>
-									<p class="card-text"
-										th:text="${memberInfo[0].acoPoint} + 정산가능포인트 + ${memberInfo[0].availableActivityPoint}">
-										\</p></li>
-							</ul>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+								</button>
+								<!-- 모달시작 -->
+								<div class="modal fade" id="point" tabindex="-1"
+									role="dialog" aria-labelledby="pointModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-xl" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="pointModalLabel"
+													style="font-weight: bold;">포인트뱅크</h5>
+												<button type="button" class="close" data-bs-dismiss="modal"
+													aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<ul class="tab-ul">
+													<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
+															[[${myq.writeDate}]] </span>
+														<hr></li>
+												</ul>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-bs-dismiss="modal">Close</button>
+												<button type="button" class="btn btn-primary">Save
+													changes</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- 모달 끝 -->
+							</div>
 						</div>
 						<div class="card" style="margin: 15px;">
-							<li class="mb-1"><img class="flex-column"
-								src="commonResource/icon/activity.png"
-								style="width: 40px; height: auto; object-fit: cover; object-position: center top; position: absolute; top: 50%; transform: translateY(-50%);">
-
-								<button
-									class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-									id="exampleModalToggle" data-bs-toggle="collapse"
-									data-bs-target="#dashboard-collapse" aria-expanded="false">내
-									활동관리</button>
+							<div class="box-2">
+								<img class=" profile" src="commonResource/icon/activity.png"
+									style="width: 40px; height: auto;">
+							</div>
+							<div>
+								<h6 style="font-weight: bold;">내 활동관리</h6>
 								<p class="card-text" th:text="|활동점수 / 등급이 궁금하다면?|">\</p>
-								<div class="collapse" id="dashboard-collapse"></div></li>
+							</div>
+							<div>
+								<!-- 모달버튼 -->
+								<button type="button" class="btn btn-modal"
+									data-bs-toggle="modal" data-bs-target="#activity"
+									style="text-decoration: none; color: #979da9;">
+
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+								</button>
+								<!-- 모달시작 -->
+								<div class="modal fade" id="activity" tabindex="-1"
+									role="dialog" aria-labelledby="activityModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-xl" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="activityModalLabel"
+													style="font-weight: bold;">내 활동 관리</h5>
+												<button type="button" class="close" data-bs-dismiss="modal"
+													aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<ul class="tab-ul">
+													<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
+															[[${myq.writeDate}]] </span>
+														<hr></li>
+												</ul>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-bs-dismiss="modal">Close</button>
+												<button type="button" class="btn btn-primary">Save
+													changes</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- 모달 끝 -->
+							</div>
 						</div>
 						<div class="card" style="margin: 15px;">
-							<li class="mb-1"><img class="flex-column"
-								src="commonResource/icon/modifyinfo.png"
-								style="width: 40px; height: auto; object-fit: cover; object-position: center top; position: absolute; top: 50%; transform: translateY(-50%);">
-								<button
-									class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-									data-bs-toggle="collapse" data-bs-target="#orders-collapse"
-									aria-expanded="false">회원정보관리</button>
+							<div class="box-2">
+								<img class="profile" src="commonResource/icon/modifyinfo.png"
+									style="width: 40px; height: auto;">
+							</div>
+							<div>
+								<h6 style="font-weight: bold;">회원정보수정</h6>
 								<p class="card-text" th:text="|정보, 비밀번호 변경|">\</p>
-								<div class="collapse" id="orders-collapse"></div></li>
-						</div>
-						<!-- 모달 -->
+							</div>
+							<div>
+								<!-- 모달버튼 -->
+								<button type="button" class="btn btn-modal"
+									data-bs-toggle="modal" data-bs-target="#modify"
+									style="text-decoration: none; color: #979da9;">
 
-						<div class="modal fade" id="exampleModalToggle" aria-hidden="true"
-							aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-							<div class="modal-dialog modal-dialog-centered">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h1 class="modal-title fs-5" id="exampleModalToggleLabel">포인트뱅크</h1>
-										<button type="button" class="btn-close"
-											data-bs-dismiss="modal" aria-label="Close"></button>
-									</div>
-									<div class="modal-body">Show a second modal and hide this
-										one with the button below.</div>
-									<div class="modal-footer">
-										<button class="btn btn-primary"
-											data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Open
-											second modal</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="modal fade" id="exampleModalToggle2"
-							aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-							tabindex="-1">
-							<div class="modal-dialog modal-dialog-centered">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal
-											2</h1>
-										<button type="button" class="btn-close"
-											data-bs-dismiss="modal" aria-label="Close"></button>
-									</div>
-									<div class="modal-body">Hide this modal and show the
-										first with the button below.</div>
-									<div class="modal-footer">
-										<button class="btn btn-primary"
-											data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back
-											to first</button>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+								</button>
+								<!-- 모달시작 -->
+								<div class="modal fade" id="modify" tabindex="-1"
+									role="dialog" aria-labelledby="modifyModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-xl" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="modifyModalLabel"
+													style="font-weight: bold;">회원정보수정</h5>
+												<button type="button" class="close" data-bs-dismiss="modal"
+													aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<ul class="tab-ul">
+													<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
+															[[${myq.writeDate}]] </span>
+														<hr></li>
+												</ul>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-bs-dismiss="modal">Close</button>
+												<button type="button" class="btn btn-primary">Save
+													changes</button>
+											</div>
+										</div>
 									</div>
 								</div>
+								<!-- 모달 끝 -->
 							</div>
 						</div>
-						<a class="btn btn-primary" data-bs-toggle="modal"
-							href="#exampleModalToggle" role="button">Open first modal</a>
-						<!-- 모달끝 -->
 					</div>
 				</div>
 			</aside>
 			<!-- 메인바디영역 -->
 			<div class="container" id="myTabContent"
 				style="justify-content: center; width: 826px; background-color: #aebfec; margin-left: -10px; padding-left: 30px;">
-				<ul class="nav nav-tabs" id="myTab" role="tablist">
-					<li class="nav-item" role="presentation">
-						<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-							data-bs-target="#home-tab-pane" type="button" role="tab"
-							aria-controls="home-tab-pane" aria-selected="true"
-							style="width: 380px;">내가 참여한 프로젝트</button>
-					</li>
-					<li class="nav-item" role="presentation">
-						<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-							data-bs-target="#profile-tab-pane" type="button" role="tab"
-							aria-controls="profile-tab-pane" aria-selected="false"
-							style="width: 380px;" onclick="location.href='/myPage2?memberNo=5'">내 질답통계</button>
-					</li>
-				</ul>
+					<ul class="nav nav-tabs" id="myTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+								data-bs-target="#home-tab-pane" type="button" role="tab"
+								aria-controls="home-tab-pane" aria-selected="true"
+								style="width: 380px;">내가 참여한 프로젝트</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#profile-tab-pane" type="button" role="tab"
+								aria-controls="profile-tab-pane" aria-selected="false"
+								style="width: 380px;" onclick="goMypage2()">내 질답통계</button>
+						</li>
+					</ul>
 				<div>
-
-					<div class="card" style="width: 784px;">
+					<div class="card">
 						<div class="card-body" id="card-1">
-							<h5 class="card-title">Card title</h5>
+							<h5 class="card-title">🏃‍♀️참여젝트 목록</h5>
 							<h6 class="card-subtitle mb-2 text-body-secondary">Card
 								subtitle</h6>
 							<p class="card-text">Some quick example text to build on the
@@ -149,13 +237,13 @@
 								class="card-link">Another link</a>
 						</div>
 					</div>
-
 				</div>
+		
 				<div class="card"
 					style="width: auto; height: 257px; float: left; margin-top: 30px;">
 					<div class="card-body" id="card-1">
+						<p>내 관심주제</p>
 						<ul class="tab-ul">
-							<p>내 관심주제</p>
 							<li th:text="${memberInfo[0].topicHashtag}"></li>
 						</ul>
 					</div>
@@ -163,11 +251,8 @@
 				<div class="card"
 					style="width: auto; float: left; margin-top: 30px;">
 					<div class="card-body" id="card-1">
+						<p>이모티콘 구매내역</p>
 						<ul class="tab-ul">
-							<p>
-								이모티콘 구매내역
-								<button>></button>
-							</p>
 							<li th:each="emo:${emoInfo}">[[ ${emo.emoName} ]] 구매날짜
 								[[${emo.emoBuydate}]]
 								<hr>
@@ -176,7 +261,18 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- mypage2 메인바디 들어갈곳 (처음엔 class="hidden"처리) -->
+		</section>
 	</div>
+
 </div>
+<script>
+	const memberno = [[${session.member.memberNo}]]
 
+	function goMypage2() {
+		location.href = '/myPage2?memberNo=' + memberno;
 
+	}
+</script>
+</div>
