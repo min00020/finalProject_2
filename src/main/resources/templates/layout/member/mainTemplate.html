@@ -66,23 +66,46 @@
 	
 	<!-- 전체적용 style  -->
 	<style>
-		
+
 	</style>
 
 </head>
 <body class="light-mode">
 	<header th:replace="@{/layout/member/header.html}"></header>
 	<section class="d-flex justify-content-between common-width">
-		
 		<th:block th:if="${main} == 1">
 			<aside style="width:15%;">
-				<p>광고<p>
+				<img id="sidebanner" src="commonResource/sidebanner.png" alt="sidebanner" style="width:90%">
+				<section class = "park_rank">
+            <h5>실시간 랭킹 <span class="park_more"> +더보기</span></h5>
+               <hr style="margin:5;">
+               <table class="park_sidemenu">
+                  <tr>
+                     <td>
+                        <span class="park_box">
+                          <img class="park_profile" src="commonResource/mann.png" alt="profile">
+                        </span>
+                        <span class="park_name" >user01</span><span class="park_no">300</span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        <span class="park_box">
+                          <img class="park_profile" src="commonResource/mann2.png" alt="profile">
+                        </span>
+                        <span class="park_name">user0111</span><span class="park_no">20</span>
+                     </td>
+                  </tr>
+                </table>
+            </section>
 			</aside>
 			<section layout:fragment="content" id="mainBody" style="width:70%">
 		
 			</section>
+			
 			<aside style="width:15%;">
-				<p>광고<p>
+				<img id="sidebanner2" src="commonResource/sidebanner2.png" alt="sidebanner2" style="width:90%; margin-left:20px">
+				<img id="sidebanner3" src="commonResource/sidebanner3.png" alt="sidebanner3" style="width:90%; margin-left:20px; margin-top : 100px">
 			</aside>
 		</th:block>
 		<th:block th:unless="${main} == 1">

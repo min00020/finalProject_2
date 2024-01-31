@@ -1,8 +1,9 @@
 
     <div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
-        class="common-width">
+        class="common-width"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
         <header>
-            <div class="navbar">
+            <div class="park_navbar">
                <a href="/" style="width:15%">
     			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:80%">
 				</a>
@@ -16,23 +17,33 @@
                     <li>이모티콘 상점</li>
                     <li>포인트 충전</li>
                 </ul>
-                <div class="search-align-self-center">
-  					<input type="text" placeholder="검색어 입력" class="searchInput">
-  					<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="searchImg">
+                <div class="park_search-align-self-center">
+  					<input type="text" placeholder="검색어 입력" class="park_searchInput">
+  					<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="park_searchImg">
 				</div>
-                <div class="align-self-center">
+                <div class="park_align-self-center">
                     <!-- 다크 모드/라이트 모드 토글 버튼 추가 -->
-                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
-                        <div class="sun-moon-container">
+                    <div class="park_dark-mode-toggle" onclick="toggleDarkMode()">
+                        <div class="park_sun-moon-container">
                             <i class="fas fa-sun sun-icon"></i><i class="fas fa-moon moon-icon"></i>
                         </div>
                     </div>
+                    
                 </div>
-                <div class="align-self-center">
-                    <button class="login-button" onclick="location.href='/loginForm'">로그인</button>
-                    <button class="signup-button" onclick="location.href='/createAccountForm'">회원가입</button>
+
+                <div class="park_align-self-center">
+                    <button class="park_login-button" onclick="location.href='/loginForm'">로그인</button>
+                    <button class="park_signup-button" onclick="location.href='/createAccountForm'">회원가입</button>
                 </div>
+<!--                 <div class = "park_align-self-center"> -->
+<!--                 	<th:block sec:authorize="isAuthenticated()"> -->
+<!--                 		<div>[[${profileImage}]]</div> -->
+<!--                 		<button class="park_MP" onclick="location.href='">MY</button>    -->
+<!--                	 		<button class="park_logout-button" onclick="location.href='">로그아웃</button>         		 -->
+<!--                 	</th:block> -->
+<!--                 </div> -->
             </div>
+            
         </header>
 
         <script>
@@ -42,7 +53,7 @@
                 const sunIcon = document.querySelector('.sun-icon');
                 const moonIcon = document.querySelector('.moon-icon');
                 const logoImage = document.getElementById('logoImage');
-
+                const logoImage3 = document.getElementById('logoImage3');
                 // body 요소에 'dark-mode' 클래스가 있는지 확인하여 토글
                 body.classList.toggle('dark-mode');
 
@@ -52,11 +63,13 @@
                     moonIcon.classList.remove('hidden');
                     sunIcon.classList.add('hidden');
                     logoImage.src = "commonResource/askcodeLogo_dark.png";
+                    logoImage3.src = "commonResource/askcodeLogo_dark.png";
                 } else {
                     body.classList.add('light-mode');
                     moonIcon.classList.add('hidden');
                     sunIcon.classList.remove('hidden');
                     logoImage.src = "commonResource/askcodeLogo.png";
+                    logoImage3.src = "commonResource/askcodeLogo.png";
                 }
             }
         </script>
