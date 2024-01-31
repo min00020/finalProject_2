@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
+	<select id="getQuestionList" resultType="QuestionVO">
+		SELECT QUESTION_BOARD_NO,
+		        MEMBER_NO,
+		        TOPIC,
+		        POINT,
+		        TITLE,
+		        TAG,
+		        CONTENTS,
+		        WRITE_DATE,
+		        VIEW_CNT,
+		        RECOMMEND_CNT,
+		        BOOKMARK_CNT,
+		        ANSWER_CNT
+		FROM QUESTION_BOARD
+		ORDER BY WRITE_DATE DESC
+	</select>
+</mapper>

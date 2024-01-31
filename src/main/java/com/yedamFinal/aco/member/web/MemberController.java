@@ -128,23 +128,6 @@ public class MemberController {
 		return "common/test";
 	}
 	
-
-	
-	/*chae 질문&답변 게시판*/
-	@GetMapping("/questionBoard")
-	public String getquestionBoard() {
-		return "question/questionList";
-	}
-	@GetMapping("/questionInfo")
-	public String getquestionInfo() {
-		return "question/questionInfo";
-	}
-	@GetMapping("/questionWrite")
-	public String questionWrite() {
-		return "question/questionWrite";
-	}
-	
-	
 	
 }
 
