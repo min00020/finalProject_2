@@ -89,7 +89,6 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/upload/**");
 		permitAllUrl.add("/gitLink");
 		permitAllUrl.add("/gitLinkPage");
-		permitAllUrl.add("/qnaBoard");
 	}
 	
 	private void insertPermitAllUrlByChae() {
