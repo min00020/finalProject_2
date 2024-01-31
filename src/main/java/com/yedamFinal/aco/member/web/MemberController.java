@@ -127,4 +127,7 @@ public class MemberController {
 	public String test() {
 		return "common/test";
 	}
+	
+	
 }
+
