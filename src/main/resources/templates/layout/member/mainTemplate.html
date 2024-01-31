@@ -29,7 +29,9 @@
 		<!-- sweetAlert2 -->
 		<meta name="csrf" th:content="${_csrf.token}" />
 		<meta name="csrfPara" th:content="${_csrf.parameterName}" />
-	
+		
+		<!-- ckeditor -->
+		<script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/super-build/ckeditor.js"></script>
 		
 	
 	
@@ -70,7 +72,14 @@
 	
 	<!-- 전체적용 style  -->
 	<style>
-
+		.ck-editor__editable[role="textbox"] {
+    		min-height: 300px;
+  		}
+	
+  		.ck-content .image {
+    		max-width: 80%;
+    		margin: 20px auto;
+  		}
 	</style>
 
 </head>
