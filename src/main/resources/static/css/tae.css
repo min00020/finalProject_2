@@ -106,7 +106,17 @@ main {
 }
 .card{
 	border-radius : 20px;
+	
 }
 .card-body{
 	padding : 10px;
+	border : 0px;
+	
+	
+}
+.container{
+	height : 950px;
+}
+.btn btn-modal{
+	padding-bottom:0px;
 }

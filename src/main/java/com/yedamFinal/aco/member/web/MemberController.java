@@ -64,8 +64,8 @@ public class MemberController {
 		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
 		List<MyquestionVO> myquestion = memberService.getMyqList(memberVO);
 		model.addAttribute("memberInfo", list);
-		model.addAttribute("bmark", bmark);
-		model.addAttribute("mquestion", myquestion);
+		model.addAttribute("bmarkList", bmark);
+		model.addAttribute("mquestionList", myquestion);
 		return "common/myPage2";
 	}
 	

@@ -75,5 +75,6 @@ public class WebSecurityConfig {
 	
 	private void insertPermitAllUrlByTae() {
 		permitAllUrl.add("/myPage");
+		permitAllUrl.add("/myPage2");
 	}
 }
