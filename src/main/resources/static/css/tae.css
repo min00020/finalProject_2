@@ -86,7 +86,8 @@ main {
 	margin-left: 1.25rem;
 }
 
-.btn-toggle-nav a:hover, .btn-toggle-nav a:focus {
+.btn-toggle-nav a:hover, 
+.btn-toggle-nav a:focus {
 	background-color: var(- -bs-tertiary-bg);
 }
 
@@ -96,10 +97,16 @@ main {
 .tab-ul{
 	list-style : none;
 	float: left;
-	paddig-left: -32px;
+	padding : 10px;
+	margin : 0px;
 	
 }
 .mb-1{
 	list-style : none;
 }
-
+.card{
+	border-radius : 20px;
+}
+.card-body{
+	padding : 10px;
+}
