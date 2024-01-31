@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-<meta charset="UTF-8">
-<title>Point</title>
-
-
-<style>
-</style>
-
-</head>
-<body class="light-mode">
-	<header th:replace="@{/layout/member/header.html}"></header>
-	<section class="d-flex justify-content-between common-width">
-		<aside style="width: 25%;">
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+>
+	<aside style="width: 25%;">
 		
 		</aside>
 		<section layout:fragment="content" id="mainBody" style="width: 75%">
 		<h1>asdjasodoasdjo</h1>
 		</section>
-	</section>
-	<footer th:replace="@{/layout/member/footer.html}"></footer>
-
+</div>
+		
 </body>
 </html>

@@ -1,10 +1,179 @@
-<div 
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="@{/layout/member/mainTemplate.html}"
-	layout:fragment="content">	  
+	layout:fragment="content">
 
-	<section>
-		
-	</section>
+
+	<div class="d-flex">
+
+		<aside th:replace="@{/layout/member/pointAsideMain.html}"></aside>
+
+		<section class="main">
+			<div class="pointHeader">
+				<p>애코머니 충전</p>
+				<span>질문게시판, 이모티콘 상점에서 사용되는 애코머니를 간편하게 충전할 수 있습니다.</span>
+			</div>
+			<div class="pointCharegingMain">
+				<div
+					style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+					<div class="chargePointSelect">
+						<div class="input-container">
+							<label for="amountInput"></label> <input type="text"
+								id="amountInput" placeholder="충전할 금액을 입력해 주세요"
+								oninput="formatNumber(this)" />
+						</div>
+						<hr style="margin-top: 0;">
+						<div class="points">
+							<button>+1,000</button>
+							<button>+3,000</button>
+							<button>+5,000</button>
+							<button>+10,000</button>
+							<button>+30,000</button>
+							<button>+50,000</button>
+						</div>
+						<div class="accountSelect">
+							<br>
+							<br>
+							<h3>출금 계좌</h3>
+							<hr>
+						</div>
+						<div class="account">
+							<p>카카오뱅크</p>
+							<p>카카오뱅크 1231***1232131</p>
+						</div>
+						<div class="account">
+							<p>카카오뱅크</p>
+							<p>카카오뱅크 1231***1232131</p>
+						</div>
+						<div class="account">
+							<p>카카오뱅크</p>
+							<p>카카오뱅크 1231***1232131</p>
+						</div>
+						<div class="account">
+							<p>카카오뱅크</p>
+							<p>카카오뱅크 1231***1232131</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+	</div>
+
 </div>
+<style>
+.account {
+	border: 1px solid #BDBDBD;
+	height: 80px;
+	border-radius: 5px;
+	text-align: left;
+	margin-bottom : 10px;
+}
+
+.accountSelect {
+	text-align: left;
+	
+}
+
+.pointHeader {
+	background-color: #3e6ce3;
+	color: white;
+	padding: 20px;
+	text-align: left;
+	border-radius: 5px;
+	width: 1000px;
+	height: 80px;
+	margin-left: 50px;
+	position: relative; /* 상대 위치 설정 */
+}
+
+.pointHeader p {
+	font-size: 27px;
+	font-weight: bold;
+	position: absolute; /* 절대 위치 설정 */
+	top: 7%; /* 상단으로부터 30% 위치 */
+	left: 20px; /* 텍스트 정렬을 위한 왼쪽 여백 */
+}
+
+.pointHeader span {
+	position: absolute;
+	top: 59%;
+	font-size: 16px;
+}
+
+.pointCharegingMain {
+	border: 1px solid #BDBDBD;
+	margin-left: 50px;
+	margin-top: 20px;
+	height: 1000px;
+}
+
+.chargePointSelect {
+	text-align: center;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.chargePointSelect p {
+	margin-bottom: 10px;
+}
+
+.points button {
+	background-color: #f1f1f1;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 7px 20px;
+	margin: 0 5px;
+	font-size: 16px;
+	cursor: pointer;
+	width: 100px;
+}
+
+.points button:hover {
+	background-color: #e9e9e9;
+}
+
+.pointInput {
+	width: 300px;
+	font-size: 16px;
+}
+
+.input-container {
+	font-family: 'Noto Sans KR', sans-serif;
+	margin-bottom: 12px;
+}
+
+.input-container label {
+	display: block;
+	margin-bottom: 10px;
+}
+
+#amountInput {
+	width: 100%;
+	padding: 8px;
+	border: none;
+	border-radius: 4px;
+	margin-bottom: -20px;
+	margin-top: 0px;
+	font-size: 28px; /* 입력 텍스트의 글자 크기를 설정 */
+}
+
+#amountInput::placeholder {
+	font-size: 28px; /* 원하는 텍스트 크기로 조정 */
+}
+
+#amountInput:focus {
+	outline: none;
+	border-color: #3e6ce3;
+	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
+}
+</style>
+
+<script>
+	function formatNumber(input) {
+		// 입력된 값에서 숫자가 아닌 모든 문자를 제거.
+		let numbers = input.value.replace(/\D/g, '');
+
+		// 숫자를 콤마 형식으로 변환.
+		input.value = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
+</script>

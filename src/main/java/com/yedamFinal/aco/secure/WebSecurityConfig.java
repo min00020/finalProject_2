@@ -99,7 +99,8 @@ public class WebSecurityConfig {
 	
 	private void insertPermitAllUrlByKyung() {
 		permitAllUrl.add("/freeBoard/freeBoardList");
-		permitAllUrl.add("/point/pointCharging");
+		permitAllUrl.add("/point");
+		
 	}
 	
 	private void insertPermitAllUrlByTae() {
