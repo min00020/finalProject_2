@@ -20,7 +20,7 @@
 					</ul>
                 </li>
                 <li>이모티콘 상점</li>
-                <li>포인트 충전</li>
+                 <li onclick="location.href='/point'">포인트 충전</li>
             </ul>
             <div class="park_search-align-self-center">
              <input type="text" placeholder="검색어 입력" class="park_searchInput">
@@ -43,6 +43,10 @@
             </th:block>
             <th:block sec:authorize="isAuthenticated()"> 
                 <div class = "park_align-self-center d-flex gap-2">
+                               <div class="park_alert" style="width :45px; margin-top:10px; padding-left:20px;">
+                    <a href = '/'><img class="bell" src="commonResource/bell.png" alt="bell" style="width:100%"></a>
+                    
+               </div>
                     <div class="mink_box">
                     	<a th:href="|/myPage?memberNo=${session.member.memberNo}|">
                     		<img class="mink_profile" th:src="|upload/profile/${session.member.profileImage}|" alt ="profile" />

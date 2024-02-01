@@ -33,26 +33,18 @@
 							<button>+50,000</button>
 						</div>
 						<div class="accountSelect">
+						
+						
 							<br> <br>
 							<h3>출금 계좌</h3>
 							<hr>
 						</div>
+					  <div th:each="account : ${getAccountList}">
 						<div class="account">
-							<p>카카오뱅크</p>
-							<p>카카오뱅크 1231***1232131</p>
+							<p>[[${account.bankName}]]</p>
+							<p>[[${account.accountNo}]]</p>
 						</div>
-						<div class="account">
-							<p>카카오뱅크</p>
-							<p>카카오뱅크 1231***1232131</p>
-						</div>
-						<div class="account">
-							<p>카카오뱅크</p>
-							<p>카카오뱅크 1231***1232131</p>
-						</div>
-						<div class="account">
-							<p>카카오뱅크</p>
-							<p>카카오뱅크 1231***1232131</p>
-						</div>
+					  </div><!-- th:each end -->
 					</div>
 					<p style="color: #808080">선택 : 카카오뱅크</p>
 					<span class="addAcount">
