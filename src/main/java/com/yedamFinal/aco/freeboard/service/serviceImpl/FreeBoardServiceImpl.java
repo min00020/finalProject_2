@@ -27,7 +27,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return freeBoardMapper.getFreeBoard();
 	}
 
-	
-	
+
+
 	
 }

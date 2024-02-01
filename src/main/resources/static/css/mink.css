@@ -24,6 +24,32 @@
     top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
     transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
 }
+
+.mink_btn_border_background_none {
+	background-color:white;
+	border:none;
+}
+
+.mink_searchImg {
+	position: absolute;
+	width: 2px;
+	top: 297px;
+	right: 326px;
+}
+
+#mink_answercnt{
+	color : #3e6ce3;
+	border-width : 1px;
+	border-style : solid;
+	border-radius : 1rem;
+	border-color: #989daa !important;
+	width: 110px; 
+	height: 80px; 
+	text-align: center; 
+	display: flex; 
+	flex-direction: column; 
+	justify-content: center;
+}
 /* #mainBody { */
 /* 	min-height : 1200px; */
 /* } */
@@ -31,7 +57,7 @@
 /* .common-width { */
 /* 	margin: 0 auto; */
 /* 	width: 70%; */
-/* } */
+} 
 /* .search { */
 /*   	position: relative; */
 /*   	margin-left : 30px; */

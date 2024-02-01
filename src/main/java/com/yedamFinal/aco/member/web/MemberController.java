@@ -52,13 +52,12 @@ public class MemberController {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
         	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
             MemberVO username = userDetails.getMemberVO();
-            
-            int a = 90;
         }
 		
 		return "common/mainPage";
 	}
 	
+	// min 회원가입 form
 	@GetMapping("/createAccountForm")
 	public String getCreateAccountForm(HttpServletRequest request, Model model) {
 		var tagList = memberService.getTagList();
@@ -66,6 +65,7 @@ public class MemberController {
 		return "common/createAccount";
 	}
 	
+	// min 아이디 중복체크 요청
 	@GetMapping("/checkId")
 	@ResponseBody
 	public Map<String,Object> checkDuplicateID(@RequestParam String id) {
@@ -73,24 +73,28 @@ public class MemberController {
 		return retData;
 	}
 	
+	// min 이메일 인증요청
 	@GetMapping("/checkEmail")
 	@ResponseBody
 	public Map<String, Object> checkDuplicateEmail(@RequestParam String email) {
 		return memberService.checkDuplicateEmail(email);
 	}
 	
+	// min 번호 인증요청
 	@GetMapping("/authPhoneNum")
 	@ResponseBody
 	public Map<String, Object> sendAuthNumber(@RequestParam String phoneNum) {
 		return memberService.sendAuthNumberToPhone(phoneNum);
 	}
 	
+	// min 번호 인증 확인(시연 시 실제 문자서비스 이용)
 	@GetMapping("/verifyAuthPhoneNum")
 	@ResponseBody
 	public Map<String, Object> verifyAuthNumber(@RequestParam String authNum, @RequestParam String phoneNum) {
 		return memberService.verifyAuthNumber(authNum,phoneNum);	
 	}
 
+	// min 회원가입
 	@PostMapping("/join")
 	@ResponseBody
 	public Map<String, Object> joinMember(MemberVO member, MultipartFile file) {  
@@ -103,12 +107,14 @@ public class MemberController {
 		return memberService.joinMember(member, file);
 	}
 	
+	// min login처리(안씀)
 	@PostMapping("/login")
 	@ResponseBody
 	public Map<String,Object> login(@RequestParam("userid") String userid, @RequestParam("userid") String userpw) {
 		return memberService.loginMember(userid, userpw);
 	}
 	
+	// min 깃허브 연동 page
 	@GetMapping("/gitLinkPage")
 	public String gitLinkPageForm(HttpServletRequest req, String id, Model model) {
 		if(id != null)
@@ -117,6 +123,7 @@ public class MemberController {
 		return "common/gitLinkPage";
 	}
 	
+	// min 깃허브 연동
 	@PostMapping("/gitLink")
 	@ResponseBody
 	public Map<String,Object> gitLink(HttpServletRequest req, @RequestParam String gitCode, Model model) {
@@ -127,4 +134,7 @@ public class MemberController {
 	public String test() {
 		return "common/test";
 	}
+	
+	
 }
+
