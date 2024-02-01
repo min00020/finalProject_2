@@ -19,8 +19,12 @@ public class QnABoardServiceImpl implements QnABoardService {
 	private QnABoardMapper qnaMapper;
 	
 	@Override
-	public Map<String, Object> getMyQnaBoardList(int pageNo, MemberVO vo) {
-		var qnaList = qnaMapper.selectMyQnaBoardList(pageNo,vo.getMemberNo());
+	public Map<String, Object> getMyQnaBoardList(int pageNo, MemberVO vo, String orderby) {
+		if(orderby == null || orderby.isEmpty()) {
+			orderby = "Latest";
+		}
+		
+		var qnaList = qnaMapper.selectMyQnaBoardList(pageNo,vo.getMemberNo(),orderby);
 		PaginationDTO dto = null;
 		if(qnaList.size() > 0) {
 			dto = new PaginationDTO(qnaMapper.selectMyQnaBoardCount(vo.getMemberNo()), pageNo, 5);
@@ -31,6 +35,25 @@ public class QnABoardServiceImpl implements QnABoardService {
 		ret.put("pageDTO", dto);
 		
 		// TODO Auto-generated method stub
+		return ret;
+	}
+
+	@Override
+	public Map<String, Object> getMyQnaBoardListFromSearch(int pageNo, String search, MemberVO vo, String orderby) {
+		if(orderby == null || orderby.isEmpty()) {
+			orderby = "Latest";
+		}
+		
+		var qnaList = qnaMapper.selectMyQnaBoardListFromSearch(pageNo,search,vo.getMemberNo(),orderby);
+		PaginationDTO dto = null;
+		if(qnaList.size() > 0) {
+			dto = new PaginationDTO(qnaMapper.selectMyQnaBoardCountFromSearch(vo.getMemberNo(), search), pageNo, 5);
+		}
+		
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("qnaList", qnaList);
+		ret.put("pageDTO", dto);
+		
 		return ret;
 	}
 	

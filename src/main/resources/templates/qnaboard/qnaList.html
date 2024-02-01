@@ -12,8 +12,8 @@
 	<div class="questionBoard" style="width:1344px;">
          <!-- 상단 선택 메뉴 -->
          <div class="d-flex justify-content-end" >
-			<input type="text" placeholder="검색어 입력" class="park_searchInput w-25">
-			<button class="mink_btn_border_background_none mink_searchImg" onclick="hi()"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" style="width:30px;"></button>
+			<input type="text" placeholder="검색어 입력" class="park_searchInput w-25" id="searchInput">
+			<button class="mink_btn_border_background_none mink_searchImg" id="searchBtn"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" style="width:30px;"></button>
          </div>
            <hr>
          <!-- 추천순 정렬, 작성버튼 -->
@@ -38,7 +38,7 @@
 			<div id="title" class="col-10">
 				<div id="member" style="height:40px;">
 					<div class="qna_box">
-						<img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+						<img class="qna_profile" th:src="|upload/profile/${session.member.profileImage}|" alt="profile">
 					</div>
 					<p>[[${qna.nickname}]]</p>
 				</div>
@@ -50,35 +50,72 @@
 				<h6>[[${qna.viewCnt}]]</h6>
 				<h6>조회</h6>
             </div>
-           	<div id="mink_answercnt" class="col-1" style="text-align:center; margin:auto;">
+           	<div id="mink_answercnt" class="col-1" style="text-align:center; margin:auto; background-color:#3e6ce3; color:white;">
                 <h6>[[${qna.answerState}]]</h6>
+           	</div>
+           	<div>
+           		<h6 th:text="${#dates.format(qna.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></h6>
            	</div>
             <hr style="margin-top:30px; margin-bottom:30px;">
          </div>
+         
          
          <!-- end of postList -->
       </div>
       </div>
 	 <!-- Pagination -->
-    <ul class="pagination justify-content-center">
-        <li class="page-item" th:if="${qnaInfo.pageDTO.prev}">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        <li class="page-item" th:each="">
-            <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item" th:if="${qnaInfo.pageDTO.next}">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
+	<th:block th:if="${qnaInfo.pageDTO != null}">
+    	<ul class="pagination justify-content-center">
+        	<li class="page-item" th:if="${qnaInfo.pageDTO.prev}">
+        		<th:block th:if="${search != null}">
+        			<a class="page-link" th:href="|/qnaBoard?pg=${qnaInfo.pageDTO.curPage - 1}&search=${search}|" aria-label="Previous">
+                		<span aria-hidden="true">&laquo;</span>
+                		<span class="sr-only">Previous</span>
+            		</a>
+            	</th:block>
+            	<th:block th:unless="${search != null}">
+        			<a class="page-link" th:href="|/qnaBoard?pg=${qnaInfo.pageDTO.curPage - 1}|" aria-label="Previous">
+                		<span aria-hidden="true">&laquo;</span>
+                		<span class="sr-only">Previous</span>
+            		</a>
+            	</th:block>
+        	</li>
+        	<li th:class="${pageNo == qnaInfo.pageDTO.curPage} ? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(qnaInfo.pageDTO.startPage, qnaInfo.pageDTO.endPage)}">
+        		<!--/* 검색으로 인한 페이징은 다르게 요청 */-->
+        		<th:block th:if="${search != null}">
+            		<a class="page-link" th:href="|/qnaBoard?pg=${pageNo}&search=${search}|">[[${pageNo}]]</a>
+            	</th:block>
+            	<th:block th:unless="${search != null}">
+            		<a class="page-link" th:href="|/qnaBoard?pg=${pageNo}|">[[${pageNo}]]</a>
+            	</th:block>
+        	</li>
+        	<li class="page-item" th:if="${qnaInfo.pageDTO.next}">
+        		<th:block th:if="${search != null}">
+        			<a class="page-link" th:href="|/qnaBoard?pg=${qnaInfo.pageDTO.curPage + 1}&search=${search}|" aria-label="Previous">
+                		<span aria-hidden="true">&raquo;</span>
+                		<span class="sr-only">Next</span>
+            		</a>
+            	</th:block>
+            	<th:block th:unless="${search != null}">
+        			<a class="page-link" th:href="|/qnaBoard?pg=${qnaInfo.pageDTO.curPage + 1}|" aria-label="Previous">
+                		<span aria-hidden="true">&raquo;</span>
+                		<span class="sr-only">Next</span>
+            		</a>
+            	</th:block>
+        	</li>
+    	</ul>
+    </th:block>
 </div>
 <script th:inline="javascript">
-const sdf = [[${qnaInfo.qnaList}]];
-const test = [[${qnaInfo.pageDTO}]];
+	$('#searchBtn').on('click', function(e) {
+		window.location.href = "/qnaBoard?pg=1&search=" + $('#searchInput').val();
+	});
+	
+	$('#searchInput').on('keydown', function(e) {
+		if (e.keyCode === 13) {
+			window.location.href = "/qnaBoard?pg=1&search=" + $('#searchInput').val();
+	    }
+	})
+	
+	
 </script>

@@ -1,5 +1,7 @@
 package com.yedamFinal.aco.qnaBoard.web;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +20,12 @@ public class QnABoardController {
 	@Autowired
 	private QnABoardServiceImpl qnaBoardService;
 	
+	// min 문의게시판 리스트 불러오기(페이징, 검색등)
 	@GetMapping("/qnaBoard")
-	public String getQnaBoardListForm(@RequestParam String pg, Model model) {
+	public String getQnaBoardListForm(@RequestParam String pg, String search, String ob, Model model) {
 		// MemberVO 꺼내오기.
 		MemberVO vo = null;
+		Map<String,Object> ret = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
         	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
@@ -30,11 +34,18 @@ public class QnABoardController {
             	return "redirect:/loginForm";
             }
             
-            var qnaInfo = qnaBoardService.getMyQnaBoardList(Integer.valueOf(pg), vo);
-            if(qnaInfo == null) {
+            // 검색창 입력의 경우.
+            if(search == null)
+            	ret = qnaBoardService.getMyQnaBoardList(Integer.valueOf(pg), vo,ob);
+            else {
+            	ret = qnaBoardService.getMyQnaBoardListFromSearch(Integer.valueOf(pg), search, vo,ob);
+            	model.addAttribute("search",search); // 해당 search키워드로 페이징해야함.
+            }
+            
+            if(ret == null) {
             	return "redirect:/loginForm";
             }
-            model.addAttribute("qnaInfo",qnaInfo);
+            model.addAttribute("qnaInfo",ret);
         }
         else {
         	return "redirect:/";
