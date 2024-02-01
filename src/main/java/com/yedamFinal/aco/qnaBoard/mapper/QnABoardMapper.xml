@@ -2,4 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedamFinal.aco.qnaBoard.mapper.QnABoardMapper">
+	<select id="selectMyQnaBoardList" resultType="QnABoardVO">
+	<![CDATA[
+		SELECT 
+        	A.QNA_BOARD_NO, 
+        	A.NICKNAME, 
+        	A.TITLE, 
+        	A.WRITE_DATE, 
+        	A.CHANGE_DATE, 
+        	SUBCODE_TO_NAME(A.ANSWER_STATE) AS ANSWER_STATE,  
+        	A.VIEW_CNT
+        	FROM (
+            	SELECT ROWNUM AS RN, B.QNA_BOARD_NO, B.NICKNAME, B.TITLE, B.WRITE_DATE, B.CHANGE_DATE, B.ANSWER_STATE, B.VIEW_CNT FROM (
+                	SELECT C.QNA_BOARD_NO, D.NICKNAME, C.TITLE, C.WRITE_DATE, C.CHANGE_DATE, C.ANSWER_STATE, C.VIEW_CNT
+                    	FROM QNA_BOARD C
+                    	JOIN MEMBER D ON C.MEMBER_NO = D.MEMBER_NO
+                    	WHERE D.MEMBER_NO = #{memberNo}
+                	) B
+        	) A
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	<select id="selectMyQnaBoardCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QNA_BOARD
+            WHERE MEMBER_NO = #{memberNo}
+	</select>
 </mapper>

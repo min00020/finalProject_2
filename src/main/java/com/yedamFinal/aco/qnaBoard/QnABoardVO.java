@@ -15,4 +15,5 @@ public class QnABoardVO {
 	private Date changeDate;
 	private String answerState;
 	private int viewCnt;
+	private String nickname;
 }

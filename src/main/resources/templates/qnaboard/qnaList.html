@@ -34,24 +34,24 @@
          
          <!-- start of postList -->
          <hr style="margin-bottom:30px">
-         <div id="questionList"  class="row">
+         <div id="questionList"  class="row" th:each="qna : ${qnaInfo.qnaList}">
 			<div id="title" class="col-10">
 				<div id="member" style="height:40px;">
 					<div class="qna_box">
 						<img class="qna_profile" src="commonResource/cookie.png" alt="profile">
 					</div>
-					<p >cookie123</p>
+					<p>[[${qna.nickname}]]</p>
 				</div>
 				<div id="titleTag">
-					<h4>node.js에 대한 질문이 있습니다.</h4>
+					<h4>[[${qna.title}]]</h4>
 				</div>
 			</div>
 			<div class="col-1" style="text-align:center; margin:auto;">
-				<h6>2</h6>
+				<h6>[[${qna.viewCnt}]]</h6>
 				<h6>조회</h6>
             </div>
            	<div id="mink_answercnt" class="col-1" style="text-align:center; margin:auto;">
-                <h6>답변대기중</h6>
+                <h6>[[${qna.answerState}]]</h6>
            	</div>
             <hr style="margin-top:30px; margin-bottom:30px;">
          </div>
@@ -59,4 +59,32 @@
          <!-- end of postList -->
       </div>
       </div>
+	 <!-- Pagination -->
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:if="${qnaInfo.pageDTO.prev}">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item" th:if="${qnaInfo.pageDTO.next}">
+            <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
 </div>
+<script th:inline="javascript">
+const sdf = [[${qnaInfo.qnaList}]];
+const test = [[${qnaInfo.pageDTO}]];
+</script>
