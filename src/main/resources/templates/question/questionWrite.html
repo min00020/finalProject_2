@@ -15,7 +15,7 @@
 						<div style="width:48%;">
 							<label for="topic" style="font-weight : bold;">토픽</label>
 							<p style="font-size:14px; margin-bottom:8px;">질문과 관련된 토픽을 선택해주세요. </p>
-		                    <select id="topic" class="form-select" style="border:1px solid #ccc;">
+		                    <select id="topic" name="topic" class="form-select" style="border:1px solid #ccc;">
 		                    	<option value="" selected disabled hidden>토픽을 선택해주세요</option>
 		                    	<option value="H001">기술</option>
 		                    	<option value="H002">사이드 프로젝트</option>
@@ -28,7 +28,7 @@
 							<p style="font-size:14px; margin-bottom:8px;">답변자에게 지급할 포인트 금액을 입력해주세요. </p>
 		                   <!-- 	<input type="text" class="form-control" value="0"> -->
 		                   	<div class="chae_input-container" style="width:100%;">
-							    <input id="point" type="text" class="form-control" value="0" style="color:#3e6ce3;">
+							    <input id="point" name="point" type="text" class="form-control" value="0" style="color:#3e6ce3;">
 							    <button class="chae_pointBtn">전액사용</button>
 							</div>
 						</div>
@@ -38,15 +38,15 @@
 					<div>
 						<div>
 							<label for="title" style="font-weight:bold; margin-bottom:8px;">제목</label>
-							<input id="title" type="text" class="form-control" placeholder="제목을 입력해주세요">
+							<input id="title" name="title" type="text" class="form-control" placeholder="제목을 입력해주세요">
 							<br>
 						</div>
 						<label for="tags" style="font-weight:bold; margin-bottom:8px;">태그</label>
-						<input id="tag" type="text" class="form-control" placeholder="태그를 입력해주세요">
+						<input id="tag" name="tag" type="text" class="form-control" placeholder="태그를 입력해주세요">
 						<br>
 						
 						<label for="contents" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
-						<textarea id="contents" class="form-control" style="height:300px;"></textarea>
+						<textarea id="contents" name="contents" class="form-control" style="height:300px;"></textarea>
 						<br>
 					</div>
 					
@@ -64,19 +64,15 @@
 </div>
 
 <script th:inline="javascript">
+let csrfPara = $('meta[name="csrfPara"]').attr("content");
+let csrfToken = $('meta[name="csrf"]').attr("content");
+
 function sendQuestion(){
+	console.log('test',[[${session.member.memberNo}]]);
+	const formData = new FormData(document.questionWrite);
 	
-	console.log('test');
-	console.log('');
-	
-	/* formData.append(csrfPara, csrfToken);
-	
-	formData.append("memberNo", $('input[name="topic"]').val());
-	formData.append("topic", $('input[name="topic"]').val());
-	formData.append("point", $('input[name="point"]').val());
-	formData.append("title", $('input[name="title"]').val());
-	formData.append("tag", $('input[name="tag"]').val());
-	formData.append("contents", $('input[name="contents"]').val());
+	formData.append(csrfPara, csrfToken);
+	formData.append("memberNo", [[${session.member.memberNo}]]);
 	
 	$.ajax('/write', {
 		type : "POST",
@@ -86,12 +82,13 @@ function sendQuestion(){
 	})
 	.done(res => {
 		console.log('등록 성공');
+		console.log(res);
     	/* window.location.href = "/gitLinkPage?id=" + $('input[name="userid"]').val(); */
-   /*  })
+    })
     .fail(err => {
     	console.log(err);
     	showWarningAlert('다시 시도해주세요.');
-    }) */
+    })
 	
 }
 	

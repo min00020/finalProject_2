@@ -24,17 +24,15 @@ public class QuestionServiceImpl implements QuestionService{
 	@Override
 	public Map<String, Object> writeQuestion(QuestionVO vo) {
 		Map<String,Object> ret = new HashMap<String,Object>();
-		
-		vo.setTopic(null);
-		vo.setPoint(0);
-		vo.setTitle(null);
-		vo.setTag(null);
-		vo.setContents(null);
-		vo.setWriteDate(null);
-		/*vo.setViewCnt(0); vo.setRecommendCnt(0); 
-		 * vo.setBookmarkCnt(0); vo.setAnswerCnt(0);*/
-		
-		return null;
+		int insertId = questionMapper.insertQuestion(vo);
+		if(insertId <= 0) {
+			ret.put("result", "500");
+		}
+		else {
+			ret.put("result", "200");
+			ret.put("vo", vo);
+		}
+		return ret;
 	}
 
 

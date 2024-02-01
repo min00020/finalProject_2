@@ -70,7 +70,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		if(vo == null) {
 			throw new UsernameNotFoundException("no name");
 		}
-		
 		return new UserDetailVO(vo);
 	}
 

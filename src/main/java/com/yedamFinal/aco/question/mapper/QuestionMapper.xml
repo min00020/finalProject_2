@@ -4,6 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
+	<!-- 질문글 전체조회 -->
 	<select id="getQuestionList" resultType="QuestionVO">
 		SELECT m.id, m.profile_image,
 		        q.QUESTION_BOARD_NO,
@@ -23,6 +24,19 @@
 		ON q.MEMBER_NO = m.MEMBER_NO
 		ORDER BY WRITE_DATE DESC
 	</select>
+	
+	<!-- 질문글 단건조회 -->
+	<select id="getQuestionList" resultType="QuestionVO">
+		SELECT m.id, m.profile_image,
+		    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
+		    q.WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT
+		FROM QUESTION_BOARD q
+		JOIN MEMBER m
+		ON q.MEMBER_NO = m.MEMBER_NO
+		WHERE QUESTION_BOARD_NO = 104
+	</select>
+	
+	<!-- 질문글 작성 -->
 	<insert id="insertQuestion" parameterType="QuestionVO">
 		INSERT INTO QUESTION_BOARD (
 		    QUESTION_BOARD_NO,MEMBER_NO,TOPIC, POINT, TITLE, TAG, 
