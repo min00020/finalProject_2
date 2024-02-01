@@ -23,6 +23,7 @@
 								oninput="formatNumber(this)" />
 						</div>
 						<hr style="margin-top: 0;">
+						<p style="text-align : left; color : #808080; font-size:small; margin-top : -10px;">일일 최대 충전 한도 : 1,000,000 원</p>
 						<div class="points">
 							<button>+1,000</button>
 							<button>+3,000</button>
@@ -32,8 +33,7 @@
 							<button>+50,000</button>
 						</div>
 						<div class="accountSelect">
-							<br>
-							<br>
+							<br> <br>
 							<h3>출금 계좌</h3>
 							<hr>
 						</div>
@@ -54,7 +54,67 @@
 							<p>카카오뱅크 1231***1232131</p>
 						</div>
 					</div>
+					<p style="color: #808080">선택 : 카카오뱅크</p>
+					<span class="addAcount">
+						<p>
+							<img id="plus" src="commonResource/plus.png" alt="logo"
+								style="width: 2%"> 계좌 등록하기
+						</p>
+					</span>
+					<hr>
+
+
+					<div class="termsParentParent d-flex">
+						<div class="termsParent">
+							<div class="terms-container">
+								<p>제 1장 총칙</p>
+								<p>제 1조 (목적)</p>
+								<!-- 약관의 내용을 여기에 넣으세요. -->
+								<p>이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여
+									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+								<!-- ... -->
+							</div>
+
+							<div class="agree-chkbox">
+								<input type="checkbox" id="termsAgree"> <label
+									for="termsAgree">위 내용에 동의합니다.</label>
+							</div>
+
+
+						</div>
+
+
+
+						<div class="summary-container"
+							style="display: inline-block; margin-left: 20px;">
+							<hr>
+							<div class="summary-item">
+
+								<span>현재 보유 애코머니 :</span> <span>8,000 P</span>
+							</div>
+							<div class="summary-item">
+								<span>충전할 애코머니 :</span> <span>5,000 P</span>
+							</div>
+							<div class="summary-item summary-total">
+								<span>결제할 금액 :</span> <span>5,000 원</span>
+							</div>
+							<hr>
+							<div class="summary-item summary-total">
+								<span>충전후 애코머니 :</span> <span>13,000 P</span>
+							</div>
+						</div>
+					</div>
+					<hr style="margin-top: 50px;">
+					<div class="AA d-flex justify-content-end">
+						<button class="Abutton" onclick="submitPayment()">충전하기</button>
+						<button class="Abutton" onclick="cancelPayment()"
+							style="background-color: #808080">취소</button>
+					</div>
 				</div>
+
+
+
+
 			</div>
 
 		</section>
@@ -62,17 +122,81 @@
 
 </div>
 <style>
+.AA {
+	margin-top: 30px;
+	justify-content: end;
+}
+
+.summary-container {
+	border-radius: 8px;
+	padding: 20px;
+	font-size: larger;
+	margin-top: 30px;
+	width: 38%;
+}
+
+.summary-item {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.summary-total {
+	font-weight: bold;
+	color: red;
+	margin-bottom: 20px;
+}
+
+.Abutton {
+	background-color: #3e6ce3;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	margin: 5px;
+}
+
+.termsParent {
+	margin-top: 30px;
+	width: 60%;
+	border: 1px solid;
+	padding: 15px;
+	background-color: #F2F2F2
+}
+
+.terms-container {
+	width: 300px;
+	border: 1px solid #000;
+	padding: 10px;
+	overflow-y: scroll;
+	height: 150px;
+	width: 100%;
+	background-color: #fff
+}
+
+.agree-chkbox {
+	margin-top: 10px;
+	text-align: right;
+	margin-right: 0px;
+}
+
+.addAcount {
+	text-align: center;
+	color: #3e6ce3;
+	font-weight: bold;
+}
+
 .account {
 	border: 1px solid #BDBDBD;
 	height: 80px;
 	border-radius: 5px;
 	text-align: left;
-	margin-bottom : 10px;
+	margin-bottom: 10px;
 }
 
 .accountSelect {
 	text-align: left;
-	
 }
 
 .pointHeader {
@@ -84,15 +208,19 @@
 	width: 1000px;
 	height: 80px;
 	margin-left: 50px;
-	position: relative; /* 상대 위치 설정 */
+	position: relative;
+	/* 상대 위치 설정 */
 }
 
 .pointHeader p {
 	font-size: 27px;
 	font-weight: bold;
-	position: absolute; /* 절대 위치 설정 */
-	top: 7%; /* 상단으로부터 30% 위치 */
-	left: 20px; /* 텍스트 정렬을 위한 왼쪽 여백 */
+	position: absolute;
+	/* 절대 위치 설정 */
+	top: 7%;
+	/* 상단으로부터 30% 위치 */
+	left: 20px;
+	/* 텍스트 정렬을 위한 왼쪽 여백 */
 }
 
 .pointHeader span {
@@ -105,7 +233,8 @@
 	border: 1px solid #BDBDBD;
 	margin-left: 50px;
 	margin-top: 20px;
-	height: 1000px;
+	width: 1000px;
+	height: 1200px;
 }
 
 .chargePointSelect {
@@ -154,11 +283,13 @@
 	border-radius: 4px;
 	margin-bottom: -20px;
 	margin-top: 0px;
-	font-size: 28px; /* 입력 텍스트의 글자 크기를 설정 */
+	font-size: 28px;
+	/* 입력 텍스트의 글자 크기를 설정 */
 }
 
 #amountInput::placeholder {
-	font-size: 28px; /* 원하는 텍스트 크기로 조정 */
+	font-size: 28px;
+	/* 원하는 텍스트 크기로 조정 */
 }
 
 #amountInput:focus {
@@ -170,10 +301,17 @@
 
 <script>
 	function formatNumber(input) {
-		// 입력된 값에서 숫자가 아닌 모든 문자를 제거.
-		let numbers = input.value.replace(/\D/g, '');
+		 let numbers = input.value.replace(/\D/g, '');
 
-		// 숫자를 콤마 형식으로 변환.
-		input.value = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		    // 문자열을 정수로 변환(10진수).
+		    let integerNumber = parseInt(numbers, 10);
+
+		    // 숫자가 1,000,000을 초과하는 경우 1,000,000으로 설정.
+		    if (integerNumber > 1000000) {
+		        integerNumber = 1000000;
+		    }
+
+		    // 숫자를 콤마 형식으로 변환하여 input 값으로 설정.
+		    input.value = integerNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	}
 </script>
