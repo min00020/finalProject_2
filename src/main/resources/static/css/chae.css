@@ -1,1 +1,347 @@
 @charset "UTF-8";
+
+.container{
+	margin:0 auto ;
+}
+
+/*question List page*/
+	/*상단 배너*/
+	#qna_banner{
+		height:130px;
+		background-color:#e0e4ef;
+		margin-top:20px;
+		margin-bottom:50px;
+		padding:30px;
+	    position: relative;
+	}
+	
+	#qna_banner::before {
+	    content: "";
+	    position: absolute;
+	    top: 0;
+	    bottom: 0;
+	    left: -50vw;
+	    right: -50vw; 
+	    background-color: inherit; /* #banner의 배경색 상속 */
+	    z-index: -1;
+	}
+	
+	#qna_banner h3 {
+		margin:0;
+		color:#3e6ce3;
+		font-weight : bold;
+	}
+	
+	#qna_banner p{
+		margin-top:5px;
+	}
+	
+	/*상단 토픽*/
+	#qna_topic.list-unstyled li {
+	    font-size: 25px;
+	    margin: 0 15px;
+		font-weight : bold;
+		/* vertical-align: bottom; */
+	}
+	#qna_topic.list-unstyled li:hover {
+	    color: #3e6ce3;
+	}
+	
+	.questionBoard li{
+		cursor: pointer;
+	}
+	
+	/* 프로필 이미지 */
+	#member{
+		padding:0;
+	}
+	.qna_box {
+	    width: 25px;
+	    height: 25px;
+	    overflow: hidden;
+	    float: left;
+	    margin: 5px;
+	    border-radius: 50%;
+	    position: relative; 
+	}
+	
+	.qna_profile {
+	    width: 100%;
+	    height: auto; 
+	    object-fit: cover;
+	    object-position: center top; 
+	    position: absolute;
+	    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+	    transform: translateY(-50%); 
+	}
+	
+	/* 태그, 랭킹 */
+	.QNAtag{
+	 	 float: left;
+	 	/* margin-right:40px; */
+	}
+	.QNArank{
+	   margin-top:100px;
+	}
+	.QNAno{
+	 	float: right;
+	    /* margin-left : 70px; */
+	    color : #3e6ce3;
+	    font-weight : bold;
+	}
+	.QNAmore{
+	    color : #3e6ce3;
+	    font-size: small;
+	    font-weight : bold;
+	    margin-left : 50px;
+	}
+	.QNAsidemenu{
+	 	width: 170px;
+	 	margin:auto;
+	}
+	
+	/*답변버튼*/
+	.QNAcnt{
+	  font-weight : bold;
+	}
+
+	#answercnt{
+		color : #3e6ce3;
+		border-width : 1px;
+	    border-style : solid;
+	    border-radius: 15%;
+	    border-color: #989daa !important;
+	    width: 80px; 
+	    height: 80px; 
+	    text-align: center; 
+	    display: flex; 
+	    flex-direction: column; 
+	    justify-content: center;
+	}
+	
+	
+/*question info page*/
+.questionInfo{
+	margin: 0 auto ;
+	width: 900px;
+}
+#questionInfo2{
+	justify-content: space-between;
+}
+#questionTitle {
+    height: 80px;
+    display: flex;
+    align-items: flex-end; /* 수직 정렬을 아래쪽으로 설정 */
+    
+}
+#questionTitle p{
+	margin:0;	
+}
+.qna_logo{
+	font-weight:bold; 
+	color:#3e6ce3; 
+	float: left;
+	margin:0 8px;
+	font-size: 60px;
+}
+.qna_logo.p{
+	margin:0;
+}
+
+.qna_title {
+    display: flex;
+    align-items: baseline; /* 하단을 기준으로 정렬 */
+	margin-right: 10px;
+	
+}
+
+/*버튼색상*/
+/* .qna_grayBtn{ 
+	font-size: 13px;
+	background-color: #e0e0e7;
+    display: inline-block;
+    border-radius: 15%;
+    max-width: 100%; 최대 가로 길이를 부모 요소에 맞게 설정
+    box-sizing: border-box; padding과 border를 포함한 크기 계산
+	margin: 10px 0;
+    padding:3px 10px;
+} */
+.qna_blueBtn{ 
+	font-size: 13px;
+	color:white;
+	font-weight : bold;
+	background-color: #aebfec;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 15%;
+    max-width: 100%; /* 최대 가로 길이를 부모 요소에 맞게 설정 */
+    box-sizing: border-box; /* padding과 border를 포함한 크기 계산 */
+/* 	margin: 5px; */
+}
+
+.qna_second_line{
+	margin-bottom:9px;
+}
+#qna_deleteBtn{
+	font-size: 15px;
+	text-align:right;
+	float:right;
+	margin:25px 5px 0px;
+	padding-right:30px;
+}
+#qna_deleteBtn span, #qna_deleteBtn p{
+	margin-left:10px;
+	margin-bottom:0;
+	color:#76767e;
+}
+
+.qna_contents{
+	width:94%;
+	margin: 20px auto;
+}
+
+/*프로필 이미지*/
+.qna_box2 {
+   width: 40px;
+   height: 40px;
+   overflow: hidden;
+   float: left;
+   margin: 5px;
+   border-radius: 50%;
+   position: relative; 
+}
+
+/*하단 아이콘*/
+#question_bottom{
+	display:flex;
+	height:50px;
+	margin:10px;
+	justify-content:space-between;
+}
+
+#qna_iconAll{
+	display:flex;
+	align-items:flex-end;
+	justify-content: right;
+}
+#qna_iconAll span{
+	margin-left:4px;	
+}
+.qna_icon{
+	opacity: 0.5;
+	width:20px;
+}
+
+/*답변글 작성, 리스트*/
+.answer-top{
+	display:flex;
+	align-items:flex-end;
+	justify-content: left;
+	margin-bottom:20px;
+}
+
+.min_align_bottom{
+	display:flex;
+	align-items: flex-start; /* 왼쪽 정렬 */
+    flex-direction: column;
+    margin-bottom:9px;
+}
+
+/*추가 질문답변*/
+#qna_add{
+	display:flex;
+	align-items: flex-start; 
+	justify-content: center;
+}
+
+.qna_add_icon{
+	margin-top:20px;
+	width:45px;
+}
+.qna_add_info{
+	width:800px;
+  	margin : 10px; 
+ 	padding : 30px;
+ 	border : 1px solid lightgray;
+ 	border-radius : 5px;
+	justify-content: right;
+	padding:20px;
+}
+#qna_add_form{
+	width:800px;
+  	margin : 10px; 
+ 	padding : 30px;
+ 	border : 1px solid #3e6ce3;
+ 	border-radius : 5px;
+	justify-content: right;
+	padding:20px;
+}
+
+/*답변글 프로필 이미지*/
+	.min_answerbox {
+	    width: 60px;
+	    height: 60px;
+	    overflow: hidden;
+	    float: left;
+	    margin: 5px;
+	    border-radius: 50%;
+	    position: relative; 
+	}
+	
+	.answer_profile {
+	    width: 100%;
+	    height: auto; 
+	    object-fit: cover;
+	    object-position: center top; 
+	    position: absolute;
+	    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+	    transform: translateY(-50%); 
+	}
+/*포인트 input-전액사용 버튼 만들기*/
+	.chae_input-container {
+		position: relative;
+		display: inline-block;
+	}
+
+	.form-control {
+		width: 100%;
+		padding-right: 40px; /* 버튼을 위한 우측 여백 */
+		border: 1px solid #ccc; /* 입력란 테두리 추가 (선택사항) */
+		border-radius: 4px; /* 입력란 테두리를 둥글게 만듦 (선택사항) */
+		box-sizing: border-box; /* 입력란의 크기를 테두리를 포함한 크기로 설정 (선택사항) */
+	}
+
+	.chae_pointBtn {
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 100%;
+		padding: 7px 15px;
+		border: none;
+		background-color: transparent;
+		color: #76767e; /* 버튼 텍스트 색상 설정 */
+		cursor: pointer;
+		font-size:14px;
+	}
+
+	.separator {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		height: 70%;
+		width: 1px;
+		background-color: #ccc;
+	}
+
+	.chae_input-container::before {
+		content: '';
+		width: 1px;
+		height: 100%;
+		background-color: #ccc;
+		margin-right: 5px;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%); /*수직 중앙 정렬 */
+		right: 18%;
+}

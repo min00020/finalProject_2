@@ -408,9 +408,9 @@ function sendJoinRequest() {
 	formData.append("email", $('input[name="email"]').val());
 	formData.append("phoneNum", $('input[name="phone"]').val());
 	formData.append("name", $('input[name="name"]').val());
-	formData.append("nickName", $('input[name="nickname"]').val());
+	formData.append("nickname", $('input[name="nickname"]').val());
 	formData.append("profileImage", $('#customFileInput').val());
-	formData.append("topicHashTag", insertTagList.join("#"));
+	formData.append("topicHashtag", insertTagList.join(","));
 	//formData.append("permission", 'ROLE_USER');
 	//formData.append("leaveDate", new Date());
 	//formData.append("accumActivityPoint", 0);
