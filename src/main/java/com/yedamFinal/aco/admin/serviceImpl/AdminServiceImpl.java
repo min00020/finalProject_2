@@ -45,6 +45,16 @@ public class AdminServiceImpl implements AdminService {
 	public List<AdminEmoVO> getAdEmoList() {
 		return adminMapper.getAdEmoList();
 	}
+	//이모티콘 등록
+	@Override
+	public int insertEmo(AdminEmoVO adminEmoVO) {
+		int result = adminMapper.insertEmo(adminEmoVO);
+		if(result == 1) {
+			return adminEmoVO.getEmoNo();
+		}else {
+			return -1;
+		}
+	}
 
 	@Override
 	public List<AdminMainVO> getAdCntList() {
@@ -59,5 +69,10 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int insertNotice(AdminMainVO adminMainVO) {
 		return adminMapper.insertNotice(adminMainVO);
+	}
+	//이모티콘 상점 이모티콘상세
+	@Override
+	public AdminEmoVO getEmoDetail(AdminEmoVO vo) {
+		return adminMapper.getEmoDetail(vo);
 	}
 }

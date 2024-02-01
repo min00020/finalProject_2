@@ -64,8 +64,19 @@ public class AdminController {
 		model.addAttribute("adminEmo", list);
 		return "layout/admin/adminEmo";
 	}
+	//이모티콘 등록
+	@PostMapping("/insertEmo")
+	public String insertEmoProcess(AdminEmoVO adminEmoVO) {
+		adminService.insertEmo(adminEmoVO);
+		return "redirect:adminEmo";
+	}
+	/*
+	 * public String insertEmoProcess(AdminEmoVO adminEmoVO, MultipartFile[] files)
+	 * { adminService.insertEmo(adminEmoVO, files); return "redirect:adminEmo"; }
+	 */
+	
 	//공지등록
-	@PostMapping("insertNotice")
+	@PostMapping("/insertNotice")
 	public String insertNoticeProcess(AdminMainVO adminMainVO) {
 		adminService.insertNotice(adminMainVO);
 		return "redirect:insertNotice";

@@ -69,20 +69,57 @@
 			C.SUB_CODE_NAME AS EMOTICON_STATE
 				FROM EMOTICON E
 				JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
+				WHERE EMO_STATE = 'D001'
 				ORDER BY E.EMO_NO
+</select>
+<!-- 이모티콘 등록 -->
+<insert id="insertEmo" parameterType="AdminEmoVO">
+	 		<selectKey keyProperty="emoNo"
+ 				 resultType="int"
+ 				 order="BEFORE">
+ 			SELECT NVL(MAX(EMO_NO), 0) + 1
+ 			FROM EMOTICON
+ 		</selectKey>
+  		INSERT INTO EMOTICON
+  			 (
+  			 		EMO_NO
+  				 	,EMO_NAME
+  					,EMO_PRICE
+  					,EMO_DESC
+  					,EMO_FIRSTIMG
+  					,EMO_INNERIMG
+  					,EMO_PATH
+  					,EMO_STATE
+  			)
+  			VALUES(
+  					#{emoNo}
+  				 	,#{emoName}
+  					,#{emoPrice}
+  					,#{emoDesc}
+  					,#{emoFirstimg}
+  					,#{emoInnerimg}
+  					,'commonResource/emoticon/'
+  					,'D001'
+  			)		
+</insert>
+<!-- 이모티콘 상세화면 -->
+<select id="getEmoDetail" resultType="AdminEmoVO">
+	SELECT * 
+	FROM EMOTICON
+	WHERE EMO_NO=#{emoNo}
 </select>
 <select id="getAdCntList" resultType="AdminMainVO">
 	SELECT COUNT(CASE WHEN REPORT_STATE = 'B001' THEN 1 END)AS SCOUNT FROM REPORT UNION ALL
     SELECT COUNT(CASE WHEN ANSWER_STATE = 'P001' THEN 1 END) FROM QNA_BOARD UNION ALL
     SELECT COUNT(CASE WHEN PROCESS_STATUS = 'O001' THEN 1 END) FROM SETTLEMENT UNION ALL
-    SELECT ROUND(COUNT(CASE WHEN REPORT_STATE = 'B001' THEN 1 END) / COUNT(REPORT_STATE)*100) FROM REPORT UNION ALL
-    SELECT ROUND(COUNT(CASE WHEN ANSWER_STATE = 'P001' THEN 1 END) / COUNT(ANSWER_STATE)*100) FROM QNA_BOARD UNION ALL
-    SELECT ROUND(COUNT(CASE WHEN PROCESS_STATUS = 'O001' THEN 1 END) / COUNT(PROCESS_STATUS)*100) FROM SETTLEMENT
+    SELECT ROUND(COUNT(CASE WHEN REPORT_STATE != 'B001' THEN 1 END) / COUNT(REPORT_STATE)*100) FROM REPORT UNION ALL
+    SELECT ROUND(COUNT(CASE WHEN ANSWER_STATE != 'P001' THEN 1 END) / COUNT(ANSWER_STATE)*100) FROM QNA_BOARD UNION ALL
+    SELECT ROUND(COUNT(CASE WHEN PROCESS_STATUS != 'O001' THEN 1 END) / COUNT(PROCESS_STATUS)*100) FROM SETTLEMENT
 </select>
 <select id="getAdNoticeList" resultType="AdminMainVO">
 	SELECT NOTICE_BOARD_NO, TITLE, CONTENT, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT FROM NOTICE_BOARD
 </select>
-<!-- 공지등록 -->
+<!-- 공지등록 --> 
 <insert id="insertNotice" parameterType="AdminMainVO">
 		<selectKey keyProperty="noticeBoardNo" order="BEFORE"
 			resultType="int">

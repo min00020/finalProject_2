@@ -106,6 +106,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/adminSettle");
 		permitAllUrl.add("/adminEmo");
 		permitAllUrl.add("/emoMain");
+		permitAllUrl.add("/emoDetail");
 		
 	}
 	

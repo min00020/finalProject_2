@@ -1,0 +1,50 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+
+<section style="width: 1344px">
+	<div id="qna_banner">
+			<h3>이모티콘 상점</h3>
+			<p style="color:#76767e">포인트로 이모티콘을 구매해보세요</p>
+		</div>
+		<div class="row gx-5 align-items-center justify-content-center">
+                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+                        <img class="img-fluid rounded-3 my-5" th:src="@{${emoDetail.emoPath+emoDetail.emoFirstimg}}" alt="...">
+                        </div>
+                        <div class="col-lg-8 col-xl-7 col-xxl-6">
+                            <div class="my-5 text-center text-xl-start">
+                                <h1 class="display-5 fw-bolder text-black mb-2" th:text="${emoDetail.emoName}"></h1>
+                                <p class="lead fw-normal text-black-50 mb-4" th:text="${emoDetail.emoDesc}"></p>
+                                <p class="lead fw-normal" style="color: red" th:text="${emoDetail.emoPrice}+포인트"></p>
+                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                                    <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">구매하기</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        <div class="container px-4 px-lg-5">
+           
+            <!-- Call to Action-->
+            <div class="card text-white bg-secondary my-5 py-4 text-center">
+                <div class="card-body"><p class="text-white m-0">이모티콘을 구매해서 댓글에 써보세요!</p></div>
+            </div>
+            <!-- Content Row-->
+			<div>
+			<img class="img-fluid rounded mb-4 mb-lg-0" th:src="@{${emoDetail.emoPath+emoDetail.emoInnerimg}}" alt="..." />
+			</div>
+			<br>
+			 <div style="text-align: center;">
+                    <a class="btn btn-primary" href="/">목록으로</a>
+             </div>
+        </div>
+		
+		
+		
+		
+</section>
+
+
+
+
+</div>
