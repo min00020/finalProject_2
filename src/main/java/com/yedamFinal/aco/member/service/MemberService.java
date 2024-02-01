@@ -19,12 +19,15 @@ public interface MemberService {
 	public Map<String,Object> joinMember(MemberVO vo, MultipartFile file);
 	public Map<String,Object> loginMember(String userid, String userpw);
 	public Map<String,Object> processGitLink(String userid, String tempUserGitCode);
+	
 	//회원 정보 단건조회
-	public List<MemberVO> getMemberInfo(MemberVO memberVO);
+	public MemberVO getMemberInfo(MemberVO memberVO);
 	//이모티콘 구매내역
 	public List<MyemoticonVO> getMyemoList(MemberVO memberVO);
 	//책갈피 목록
 	public List<MybookmarkVO> getMybmList(MemberVO memberVO);
+	// 책갈피 더보기 목록
+	public List<MybookmarkVO> getMyBookList(MemberVO memberVO);
 	//내가 작성한 질답글 목록
 	public List<MyquestionVO> getMyqList(MemberVO memberVO);
 	

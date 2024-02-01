@@ -216,7 +216,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	
 	//회원 단건조회
 	@Override
-	public List<MemberVO> getMemberInfo(MemberVO memberVO) {
+	public MemberVO getMemberInfo(MemberVO memberVO) {
 		return memberMapper.selectMemberInfo(memberVO);
 	}
 	//이모티콘 구매내역
@@ -233,5 +233,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public List<MyquestionVO> getMyqList(MemberVO memberVO) {
 		return memberMapper.selectMyqList(memberVO);
+	}
+	@Override
+	public List<MybookmarkVO> getMyBookList(MemberVO memberVO){
+		return memberMapper.selectMyBookList(memberVO);
 	}
 }

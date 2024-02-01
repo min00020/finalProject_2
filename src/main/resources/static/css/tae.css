@@ -60,3 +60,48 @@
 .tae_hidden {
 	display : none;
 }
+.tae-box1{
+	display: inline-block;
+}
+.tae-box2{
+	display: inline-block;
+}
+.container2{
+	margin-bottom:10px;
+	margin-top:10px;
+}
+tae_container1{
+	background-color:#fffff;
+	border-radius:20px;
+}
+#myTabContent{
+	width: 1000px;
+	background-color: #fffff;
+	margin-top:20px;
+	margin-left: -10px;
+	padding-left: 30px;
+	float: right;
+}
+#myTab{
+	margin-top:20px;
+}
+.nav-item{
+	border: 0px;
+}
+
+/* 스크롤바 설정*/
+.type2::-webkit-scrollbar{
+    width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+.type2::-webkit-scrollbar-thumb{
+    height: 17%;
+    background-color: rgba(97, 160, 235, 0.51);
+    border-radius: 10px;  
+}
+
+/* 스크롤바 뒷 배경 설정*/
+.type2::-webkit-scrollbar-track{
+    background-color: rgba(255,255,255,0.5);
+}

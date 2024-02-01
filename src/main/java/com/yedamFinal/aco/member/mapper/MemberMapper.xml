@@ -13,33 +13,65 @@
 		
 </select>
 <select id="selectMemberInfo" resultType="MemberVO">
-	SELECT m.member_no, m.email, m.nickname, m.profile_image, m.topic_hashtag, m.accum_activity_point, m.available_activity_point, m.aco_point, m.member_level, c.sub_code_name
+	SELECT m.member_no, 
+	 	   m.email, 
+	 	   m.nickname, 
+	 	   m.profile_image, 
+	 	   m.topic_hashtag, 
+	 	   m.accum_activity_point, 
+	 	   m.available_activity_point, 
+	 	   m.aco_point,  
+	 	   subcode_to_name(m.member_level) as member_level
 	FROM member m 
-		JOIN sub_code_tbl c ON c.sub_code = m.member_level
 	WHERE m.member_no = #{memberNo}
 
 
 </select>
 
 <select id="selectMyemoticonList" resultType="com.yedamFinal.aco.myemoticon.MyEmoticonJoinVO">
-	SELECT e.emo_name, m.emo_buydate
-	FROM my_emoticon m
-		JOIN emoticon e ON m.emo_no = e.emo_no
-		JOIN member a ON m.member_no = a.member_no
-	WHERE m.member_no= #{memberNo}
-	ORDER BY m.emo_buydate desc
+	SELECT 
+    ROWNUM, A.*
+	FROM
+	 ( SELECT 
+	           m.member_no,
+	           m.emo_name, 
+		       m.emo_buydate
+	 FROM my_emoticon m
+	 ORDER BY m.emo_buydate desc ) A
+	 JOIN member B ON A.member_no = B.member_no
+	 WHERE A.member_no= #{memberNo} AND ROWNUM <![CDATA[ <= ]]> 3
 </select>
 <select id="selectMybmList" resultType="com.yedamFinal.aco.bookmark.MybookmarkVO">
-	SELECT title, regist_date
+	 SELECT ROWNUM, A.*
+	 FROM
+	   (SELECT m.title,
+		       m.regist_date,
+		       m.member_no,
+               m.question_board_no
+		FROM my_bookmark m
+		ORDER BY m.regist_date desc ) A
+	JOIN member B ON A.member_no = B.member_no
+    JOIN question_board C ON C.question_board_no = A.question_board_no
+	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 3
+</select>
+<select id="selectMyBookList" resultType="com.yedamFinal.aco.bookmark.MybookmarkVO">
+	SELECT title, regist_date, member_no, question_board_no
 	FROM my_bookmark
-	WHERE member_no= #{memberNo}
+	WHERE member_no = #{memberNo}
 	ORDER BY regist_date desc
+	
 </select>
 <select id="selectMyqList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
-	SELECT question_board_no,title,write_date,answer_cnt
-	FROM question_board
-	WHERE member_no=#{memberNo}
-	ORDER BY write_date desc
+	 SELECT ROWNUM, A.*
+	 FROM
+	   (SELECT q.question_board_no,
+		       q.title,write_date,
+		       q.answer_cnt,
+	           q.member_no
+		FROM question_board q
+		ORDER BY q.write_date desc ) A
+	JOIN member B ON A.member_no = B.member_no
+	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 3
 </select>
 <select id="selectCheckDuplicateId" resultType="MemberVO">
 	SELECT id

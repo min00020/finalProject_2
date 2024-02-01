@@ -71,21 +71,23 @@ public class MemberController {
 	//회원정보 단건조회
 	@GetMapping("/myPage")
 	public String getMyPageForm(MemberVO memberVO, Model model) {
-		List<MemberVO> list = memberService.getMemberInfo(memberVO);
+		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MyemoticonVO> emoinfo = memberService.getMyemoList(memberVO);
 		model.addAttribute("emoInfo", emoinfo);
-		model.addAttribute("memberInfo", list);
+		model.addAttribute("memberInfo", findVO);
 		return "common/myPage"; 
 	}
 	// 책갈피목록, 질문글 목록
 	@GetMapping("/myPage2")
 	public String getMyPageForm2(MemberVO memberVO, Model model) {
-		List<MemberVO> list = memberService.getMemberInfo(memberVO);
+		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
 		List<MyquestionVO> myquestion = memberService.getMyqList(memberVO);
-		model.addAttribute("memberInfo", list);
+		List<MybookmarkVO> bmarkList = memberService.getMyBookList(memberVO);
+		model.addAttribute("memberInfo", findVO);
 		model.addAttribute("bmarkList", bmark);
 		model.addAttribute("mquestionList", myquestion);
+		model.addAttribute("bookmarkList2", bmarkList);
 		return "common/myPage2";
 	}
 	
