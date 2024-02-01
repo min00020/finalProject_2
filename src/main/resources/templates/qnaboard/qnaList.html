@@ -1,0 +1,62 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+>
+	<div id="qna_banner">
+      <h3>1:1 문의게시판</h3>
+      <p style="color:#76767e">궁금한 점이 있다면 언제든 질문 남겨주세요 </p>
+	</div>
+   <div class="container">
+	<div class="questionBoard" style="width:1344px;">
+         <!-- 상단 선택 메뉴 -->
+         <div class="d-flex justify-content-end" >
+			<input type="text" placeholder="검색어 입력" class="park_searchInput w-25">
+			<button class="mink_btn_border_background_none mink_searchImg" onclick="hi()"><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" style="width:30px;"></button>
+         </div>
+           <hr>
+         <!-- 추천순 정렬, 작성버튼 -->
+         <div class="d-flex justify-content-between">
+            <div class="btn-group">
+                 <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                   최신순
+                 </button>
+                 <ul class="dropdown-menu">
+                   <li><a class="dropdown-item" href="#">최신순</a></li>
+                   <li><a class="dropdown-item" href="#">조회순</a></li>
+                 </ul>
+            </div>
+            <div>
+				<button type="button" class="btn text-white" style="background-color:#3e6ce3">질문하기</button>
+			</div>
+         </div>
+         
+         <!-- start of postList -->
+         <hr style="margin-bottom:30px">
+         <div id="questionList"  class="row">
+			<div id="title" class="col-10">
+				<div id="member" style="height:40px;">
+					<div class="qna_box">
+						<img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+					</div>
+					<p >cookie123</p>
+				</div>
+				<div id="titleTag">
+					<h4>node.js에 대한 질문이 있습니다.</h4>
+				</div>
+			</div>
+			<div class="col-1" style="text-align:center; margin:auto;">
+				<h6>2</h6>
+				<h6>조회</h6>
+            </div>
+           	<div id="mink_answercnt" class="col-1" style="text-align:center; margin:auto;">
+                <h6>답변대기중</h6>
+           	</div>
+            <hr style="margin-top:30px; margin-bottom:30px;">
+         </div>
+         
+         <!-- end of postList -->
+      </div>
+      </div>
+</div>
