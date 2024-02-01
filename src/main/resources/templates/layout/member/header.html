@@ -43,8 +43,13 @@
             </th:block>
             <th:block sec:authorize="isAuthenticated()"> 
                 <div class = "park_align-self-center d-flex gap-2">
-                               <div class="park_alert" style="width :45px; margin-top:10px; padding-left:20px;">
-                    <a href = '/'><img class="bell" src="commonResource/bell.png" alt="bell" style="width:100%"></a>
+                          <div class="park_alert" style="width :45px; margin-top:13px;  ">
+                              <a href='/' class="position-relative">
+  								<img class="bell" src="commonResource/bell.png" alt="bell" style="width:50%">
+  								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+   									 99+<span class="visually-hidden">unread messages</span>
+  								</span>
+							</a>
                     
                </div>
                     <div class="mink_box">
