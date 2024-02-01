@@ -5,19 +5,32 @@
   
 <mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
 	<select id="getQuestionList" resultType="QuestionVO">
-		SELECT QUESTION_BOARD_NO,
-		        MEMBER_NO,
-		        TOPIC,
-		        POINT,
-		        TITLE,
-		        TAG,
-		        CONTENTS,
-		        WRITE_DATE,
-		        VIEW_CNT,
-		        RECOMMEND_CNT,
-		        BOOKMARK_CNT,
-		        ANSWER_CNT
-		FROM QUESTION_BOARD
+		SELECT m.id, m.profile_image,
+		        q.QUESTION_BOARD_NO,
+		        q.MEMBER_NO,
+		        q.TOPIC,
+		        q.POINT,
+		        q.TITLE,
+		        q.TAG,
+		        q.CONTENTS,
+		        q.WRITE_DATE,
+		        q.VIEW_CNT,
+		        q.RECOMMEND_CNT,
+		        q.BOOKMARK_CNT,
+		        q.ANSWER_CNT
+		FROM QUESTION_BOARD q
+		JOIN MEMBER m
+		ON q.MEMBER_NO = m.MEMBER_NO
 		ORDER BY WRITE_DATE DESC
 	</select>
+	<insert id="insertQuestion" parameterType="QuestionVO">
+		INSERT INTO QUESTION_BOARD (
+		    QUESTION_BOARD_NO,MEMBER_NO,TOPIC, POINT, TITLE, TAG, 
+		    CONTENTS, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT, BOOKMARK_CNT, ANSWER_CNT
+	    )
+	    VALUES(
+		    question_board_seq.NEXTVAL, #{memberNo}, #{topic}, #{point}, 
+		    #{title}, #{tag},#{contents},SYSDATE,0,0,0,0
+	    )
+	</insert>
 </mapper>

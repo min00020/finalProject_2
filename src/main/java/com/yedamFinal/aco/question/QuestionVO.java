@@ -18,4 +18,6 @@ public class QuestionVO {
 	private int recommendCnt;
 	private int bookmarkCnt;
 	private int answerCnt;
+	private String id;
+	private String profileImage;
 }

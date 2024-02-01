@@ -12,7 +12,7 @@
 	<!-- start of question -->
 	<div class="container">
 	<!-- start of sidebar -->
-		<div id="QNAsidebar" style="float:left; width: 250px;">
+		<div id="QNAsidebar" style="float:left; width: 250px;height:1500px;">
 			<br>
 			<aside style="margin-right:30px; margin-top:50px;">
 				<section>
@@ -111,29 +111,29 @@
 			
 			<!-- start of postList -->
 			<hr style="margin-bottom:30px">
-			<div id="questionList"  class="row">
+			<div id="questionList"  class="row" th:each="question : ${questionList}">
 				<div id="title" class="col-8">
 					<div id="member" style="height:40px;">
 						<div class="qna_box">
-						    <img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+						    <img class="qna_profile" th:src="|upload/profile/${question.profileImage}|" alt="profile">
 						</div>
-						<p >cookie123</p>
+						<p th:text="${question.id}">cookie123</p>
 					</div>
 				  	<div id="titleTag">
-					    <h4>node.js에 대한 질문이 있습니다.</h4>
-					    <p style="color:blue">#node.js #mysql</p>
+					    <h4 th:text="${question.title}">node.js에 대한 질문이 있습니다.</h4>
+					    <p style="color:blue" th:text="${question.tag}">#node.js #mysql</p>
 				 	</div>
 			 	</div>
 				<div class="col-1" style="text-align:center; margin:auto;">
-				 	<h6>2</h6>
+				 	<h6 th:text="${question.viewCnt}">2</h6>
 				 	<h6>조회</h6>
 				</div>
 				<div class="col-1" style="text-align:center; margin:auto;">
-				 	<h6>5</h6>
+				 	<h6 th:text="${question.recommendCnt}">5</h6>
 				 	<h6>추천</h6>
 				</div>
 				<div id="answercnt" class="col-1" style="text-align:center; margin:auto;">
-				 	<h6 class="QNAcnt">10</h6>
+				 	<h6 class="QNAcnt" th:text="${question.answerCnt}">10</h6>
 				 	<h6>답변</h6>
 				</div>
 				<hr style="margin-top:30px; margin-bottom:30px;">
