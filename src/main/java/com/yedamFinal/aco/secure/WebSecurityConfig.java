@@ -101,6 +101,8 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/adminQna");
 		permitAllUrl.add("/adminSettle");
 		permitAllUrl.add("/adminEmo");
+		permitAllUrl.add("/emoMain");
+		
 	}
 	
 	private void insertPermitAllUrlByKyung() {
