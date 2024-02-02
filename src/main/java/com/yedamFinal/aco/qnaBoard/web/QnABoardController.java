@@ -33,18 +33,18 @@ public class QnABoardController {
             if(vo == null) {
             	return "redirect:/loginForm";
             }
-            
             // 검색창 입력의 경우.
             if(search == null)
             	ret = qnaBoardService.getMyQnaBoardList(Integer.valueOf(pg), vo, ob);
             else {
-            	ret = qnaBoardService.getMyQnaBoardListFromSearch(Integer.valueOf(pg), search, vo,ob);
+            	ret = qnaBoardService.getMyQnaBoardListFromSearch(Integer.valueOf(pg), search, vo, ob);
             	model.addAttribute("search",search); // 해당 search키워드로 페이징해야함.
             }
             
             if(ret == null) {
             	return "redirect:/loginForm";
             }
+            
             model.addAttribute("qnaInfo",ret);
         }
         else {

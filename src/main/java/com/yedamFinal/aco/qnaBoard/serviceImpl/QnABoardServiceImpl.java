@@ -14,13 +14,23 @@ import com.yedamFinal.aco.qnaBoard.service.QnABoardService;
 
 @Service
 public class QnABoardServiceImpl implements QnABoardService {
-
+	
+	private Map<String,String> orderbyByReqOb = new HashMap<String,String>();
+	
+	public QnABoardServiceImpl() {
+		// 정렬기준
+		orderbyByReqOb.put("0", "Latest");
+		orderbyByReqOb.put("1", "View");
+	}
+	
 	@Autowired
 	private QnABoardMapper qnaMapper;
 	
 	@Override
-	public Map<String, Object> getMyQnaBoardList(int pageNo, MemberVO vo, String orderby) {
-		if(orderby == null || orderby.isEmpty()) {
+	public Map<String, Object> getMyQnaBoardList(int pageNo, MemberVO vo, String ob) {
+		// 적용할 orderby value
+		String orderby = orderbyByReqOb.get(ob);
+		if(orderby == null) {
 			orderby = "Latest";
 		}
 		
@@ -39,8 +49,9 @@ public class QnABoardServiceImpl implements QnABoardService {
 	}
 
 	@Override
-	public Map<String, Object> getMyQnaBoardListFromSearch(int pageNo, String search, MemberVO vo, String orderby) {
-		if(orderby == null || orderby.isEmpty()) {
+	public Map<String, Object> getMyQnaBoardListFromSearch(int pageNo, String search, MemberVO vo, String ob) {
+		String orderby = orderbyByReqOb.get(ob);
+		if(orderby == null) {
 			orderby = "Latest";
 		}
 		
@@ -56,5 +67,4 @@ public class QnABoardServiceImpl implements QnABoardService {
 		
 		return ret;
 	}
-	
 }

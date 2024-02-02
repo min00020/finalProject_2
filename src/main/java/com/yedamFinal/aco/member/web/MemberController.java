@@ -50,7 +50,7 @@ public class MemberController {
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-        	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+        	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
             MemberVO username = userDetails.getMemberVO();
         }
 		

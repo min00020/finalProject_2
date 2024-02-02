@@ -18,7 +18,10 @@
                     	FROM QNA_BOARD C
                     	JOIN MEMBER D ON C.MEMBER_NO = D.MEMBER_NO
                     	WHERE D.MEMBER_NO = #{memberNo}
-                    	ORDER BY C.WRITE_DATE DESC
+                    	<choose>
+							<when test="orderBy == View">ORDER BY C.VIEW_CNT DESC</when>
+    						<otherwise>ORDER BY C.WRITE_DATE DESC</otherwise>
+						</choose>
                 	) B
         	) A
         	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
@@ -47,7 +50,10 @@
                     	FROM QNA_BOARD C
                     	JOIN MEMBER D ON C.MEMBER_NO = D.MEMBER_NO
                     	WHERE D.MEMBER_NO = #{memberNo} AND UPPER(C.TITLE) LIKE '%' || UPPER(#{search}) || '%' 
-                    	ORDER BY C.WRITE_DATE DESC
+                    	<choose>
+							<when test="orderBy == View">ORDER BY C.VIEW_CNT DESC</when>
+    						<otherwise>ORDER BY C.WRITE_DATE DESC</otherwise>
+						</choose>
                 	) B
         	) A
         	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
