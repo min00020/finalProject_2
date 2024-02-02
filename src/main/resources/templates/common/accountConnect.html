@@ -3,25 +3,24 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content">
 
-
 	<div class="d-flex">
 
 		<aside th:replace="@{/layout/member/pointAsideMain.html}"></aside>
 
 		<section class="main">
-			<div class="pointCharegingMain" style="height: 800px;">
+			<div class="park_pointCharegingMain" style="height: 800px;">
 				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
-					<div class="chargePointSelect">
-						<div class="input-container">
+					<div class="park_chargePointSelect">
+						<div class="park_input-container">
 							<h4 style="font-weight: bold;">간편 계좌 연결</h4>
 						</div>
 						<hr style="margin-top: 0;">
 						<h6>본인 명의 자유입출금 계좌만 연결할 수 있어요</h6>
-						<div class="accountSelect row" >
+						<div class="park_accountSelect row" style="justify-content: center;">
 							<br> <br>
 							<h3>은행 선택</h3>
 							<hr><br>
-					<div class="bank col-3"
+					<div class="park_bank col-3"
 							th:data-bankcode="${bank.bankCode}" th:data-bankname="${bank.bankName}"  th:each="bank : ${getBankList}">
 								<div class="bankImage"
 									style="display: flex; justify-content: center;">
@@ -35,8 +34,7 @@
 					<p class="selected-bank text-center" style="color: #808080;">선택:</p>
 				</div>
 				<div class="nextBtn" style="text-align: right; margin-right : 80px;">
-				<button style="font-weight : bold; background-color : transparent; color : #3e6ce3; border : none;" 
-																		onclick="nextStep()">다음 →</button>
+				<button style="font-weight : bold; background-color : transparent; color : #3e6ce3; border : none;" 														onclick="nextStep()">다음 →</button>
 				</div>
 			</div>
 		</div>
@@ -63,196 +61,7 @@
 </script>
 
 <style>
-.AA {
-	margin-top: 30px;
-	justify-content: end;
-}
 
-.summary-container {
-	border-radius: 8px;
-	padding: 20px;
-	font-size: larger;
-	margin-top: 30px;
-	width: 38%;
-}
-
-.summary-item {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 10px;
-}
-
-.summary-total {
-	font-weight: bold;
-	color: red;
-	margin-bottom: 20px;
-}
-
-.Abutton {
-	background-color: #3e6ce3;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 5px;
-	cursor: pointer;
-	margin: 5px;
-}
-
-.termsParent {
-	margin-top: 30px;
-	width: 60%;
-	border: 1px solid;
-	padding: 15px;
-	background-color: #F2F2F2
-}
-
-.terms-container {
-	width: 300px;
-	border: 1px solid #000;
-	padding: 10px;
-	overflow-y: scroll;
-	height: 150px;
-	width: 100%;
-	background-color: #fff
-}
-
-.agree-chkbox {
-	margin-top: 10px;
-	text-align: right;
-	margin-right: 0px;
-}
-
-.addAcount {
-	text-align: center;
-	color: #3e6ce3;
-	font-weight: bold;
-}
-
-.bank {
-	border: 1px solid #BDBDBD;
-	height: 80px;
-	border-radius: 5px;
-	justify-content: center;
-	margin-bottom: 10px;
-	margin-left: 10px;
-}
-
-.bank:hover {
-	background-color: #E2E2E2;
-	cursor: pointer;
-}
-
-
-.bank p {
-	justify-content: center;
-	align-items: flex-end;
-	text-align: center;
-	font-weight: bold;
-}
-
-.accountSelect {
-	text-align: left;
-	justify-content: center;
-}
-
-.pointHeader {
-	background-color: #3e6ce3;
-	color: white;
-	padding: 20px;
-	text-align: left;
-	border-radius: 5px;
-	width: 1000px;
-	height: 80px;
-	margin-left: 50px;
-	position: relative;
-	/* 상대 위치 설정 */
-}
-
-.pointHeader p {
-	font-size: 27px;
-	font-weight: bold;
-	position: absolute;
-	/* 절대 위치 설정 */
-	top: 7%;
-	/* 상단으로부터 30% 위치 */
-	left: 20px;
-	/* 텍스트 정렬을 위한 왼쪽 여백 */
-}
-
-.pointHeader span {
-	position: absolute;
-	top: 59%;
-	font-size: 16px;
-}
-
-.pointCharegingMain {
-	border: 1px solid #BDBDBD;
-	margin-left: 50px;
-	margin-top: 20px;
-	width: 1000px;
-	height: 1200px;
-}
-
-.chargePointSelect {
-	text-align: center;
-	font-family: 'Noto Sans KR', sans-serif;
-}
-
-.chargePointSelect p {
-	margin-bottom: 10px;
-}
-
-.points button {
-	background-color: #f1f1f1;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	padding: 7px 20px;
-	margin: 0 5px;
-	font-size: 16px;
-	cursor: pointer;
-	width: 100px;
-}
-
-.points button:hover {
-	background-color: #e9e9e9;
-}
-
-.pointInput {
-	width: 300px;
-	font-size: 16px;
-}
-
-.input-container {
-	font-family: 'Noto Sans KR', sans-serif;
-	margin-bottom: 12px;
-}
-
-.input-container label {
-	display: block;
-	margin-bottom: 10px;
-}
-
-#amountInput {
-	width: 100%;
-	padding: 8px;
-	border: none;
-	border-radius: 4px;
-	margin-bottom: -20px;
-	margin-top: 0px;
-	font-size: 28px;
-	/* 입력 텍스트의 글자 크기를 설정 */
-}
-
-#amountInput::placeholder {
-	font-size: 28px;
-	/* 원하는 텍스트 크기로 조정 */
-}
-
-#amountInput:focus {
-	outline: none;
-	border-color: #3e6ce3;
-	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
-}
 </style>
 
 <script>
@@ -273,7 +82,7 @@
 	}
 	
 	// 은행 요소를 선택합니다.
-	const bankElements = document.querySelectorAll('.bank');
+	const bankElements = document.querySelectorAll('.park_bank');
 
 	// 각 은행 요소에 클릭 이벤트를 추가합니다.
 	bankElements.forEach((bankElement) => {
@@ -292,7 +101,7 @@
 	});
 	
 	// 은행 요소를 선택합니다.
-	const bankElements2 = document.querySelectorAll('.bank');
+	const bankElements2 = document.querySelectorAll('.park_bank');
 
 	// 이전에 선택한 은행 요소를 저장할 변수를 초기화합니다.
 	let previousSelectedBank = null;

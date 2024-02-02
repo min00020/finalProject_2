@@ -9,22 +9,21 @@
 		<aside th:replace="@{/layout/member/pointAsideMain.html}"></aside>
 
 		<section class="main">
-			<div class="pointHeader">
+			<div class="park_pointHeader">
 				<p>애코머니 충전</p>
 				<span>질문게시판, 이모티콘 상점에서 사용되는 애코머니를 간편하게 충전할 수 있습니다.</span>
 			</div>
-			<div class="pointCharegingMain">
-				<div
-					style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
-					<div class="chargePointSelect">
-						<div class="input-container">
-							<label for="amountInput"></label> <input type="text"
-								id="amountInput" placeholder="충전할 금액을 입력해 주세요"
+			<div class="park_pointCharegingMain">
+				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+					<div class="park_chargePointSelect">
+						<div class="park_input-container">
+							<label for="park_amountInput"></label> <input type="text"
+								id="park_amountInput" placeholder="충전할 금액을 입력해 주세요"
 								oninput="formatNumber(this)" />
 						</div>
 						<hr style="margin-top: 0;">
 						<p style="text-align : left; color : #808080; font-size:small; margin-top : -10px;">일일 최대 충전 한도 : 1,000,000 원</p>
-						<div class="points">
+						<div class="park_points">
 							<button>+1,000</button>
 							<button>+3,000</button>
 							<button>+5,000</button>
@@ -32,33 +31,29 @@
 							<button>+30,000</button>
 							<button>+50,000</button>
 						</div>
-						<div class="accountSelect">
-						
-						
+						<div class="park_accountSelect">		
 							<br> <br>
 							<h3>출금 계좌</h3>
 							<hr>
 						</div>
 					  <div th:each="account : ${getAccountList}">
-						<div class="account">
+						<div class="park_account">
 							<p>[[${account.bankName}]]</p>
 							<p>[[${account.accountNo}]]</p>
 						</div>
 					  </div><!-- th:each end -->
 					</div>
 					<p style="color: #808080">선택 : 카카오뱅크</p>
-					<span class="addAcount">
+					<span class="park_addAcount">
 						<p><a href="/accountConnect" style="text-decoration-line: none; color : #3e6ce3;">
 							<img id="plus" src="commonResource/plus.png" alt="logo"
 								style="width: 2%; margin-bottom:3px;"> 계좌 등록하기</a>
 						</p>
 					</span>
 					<hr>
-
-
-					<div class="termsParentParent d-flex">
-						<div class="termsParent">
-							<div class="terms-container">
+					<div class="park_termsParentParent d-flex">
+						<div class="park_termsParent">
+							<div class="park_terms-container">
 								<p>제 1장 총칙</p>
 								<p>제 1조 (목적)</p>
 								<!-- 약관의 내용을 여기에 넣으세요. -->
@@ -66,229 +61,43 @@
 									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
 								<!-- ... -->
 							</div>
-
-							<div class="agree-chkbox">
+							<div class="park_agree-chkbox">
 								<input type="checkbox" id="termsAgree"> <label
 									for="termsAgree">위 내용에 동의합니다.</label>
 							</div>
-
-
 						</div>
-
-
-
-						<div class="summary-container"
-							style="display: inline-block; margin-left: 20px;">
+						<div class="park_summary-container">
 							<hr>
-							<div class="summary-item">
+							<div class="park_summary-item">
 
 								<span>현재 보유 애코머니 :</span> <span>8,000 P</span>
 							</div>
-							<div class="summary-item">
+							<div class="park_summary-item">
 								<span>충전할 애코머니 :</span> <span>5,000 P</span>
 							</div>
-							<div class="summary-item summary-total">
+							<div class="park_summary-item park_summary-total">
 								<span>결제할 금액 :</span> <span>5,000 원</span>
 							</div>
 							<hr>
-							<div class="summary-item summary-total">
+							<div class="park_summary-item park_summary-total">
 								<span>충전후 애코머니 :</span> <span>13,000 P</span>
 							</div>
 						</div>
 					</div>
 					<hr style="margin-top: 50px;">
-					<div class="AA d-flex justify-content-end">
-						<button class="Abutton" onclick="submitPayment()">충전하기</button>
-						<button class="Abutton" onclick="cancelPayment()"
+					<div class="park_AA d-flex justify-content-end">
+						<button class="park_Abutton" onclick="submitPayment()">충전하기</button>
+						<button class="park_Abutton" onclick="cancelPayment()"
 							style="background-color: #808080">취소</button>
 					</div>
 				</div>
-
-
-
-
 			</div>
-
 		</section>
 	</div>
 
 </div>
 <style>
-.AA {
-	margin-top: 30px;
-	justify-content: end;
-}
 
-.summary-container {
-	border-radius: 8px;
-	padding: 20px;
-	font-size: larger;
-	margin-top: 30px;
-	width: 38%;
-}
-
-.summary-item {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 10px;
-}
-
-.summary-total {
-	font-weight: bold;
-	color: red;
-	margin-bottom: 20px;
-}
-
-.Abutton {
-	background-color: #3e6ce3;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 5px;
-	cursor: pointer;
-	margin: 5px;
-}
-
-.termsParent {
-	margin-top: 30px;
-	width: 60%;
-	border: 1px solid;
-	padding: 15px;
-	background-color: #F2F2F2
-}
-
-.terms-container {
-	width: 300px;
-	border: 1px solid #000;
-	padding: 10px;
-	overflow-y: scroll;
-	height: 150px;
-	width: 100%;
-	background-color: #fff
-}
-
-.agree-chkbox {
-	margin-top: 10px;
-	text-align: right;
-	margin-right: 0px;
-}
-
-.addAcount {
-	text-align: center;
-	color: #3e6ce3;
-	font-weight: bold;
-}
-
-.account {
-	border: 1px solid #BDBDBD;
-	height: 80px;
-	border-radius: 5px;
-	text-align: left;
-	margin-bottom: 10px;
-}
-
-.accountSelect {
-	text-align: left;
-}
-
-.pointHeader {
-	background-color: #3e6ce3;
-	color: white;
-	padding: 20px;
-	text-align: left;
-	border-radius: 5px;
-	width: 1000px;
-	height: 80px;
-	margin-left: 50px;
-	position: relative;
-	/* 상대 위치 설정 */
-}
-
-.pointHeader p {
-	font-size: 27px;
-	font-weight: bold;
-	position: absolute;
-	/* 절대 위치 설정 */
-	top: 7%;
-	/* 상단으로부터 30% 위치 */
-	left: 20px;
-	/* 텍스트 정렬을 위한 왼쪽 여백 */
-}
-
-.pointHeader span {
-	position: absolute;
-	top: 59%;
-	font-size: 16px;
-}
-
-.pointCharegingMain {
-	border: 1px solid #BDBDBD;
-	margin-left: 50px;
-	margin-top: 20px;
-	width: 1000px;
-	height: 1200px;
-}
-
-.chargePointSelect {
-	text-align: center;
-	font-family: 'Noto Sans KR', sans-serif;
-}
-
-.chargePointSelect p {
-	margin-bottom: 10px;
-}
-
-.points button {
-	background-color: #f1f1f1;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	padding: 7px 20px;
-	margin: 0 5px;
-	font-size: 16px;
-	cursor: pointer;
-	width: 100px;
-}
-
-.points button:hover {
-	background-color: #e9e9e9;
-}
-
-.pointInput {
-	width: 300px;
-	font-size: 16px;
-}
-
-.input-container {
-	font-family: 'Noto Sans KR', sans-serif;
-	margin-bottom: 12px;
-}
-
-.input-container label {
-	display: block;
-	margin-bottom: 10px;
-}
-
-#amountInput {
-	width: 100%;
-	padding: 8px;
-	border: none;
-	border-radius: 4px;
-	margin-bottom: -20px;
-	margin-top: 0px;
-	font-size: 28px;
-	/* 입력 텍스트의 글자 크기를 설정 */
-}
-
-#amountInput::placeholder {
-	font-size: 28px;
-	/* 원하는 텍스트 크기로 조정 */
-}
-
-#amountInput:focus {
-	outline: none;
-	border-color: #3e6ce3;
-	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
-}
 </style>
 
 <script>
