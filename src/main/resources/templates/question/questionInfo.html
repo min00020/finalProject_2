@@ -58,7 +58,7 @@
 			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
 				<div id="member" class="col-8" style="height:40px;">
 					<div class="qna_box2">
-					   <img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+					   <img class="qna_profile" src="/commonResource/cookie.png" alt="profile">
 					</div>
 					<p class="m-0">cookie123</p>
 					<p class="m-0">silver</p>
@@ -66,19 +66,19 @@
 				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
 				<div id="qna_iconAll" class="col-3"> 
 					<span>					
-						<img class="qna_icon" src="commonResource/icon/eye.png" alt="eye">
+						<img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye">
 					</span>
 					<span>10</span>
 					<span>					
-						<img class="qna_icon" src="commonResource/icon/bookmark.png" alt="bookmark">
+						<img class="qna_icon" src="/commonResource/icon/bookmark.png" alt="bookmark">
 					</span>
 					<span>13</span>
 					<span>					
-						<img class="qna_icon" src="commonResource/icon/best.png" alt="best">
+						<img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
 					</span>
 					<span>9</span>
 					<span>					
-						<img class="qna_icon" src="commonResource/icon/reply.png" alt="reply">
+						<img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply">
 					</span>
 					<span>7</span>
 				</div>
@@ -90,7 +90,7 @@
 		<th:block sec:authorize="isAuthenticated()">
 			<div class="answer-top" style="height:80px;">
 				<div class="min_answerbox" >
-				   <img class="answer_profile" th:src="|upload/profile/${session.member.profileImage}|" alt="profile">
+				   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
 				</div>
 				<div class="min_align_bottom">
 					<h6 class="m-1" style="font-weight : bold;">[[${session.member.id}]]님 답변해주세요!</h6>
@@ -148,7 +148,7 @@
 			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
 				<div id="member" class="col-7" style="height:40px;">
 					<div class="qna_box2">
-					   <img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+					   <img class="qna_profile" src="/commonResource/cookie.png" alt="profile">
 					</div>
 					<p class="m-0">cookie123</p>
 					<p class="m-0">silver</p>
@@ -156,11 +156,11 @@
 				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
 				<div id="qna_iconAll" class="col-3">
 					<span>					
-						<img class="qna_icon" src="commonResource/icon/best.png" alt="best">
+						<img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
 					</span>
 					<span>9</span>
 					<span>					
-						<img class="qna_icon" src="commonResource/icon/reply.png" alt="reply">
+						<img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply">
 					</span>
 					<span>7</span>
 					<button type="button" class="btn text-white" 
@@ -174,7 +174,7 @@
 		</div>
 			<!-- 추가질문답변칸 -->
 			<div id="qna_add">				
-				<img class="qna_add_icon" src="commonResource/add_question.png" alt="profile">
+				<img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
 				<div class="qna_add_info">
 					<span class="m-1" style="font-weight:bold;">질문자의 추가질문</span>
 					<span style="float:right;font-size: 15px;color:#76767e;">신고</span>
@@ -183,7 +183,7 @@
 				</div>
 			</div>
 			<div id="qna_add">				
-				<img class="qna_add_icon" src="commonResource/add_answer.png" alt="profile">
+				<img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
 				<div class="qna_add_info">
 					<span class="m-1" style="font-weight:bold;">답변자의 추가답변</span>
 					<span style="float:right; font-size: 15px; color:#76767e;">신고</span>
@@ -191,13 +191,13 @@
 					
 					<span class="m-1" style="font-size: 15px; color:#76767e;">2023.01.27</span>
 					<span style="float:right;">
-						<img src="commonResource/icon/check.png" alt="profile" style="width:35px;" >
+						<img src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
 						<a style="color:#3e6ce3;font-weight:bold;">채택</a>
 					</span>
 				</div>				
 			</div>
 			<div id="qna_add">				
-				<img class="qna_add_icon" src="commonResource/add_question.png" alt="profile">
+				<img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
 				<textarea class="form-control" id="qna_add_form" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
 				<!-- <div class="qna_add_form">
 					<p>답변자에게 추가로 질문을 남겨주세요!</p>

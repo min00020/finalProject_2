@@ -26,14 +26,14 @@
 	</select>
 	
 	<!-- 질문글 단건조회 -->
-	<select id="getQuestionList" resultType="QuestionVO">
+	<select id="getQuestionInfo" resultType="QuestionVO">
 		SELECT m.id, m.profile_image,
 		    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
 		    q.WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT
 		FROM QUESTION_BOARD q
 		JOIN MEMBER m
 		ON q.MEMBER_NO = m.MEMBER_NO
-		WHERE QUESTION_BOARD_NO = 104
+		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</select>
 	
 	<!-- 질문글 작성 -->
@@ -47,4 +47,19 @@
 		    #{title}, #{tag},#{contents},SYSDATE,0,0,0,0
 	    )
 	</insert>
+	<!-- 질문글 수정 -->
+	<update id="updateQuestion" parameterType="QuestionVO">
+		UPDATE QUESTION_BOARD
+	    SET TOPIC = #{topic},
+	        POINT = #{point},
+	        TITLE = #title},
+	        TAG = #{tag},
+	        CONTENTS = #{contents}
+	    WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	<!-- 질문글 삭제 -->
+	<delete id="deleteQuestion">
+		DELETE QUESTION_BOARD
+		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</delete>
 </mapper>

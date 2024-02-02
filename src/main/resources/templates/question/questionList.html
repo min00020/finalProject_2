@@ -59,7 +59,7 @@
 		               <tr>
 		                  <td>
 			                  <span class="qna_box">
-					     			<img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+					     			<img class="qna_profile" src="/commonResource/cookie.png" alt="profile">
 			                  </span>
 			                  <span class="QNAname">user01</span><span class="QNAno">300</span>
 		                  </td>
@@ -67,7 +67,7 @@
 		         	   <tr>
 		                  <td>
 			                  <span class="qna_box">
-					     			<img class="qna_profile" src="commonResource/cookie.png" alt="profile">
+					     			<img class="qna_profile" src="/commonResource/cookie.png" alt="profile">
 			                  </span>
 			                  <span class="QNAname">cookie123</span><span class="QNAno">20</span>
 		                  </td>
@@ -108,14 +108,14 @@
 					<button type="button" class="btn text-white" style="background-color:#3e6ce3">질문하기</button>
 				</div>
 			</div>
-			
+
 			<!-- start of postList -->
 			<hr style="margin-bottom:30px">
 			<div id="questionList"  class="row" th:each="question : ${questionList}">
 				<div id="title" class="col-8">
 					<div id="member" style="height:40px;">
 						<div class="qna_box">
-						    <img class="qna_profile" th:src="|upload/profile/${question.profileImage}|" alt="profile">
+						    <img class="qna_profile" th:src="|/upload/profile/${question.profileImage}|" alt="profile">
 						</div>
 						<p th:text="${question.id}">cookie123</p>
 					</div>
@@ -139,8 +139,41 @@
 				<hr style="margin-top:30px; margin-bottom:30px;">
 			</div>
 			<!-- end of postList -->
+			<!-- 페이지 시작 -->
+			<div>
+			    <ul class="pagination justify-content-center">
+			        <li class="page-item">
+			            <a class="page-link" href="#" aria-label="Previous">
+			                <span aria-hidden="true">&laquo;</span>
+			                <span class="sr-only">Previous</span>
+			            </a>
+			        </li>
+			        <li class="page-item">
+			            <a class="page-link" href="#">1</a>
+			        </li>
+			        <li class="page-item">
+			            <a class="page-link" href="#">2</a>
+			        </li>
+			        <li class="page-item">
+			            <a class="page-link" href="#">3</a>
+			        </li>
+			        <li class="page-item">
+			            <a class="page-link" href="#" aria-label="Next">
+			                <span aria-hidden="true">&raquo;</span>
+			                <span class="sr-only">Next</span>
+			            </a>
+			        </li>
+			    </ul>
+			</div>
+			<!-- 페이지 끝-->
 		</div>
 		<!-- end of questionBoard -->
 	</div>
 </section>
 </div>
+<script th:inline="javascript">
+
+	const test = [[ ${questionInfo} ]];
+	
+	
+</script>

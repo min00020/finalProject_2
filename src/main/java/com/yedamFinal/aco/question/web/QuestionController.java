@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,8 +29,14 @@ public class QuestionController {
 	}
 	
 	//질문글 상세조회 페이지
-	@GetMapping("/questionInfo")
-	public String getquestionInfo() {
+	/*
+	 * @GetMapping("/questionInfo") public String getquestionInfo() { return
+	 * "question/questionInfo"; }
+	 */
+
+	@GetMapping("/questionInfo/{qno}")
+	public String getQuestionInfo(@PathVariable("qno") int qno, Model model) {
+		model.addAttribute("questionInfo", questionService.getQuestionInfo(qno));
 		return "question/questionInfo";
 	}
 	
@@ -47,6 +54,5 @@ public class QuestionController {
 		ret.put("result", "400");
 		return ret;
 	}
-	
 	
 }

@@ -22,6 +22,11 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 
 	@Override
+	public QuestionVO getQuestionInfo(int qno) {
+		return questionMapper.getQuestionInfo(qno);
+	}
+	
+	@Override
 	public Map<String, Object> writeQuestion(QuestionVO vo) {
 		Map<String,Object> ret = new HashMap<String,Object>();
 		int insertId = questionMapper.insertQuestion(vo);
@@ -34,6 +39,7 @@ public class QuestionServiceImpl implements QuestionService{
 		}
 		return ret;
 	}
+
 
 
 	

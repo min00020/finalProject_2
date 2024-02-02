@@ -6,7 +6,7 @@ import com.yedamFinal.aco.question.QuestionVO;
 
 public interface QuestionMapper {
 	public List<QuestionVO> getQuestionList();
-	public QuestionVO selectQuestion(String qno);
+	public QuestionVO getQuestionInfo(int qno);
 	public int insertQuestion(QuestionVO questionVO);
 	
 	
