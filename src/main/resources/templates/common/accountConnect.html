@@ -10,157 +10,58 @@
 
 		<section class="main">
 			<div class="pointCharegingMain" style="height: 800px;">
-				<div
-					style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
 					<div class="chargePointSelect">
 						<div class="input-container">
 							<h4 style="font-weight: bold;">간편 계좌 연결</h4>
 						</div>
 						<hr style="margin-top: 0;">
 						<h6>본인 명의 자유입출금 계좌만 연결할 수 있어요</h6>
-						<div class="accountSelect row">
+						<div class="accountSelect row" >
 							<br> <br>
 							<h3>은행 선택</h3>
-							<hr>
-							<div class="bank col-3">
+							<hr><br>
+					<div class="bank col-3"
+							th:data-bankcode="${bank.bankCode}" th:data-bankname="${bank.bankName}"  th:each="bank : ${getBankList}">
 								<div class="bankImage"
 									style="display: flex; justify-content: center;">
-									<img id="NH" src="commonResource/NH.png" alt="NH"
+									<img th:src="|/commonResource/bankImage/${bank.bankName}.png|" th:alt="${bank.bankName}"
 										style="height: 40px; margin-top: 10px;">
 								</div>
-								<p>농협</p>
+								<p>[[${bank.bankName}]]</p>
 							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="kdb" src="commonResource/kdb.png" alt="kdb"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>산업은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="ibk" src="commonResource/ibk.png" alt="ibk"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>IBK 기업은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="kb" src="commonResource/kb.png" alt="kb"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>국민은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="hana" src="commonResource/hana.png" alt="hana"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>하나은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="woori" src="commonResource/woori.png" alt="woori"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>우리은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="jeil" src="commonResource/jeil.png" alt="jeil"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>SC제일은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="citi" src="commonResource/citi.png" alt="citi"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>씨티은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="daegu" src="commonResource/daegu.png" alt="NH"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>대구은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="gj" src="commonResource/gj.png" alt="gj"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>광주은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="jj" src="commonResource/SH.png" alt="jj"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>제주은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="JB" src="commonResource/gj.png" alt="JB"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>전북은행</p>
-							</div>
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="sh" src="commonResource/SH.png" alt="sh"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>신한은행</p>
-							</div>
-		
-							<div class="bank col-3">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="sm" src="commonResource/sm.png" alt="sm"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>새마을금고</p>
-							</div>
-							
-							
-							<div class="bank col-3" onclick="location.href='/'">
-								<div class="bankImage"
-									style="display: flex; justify-content: center;">
-									<img id="kakao" src="commonResource/kakao.png" alt="kakao"
-										style="height: 40px; margin-top: 10px;">
-								</div>
-								<p>카카오뱅크</p>
-						</div>
+						
 					</div>
-					<p style="color: #808080">선택 : 카카오뱅크</p>
-
-
-
-
+					<p class="selected-bank text-center" style="color: #808080;">선택:</p>
 				</div>
-
-
+				<div class="nextBtn" style="text-align: right; margin-right : 80px;">
+				<button style="font-weight : bold; background-color : transparent; color : #3e6ce3; border : none;" 
+																		onclick="nextStep()">다음 →</button>
+				</div>
 			</div>
-	</div>
+		</div>
 
 	</section>
 </div>
 
 </div>
+<script th:inline="javascript">
+	
+	function nextStep() {
+		const idName = document.querySelector('.selected-bank').id;
+		if(idName == '') {
+			showWarningAlert('은행을 선택해주세요!');
+			return;
+		}
+		const bankList = idName.split('&');
+		
+		window.location.href = "/insertAccountNo?bankCode=" + bankList[1] + "&bankName=" + bankList[0];
+		console.log(idName.split('&'));
+		
+	}
+
+</script>
+
 <style>
 .AA {
 	margin-top: 30px;
@@ -240,6 +141,7 @@
 	background-color: #E2E2E2;
 	cursor: pointer;
 }
+
 
 .bank p {
 	justify-content: center;
@@ -369,4 +271,50 @@
 		input.value = integerNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
 				',');
 	}
+	
+	// 은행 요소를 선택합니다.
+	const bankElements = document.querySelectorAll('.bank');
+
+	// 각 은행 요소에 클릭 이벤트를 추가합니다.
+	bankElements.forEach((bankElement) => {
+	  bankElement.addEventListener('click', () => {
+	    // 클릭된 은행의 데이터 속성(th:data-bankcode)에서 은행명을 가져옵니다.
+	 
+	    const selectedBank = bankElement.getAttribute('data-bankName');
+	    const selectedCode = bankElement.getAttribute('data-bankCode');
+
+	    // 선택된 은행명을 원하는 위치에 표시합니다.
+	    const selectionText = document.querySelector('.selected-bank');
+	    selectionText.removeAttribute("id");
+	    selectionText.id = selectedBank + '&' + selectedCode; 
+	    selectionText.textContent = `선택: ${selectedBank}`;
+	  });
+	});
+	
+	// 은행 요소를 선택합니다.
+	const bankElements2 = document.querySelectorAll('.bank');
+
+	// 이전에 선택한 은행 요소를 저장할 변수를 초기화합니다.
+	let previousSelectedBank = null;
+
+	// 각 은행 요소에 클릭 이벤트를 추가합니다.
+	bankElements2.forEach((bankElement) => {
+	  bankElement.addEventListener('click', () => {
+	
+
+
+	    // 클릭 시 푸른 테두리를 추가합니다.
+	    bankElement.style.border = '2px solid #3e6ce3';
+
+	    // 이전에 선택한 은행의 테두리를 제거합니다.
+	    if (previousSelectedBank !== null) {
+	      previousSelectedBank.style.border = '1px solid #BDBDBD';
+	    }
+	    
+
+	    // 현재 선택한 은행을 이전에 선택한 은행 변수에 저장합니다.
+	    previousSelectedBank = bankElement;
+	  });
+	});
+
 </script>

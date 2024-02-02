@@ -14,20 +14,26 @@
 				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
 					<div class="chargePointSelect">
 						<div class="input-container">
-						<p>카카오뱅크</p>
-							<label for="amountInput"></label> <input type="text"
-								id="amountInput" placeholder="-없이 계좌번호 입력" />
-						</div>
+						<div class="bankNameImage">
+						<img th:src="|/commonResource/bankImage/${bankName}.png|" th:alt="${bankName}"
+										style="height: 40px; margin-right : 10px; margin-top:-5px"><span style = "font-size : larger; font-weight : bold; color : #808080 ">[[${bankName}]]</span></div>
+							</div>
+							
+							<div class="accountAndNext" style="margin-top:-20px;">
+							<input type="text" class="amountInput" id="nameInput" name ="nameInput" placeholder="이름 입력" style="margin-top : 30px;"/><hr style="margin-top: 0;">
+							<input type="Number" class="amountInput" id="accountInput" name="accountInput" placeholder="-없이 계좌번호 입력" />
+						
 						<hr style="margin-top: 0;">
-						<button class="next" style ="width : 100%; border : none; height : 50px;">다음</button>
+						<button class="next" style ="width : 100%; border : none; height : 50px;" id="nextBtn">다음</button>
+					</div>
 				</div>
-				<div class="accountInfo" style="margin-top : 200px; color : #808080">
+				<div class="accountInfo" style="margin-top:130px;color : #808080">
 				<p style="font-weight : bold;">간편결제로 연결할 수 없는 계좌</p><hr>
 				<p>
 					·본인 명의가 아닌 계좌<br>
 					·가상계좌/적금/펀드/정기예금 등의 계좌<br>
 					·휴대폰 번호 등으로 만든 평생 계좌번호<br>
-					·계좌에 문제가 있는 경우 (예: 지급정지 또는 해약된 경우)</p><br><br><br>
+					·계좌에 문제가 있는 경우 (예: 지급정지 또는 해약된 경우)</p><hr><br><br><br>
 					
 					<p style="font-weight : bold;">내 명의 계좌인데 연결이 안될 때</p><hr>
 				<p>
@@ -41,12 +47,79 @@
 				</div>
 
 			</div>
+			</div>
 
 		</section>
 	</div>
 
 </div>
+
+<script th:inline="javascript">	
+
+const bankCode = [[${bankCode}]];
+const accessToken = [[${nhAccessToken}]];
+const Iscd = [[${Iscd}]];
+
+const date = new Date();
+let today = getFormatDate(date);
+const time = date.getTime()
+console.log(date);
+
+	$('#nextBtn').on('click', function(e) {
+		let name = $('#nameInput').val();
+		let account = $('#accountInput').val();
+
+		let obj = {};
+		obj["Header"] = {
+			ApiNm : "InquireDepositorOtherBank"	,
+			Tsymd : today,
+			Trtm :"113300",
+			Iscd : Iscd,
+			FintechApsno : "001",
+			ApiSvcCd : "DrawingTransferA",
+			IsTuno : [[${session.member.memberNo}]]+time,
+			AccessToken : accessToken,	
+		},
+		obj["Bncd"] = bankCode;
+		obj["Acno"] = account;
+		
+		$.ajax('https://developers.nonghyup.com/InquireDepositorOtherBank.nh', {
+			type:'post',
+			contentType: 'application/json',
+			data : JSON.stringify(obj)
+		})
+		.done(res => {
+			console.log(res);
+		})
+		.fail(err => {
+			console.log(err);
+		})
+	})
+	
+	
+	function getFormatDate(date){
+    	var year = date.getFullYear();              //yyyy
+    	var month = (1 + date.getMonth());          //M
+    	month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    	var day = date.getDate();                   //d
+    	day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    	
+    	return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+	}
+	
+</script>
+
 <style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.input-container {
+    display: flex; /* Flexbox 레이아웃을 활성화 */
+    align-items: center; /* 수직 방향으로 중앙 정렬 */
+    margin-top: 10px; /* 상단 여백 추가 */
+    
+}
 .AA {
 	margin-top: 30px;
 	justify-content: end;
@@ -159,12 +232,13 @@
 	margin-left: 50px;
 	margin-top: 20px;
 	width: 1000px;
-	height: 1200px;
+	height: 1000px;
 }
 
 .chargePointSelect {
 	text-align: center;
 	font-family: 'Noto Sans KR', sans-serif;
+	margin-top:px;
 }
 
 .chargePointSelect p {
@@ -201,7 +275,7 @@
 	margin-bottom: 10px;
 }
 
-#amountInput {
+.amountInput {
 	width: 100%;
 	padding: 8px;
 	border: none;
@@ -212,12 +286,12 @@
 	/* 입력 텍스트의 글자 크기를 설정 */
 }
 
-#amountInput::placeholder {
+.amountInput::placeholder {
 	font-size: 28px;
 	/* 원하는 텍스트 크기로 조정 */
 }
 
-#amountInput:focus {
+.amountInput:focus {
 	outline: none;
 	border-color: #3e6ce3;
 	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
