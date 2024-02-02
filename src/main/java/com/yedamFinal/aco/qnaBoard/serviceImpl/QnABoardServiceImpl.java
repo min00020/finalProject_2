@@ -52,7 +52,7 @@ public class QnABoardServiceImpl implements QnABoardService {
 	public Map<String, Object> getMyQnaBoardListFromSearch(int pageNo, String search, MemberVO vo, String ob) {
 		String orderby = orderbyByReqOb.get(ob);
 		if(orderby == null) {
-			orderby = "Latest";
+			orderby = "Latest";	
 		}
 		
 		var qnaList = qnaMapper.selectMyQnaBoardListFromSearch(pageNo,search,vo.getMemberNo(),orderby);
