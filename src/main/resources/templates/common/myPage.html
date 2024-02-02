@@ -32,10 +32,6 @@
 								th:text="${memberInfo.memberLevel}">\</span>
 							<h6 class="card-text" th:text="${memberInfo.accumActivityPoint}">\</h6>
 
-
-
-
-
 						</div>
 					</div>
 
@@ -64,7 +60,7 @@
 									<!-- 모달버튼 -->
 									<button type="button" class="btn btn-modal"
 										data-bs-toggle="modal" data-bs-target="#point"
-										style="text-decoration: none; float: right; color: #979da9;">
+										style="text-decoration: none;color: #979da9;">
 
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -78,12 +74,13 @@
 										<div class="modal-dialog modal-xl" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title" id="pointModalLabel"
-														style="font-weight: bold;">포인트뱅크</h5>
-													<!-- <button type="button" class="close" data-bs-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button> -->
+
+													<h3 class="modal-title" id="pointModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/point.png"
+															style="width: 70px; height: 70px;">포인트뱅크
+													</h3>
+
 												</div>
 												<div class="modal-body">
 													<ul class="tab-ul">
@@ -121,27 +118,27 @@
 								<div class="col-1" style="width: 55px;">
 									<!-- 모달버튼 -->
 									<button type="button" class="btn btn-modal"
-										data-bs-toggle="modal" data-bs-target="#point"
+										data-bs-toggle="modal" data-bs-target="#activity"
 										style="text-decoration: none; color: #979da9;">
-
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
 											stroke-linejoin="round" class="feather feather-chevron-right">
 										<polyline points="9 18 15 12 9 6"></polyline></svg>
 									</button>
+									</button>
 									<!-- 모달시작 -->
-									<div class="modal fade" id="point" tabindex="-1" role="dialog"
-										aria-labelledby="pointModalLabel" aria-hidden="true">
+									<div class="modal fade" id="activity" tabindex="-1"
+										role="dialog" aria-labelledby="activityModalLabel"
+										aria-hidden="true">
 										<div class="modal-dialog modal-xl" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title" id="pointModalLabel"
-														style="font-weight: bold;">내활동관리</h5>
-													<!-- <button type="button" class="close" data-bs-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button> -->
+													<h3 class="modal-title" id="activityModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/activity.png"
+															style="width: 70px; height: 70px;">내활동관리
+													</h3>
 												</div>
 												<div class="modal-body">
 													<ul class="tab-ul">
@@ -181,8 +178,7 @@
 									<!-- 모달버튼 -->
 									<button type="button" class="btn btn-modal"
 										data-bs-toggle="modal" data-bs-target="#point"
-										style="text-decoration: none; float: right; color: #979da9;">
-
+										style="text-decoration: none;color: #979da9;">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
@@ -190,13 +186,16 @@
 										<polyline points="9 18 15 12 9 6"></polyline></svg>
 									</button>
 									<!-- 모달시작 -->
-									<div class="modal fade" id="point" tabindex="-1" role="dialog"
-										aria-labelledby="pointModalLabel" aria-hidden="true">
+									<div class="modal fade" id="modify" tabindex="-1" role="dialog"
+										aria-labelledby="modifyModalLabel" aria-hidden="true">
 										<div class="modal-dialog modal-xl" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title" id="pointModalLabel"
-														style="font-weight: bold;">회원정보수정</h5>
+													<h3 class="modal-title" id="modifyModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/modifyinfo.png"
+															style="width: 70px; height: 70px;">회원정보수정
+													</h3>
 													<!-- <button type="button" class="close" data-bs-dismiss="modal"
 														aria-label="Close">
 														<span aria-hidden="true">&times;</span>
@@ -228,6 +227,7 @@
 			</aside>
 		</section>
 		<!-- 메인바디영역 -->
+		<!-- mypage1 -->
 		<div class="container" style="background-color: #aebfec;">
 			<div class="container">
 				<div class="card" id="myTabContent" style="height: 850px;">
@@ -242,7 +242,8 @@
 							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 								data-bs-target="#profile-tab-pane" type="button" role="tab"
 								aria-controls="profile-tab-pane" aria-selected="false"
-								style="width: 380px;" onclick="goMypage2()">내 질답통계</button>
+								style="width: 380px;" onclick="location.href='/myPage2'">내
+								질답통계</button>
 						</li>
 					</ul>
 					<div class="card d-flex">
@@ -277,7 +278,8 @@
 								<h5 style="margin-bottom: -8px; font-weight: bold;">
 									😉 이모티콘 구매내역
 									<button type="button" class="btn btn-modal"
-										data-bs-toggle="modal" data-bs-target="#bookmark"
+										onclick="goEmoShop()" data-bs-toggle="modal"
+										data-bs-target="#bookmark"
 										style="text-decoration: none; color: #979da9;">
 										더보기
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -290,9 +292,9 @@
 								</h5>
 								<ul class="tab-ul">
 									<li th:each="emo:${emoInfo}">[[ ${emo.emoName} ]] <span
-										th:text="${#dates.format(emo.emoBuydate, 'yyyy-MM-dd')}"
+										th:text="|구매날짜 ${#dates.format(emo.emoBuydate, 'yyyy-MM-dd')}|"
 										style="padding-left: 133px; float: right;">
-											[[${emo.emoBuydate}]] </span>구매날짜
+											[[${emo.emoBuydate}]] </span>
 
 										<hr>
 									</li>
@@ -302,17 +304,13 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
-
-		<!-- mypage2 메인바디 들어갈곳 (처음엔 class="hidden"처리) -->
-
 	</div>
-	<script>
+	<!-- ajax 바뀔부분 끝나는 부분 -->
+</div>
+<script>
 	const memberno = [[${session.member.memberNo}]]
-
-	function goMypage2() {
-		location.href = '/myPage2?memberNo=' + memberno;
-
+	function goEmoShop(){
+		location.href = '/emoMain';
 	}
 </script>

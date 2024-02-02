@@ -233,33 +233,24 @@
 				<div class="card" id="myTabContent" style="height: 850px;">
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
 						<li class="nav-item" role="presentation">
-							<button class="nav-link active" id="home-tab"
-								data-bs-toggle="tab" data-bs-target="#home-tab-pane"
-								type="button" role="tab" aria-controls="home-tab-pane"
-								aria-selected="true" style="width: 330px;" onclick="goMypage()">내가
-								참여한 프로젝트</button>
-						</li>
-						<li class="nav-item" role="presentation">
 							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 								data-bs-target="#profile-tab-pane" type="button" role="tab"
 								aria-controls="profile-tab-pane" aria-selected="false"
-								style="width: 330px;">내 질답통계</button>
+								style="width: 330px;" onclick="location.href='/myPage'">내가 참여한 프로젝트</button>
 						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="home-tab"
+								data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+								type="button" role="tab" aria-controls="home-tab-pane"
+								aria-selected="true" style="width: 330px;">내 질답 통계</button>
+						</li>
+
 					</ul>
 					<div>
 
 						<div class="card" style="width: 900px; border: 0px;">
 							<div class="card-body" id="card-1" style="margint-top: 20px;">
 								<div id="piechart" style="width: 500px; height: 300px;"></div>
-								<ul class="card-text">
-									<li>질문한 글<!-- <p th:text=""></p> -->건
-									</li>
-									<li>답변 남긴 글<!-- <p th:text=""></p> -->건
-									</li>
-									<li>채택된 글<!-- <p th:text=""></p> -->건
-									</li>
-								</ul>
-
 							</div>
 						</div>
 
@@ -289,7 +280,8 @@
 								<!-- Modal -->
 								<div class="modal fade" id="board" tabindex="-1" role="dialog"
 									aria-labelledby="boardModalLabel" aria-hidden="true">
-									<div class="modal-dialog modal-xl" role="document">
+									<div class="modal-dialog modal-xl" role="document"
+										style="overflow: visible;">
 										<div class="modal-content">
 											<div class="modal-header">
 												<h5 class="modal-title" id="boardModalLabel"
@@ -300,11 +292,56 @@
 									</button> -->
 											</div>
 											<div class="modal-body">
-												<ul class="tab-ul">
-													<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
-															[[${myq.writeDate}]] </span>
-														<hr></li>
-												</ul>
+												<div id="container">
+													<ul class="tab">
+														<li data-tab="tab1" class='tabmenu' id="default"><a
+															href="#">질답형 게시판</a></li>
+														<li data-tab="tab2" class='tabmenu'><a href="#">사이드프로젝트</a></li>
+													</ul>
+													<div id="tabcontent"></div>
+												</div>
+												
+												<div class="container" style="padding-top: 100px;">
+													<table class="table">
+														<thead>
+															<tr>
+																<th>No.</th>
+																<th>제목</th>
+																<th>작성일자</th>
+																<th>답변수</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="myq:${mquestionList}">
+																<td th:text="${myqStat.count}">1</td>
+																<td>[[ ${myq.title} ]]</td>
+																<td
+																	th:text="${#dates.format(myq.writeDate, 'yyyy-MM-dd')}">[[
+																	${myq.writeDate} ]]</td>
+																<td>[[ ${myq.answerCnt} ]]</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												<div>
+													<!-- Pagination -->
+													<ul class="pagination justify-content-center">
+														<li class="page-item"><a class="page-link" href="#"
+															aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+																<span class="sr-only">Previous</span>
+														</a></li>
+														<li class="page-item"><a class="page-link" href="#">1</a>
+														</li>
+														<li class="page-item"><a class="page-link" href="#">2</a>
+														</li>
+														<li class="page-item"><a class="page-link" href="#">3</a>
+														</li>
+														<li class="page-item"><a class="page-link" href="#"
+															aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+																<span class="sr-only">Next</span>
+														</a></li>
+													</ul>
+												</div>
 											</div>
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary"
@@ -312,7 +349,6 @@
 											</div>
 										</div>
 									</div>
-									<hr>
 								</div>
 								<!-- 모달 끝 -->
 								<ul class="tab-ul">
@@ -357,8 +393,9 @@
 									</button> -->
 											</div>
 											<div class="modal-body">
-												<div class="scroll type2" style="overflow-y: scroll; height: 600px; overflow-x:hidden;">
-													<p style="margin-bottom: 30px;"> ※책갈피 아이콘을 해제시 책갈피 목록에서
+												<div class="scroll type2"
+													style="overflow-y: scroll; height: 600px; overflow-x: hidden;">
+													<p style="margin-bottom: 30px;">※책갈피 아이콘을 해제시 책갈피 목록에서
 														삭제됩니다.</p>
 													<div class="row">
 														<div class="col-sm-3 mb-3 mb-sm-0"
@@ -408,10 +445,10 @@
 					</div>
 				</div>
 			</div>
-			</section>
 		</div>
 	</div>
-	<script type="text/javascript">
+</div>
+<script type="text/javascript">
 	google.charts.load('current', {
 		'packages' : [ 'corechart' ]
 	});
@@ -420,8 +457,8 @@
 	function drawChart() {
 
 		var data = google.visualization.arrayToDataTable([
-				[ 'Task', 'Hours per Day' ], [ 'Work', 11 ], [ 'Eat', 2 ],
-				[ 'Commute', 2 ], [ 'Watch TV', 2 ], [ 'Sleep', 7 ] ]);
+				[ 'Task', 'Hours per Day' ], [ '내가 질문한 글', 11 ], [ '내가 답변한 글', 2 ],
+				[ '채택된 글', 15 ] ]);
 
 		var options = {
 			title : '내 질답통계'
@@ -435,7 +472,7 @@
 
 	const memberno = [[${session.member.memberNo}]]
 	function goMypage(){
-		location.href='/myPage?memberNo='+memberno;
+		location.href='/myPage';
 		
 	}
 

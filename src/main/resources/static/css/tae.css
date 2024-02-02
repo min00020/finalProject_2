@@ -10,6 +10,7 @@
 	border-radius: 50%;
 	position: relative;
 }
+
 .box-2 {
 	width: 25px;
 	height: 25px;
@@ -19,6 +20,7 @@
 	border-radius: 50%;
 	position: relative;
 }
+
 .profile-1 {
 	width: 100%;
 	height: auto;
@@ -29,79 +31,108 @@
 	transform: translateY(-50%);
 }
 
-.tab-ul{
-	list-style : none;
+.tab-ul {
+	list-style: none;
 	float: left;
-	padding : 10px;
-	margin : 0px;
-	
-}
-.mb-1{
-	list-style : none;
-}
-.card{
-	border-radius : 20px;
-	
-}
-.card-body{
-	padding : 10px;
-	border : 0px;
-	
-	
-}
-.container{
-	height : 950px;
-}
-.btn btn-modal{
-	padding-bottom:0px;
+	padding: 10px;
+	margin: 0px;
 }
 
+.mb-1 {
+	list-style: none;
+}
+
+.card {
+	border-radius: 20px;
+}
+
+.card-body {
+	padding: 10px;
+	border: 0px;
+}
+
+.container {
+	height: 950px;
+}
+
+.btn btn-modal {
+	padding-bottom: 0px;
+}
 
 .tae_hidden {
-	display : none;
+	display: none;
 }
-.tae-box1{
+
+.tae-box1 {
 	display: inline-block;
 }
-.tae-box2{
+
+.tae-box2 {
 	display: inline-block;
 }
-.container2{
-	margin-bottom:10px;
-	margin-top:10px;
+
+.container2 {
+	margin-bottom: 10px;
+	margin-top: 10px;
 }
-tae_container1{
-	background-color:#fffff;
-	border-radius:20px;
+
+tae_container1 {
+	background-color: #fffff;
+	border-radius: 20px;
 }
-#myTabContent{
+
+#myTabContent {
 	width: 1000px;
 	background-color: #fffff;
-	margin-top:20px;
+	margin-top: 20px;
 	margin-left: -10px;
 	padding-left: 30px;
 	float: right;
 }
-#myTab{
-	margin-top:20px;
+
+#myTab {
+	margin-top: 20px;
 }
-.nav-item{
+
+.nav-item {
 	border: 0px;
 }
 
 /* 스크롤바 설정*/
-.type2::-webkit-scrollbar{
-    width: 6px;
+.type2::-webkit-scrollbar {
+	width: 6px;
 }
 
 /* 스크롤바 막대 설정*/
-.type2::-webkit-scrollbar-thumb{
-    height: 17%;
-    background-color: rgba(97, 160, 235, 0.51);
-    border-radius: 10px;  
+.type2::-webkit-scrollbar-thumb {
+	height: 17%;
+	background-color: rgba(97, 160, 235, 0.51);
+	border-radius: 10px;
 }
 
 /* 스크롤바 뒷 배경 설정*/
-.type2::-webkit-scrollbar-track{
-    background-color: rgba(255,255,255,0.5);
+.type2::-webkit-scrollbar-track {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+#tae-tb: link {
+  color: pink;
+	text-decoration: none;
+}
+
+#tae-tb:visited {
+	color: black;
+	text-decoration: none;
+}
+.hidden{
+	display : none;
+}
+#tae-tb:hover {
+	color: 979da9;
+	text-decoration: underline;
+}
+
+#tae-tb:active {
+	color: green;
+	text-decoration: none;
 }

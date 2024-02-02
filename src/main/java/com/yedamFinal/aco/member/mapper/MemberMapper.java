@@ -2,9 +2,9 @@ package com.yedamFinal.aco.member.mapper;
 
 import java.util.List;
 
-import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import org.apache.ibatis.annotations.Param;
 
+import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;

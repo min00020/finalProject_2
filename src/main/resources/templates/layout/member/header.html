@@ -38,7 +38,7 @@
             <th:block sec:authorize="isAuthenticated()"> 
                 <div class = "park_align-self-center d-flex gap-2">
                     <div class="mink_box">
-                    	<a th:href="|/myPage?memberNo=${session.member.memberNo}|">
+                    	<a th:href="|/myPage|">
                     		<img class="mink_profile" th:src="|upload/profile/${session.member.profileImage}|" alt ="profile" />
                     	</a>
                     </div> 
