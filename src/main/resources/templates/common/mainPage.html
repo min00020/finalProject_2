@@ -5,11 +5,11 @@
 
 	<div class="park_slider">
 		<div class="park_slide">
-			<img id="logoImage" src="commonResource/sideproject.png" alt="side"
+			<img id="logoImage" src="/commonResource/sideproject.png" alt="side"
 				style="width: 100%;">
 		</div>
 		<div class="park_slide">
-			<img id="logoImage2" src="commonResource/banner.png" alt="banner"
+			<img id="logoImage2" src="/commonResource/banner.png" alt="banner"
 				style="width: 100%;">
 		</div>
 
@@ -25,7 +25,7 @@
 					<ul class = "park_fb">
 						<li th:each="free : ${getFreeBoardList}">
 							<span class="park_nickname">[[${free.nickname}]]</span>
-							<span class="park_activityPoint"> · <img id="thunder" src="commonResource/thunder.png" alt="acti">[[${free.accumActivityPoint}]]
+							<span class="park_activityPoint"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${free.accumActivityPoint}]]
 								<span th:if="${free.minute < 60}" th:text="' · ' + (${free.minute}) + '분 전'"></span>
 								<span th:if="${free.minute >= 60 && free.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 60.0)}) + '시간 전'"></span>
 								<span th:if="${free.minute >= 1440 && free.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 1440.0)}) + '일 전'"></span>
