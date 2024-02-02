@@ -69,7 +69,20 @@
 			C.SUB_CODE_NAME AS EMOTICON_STATE
 				FROM EMOTICON E
 				JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
-				WHERE EMO_STATE = 'D001'
+				ORDER BY E.EMO_NO
+</select>
+<select id="getMainEmoList" resultType="AdminEmoVO">
+	SELECT E.EMO_NO, 
+			E.EMO_NAME, 
+			E.EMO_PRICE, 
+			E.EMO_DESC, 
+			E.EMO_FIRSTIMG, 
+			E.EMO_INNERIMG, 
+			E.EMO_PATH, 
+			C.SUB_CODE_NAME AS EMOTICON_STATE
+				FROM EMOTICON E
+				JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
+				WHERE E.EMO_STATE = 'D001'
 				ORDER BY E.EMO_NO
 </select>
 <!-- 이모티콘 등록 -->
@@ -102,12 +115,33 @@
   					,'D001'
   			)		
 </insert>
+<!-- 이모티콘 판매종료 -->
+<update id="updateEmo" parameterType="int">
+	UPDATE EMOTICON  
+	SET EMO_STATE = 'D002' 
+	WHERE EMO_NO=#{emoNo} 	
+</update>
+<!-- 이모티콘 판매재개 -->
+<update id="updateEmo2" parameterType="int">
+	UPDATE EMOTICON  
+	SET EMO_STATE = 'D001' 
+	WHERE EMO_NO=#{emoNo} 	
+</update>
 <!-- 이모티콘 상세화면 -->
 <select id="getEmoDetail" resultType="AdminEmoVO">
 	SELECT * 
 	FROM EMOTICON
 	WHERE EMO_NO=#{emoNo}
 </select>
+<!-- 이모티콘 구매내역 -->
+<select id="getEmoBuyList" resultType="AdminEmoVO">
+	SELECT E.EMO_FIRSTIMG, E.EMO_NAME, E.EMO_PRICE, M.EMO_BUYDATE, E.EMO_PATH, E.EMO_NO
+	FROM MY_EMOTICON M JOIN EMOTICON E ON M.EMO_NO = E.EMO_NO
+	WHERE M.MEMBER_NO=#{memberNo}
+	ORDER BY M.EMO_BUYDATE
+</select>
+
+
 <select id="getAdCntList" resultType="AdminMainVO">
 	SELECT COUNT(CASE WHEN REPORT_STATE = 'B001' THEN 1 END)AS SCOUNT FROM REPORT UNION ALL
     SELECT COUNT(CASE WHEN ANSWER_STATE = 'P001' THEN 1 END) FROM QNA_BOARD UNION ALL

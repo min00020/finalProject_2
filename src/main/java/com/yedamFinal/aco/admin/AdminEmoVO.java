@@ -1,5 +1,7 @@
 package com.yedamFinal.aco.admin;
 
+import java.sql.Date;
+
 import lombok.Data;
 
 @Data
@@ -15,4 +17,6 @@ public class AdminEmoVO {
 	private String emoState;
 	
 	private String emoticonState;	
+	
+	private Date emoBuydate;
 }

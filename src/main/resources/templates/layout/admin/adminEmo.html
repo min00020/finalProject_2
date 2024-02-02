@@ -10,6 +10,9 @@
     <meta name="author" content="">
 
     <title>Ask Code 관리자 페이지</title>
+	<!-- 제이쿼리 -->
+		<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+		
 	<!-- 부트스트랩 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -238,25 +241,42 @@
                                    
                                     <tbody>
                                         <tr th:each="emo : ${adminEmo}">
-                                            <td th:text="${emo.emoName}"></td>
+                                            <td th:text="${emo.emoName}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|"></td>
                                             <td th:text="${emo.emoDesc}"></td>
                                             <td th:text="${emo.emoPrice}"></td>
                                             <td th:text="${emo.emoticonState}"></td>
                                             <td><div style="text-align: center">
                                             <!-- Button trigger modal -->
-												<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:if="${emo.emoticonState == '판매중'}" th:data-bs-target="|#exampleModal1${emo.emoNo}|">
 												  판매종료
 												</button>
 												
 												<!-- Modal -->
-												<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+												<div class="modal fade" th:id="|exampleModal1${emo.emoNo}|" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
 												  <div class="modal-dialog">
 												    <div class="modal-content">
 												      <div class="modal-header" style="margin: auto;">
 												        <h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘을 판매종료 하시겠습니까?</h1>
 												      </div>
 												      <div class="modal-footer" style="margin: auto;">
-												        <button type="button" class="btn btn-danger">판매종료</button>
+												        <button type="button" class="btn btn-danger" th:onclick="|location.href='/updateEmo?emoNo=${emo.emoNo}'|">판매종료</button>
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+												<button type="button" class="btn btn-success" data-bs-toggle="modal" th:unless="${emo.emoticonState == '판매중'}" th:data-bs-target="|#exampleModal2${emo.emoNo}|">
+												  판매재개
+												</button>
+												<!--  -->
+												<div class="modal fade" th:id="|exampleModal2${emo.emoNo}|" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+												  <div class="modal-dialog">
+												    <div class="modal-content">
+												      <div class="modal-header" style="margin: auto;">
+												        <h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘을 판매재개 하시겠습니까?</h1>
+												      </div>
+												      <div class="modal-footer" style="margin: auto;">
+												        <button type="button" class="btn btn-success" th:onclick="|location.href='/updateEmo2?emoNo=${emo.emoNo}'|">판매재개</button>
 												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 												      </div>
 												    </div>
@@ -332,11 +352,15 @@
 												</tr>
 												<tr>
 												<th>대표이미지</th>
-												<td><input type="file" name="emoFirstimg"/></td>	
+												<td><input type="file" name="emoFirstimg" accept="image/*" onchange="setThumbnail1(event)"/>
+												<div id="image_container1"></div>	
+												</td>
 												</tr>
 												<tr>
 												<th>상세이미지</th>
-												<td><input type="file" name="emoInnerimg"/></td>	
+												<td><input type="file" name="emoInnerimg" accept="image/*" onchange="setThumbnail2(event)"/>
+												<div id="image_container2"></div>
+												</td>	
 												</tr>
 												
 												</table>
@@ -424,6 +448,7 @@
 	
 			<!--자바 스크립트-->
 		<script>
+		
 			document.querySelector('form[name="insertForm"]')
 					.addEventListener('submit', boardInsertJs);
 
@@ -432,6 +457,44 @@
 
 						insertForm.submit();
 					}
+
+					function setThumbnail1(event) {
+				        var reader = new FileReader();
+
+				        reader.onload = function(event) {
+
+					      document.querySelector("div#image_container1").innerHTML = "";
+				          var img = document.createElement("img");
+				          img.setAttribute("src", event.target.result);
+				          img.setAttribute("width", "100px");
+				          
+				          document.querySelector("div#image_container1").appendChild(img);
+				        };
+
+				        reader.readAsDataURL(event.target.files[0]);
+				      }
+					function setThumbnail2(event) {
+				        var reader = new FileReader();
+						
+				        reader.onload = function(event) {
+				          document.querySelector("div#image_container2").innerHTML = "";
+				          var img = document.createElement("img");
+				          img.setAttribute("src", event.target.result);
+				          img.setAttribute("width", "100px");
+				          document.querySelector("div#image_container2").appendChild(img);
+				        };
+
+				        reader.readAsDataURL(event.target.files[0]);
+				      }
+					
+					 $(document).ready(function(){
+					        $('#AddNotice').on('hidden.bs.modal', function () {
+					            // 해당 모달이 닫힐 때마다 input 요소들의 값을 초기화합니다.
+					            $(this).find('form')[0].reset();
+					            document.querySelector("div#image_container1").innerHTML = "";
+					            document.querySelector("div#image_container2").innerHTML = "";
+					        });
+					    });
 		</script>
 </body>
 

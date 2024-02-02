@@ -1,5 +1,6 @@
 <div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content">
 
@@ -8,6 +9,9 @@
 			<h3>이모티콘 상점</h3>
 			<p style="color:#76767e">포인트로 이모티콘을 구매해보세요</p>
 		</div>
+		<div style="text-align: right;">
+                    <a class="btn btn-primary" th:onclick="|location.href='/emoBuyList'|">내 구매목록</a>
+             </div>
 <!-- Page Content -->
 <div class="hacontainer">
     <div class="row">

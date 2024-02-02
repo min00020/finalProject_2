@@ -1,0 +1,51 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+
+<section style="width: 1344px">
+	<div id="qna_banner">
+			<h3>내 이모티콘 구매목록</h3>
+			<p style="color:#76767e">구매한 이모티콘을 확인 해보세요</p>
+		</div>
+<!-- Page Content -->
+<div class="container-fluid px-4">
+				<div class="px-4 py-1 my-3 text-center">
+					<h2 class="fw-bold mb-3">이모티콘 구매내역</h2>
+				</div>
+				<div class="d-flex justify-content-center">
+					<table class="table w-85">
+						<thead>
+							<tr align="center">
+								<th>이모티콘 이미지</th>
+								<th>이모티콘 이름</th>
+								<th>가격</th>
+								<th>구매일자</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr align="center" th:each="buyList : ${emoBuyList}" th:onclick="|location.href='/emoDetail?emoNo=${buyList.emoNo}'|">
+								<td style="vertical-align : middle">
+								<img alt=""  th:src="@{${buyList.emoPath+buyList.emoFirstimg}}" style="width: 100px">
+                                </td>
+                                <td style="vertical-align : middle" th:text="${buyList.emoName}">    
+								<p><span></span></p>
+                                </td>                   
+								<td style="vertical-align : middle" th:text="${buyList.emoPrice}"><p><span></span></p></td>
+								<td style="vertical-align : middle" th:text="${buyList.emoBuydate}"><p><span></span></p></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+<!-- /.container -->
+		
+		
+		
+		
+</section>
+
+
+
+
+</div>

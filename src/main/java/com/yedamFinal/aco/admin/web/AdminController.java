@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
@@ -70,6 +71,19 @@ public class AdminController {
 		adminService.insertEmo(adminEmoVO);
 		return "redirect:adminEmo";
 	}
+	//이모티콘 판매종료
+	@GetMapping("/updateEmo")
+	public String updateEmoProcess(int emoNo) {
+		adminService.updateEmo(emoNo);
+		return "redirect:adminEmo";
+	}
+	//이모티콘 판매재개
+	@GetMapping("/updateEmo2")
+	public String updateEmo2Process(int emoNo) {
+		adminService.updateEmo2(emoNo);
+		return "redirect:adminEmo";
+	}
+	
 	/*
 	 * public String insertEmoProcess(AdminEmoVO adminEmoVO, MultipartFile[] files)
 	 * { adminService.insertEmo(adminEmoVO, files); return "redirect:adminEmo"; }
