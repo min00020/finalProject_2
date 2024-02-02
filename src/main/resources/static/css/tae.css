@@ -114,6 +114,22 @@ tae_container1 {
 .type2::-webkit-scrollbar-track {
 	background-color: rgba(255, 255, 255, 0.5);
 }
+/* 스크롤바 설정*/
+.type3::-webkit-scrollbar {
+	width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+.type3::-webkit-scrollbar-thumb {
+	height: 17%;
+	background-color: rgba(97, 160, 235, 0.51);
+	border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+.type3::-webkit-scrollbar-track {
+	background-color: rgba(255, 255, 255, 0.5);
+}
 
 #tae-tb: link {
   color: pink;
@@ -135,4 +151,23 @@ tae_container1 {
 #tae-tb:active {
 	color: green;
 	text-decoration: none;
+}
+.point-image{
+	width: 30%;
+    float: left;
+    box-sizing: border-box;
+}
+.point-acc{
+	width: 70%;
+    float: right;
+    box-sizing: border-box;
+}
+.form-control{
+	height: 50px;
+	width: 600px;
+	background-color: bdcde4;
+}
+input::placeholder 
+{
+	color:#e0e0e7;
 }

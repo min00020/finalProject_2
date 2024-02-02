@@ -8,6 +8,7 @@ import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
 public interface MemberMapper {
@@ -21,6 +22,8 @@ public interface MemberMapper {
 	public List<MybookmarkVO> selectMyBookList(MemberVO memberVO);
 	//작성한 질문글 리스트
 	public List<MyquestionVO> selectMyqList(MemberVO memberVO);
+	//포인트 사용내역
+	public List<PointDetailJoinVO> selectPointDetailList(MemberVO memberVO);
 	
 	public MemberVO selectCheckDuplicateId(String id);
 	public MemberVO selectCheckDuplicateEmail(String email);

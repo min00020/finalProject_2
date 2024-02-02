@@ -9,6 +9,7 @@ import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
 public interface MemberService {
@@ -30,6 +31,7 @@ public interface MemberService {
 	public List<MybookmarkVO> getMyBookList(MemberVO memberVO);
 	//내가 작성한 질답글 목록
 	public List<MyquestionVO> getMyqList(MemberVO memberVO);
-	
+	//포인트 사용내역
+	public List<PointDetailJoinVO> getPointList(MemberVO memberVO);
 	public List<TagVO> getTagList();
 }

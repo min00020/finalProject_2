@@ -12,6 +12,7 @@
 		WHERE MID = #{mid}
 		
 </select>
+<!-- 회원정보조회 -->
 <select id="selectMemberInfo" resultType="MemberVO">
 	SELECT m.member_no, 
 	 	   m.email, 
@@ -27,7 +28,7 @@
 
 
 </select>
-
+<!-- 내이모티콘구매내역조회 -->
 <select id="selectMyemoticonList" resultType="com.yedamFinal.aco.myemoticon.MyEmoticonJoinVO">
 	SELECT 
     ROWNUM, A.*
@@ -41,6 +42,7 @@
 	 JOIN member B ON A.member_no = B.member_no
 	 WHERE A.member_no= #{memberNo} AND ROWNUM <![CDATA[ <= ]]> 3
 </select>
+<!-- 북마크리스트 -->
 <select id="selectMybmList" resultType="com.yedamFinal.aco.bookmark.MybookmarkVO">
 	 SELECT ROWNUM, A.*
 	 FROM
@@ -54,6 +56,7 @@
     JOIN question_board C ON C.question_board_no = A.question_board_no
 	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 3
 </select>
+<!-- 북마크 상세 -->
 <select id="selectMyBookList" resultType="com.yedamFinal.aco.bookmark.MybookmarkVO">
 	SELECT title, regist_date, member_no, question_board_no
 	FROM my_bookmark
@@ -61,6 +64,7 @@
 	ORDER BY regist_date desc
 	
 </select>
+<!-- 내가 질문한글 리스트 -->
 <select id="selectMyqList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
 	 SELECT ROWNUM, A.*
 	 FROM
@@ -73,6 +77,15 @@
 	JOIN member B ON A.member_no = B.member_no
 	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 3
 </select>
+<!-- 포인트사용내역 리스트 -->
+<select id="selectPointDetailList" resultType="com.yedamFinal.aco.point.PointDetailJoinVO">
+	SELECT member_no, history_date, INC_DEC_POINT, CASE WHEN INC_DEC_POINT <![CDATA[ > ]]> 0 THEN '0'
+               ELSE '1' END AS acc_type
+    FROM point_detail
+    WHERE member_no=#{memberNo}
+    ORDER BY history_date desc
+</select>
+
 <select id="selectCheckDuplicateId" resultType="MemberVO">
 	SELECT id
 		FROM member

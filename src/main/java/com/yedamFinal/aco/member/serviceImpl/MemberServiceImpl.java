@@ -24,6 +24,7 @@ import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
 import net.nurigo.sdk.NurigoApp;
@@ -237,5 +238,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public List<MybookmarkVO> getMyBookList(MemberVO memberVO){
 		return memberMapper.selectMyBookList(memberVO);
+	}
+
+	@Override
+	public List<PointDetailJoinVO> getPointList(MemberVO memberVO) {
+		return memberMapper.selectPointDetailList(memberVO);
 	}
 }

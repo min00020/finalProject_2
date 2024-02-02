@@ -83,17 +83,54 @@
 
 												</div>
 												<div class="modal-body">
-													<ul class="tab-ul">
-														<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
-																[[${myq.writeDate}]] </span>
-															<hr></li>
-													</ul>
+													<!-- 포인트뱅크모달영역 -->
+													<div class="d-flex" style="hegiht:700px;">
+														<div class="point-image" style="width:350px;hegiht:700px;">
+															<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
+															<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
+															<h3 style="font-weight:bold;padding-left:120px;color:#2e54b7;">100,000</h3>
+														</div>
+														<div class="point-acc" style="hegiht:700px;">
+															<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																<h4>애코포인트 정산</h4>
+																<br>
+																<p style="margin-bottom:-8px;">최소 5,000P 부터 정산가능</p>
+																<br>
+																<div class="input-group mb-3" style="width:600px;height:50px;">
+																	<input type="text" class="form-control" placeholder="정산가능포인트 P" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
+																	<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">정산요청</button>
+																</div>
+															</div>
+															<div class="point-acc-1" style="width:750px;hegiht:450px;">
+																<h4>활동점수 포인트 전환</h4>
+																<br>
+																<p style="margin-bottom:-8px;">5,000점 이상부터 1,000점 단위로 전환가능</p>
+																<br>
+																<div class="input-group mb-3" style="width:600px;height:50px;">
+																	<input type="text" class="form-control" placeholder="현재활동점수  점" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
+																	<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">환전요청</button>
+																</div>
+															</div>
+														</div>
+													
+													</div>
+														<div class="container" id="activityList" style="height:270px;">
+															<div class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																<h3>포인트 정산 및 환전 내역</h3><hr>
+																	<ul>
+																		<li th:each="pol:${pointList}">
+																		<span th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
+																		<span th:text="( (${pol.accType} == '0')? '-' + ${pol.incDecPoint} : '+' + ${pol.incDecPoint})" >[[ ${pol.incDecPoint} ]]</span>
+																		<hr>
+																		</li>
+																	</ul>
+																
+															</div>
+														</div>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
 														data-bs-dismiss="modal">Close</button>
-													<button type="button" class="btn btn-primary">Save
-														changes</button>
 												</div>
 											</div>
 										</div>
@@ -193,20 +230,13 @@
 												<div class="modal-header">
 													<h3 class="modal-title" id="modifyModalLabel"
 														style="font-weight: bold;">
-														<img src="commonResource/icon/modifyinfo.png"
+														<img src="/commonResource/icon/modifyinfo.png"
 															style="width: 70px; height: 70px;">회원정보수정
 													</h3>
-													<!-- <button type="button" class="close" data-bs-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button> -->
 												</div>
+												<!-- 회원정보수정모달영역 전민교가 연동하기로함 -->
 												<div class="modal-body">
-													<ul class="tab-ul">
-														<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
-																[[${myq.writeDate}]] </span>
-															<hr></li>
-													</ul>
+													
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
