@@ -9,4 +9,6 @@ public interface QuestionService {
 	public List<QuestionVO> getQuestionList();
 	public QuestionVO getQuestionInfo(int qno);
 	public Map<String, Object> writeQuestion(QuestionVO vo);
+	public Map<String, Object> updateQuestion(QuestionVO vo);
+	public QuestionVO deleteQuestion(int qno);
 }

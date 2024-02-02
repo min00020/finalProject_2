@@ -120,7 +120,7 @@
 						<p th:text="${question.id}">cookie123</p>
 					</div>
 				  	<div id="titleTag">
-					    <h4 th:text="${question.title}">node.js에 대한 질문이 있습니다.</h4>
+					    <h4 th:text="${question.title}"  th:onclick="|location.href='/questionInfo/${question.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
 					    <p style="color:blue" th:text="${question.tag}">#node.js #mysql</p>
 				 	</div>
 			 	</div>
@@ -173,7 +173,10 @@
 </div>
 <script th:inline="javascript">
 
-	const test = [[ ${questionInfo} ]];
+	//const test = [[ ${questionInfo} ]];
+	function test(a) {
+		console.log(a);
+	}
 	
 	
 </script>

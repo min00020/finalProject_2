@@ -40,6 +40,17 @@ public class QuestionServiceImpl implements QuestionService{
 		return ret;
 	}
 
+	@Override
+	public Map<String, Object> updateQuestion(QuestionVO vo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public QuestionVO deleteQuestion(int qno) {
+		return questionMapper.deleteQuestion(qno);
+	}
+
 
 
 	

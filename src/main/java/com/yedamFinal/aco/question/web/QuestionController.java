@@ -55,4 +55,8 @@ public class QuestionController {
 		return ret;
 	}
 	
+	//질문글 수정
+
+	//질문글 삭제
+	
 }
