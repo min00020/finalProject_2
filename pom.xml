@@ -89,6 +89,12 @@
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
+		
+		<!-- mail service -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>

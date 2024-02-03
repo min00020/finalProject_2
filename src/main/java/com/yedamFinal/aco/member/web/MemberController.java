@@ -135,6 +135,15 @@ public class MemberController {
 		return "common/test";
 	}
 	
+	@GetMapping("/findAccount")
+	public String findAccountForm() {
+		return "common/findAccount";
+	}
+	
+	@PostMapping("/findAccount")
+	public Map<String,Object> findAccount(@RequestParam String email) {
+		return memberService.findAccount(email);
+	}
 	
 }
 

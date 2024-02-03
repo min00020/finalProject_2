@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.common.NaverMailSender;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
@@ -56,6 +57,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	
 	@Autowired
 	private GitHubServiceImpl githubService;
+	
+	@Autowired
+	private NaverMailSender mailSender;
     
     @PostConstruct
     public void init() {
@@ -210,4 +214,22 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 		return ret;
 	}
+
+	@Override
+	public Map<String, Object> findAccount(String email) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		ret.put("result", "400");
+		
+		String emailTitle = "[AskCode] 계정찾기 이메일 정보입니다.";
+		StringBuilder emailBodyBuilder = new StringBuilder();
+		emailBodyBuilder.append("<div>");
+		emailBodyBuilder.append("<h1>AskCode</h1>");
+		emailBodyBuilder.append("</div>");
+		
+		//mailSender.sendEmail(email, email)
+		
+		return ret;
+	}
+	
+	
 }

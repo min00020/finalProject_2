@@ -4,23 +4,33 @@
 	  lang="ko">
 <head>
 	<meta charset="UTF-8">
-	<meta name="csrf" th:content="${_csrf.token}" />
-	<meta name="csrfPara" th:content="${_csrf.parameterName}" />
-	<title>AskCode</title>
-	<link th:href="@{/css/mink.css}" rel="stylesheet" type="text/css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	
+	<!-- csrf토큰은 이렇게받아오기. -->
 	<meta name="csrf" th:content="${_csrf.token}" />
 	<meta name="csrfPara" th:content="${_csrf.parameterName}" />
 	
+	<title>AskCode</title>
+	<link th:href="@{/css/mink.css}" rel="stylesheet" type="text/css">
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	
+	<!-- tagify -->
+	<link rel="stylesheet" href="https://unpkg.com/@yaireo/dragsort/dist/dragsort.css" media="print" onload="this.media='all'">
+	<link rel="stylesheet" th:href="@{/css/tagify.css}">
+		
+    <script th:src="@{/js/jQuery.tagify.min.js}"></script>
+    <script src="https://unpkg.com/@yaireo/dragsort"></script>
+	<!-- tagify -->
 	<!-- sweetAlert2 -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
 	<script type="text/javascript" th:src="@{/js/commonMethod.js}"></script>
+	
 	<!-- sweetAlert2 -->
 	
 	<style>
-	img {
+		img {
     		margin: auto;
     		display: block;
 		}
@@ -32,8 +42,8 @@
 			margin-right : 1rem;
 		}
 		.rounded {
-			padding-left: 3rem;
-			padding-right: 3rem;
+			padding-left: 4.4rem;
+			padding-right: 4.4rem;
 			padding-top : 0.5rem;
 			padding-bottom : 0.5rem;
 			background-color: white;
@@ -55,50 +65,51 @@
 			background-color:#3e6ce3;
 			color:white;
 		}
+		
 	</style>
 	<!-- 제이쿼리 -->
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
-
 <body>
-	<div style="margin-top:180px; margin-bottom:180px;" class="container">
+<!-- 
+	<svg style="width:3%;" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M28.9992 57.8002C44.905 57.8002 57.7992 44.906 57.7992 29.0002C57.7992 13.0944 44.905 0.200195 28.9992 0.200195C13.0934 0.200195 0.199219 13.0944 0.199219 29.0002C0.199219 44.906 13.0934 57.8002 28.9992 57.8002ZM42.3448 24.3458C43.7507 22.9399 43.7507 20.6605 42.3448 19.2546C40.9389 17.8487 38.6595 17.8487 37.2536 19.2546L25.3992 31.109L20.7448 26.4546C19.3389 25.0487 17.0595 25.0487 15.6536 26.4546C14.2477 27.8605 14.2477 30.1399 15.6536 31.5458L22.8536 38.7458C24.2595 40.1517 26.5389 40.1517 27.9448 38.7458L42.3448 24.3458Z" fill="#34D399"></path></svg>
+ -->
+	<div style="margin-top:180px;" class="container">
 		<a href="/">
 			<img src="/commonResource/askcodeLogo.png" alt="logo" class="w-25 d-flex justify-content-center">
 		</a>
 		<div>
-			<h2 class="text-center"><b>깃허브 연동</b></h2>
-			<p class="text-center">AskCode를 좀 더 다양하게 이용하기 위해서는 깃허브 계정 연동이 필요합니다.</p>
-			<p class="text-center">아래 연동 버튼을 선택할 시 깃허브 계정과 연동이 가능해집니다. </p>
+			<h2 class="text-center"><b>계정 찾기</b></h2>
+			<p class="text-center">
+			회원 가입시 입력하신 이메일 주소를 입력하시면,<br>
+			해당 이메일로 아이디 및 비밀번호 변경 링크를 보내드립니다.
+			</p>
 		</div>
-		<div class="d-flex justify-content-center mt-5">
-			<button class="default-right-mg rounded default-color" onclick="gitLink()">
-				연동하기
-			</button>
-			<button class="default-color rounded" onclick="location.href='/loginForm'">
-				취소하기
-			</button>
+		<div class="container">
+				<div class="my-4 center">
+					<label for="email" style="margin-left:27rem;" class="w-50">이메일</label>
+					<div class="mt-1 d-flex justify-content-center">
+						<input id="email" type="text" class="px-3 py-2 rounded" style="width:33%;" name="email" placeholder="askcode@ask.com">
+					</div>
+				</div>
+				<div class="center d-flex justify-content-between" style="width:33%">
+					<button class="rounded" type="button" style="background-color:#989daa; color:white;" onclick="location.href='/loginForm'">취소하기</button>
+					<button class="rounded" type="button" style="background-color:#3e6ce3; color:white;" onclick="sendEmail()">계정찾기</button>
+				</div>
+			</div>
 		</div>
-	</div>
 	
-	<script>
+	<script th:inline="javascript">
 		const csrfPara = $('meta[name="csrfPara"]').attr("content");
 		const csrfToken = $('meta[name="csrf"]').attr("content");
-		const cid = "[[${clientId}]]";
-		function gitLink() {
-			const GITHUB_LOGIN_URL = "https://github.com/login/oauth/authorize?client_id=" + cid;
-		    window.location.assign(GITHUB_LOGIN_URL);
-		}
 		
-		const queryString = window.location.search;
-	    const urlParams = new URLSearchParams(queryString);
-	    const gitCodeValue = urlParams.get('code'); //인증코드 가져오기 (10분동안만 유효하므로 굳이 저장x)
-	    
-	    
-		if(gitCodeValue != null && typeof gitCodeValue != "undefined") {
-			const formData = new FormData();
-		    formData.append(csrfPara, csrfToken);
-		    formData.append("gitCode", gitCodeValue);
-			// 사용자가 로그인을 하고 다시 페이지로 돌아온 경우.
+		function sendEmail() {
+			const inputEmail = $('input[name="email"]').val();
+			if(inputEmail == '') {
+				showWarningAlert('이메일을 입력해주세요.');
+				return;
+			}
+			
 			$.ajax('/gitLink', {
 				type : "POST",
 				data : formData,
@@ -121,12 +132,10 @@
 			.fail(err => {
 				showFailAlert('에러 발생.', '다시 시도해주세요.');
 				console.log(err);
-			})
+			})	
 		}
-		else {
-			// 처음 진입인 경우.
-		}
-		
 	</script>
 </body>
+
 </html>
+

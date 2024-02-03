@@ -90,6 +90,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/upload/**");
 		permitAllUrl.add("/gitLink");
 		permitAllUrl.add("/gitLinkPage");
+		permitAllUrl.add("/findAccount");
 	}
 	
 	private void insertPermitAllUrlByChae() {
