@@ -66,83 +66,32 @@
 			color:white;
 		}
 		
+		.hidden {
+			display:none;
+		}
+		
 	</style>
 	<!-- 제이쿼리 -->
 		<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <body>
+<!-- 
+	
+ -->
 	<div style="margin-top:180px;" class="container">
 		<a href="/">
 			<img src="/commonResource/askcodeLogo.png" alt="logo" class="w-25 d-flex justify-content-center">
 		</a>
-		<div>
-			<h1 class="text-center"><b>변경하실 비밀번호를 입력해주세요</b></h1>
+		<div class="d-flex justify-content-center">
+			<h1>알 수 없는 경로의 진입</h1>
 		</div>
-		<div class="container">
-			<form>
-				<div class="my-4 center">
-					<label for="userpw" style="margin-left:22rem;" class="w-100">새 비밀번호</label>
-					<div class="mt-1 d-flex justify-content-center">
-						<input id="userpw" type="password" class="px-3 py-2 rounded" style="width:45%;" name="userpw" placeholder="8자리 이상 기호,영문,숫자 조합 입력" autoComplete="off">
-					</div>
-				</div>
-				<div class="my-4 center">
-					<label for="userpwverify" style="margin-left:22rem;" class="w-100">새 비밀번호 확인</label>
-					<div class="mt-1 d-flex justify-content-center">
-						<input id="userpwverify" type="password" class="px-3 py-2 rounded" style="width:45%;" name="userpwverify" placeholder="8자리 이상 기호,영문,숫자 조합 입력" autoComplete="off">
-					</div>
-				</div>
-				<div class="d-flex justify-content-center">
-					<button type="button" class="btn rounded" style="background-color:#3e6ce3; color:white; margin:0 auto; width:45%;" onclick="changePassword()">비밀번호 변경</button>
-				</div>
-			</form>
+		<div class="d-flex justify-content-center my-2">
+			<button type="button" class="btn rounded" style="background-color:#3e6ce3; color:white; margin:0 auto; width:45%;" onclick="location.href='/'">메인으로 가기</button>
 		</div>
 	</div>
 	
 	<script th:inline="javascript">
-		const accessKey = [[${accessKey}]];
-		const csrfPara = $('meta[name="csrfPara"]').attr("content");
-		const csrfToken = $('meta[name="csrf"]').attr("content");
 		
-		function changePassword() {
-			// 비밀번호 정규식
-			const pwReg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^])(?=.*[0-9]).{8,30}$/;
-			const password = $('input[name="userpw"]').val();
-			const passwordVerify = $('input[name="userpwverify"]').val();
-			if(password != passwordVerify) {
-				showWarningAlert("비밀번호가 서로 일치하지 않습니다.");
-				return;
-			}
-			
-			if(!pwReg.test(password)) {
-				showFailAlert("실패","8자리 이상 기호,영문,숫자를 조합한 비밀번호를 입력해주세요.");
-				return;
-			}
-			
-			let object = {
-				accessKey : accessKey,
-				password : password,
-				passwordVerify : passwordVerify
-			};
-			
-			object[csrfPara] = csrfToken;
-			$.ajax('/changePassword', {
-				type : "POST",
-				data : object
-			})
-			.done(res => {
-				if(res.result == "200") {
-					window.location.href="/loginForm";
-				}
-				else {
-					showFailAlert("실패","사유" + res.result);
-				}
-			})
-			.fail(err => {
-				showFailAlert('에러 발생.', '다시 시도해주세요.');
-				console.log(err);
-			})	
-		}
 	</script>
 </body>
 

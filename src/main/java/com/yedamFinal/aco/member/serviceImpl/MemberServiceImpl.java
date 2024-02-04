@@ -1,10 +1,12 @@
 package com.yedamFinal.aco.member.serviceImpl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.NaverMailSender;
+import com.yedamFinal.aco.common.RandomString;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
+import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
@@ -218,18 +222,95 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public Map<String, Object> findAccount(String email) {
 		Map<String,Object> ret = new HashMap<String,Object>();
-		ret.put("result", "400");
+		ret.put("result", "200");
+		
+		MemberVO vo = memberMapper.selectCheckDuplicateEmail(email);
+		if(vo == null) {
+			ret.put("result", "400");
+			return ret;
+		}
+		
+		Date curDate = new Date();
+		String dateStr = String.valueOf(curDate.getTime());
+		String randomAccessKey = RandomString.generateRandomString(40) + dateStr;
+		
+		FindAccountEmailLinkVO insertVO = new FindAccountEmailLinkVO();
+		insertVO.setAccessKey(randomAccessKey);
+		insertVO.setExpireDate(new Date(curDate.getTime() + (10 * 60 * 1000)));
+		insertVO.setMemberId(vo.getId());
+		
+		if(memberMapper.insertFindAccountEmailLink(insertVO) <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
 		
 		String emailTitle = "[AskCode] 계정찾기 이메일 정보입니다.";
 		StringBuilder emailBodyBuilder = new StringBuilder();
 		emailBodyBuilder.append("<div>");
-		emailBodyBuilder.append("<h1>AskCode</h1>");
+		emailBodyBuilder.append("<h1 style='color:#3e6ce3; margin-bottom:30px;'>AskCode</h1>");
+		emailBodyBuilder.append("<h1>계정찾기</h1>");
+		emailBodyBuilder.append("<p style='margin-top:30px;'>아이디 : <b>" + vo.getId() + "</b></p>");
+		emailBodyBuilder.append("<p>비밀번호 변경을 원하시면 아래 링크를 통해 변경하실 수 있습니다.</p>");
+		emailBodyBuilder.append("<p>(비밀번호 변경 링크의 유효시간은 10분입니다.)</p>");
+		emailBodyBuilder.append("<div style='margin-top:20px;'>");
+		emailBodyBuilder.append("<a href='http://localhost/changePassword?key=" + randomAccessKey
+				+ "' style='background-color:#3e6ce3; color:white; padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px;'"
+				+ ">비밀번호 변경하기 ></a>");
+		emailBodyBuilder.append("</div>");
 		emailBodyBuilder.append("</div>");
 		
-		//mailSender.sendEmail(email, email)
-		
+		mailSender.sendEmail(emailTitle, emailBodyBuilder.toString());
 		return ret;
 	}
-	
-	
+
+	@Override
+	public boolean verifyChangePasswordForm(String accessKey) {
+		if(accessKey == null || accessKey.isEmpty()) {
+			return false;
+		}
+		 
+		FindAccountEmailLinkVO vo = memberMapper.selectFindAccountEmailInfo(accessKey);
+		if(vo == null) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	@Transactional
+	public Map<String, Object> changePassword(String accessKey, String pwd, String pwdVerify) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String,Object>();
+		ret.put("result", "200");
+		
+		if(accessKey == null || accessKey.isEmpty()) {
+			ret.put("result", "400");
+			return ret;
+		}
+		
+		if(!pwd.equals(pwdVerify)) {
+			ret.put("result", "400");
+			return ret;
+		}
+		
+		FindAccountEmailLinkVO vo = memberMapper.selectFindAccountEmailInfo(accessKey);
+		if(vo == null) {
+			ret.put("result", "400");
+			return ret;
+		}
+		
+		String bCryptPassword = bCryptPasswordEncoder.encode(pwd);
+		String id = vo.getMemberId();
+		if(memberMapper.updateMemberPassword(id, bCryptPassword) <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		if(memberMapper.deleteFindAccountEmailLink(accessKey) <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		return ret;
+	}
 }

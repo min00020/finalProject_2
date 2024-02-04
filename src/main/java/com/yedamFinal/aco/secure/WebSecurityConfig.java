@@ -91,6 +91,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/gitLink");
 		permitAllUrl.add("/gitLinkPage");
 		permitAllUrl.add("/findAccount");
+		permitAllUrl.add("/changePassword");
 	}
 	
 	private void insertPermitAllUrlByChae() {
