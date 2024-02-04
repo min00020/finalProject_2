@@ -12,10 +12,10 @@
 				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
 					<div class="park_chargePointSelect">
 						<div class="park_input-container">
-							<h4 style="font-weight: bold;">간편 계좌 연결</h4>
+							<h4 style="font-weight: bold;">간편 계좌 등록</h4>
 						</div>
 						<hr style="margin-top: 0;">
-						<h6>본인 명의 자유입출금 계좌만 연결할 수 있어요</h6>
+						<h6>본인 명의 자유입출금 계좌만 등록할 수 있어요</h6>
 						<div class="park_accountSelect row" style="justify-content: center;">
 							<br> <br>
 							<h3>은행 선택</h3>
@@ -34,7 +34,7 @@
 					<p class="selected-bank text-center" style="color: #808080;">선택:</p>
 				</div>
 				<div class="nextBtn" style="text-align: right; margin-right : 80px;">
-				<button style="font-weight : bold; background-color : transparent; color : #3e6ce3; border : none;" 														onclick="nextStep()">다음 →</button>
+				<button style="font-weight : bold; background-color : transparent; color : #3e6ce3; border : none;" onclick="nextStep()">다음 →</button>
 				</div>
 			</div>
 		</div>
@@ -94,6 +94,7 @@
 
 	    // 선택된 은행명을 원하는 위치에 표시합니다.
 	    const selectionText = document.querySelector('.selected-bank');
+	    //removeAttribute : 새 은행을 선택할 때마다 이전에 선택된 은행의 id 정보를 제거하기 위해 사용
 	    selectionText.removeAttribute("id");
 	    selectionText.id = selectedBank + '&' + selectedCode; 
 	    selectionText.textContent = `선택: ${selectedBank}`;
