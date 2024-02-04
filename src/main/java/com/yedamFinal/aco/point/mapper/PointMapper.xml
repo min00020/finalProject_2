@@ -33,7 +33,7 @@
 	#{accountHolder},
 	#{bankCode},
 	#{bankName}
-	);
+	)
 
 	</insert>
 </mapper>

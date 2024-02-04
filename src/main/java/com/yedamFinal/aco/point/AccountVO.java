@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AccountVO {
 
-	private int accountNo;
+	private String accountNo;
 	private int memberNo;
 	private String accountHolder;
 	private String bankCode;

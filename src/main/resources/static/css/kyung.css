@@ -559,3 +559,49 @@ justify-content: center;
 	font-weight: bold;
 }
 /*accountConnectCss END*/
+
+/*insertAccountCss*/
+
+/*input type = number 에서 위아래 화살표 없애기*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.park_account_input-container {
+    display: flex; /* Flexbox 레이아웃을 활성화 */
+    align-items: center; /* 수직 방향으로 중앙 정렬 */
+    margin-top: 10px; /* 상단 여백 추가 */
+  
+    
+}
+
+.park_ia_pointCharegingMain {
+	border: 1px solid #BDBDBD;
+	margin-left: 50px;
+	margin-top: 20px;
+	width: 1000px;
+	height: 1000px;
+}
+
+.park_ia_amountInput {
+	width: 100%;
+	padding: 8px;
+	border: none;
+	border-radius: 4px;
+	margin-bottom: -20px;
+	margin-top: 0px;
+	font-size: 28px;
+	/* 입력 텍스트의 글자 크기를 설정 */
+}
+
+.park_ia_amountInput::placeholder {
+	font-size: 28px;
+	/* 원하는 텍스트 크기로 조정 */
+}
+
+.park_ia_amountInput:focus {
+	outline: none;
+	border-color: #3e6ce3;
+	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
+}
+/*insertAccountCss End*/

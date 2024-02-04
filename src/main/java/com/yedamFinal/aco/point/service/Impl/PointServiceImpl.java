@@ -1,6 +1,8 @@
 package com.yedamFinal.aco.point.service.Impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +30,20 @@ public class PointServiceImpl implements PointService{
 	}
 
 	@Override
-	public int insertAccountInfo(AccountVO accountVO) {
-		int result = pointMapper.registAccountInfo(accountVO);
-		return result == 1 ? accountVO.getAccountNo() : -1 ;
+	public Map<String, Object> insertAccountInfo(AccountVO accountVO) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		
+		int insertId = pointMapper.registAccountInfo(accountVO);
+		if(insertId <= 0) {
+			ret.put("result", "500");		
+		}
+		else {
+			ret.put("result", "200");
+			ret.put("accountVO", accountVO);
+		}
+		return ret;
+		
+		
 	}	
 	
 }

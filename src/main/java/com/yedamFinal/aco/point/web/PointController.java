@@ -1,12 +1,18 @@
 package com.yedamFinal.aco.point.web;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.service.PointService;
 
 @Controller
@@ -42,13 +48,22 @@ public class PointController {
 	public String getInserstAccountNo(@RequestParam String bankCode, @RequestParam String bankName, Model model) {
 		model.addAttribute("bankCode",bankCode);
 		model.addAttribute("bankName",bankName);
+		
 		model.addAttribute("Iscd", nhIscd);
 		model.addAttribute("nhAccessToken", nhAccessToken);
 	
 		return "common/insertAccountNo";
 	}
 	//
+	@PostMapping("/registAccount")
+	@ResponseBody
 	
+	public Map<String, Object> registAccount(@RequestBody AccountVO accountVO,Model model) {
+		
+		return pointService.insertAccountInfo(accountVO);
+
+		
+	}
 	
 	
 	
