@@ -77,6 +77,21 @@
 	JOIN member B ON A.member_no = B.member_no
 	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 3
 </select>
+<!-- 내가 질문한 리스트전체 페이지처리 -->
+<select id="selectQuestionList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
+	 SELECT question_board_no,
+		    title,write_date,
+		    answer_cnt,
+	        member_no
+	FROM question_board
+	WHERE member_no= #{memberNo}
+	ORDER BY write_date desc
+</select>
+<!-- 사이드프로젝트 목록(더보기보달) -->
+<!-- <select id="selectSideProjectList" resultType="com.yedamFinal.aco.sideboard.SideVO">
+	 
+</select> -->
+
 <!-- 포인트사용내역 리스트 -->
 <select id="selectPointDetailList" resultType="com.yedamFinal.aco.point.PointDetailJoinVO">
 	SELECT member_no, history_date, INC_DEC_POINT, CASE WHEN INC_DEC_POINT <![CDATA[ > ]]> 0 THEN '0'

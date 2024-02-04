@@ -3,6 +3,7 @@ package com.yedamFinal.aco.member.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
@@ -11,6 +12,10 @@ import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
+
+import lombok.RequiredArgsConstructor;
+@Service
+@RequiredArgsConstructor
 
 public interface MemberService {
 	public Map<String,Object>  checkDuplicateId(String id);
@@ -31,7 +36,11 @@ public interface MemberService {
 	public List<MybookmarkVO> getMyBookList(MemberVO memberVO);
 	//내가 작성한 질답글 목록
 	public List<MyquestionVO> getMyqList(MemberVO memberVO);
-	//포인트 사용내역
+	//질답글 모달
+	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO);
+	//사이드 프로젝트 모달 리스트
+	//public List<SideVo> getMySideProjectList(MemberVO memberVO);
+ 	//포인트 사용내역
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO);
 	public List<TagVO> getTagList();
 }

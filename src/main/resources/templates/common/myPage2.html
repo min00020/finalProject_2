@@ -236,7 +236,8 @@
 							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 								data-bs-target="#profile-tab-pane" type="button" role="tab"
 								aria-controls="profile-tab-pane" aria-selected="false"
-								style="width: 330px;" onclick="location.href='/myPage'">내가 참여한 프로젝트</button>
+								style="width: 330px;" onclick="location.href='/myPage'">내가
+								참여한 프로젝트</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="home-tab"
@@ -300,7 +301,7 @@
 													</ul>
 													<div id="tabcontent"></div>
 												</div>
-												
+
 												<div class="container" style="padding-top: 100px;">
 													<table class="table">
 														<thead>
@@ -326,20 +327,22 @@
 												<div>
 													<!-- Pagination -->
 													<ul class="pagination justify-content-center">
+														<th:block th:if="${pageMaker.prev}">
 														<li class="page-item"><a class="page-link" href="#"
 															aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 																<span class="sr-only">Previous</span>
 														</a></li>
-														<li class="page-item"><a class="page-link" href="#">1</a>
+														</th:block>
+														<th:each var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+														<li class="page-item"><a class="page-link" href="#" th:text="${num}">1</a>
 														</li>
-														<li class="page-item"><a class="page-link" href="#">2</a>
-														</li>
-														<li class="page-item"><a class="page-link" href="#">3</a>
-														</li>
+														
+														<th:block th:if="${pageMaker.next}">
 														<li class="page-item"><a class="page-link" href="#"
 															aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 																<span class="sr-only">Next</span>
 														</a></li>
+														</th:block>
 													</ul>
 												</div>
 											</div>
@@ -410,7 +413,7 @@
 																	<p class="card-text" style="width: 100px;"
 																		th:text="${#dates.format(bml2.registDate, 'yyyy-MM-dd')}">작성일자
 																		: [[${bml2.registDate}]]</p>
-																	<button type="button"
+																	<button type="button" id="deleteBookamrk"
 																		style="background-color: #fff; border: 0px; float: right;">
 																		<img src="/commonResource/icon/bookmark2.png"
 																			style="width: 50px;">
@@ -475,5 +478,70 @@
 		location.href='/myPage';
 		
 	}
+
+	function addBookmark() {
+	    var mybookVO = {
+	        memberNo: memberno, 
+	        questionBoardNo: [[${bml2.questionBoardNo}]]  
+	    };
+	
+	    $.ajax({
+	        type: "POST",
+	        contentType: "application/json",
+	        url: "myPage2",
+	        data: JSON.stringify(mybookVO),
+	        success: function (response) {
+	            console.log(response);
+	        },
+	        error: function (error) {
+	            console.error(error);
+	        }
+	    });
+	}
+	
+	
+	function deleteBookmark() {
+	    var mybookVO = {
+	    	memberNo: memberno, 
+		    questionBoardNo: [[${bml2.questionBoardNo}]]  
+	    };
+	
+	    $.ajax({
+	        type: "DELETE",
+	        contentType: "application/json",
+	        url: "myPage2",
+	        data: mybookVO,
+	        success: function (response) {
+	            console.log(response);
+	        },
+	        error: function (error) {
+	            console.error(error);
+	        }
+	    });
+	}
+	
+	function checkBookmark() {
+	    var memberNo = memberno;  
+	    var questionBoardNo = [[${bml2.questionBoardNo}]]; 
+	
+	    $.ajax({
+	        type: "GET",
+	        url: "myPage2",
+	        data: {
+	            memberNo: memberNo,
+	            questionBoardNo: questionBoardNo
+	        },
+	        success: function (response) {
+	            console.log(response);
+	        },
+	        error: function (error) {
+	            console.error(error);
+	        }
+	    });
+	}
+
+	$("#addBookmark").click(addBookmark);
+	$("#deleteBookmark").click(deleteBookmark);
+	$("#checkBookmark").click(checkBookmark);
 
 </script>

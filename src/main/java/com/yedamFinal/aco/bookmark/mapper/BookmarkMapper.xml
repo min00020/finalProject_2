@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedamFinal.aco.bookmark.mapper.MybookmarkMapper">
+<insert id="insertBookmark" parameterType="MybookmarkVO">
+     INSERT INTO my_bookmark (member_no, question_board_no, regist_date, title)
+     VALUES (#{memberNo}, #{questionBoardNo}, #{registDate}, #{title})
+
+</insert>
+
+<delete id="deleteBookmark" parameterType="String">
+	 DELETE FROM my_bookmark
+     WHERE member_no = #{memberNo}
+     AND question_board_no = #{questionBoardNo}
+</delete>
+
+<select id="doesBookmarkExist" resultType="boolean" parameterType="MybookmarkVO">
+           SELECT COUNT(*)
+           FROM my_bookmark
+           WHERE member_no = #{memberNo}
+           AND question_board_no = #{questionBoardNo}
+</select>
+
+</mapper>

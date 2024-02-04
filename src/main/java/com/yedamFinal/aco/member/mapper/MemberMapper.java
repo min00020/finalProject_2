@@ -18,10 +18,14 @@ public interface MemberMapper {
 	public List<MyemoticonVO> selectMyemoticonList(MemberVO memberVO);
 	// 책갈피 목록
 	public List<MybookmarkVO> selectMybmList(MemberVO memberVO);
-	// 책갈피 더보기 목록
+	// 책갈피 모달 목록
 	public List<MybookmarkVO> selectMyBookList(MemberVO memberVO);
 	//작성한 질문글 리스트
 	public List<MyquestionVO> selectMyqList(MemberVO memberVO);
+	//작성한 질문글 모달 리스트
+	public List<MyquestionVO> selectQuestionList(MemberVO memberVO);
+	//사이드 프로젝트 모달 리스트
+	//public List<SideVo> selectSideProjectList(MemberVO memberVO);
 	//포인트 사용내역
 	public List<PointDetailJoinVO> selectPointDetailList(MemberVO memberVO);
 	

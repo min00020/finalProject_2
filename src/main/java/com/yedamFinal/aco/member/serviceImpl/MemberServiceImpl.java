@@ -244,4 +244,10 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO) {
 		return memberMapper.selectPointDetailList(memberVO);
 	}
+
+	@Override
+	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO) {
+		return memberMapper.selectQuestionList(memberVO);
+	}
+	
 }
