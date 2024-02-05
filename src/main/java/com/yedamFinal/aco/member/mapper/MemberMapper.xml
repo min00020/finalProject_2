@@ -147,7 +147,7 @@
 
 <update id="updateMemberPoint" parameterType="MemberVO">
 	UPDATE member
-    SET available_activity_point = #{availableActivityPoint} - #{resPoint}, aco_point =#{acoPoint}
+    SET available_activity_point = available_activity_point - #{resPoint}, aco_point = aco_point + #{resPoint}
     WHERE member_no = #{memberNo}
 
 </update>

@@ -90,32 +90,33 @@
 																<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
 																<h3 style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
 															</div>
-															<div class="point-acc" style="hegiht:700px;">
-																<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
-																	<h4 style="font-weight:bold;">애코포인트 정산</h4>
-																	<br>
-																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
-																	<br>
-																	<div class="input-group mb-3" style="width:600px;height:50px;">
-																		<input type="text" class="form-control" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
-																		<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
-																		<button class="btn btn-outline-secondary" type="button" onclick="accumPoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
-																		<!-- 계좌가 있는 경우 계좌 목록 표시 -->
-																		
+															<form id="updatePoint">
+																<div class="point-acc" style="hegiht:700px;">
+																	<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																		<h4 style="font-weight:bold;">애코포인트 정산</h4>
+																		<br>
+																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
+																		<br>
+																		<div class="input-group mb-3" style="width:600px;height:50px;">
+																			<input type="text" class="form-control" name="resPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
+																			<button class="btn btn-outline-secondary" type="button" onclick="accumPoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
+																			<!-- 계좌가 있는 경우 계좌 목록 표시 -->
+																			
+																		</div>
+																	</div>
+																	<div class="point-acc-1" style="width:750px;hegiht:450px;">
+																		<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
+																		<br>
+																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
+																		<br>
+																		<div class="input-group mb-3" style="width:600px;height:50px;">
+																			<input type="text" class="form-control" name="acpoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<button class="btn btn-outline-secondary" type="button" id="changepoint" onclick="changePoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
+																		</div>
 																	</div>
 																</div>
-																<div class="point-acc-1" style="width:750px;hegiht:450px;">
-																	<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
-																	<br>
-																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
-																	<br>
-																	<div class="input-group mb-3" style="width:600px;height:50px;">
-																		<input type="text" class="form-control" name="acpoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
-																		<button class="btn btn-outline-secondary" type="submit" id="button-addon2" onclick="changePoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
-																	</div>
-																</div>
-															</div>
-														
+															</form>
 														</div>
 													</div>
 														<div id="activityList">
@@ -424,29 +425,41 @@
 		location.href = '/accountConnect';
 	}
 	
+	$('button').on('click', changePoint);
 	
-	function changePoint(){
-		let acpoint = document.getElementById('acpoint');
-			if([[${memberInfo.availableActivityPoint}]] >= 5000){
-				$.ajax({
-					type:"POST",
-					url : "/myPage",
-					data : {
-						"acpoint" : acpoint.value	
-					},
-					dataType: "json",
-					success:function(data){
-						this.$showSuccessAlert('','정상적으로 환전 되었습니다. ');
-						console.log(data);
-					}
-				}).done(result =>{
-					console.log("acpoint", acpoint);
-				}).fail(err => console.log(err));
-				
-			}else{
-				showWarningAlert("5,000점 이상부터 환전 가능합니다");
-				return;
+		function pointUpdateAjax(event){
+			if (!validation()) return;
+			let pointDta = changePoint();		
+			console.log('pointDta', pointDta);
+			$.ajax('updateMemberPoint'{
+				type:"POST",
+				data : JSON.stringify(pointDta),
+				contentType : 'application/json',				
+			}).done(result =>{
+				this.$showSuccessAlert('','정상적으로 환전 되었습니다. ');
+				console.log(result);
+			}).fail(err => console.log(err));
+		}
+			
+		function validation(){
+			let resPoint = $('[name="resPoint"]');
+			if(resPoint.val() < 5000){
+			showWarningAlert("5,000점 이상부터 환전 가능합니다");
+				return false;
 			}
+			return true;
+		}	
+			
+	function changePoint(){
+		let formAry = $('form[name="updateMemberPoint"]').serializeArray();
+		console.log(formAry);
+		
+		let formObj = {};
+		$(formAry).each(idx, tag)=>{
+			console.log(tag);
+			formObj[tag.name] = tag.value;
+		});
+		return formObj;
 	}
 	
 </script>

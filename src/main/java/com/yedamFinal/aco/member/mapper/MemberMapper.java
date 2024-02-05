@@ -32,6 +32,7 @@ public interface MemberMapper {
 	public List<PointDetailJoinVO> selectPointDetailList(MemberVO memberVO);
 	//활동점수 내역
 	public List<ActivityPointVO> selectActivityList(MemberVO memberVO);
+	
 	public int insertActivityPoint(MemberVO memberVO);
 	public int updateMemberPoint(MemberVO memberVO);
 	

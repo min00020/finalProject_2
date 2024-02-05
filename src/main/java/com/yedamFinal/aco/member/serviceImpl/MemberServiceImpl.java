@@ -263,6 +263,30 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO) {
 		return memberMapper.selectActivityList(memberVO);
 	}
+	@Override
+	public int addActivityPoint(MemberVO memberVO) {
+		int result = memberMapper.insertActivityPoint(memberVO);
+		if(result == 1) {
+			return memberVO.getAvailableAccumPoint();
+		}else {
+			return -1;
+		}
+	}
+	
+	@Override
+	public Map<String, Object> updateMemberPoint(MemberVO memberVO){
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+			int result = memberMapper.updateMemberPoint(memberVO);
+			if(result == 1) {
+				isSuccessed = true;
+			}
+		map.put("result", isSuccessed);
+		map.put("target", memberVO);
+		return map;
+	}
+	
+	
 
 	@Override
 	public Map<String, Object> findAccount(String email) {

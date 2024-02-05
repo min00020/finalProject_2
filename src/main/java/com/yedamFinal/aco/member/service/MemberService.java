@@ -48,4 +48,9 @@ public interface MemberService {
 	//활동점수 내역 리스트 가져오기
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO);
 	
+
+	public int addActivityPoint(MemberVO memberVO);
+	public Map<String, Object> updateMemberPoint(MemberVO memberVO);
+	
+	
 }
