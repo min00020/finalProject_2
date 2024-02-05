@@ -1,6 +1,13 @@
 @charset "UTF-8";
 
 
+.mink_scroll_ul {
+	border : 1px solid black;
+	overflow-y:scroll;
+	list-style: none;
+	height : 100px;
+}
+
 /* 프로필 이미지 원형 */
 .mink_box {
     width: 40px;

@@ -53,4 +53,10 @@ public class QnABoardController {
 		
 		return "qnaboard/qnaList";
 	}
+	
+	// min 문의게시판 작성 폼 불러오기(페이징, 검색, 정렬등)
+	@GetMapping("/qnaBoard/write")
+	public String getQnaBoardWriteForm(Model model) {
+		return "qnaboard/qnaWrite";
+	}
 }

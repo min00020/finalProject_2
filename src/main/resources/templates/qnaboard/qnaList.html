@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content"	  
->
+>	
 	<div id="qna_banner">
       <h3>1:1 문의게시판</h3>
       <p style="color:#76767e">궁금한 점이 있다면 언제든 질문 남겨주세요 </p>
@@ -45,7 +45,7 @@
                  </ul>
             </div>
             <div>
-				<button type="button" class="btn text-white" style="background-color:#3e6ce3">질문하기</button>
+				<button type="button" class="btn text-white" style="background-color:#3e6ce3" onclick="location.href='/qnaBoard/write'">문의작성</button>
 			</div>
          </div>
          
