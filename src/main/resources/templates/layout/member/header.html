@@ -4,20 +4,21 @@
     <header>
         <div class="park_navbar">
            <a href="/" style="width:15%">
-         <img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:80%">
+         <img id="logoImage" src="/commonResource/askcodeLogo.png" alt="logo" style="width:80%">
         </a>
-            
-            
+        
             <ul class="list-unstyled d-flex gap-3 align-self-center ml-3">
                 <li>사이드 프로젝트</li>
                 <li>질문&답변</li>
                 <li>자유게시판</li>
-                <li class="dropdown" id="qna_li_c">
-                	<button class="mink_btn_border_background_none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownMenuButton1" type="button">고객센터</button>
-                	<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="display:none;" id="qna_dropdown">
-					    <li><a class="dropdown-item" href="#">공지사항</a></li>
-					    <li><a class="dropdown-item" href="#">1:1 문의게시판</a></li>
-					</ul>
+                <li id="qna_li_c">
+                	<div id="qnaDropdown" class="dropdown" style="all: unset;">
+                		<button type="button" style="font-weight:bold;" data-bs-toggle="dropdown" aria-expanded="false">고객센터</button>
+                		<ul id="qna_dropdown" class="dropdown-menu">
+					    	<li><a class="dropdown-item" href="#">공지사항</a></li>
+					    	<li><a class="dropdown-item" href="/qnaBoard?pg=1">1:1 문의게시판</a></li>
+						</ul>
+					</div>
                 </li>
                 <li>이모티콘 상점</li>
                  <li onclick="location.href='/point'">포인트 충전</li>
@@ -54,7 +55,7 @@
                </div>
                     <div class="mink_box">
                     	<a th:href="|/myPage?memberNo=${session.member.memberNo}|">
-                    		<img class="mink_profile" th:src="|upload/profile/${session.member.profileImage}|" alt ="profile" />
+                    		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
                     	</a>
                     </div> 
                     <form action="/logout" method="post">
@@ -67,14 +68,7 @@
         
     </header>
     <script>
-    	$('#qna_li_c').on('click', function(e) {
-    		if ($('#qna_dropdown').css('display') == 'block') {
-                $('#qna_dropdown').css('display', 'none');
-            } else {
-                $('#qna_dropdown').css('display', 'block');
-            }
-    	})
-    	
+
         // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
         function toggleDarkMode() {
             const body = document.body;
@@ -89,14 +83,14 @@
                 body.classList.remove('light-mode');
                 moonIcon.classList.remove('hidden');
                 sunIcon.classList.add('hidden');
-                logoImage.src = "commonResource/askcodeLogo_dark.png";
-                logoImage3.src = "commonResource/askcodeLogo_dark.png";
+                logoImage.src = "/commonResource/askcodeLogo_dark.png";
+                logoImage3.src = "/commonResource/askcodeLogo_dark.png";
             } else {
                 body.classList.add('light-mode');
                 moonIcon.classList.add('hidden');
                 sunIcon.classList.remove('hidden');
-                logoImage.src = "commonResource/askcodeLogo.png";
-                logoImage3.src = "commonResource/askcodeLogo.png";
+                logoImage.src = "/commonResource/askcodeLogo.png";
+                logoImage3.src = "/commonResource/askcodeLogo.png";
             }
         }
     </script>

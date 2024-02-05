@@ -14,7 +14,7 @@
 	<!-- sweetAlert2 -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
-	<script type="text/javascript" th:src="@{js/commonMethod.js}"></script>
+	<script type="text/javascript" th:src="@{/js/commonMethod.js}"></script>
 	<!-- sweetAlert2 -->
 	<style>
 		img {
@@ -59,9 +59,9 @@
 </head>
 <body>
 <form>
-	<div style="margin-top:180px; margin-bottom:180px;" class="container">
+	<div style="margin-top:100px; margin-bottom:180px;" class="container">
 		<a href="/">
-			<img src="commonResource/askcodeLogo.png" alt="logo" class="w-25 d-flex justify-content-center">
+			<img src="/commonResource/askcodeLogo.png" alt="logo" class="w-25 d-flex justify-content-center">
 		</a>
 		<div>
 			<h3 class="text-center"><b>AskCode에 오신것을 환영합니다.</b></h3>
@@ -96,7 +96,7 @@
 			</div>
 		</div>
 		<div class="my-3 d-flex justify-content-center">
-			<a class="gap-3" style="color:#3e6ce3; text-decoration:none; font-size:1.1rem; margin-left:22rem;" href="/"><b>계정 찾기</b></a>
+			<a class="gap-3" style="color:#3e6ce3; text-decoration:none; font-size:1.1rem; margin-left:22rem;" href="/findAccount"><b>계정 찾기</b></a>
 		</div>
 		<div style="margin-top:3rem;">
 			<div class="my-3 d-flex justify-content-center">
