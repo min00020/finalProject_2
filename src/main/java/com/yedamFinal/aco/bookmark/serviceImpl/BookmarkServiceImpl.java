@@ -1,11 +1,12 @@
 package com.yedamFinal.aco.bookmark.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.bookmark.mapper.BookmarkMapper;
 import com.yedamFinal.aco.bookmark.service.BookmarkService;
-
+@Service
 public class BookmarkServiceImpl implements BookmarkService{
 	   @Autowired
        private BookmarkMapper bookmarkMapper;

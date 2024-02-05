@@ -15,7 +15,6 @@ import com.yedamFinal.aco.questionboard.MyquestionVO;
 
 import lombok.RequiredArgsConstructor;
 @Service
-@RequiredArgsConstructor
 
 public interface MemberService {
 	public Map<String,Object>  checkDuplicateId(String id);
