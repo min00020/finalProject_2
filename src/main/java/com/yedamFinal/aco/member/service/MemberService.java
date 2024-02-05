@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.MemberVO;
@@ -39,9 +40,12 @@ public interface MemberService {
 	public List<MyquestionVO> getMyqList(MemberVO memberVO);
 	//질답글 모달
 	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO);
-	//사이드 프로젝트 모달 리스트
+	//사이드 프로젝트 모달 리스트 --> 나중에 옮기기
 	//public List<SideVo> getMySideProjectList(MemberVO memberVO);
  	//포인트 사용내역
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO);
 	public List<TagVO> getTagList();
+	//활동점수 내역 리스트 가져오기
+	public List<ActivityPointVO> getActivityList(MemberVO memberVO);
+	
 }

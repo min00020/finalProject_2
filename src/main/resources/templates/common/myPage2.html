@@ -27,9 +27,9 @@
 								th:text="${memberInfo.nickname}">\</h6>
 							<h6 class="card-text" th:text="${memberInfo.email}">\</h6>
 							<img
-								th:src="|commonResource/gradeimage/${memberInfo.memberLevel}.png|"
+								th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|"
 								logo="" style="width: 30px;"> <span class="card-text"
-								th:text="${memberInfo.memberLevel}">\</span>
+								th:text="${memberInfo.gradeName}">\</span>
 							<h6 class="card-text" th:text="${memberInfo.accumActivityPoint}">\</h6>
 
 
@@ -39,7 +39,7 @@
 						</div>
 					</div>
 
-					<!-- summary -->
+								<!-- summary -->
 
 					<div class="card container"
 						style="width: 270px; height: 400px; margin-top: 30px; margin-left: 15px;">
@@ -64,7 +64,7 @@
 									<!-- 모달버튼 -->
 									<button type="button" class="btn btn-modal"
 										data-bs-toggle="modal" data-bs-target="#point"
-										style="text-decoration: none; float: right; color: #979da9;">
+										style="text-decoration: none;color: #979da9;">
 
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -78,25 +78,71 @@
 										<div class="modal-dialog modal-xl" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title" id="pointModalLabel"
-														style="font-weight: bold;">포인트뱅크</h5>
-													<button type="button" class="close" data-bs-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
+
+													<h3 class="modal-title" id="pointModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/point.png"
+															style="width: 70px; height: 70px;">포인트뱅크
+													</h3>
+
 												</div>
 												<div class="modal-body">
-													<ul class="tab-ul">
-														<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
-																[[${myq.writeDate}]] </span>
-															<hr></li>
-													</ul>
+													<!-- 포인트뱅크모달영역 -->
+													<div style="height:430px;">
+														<div class="d-flex">
+															<div class="point-image" style="width:350px;">
+																<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
+																<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
+																<h3 style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
+															</div>
+															<div class="point-acc" style="hegiht:700px;">
+																<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																	<h4 style="font-weight:bold;">애코포인트 정산</h4>
+																	<br>
+																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산 가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
+																	<br>
+																	<div class="input-group mb-3" style="width:600px;height:50px;">
+																		<input type="text" class="form-control" th:placeholder="|정산가능 포인트 ${#numbers.formatInteger(memberInfo.acoPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
+																		<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
+																		<button class="btn btn-outline-secondary" type="button" onclick="accumPoint()" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">정산요청</button>
+																		<!-- 계좌가 있는 경우 계좌 목록 표시 -->
+																		
+																	</div>
+																</div>
+																<div class="point-acc-1" style="width:750px;hegiht:450px;">
+																	<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
+																	<br>
+																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
+																	<br>
+																	<div class="input-group mb-3" style="width:600px;height:50px;">
+																		<input type="text" class="form-control" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
+																		<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">환전요청</button>
+																	</div>
+																</div>
+															</div>
+														
+														</div>
+													</div>
+														<div id="activityList">
+															<div>
+																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4><hr>
+																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity1" th:each="pol:${pointList}">
+																		<span style="font-weight:bold;'" th:text="${pol.historyType}"></span>
+																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${pol.incDecPoint}P |"></span>
+																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${pol.incDecPoint}P |"></span>
+																		<br>
+																		<span class="tae_date" th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
+																		<hr>
+																		</li>
+																	</ul>
+																
+															</div>
+														</div>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
 														data-bs-dismiss="modal">Close</button>
-													<button type="button" class="btn btn-primary">Save
-														changes</button>
 												</div>
 											</div>
 										</div>
@@ -121,9 +167,8 @@
 								<div class="col-1" style="width: 55px;">
 									<!-- 모달버튼 -->
 									<button type="button" class="btn btn-modal"
-										data-bs-toggle="modal" data-bs-target="#point"
+										data-bs-toggle="modal" data-bs-target="#activity"
 										style="text-decoration: none; color: #979da9;">
-
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
@@ -131,30 +176,102 @@
 										<polyline points="9 18 15 12 9 6"></polyline></svg>
 									</button>
 									<!-- 모달시작 -->
-									<div class="modal fade" id="point" tabindex="-1" role="dialog"
-										aria-labelledby="pointModalLabel" aria-hidden="true">
+									<div class="modal fade" id="activity" tabindex="-1"
+										role="dialog" aria-labelledby="activityModalLabel"
+										aria-hidden="true">
 										<div class="modal-dialog modal-xl" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title" id="pointModalLabel"
-														style="font-weight: bold;">내활동관리</h5>
-													<button type="button" class="close" data-bs-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
+													<h3 class="modal-title" id="activityModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/activity.png"
+															style="width: 70px; height: 70px;">내활동관리
+													</h3>
 												</div>
 												<div class="modal-body">
-													<ul class="tab-ul">
-														<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
-																[[${myq.writeDate}]] </span>
-															<hr></li>
-													</ul>
+													<div class="d-flex" style="hegiht:700px;">
+														<div class="activity-image" style="width:350px;hegiht:700px;padding-left:30px;">
+															<img th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|" style="width:300px;padding:left:50px;">
+															<h4 style="text-align:center;font-weight:bold;">내 등급</h4>
+														</div>
+														<div class="grade" style="hegiht:700px;padding-left:80px;">
+															<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																<div class="grade">
+																	<div class="gradeinfo" style="float:left;">
+																		<img class="gradeimage" src="commonResource/gradeimage/루키.png">
+																	</div>
+																	<div class="gradecontent" style="display:inline-block;padding-left:20px;" >
+																		<h5 class="grade-h5" style="font-weight:bold;padding-top:9px;">LV1. 루키</h5>
+																		<br>
+																		<p class="grade-p" style="margin-top:-30px;">가입한 모든 회원</p>
+																	</div>
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/브론즈.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV2. 브론즈</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 20개 이상이면서 누적 활동점수 30,000점 이상인 회원</p>
+																	</div>
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/실버.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV3. 실버</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 100개 이상이면서 누적 활동점수 200,000점 이상인 회원</p>
+																	</div>																
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/골드.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV4. 골드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 500개 이상이면서 누적 활동점수 500,000점 이상인 회원</p>
+																	</div>	
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage"  src="commonResource/gradeimage/다이아몬드.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV5. 다이아몬드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 1000개 이상이면서 누적 활동점수 1,000,000점 이상인 회원</p>
+																	</div>	
+																</div>
+															</div>
+															
+														</div>
+													</div>
+													<div id="activityList">
+															<div>
+																<h4 style="padding-left:30px;font-weight:bold;">내 활동 내역</h4><hr>
+																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity1" th:each="acp:${activityList}">
+																		<span th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
+																		<span th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
+																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${acp.incDecActivityPoint}점 |"></span>
+																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${acp.incDecActivityPoint}점 |"></span>
+																		<br>
+																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
+																		<hr>
+																		</li>
+																		
+																	</ul>
+																
+															</div>
+													</div>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
 														data-bs-dismiss="modal">Close</button>
-													<button type="button" class="btn btn-primary">Save
-														changes</button>
 												</div>
 											</div>
 										</div>

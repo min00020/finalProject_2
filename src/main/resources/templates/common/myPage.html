@@ -27,10 +27,10 @@
 								th:text="${memberInfo.nickname}">\</h6>
 							<h6 class="card-text" th:text="${memberInfo.email}">\</h6>
 							<img
-								th:src="|commonResource/gradeimage/${memberInfo.memberLevel}.png|"
+								th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|"
 								logo="" style="width: 30px;"> <span class="card-text"
-								th:text="${memberInfo.memberLevel}">\</span>
-							<h6 class="card-text" th:text="${memberInfo.accumActivityPoint}">\</h6>
+								th:text="${memberInfo.gradeName}">\</span>
+							<h6 class="card-text" th:text="|${#numbers.formatInteger(memberInfo.accumActivityPoint, 0, 'COMMA')} P|">\</h6>
 
 						</div>
 					</div>
@@ -52,9 +52,8 @@
 								</div>
 								<div class="tae-box2 col-2" style="width: 140px;">
 									<h6 style="font-weight: bold;">POINT</h6>
-									<h6 class="card-text"
-										th:text="${memberInfo.acoPoint} + 정산가능 + ${memberInfo.availableActivityPoint} + P">
-										\</h6>
+									<h6 class="card-text" style="color:#3e6ce3;font-weight:bold;"
+										th:text="|${#numbers.formatInteger(memberInfo.acoPoint, 0, 'COMMA')} P|"></h6>
 								</div>
 								<div class="col-1" style="width: 55px;">
 									<!-- 모달버튼 -->
@@ -84,43 +83,51 @@
 												</div>
 												<div class="modal-body">
 													<!-- 포인트뱅크모달영역 -->
-													<div class="d-flex" style="hegiht:700px;">
-														<div class="point-image" style="width:350px;hegiht:700px;">
-															<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
-															<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
-															<h3 style="font-weight:bold;padding-left:120px;color:#2e54b7;">100,000</h3>
-														</div>
-														<div class="point-acc" style="hegiht:700px;">
-															<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
-																<h4>애코포인트 정산</h4>
-																<br>
-																<p style="margin-bottom:-8px;">최소 5,000P 부터 정산가능</p>
-																<br>
-																<div class="input-group mb-3" style="width:600px;height:50px;">
-																	<input type="text" class="form-control" placeholder="정산가능포인트 P" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
-																	<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">정산요청</button>
+													<div style="height:430px;">
+														<div class="d-flex">
+															<div class="point-image" style="width:350px;">
+																<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
+																<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
+																<h3 style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
+															</div>
+															<div class="point-acc" style="hegiht:700px;">
+																<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																	<h4 style="font-weight:bold;">애코포인트 정산</h4>
+																	<br>
+																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
+																	<br>
+																	<div class="input-group mb-3" style="width:600px;height:50px;">
+																		<input type="text" class="form-control" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																		<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
+																		<button class="btn btn-outline-secondary" type="button" onclick="accumPoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
+																		<!-- 계좌가 있는 경우 계좌 목록 표시 -->
+																		
+																	</div>
+																</div>
+																<div class="point-acc-1" style="width:750px;hegiht:450px;">
+																	<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
+																	<br>
+																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
+																	<br>
+																	<div class="input-group mb-3" style="width:600px;height:50px;">
+																		<input type="text" class="form-control" name="acpoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																		<button class="btn btn-outline-secondary" type="submit" id="button-addon2" onclick="changePoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
+																	</div>
 																</div>
 															</div>
-															<div class="point-acc-1" style="width:750px;hegiht:450px;">
-																<h4>활동점수 포인트 전환</h4>
-																<br>
-																<p style="margin-bottom:-8px;">5,000점 이상부터 1,000점 단위로 전환가능</p>
-																<br>
-																<div class="input-group mb-3" style="width:600px;height:50px;">
-																	<input type="text" class="form-control" placeholder="현재활동점수  점" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
-																	<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">환전요청</button>
-																</div>
-															</div>
+														
 														</div>
-													
 													</div>
-														<div class="container" id="activityList" style="height:270px;">
-															<div class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
-																<h3>포인트 정산 및 환전 내역</h3><hr>
-																	<ul>
-																		<li th:each="pol:${pointList}">
-																		<span th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
-																		<span th:text="( (${pol.accType} == '0')? '-' + ${pol.incDecPoint} : '+' + ${pol.incDecPoint})" >[[ ${pol.incDecPoint} ]]</span>
+														<div id="activityList">
+															<div>
+																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4><hr>
+																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity1" th:each="pol:${pointList}">
+																		<span style="font-weight:bold;font-size:large;" th:text="${pol.historyType}"></span>
+																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${pol.incDecPoint}P |"></span>
+																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${pol.incDecPoint}P |"></span>
+																		<br>
+																		<span class="tae_date" th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
 																		<hr>
 																		</li>
 																	</ul>
@@ -178,69 +185,84 @@
 												</div>
 												<div class="modal-body">
 													<div class="d-flex" style="hegiht:700px;">
-														<div class="activity-image" style="width:350px;hegiht:700px;">
-															<img th:src="|upload/profile/${memberInfo.profileImage}|" style="width:350px;">
-															<h4 style="font-weight:bold;padding-left:60px;">내 등급</h4>
+														<div class="activity-image" style="width:350px;hegiht:700px;padding-left:30px;">
+															<img th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|" style="width:300px;padding:left:50px;">
+															<h4 style="text-align:center;font-weight:bold;">내 등급</h4>
 														</div>
-														<div class="point-acc" style="hegiht:700px;">
+														<div class="grade" style="hegiht:700px;padding-left:80px;">
 															<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
-																<div class="gradeimage">
-																	<div class="gradeinfo">
-																		<img src="commonResource/gradeimage/루키.png">
-																		<h4>LV.1</h4>
+																<div class="grade">
+																	<div class="gradeinfo" style="float:left;">
+																		<img class="gradeimage" src="commonResource/gradeimage/루키.png">
+																	</div>
+																	<div class="gradecontent" style="display:inline-block;padding-left:20px;" >
+																		<h5 class="grade-h5" style="font-weight:bold;padding-top:9px;">LV1. 루키</h5>
 																		<br>
-																		<p>가입한 모든 회원</p>
+																		<p class="grade-p" style="margin-top:-30px;">가입한 모든 회원</p>
 																	</div>
 																</div>
-																<div class="gradeimage">
+																<div class="grade">
 																	<div class="gradeinfo">
-																		<img src="commonResource/gradeimage/브론즈.png">
-																		<h4>LV.2</h4>
+																		<img class="gradeimage" src="commonResource/gradeimage/브론즈.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV2. 브론즈</h5>
 																		<br>
-																		<p>작성된 질의글 및 답변이 20개 이상이면서 누적 활동점수 30,000점 이상인 회원</p>
+																		<p class="grade-p">작성된 질의글 및 답변이 20개 이상이면서 누적 활동점수 30,000점 이상인 회원</p>
 																	</div>
 																</div>
-																<div class="gradeimage">
+																<div class="grade">
 																	<div class="gradeinfo">
-																		<img src="commonResource/gradeimage/실버.png">
-																		<h4>LV.3</h4>
-																		<br>
-																		<p>작성된 질의글 및 답변이 100개 이상이면서 누적 활동점수 200,000점 이상인 회원</p>
+																		<img class="gradeimage" src="commonResource/gradeimage/실버.png">
 																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV3. 실버</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 100개 이상이면서 누적 활동점수 200,000점 이상인 회원</p>
+																	</div>																
 																</div>
-																<div class="gradeimage">
+																<div class="grade">
 																	<div class="gradeinfo">
-																		<img src="commonResource/gradeimage/골드.png">
-																		<h4>LV.4</h4>
-																		<br>
-																		<p>작성된 질의글 및 답변이 500개 이상이면서 누적 활동점수 500,000점 이상인 회원</p>
+																		<img class="gradeimage" src="commonResource/gradeimage/골드.png">
 																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV4. 골드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 500개 이상이면서 누적 활동점수 500,000점 이상인 회원</p>
+																	</div>	
 																</div>
-																<div class="gradeimage">
+																<div class="grade">
 																	<div class="gradeinfo">
-																		<img src="commonResource/gradeimage/다이아몬드.png">
-																		<h4>LV.5</h4>
-																		<br>
-																		<p>작성된 질의글 및 답변이 1000개 이상이면서 누적 활동점수 1,000,000점 이상인 회원</p>
+																		<img class="gradeimage"  src="commonResource/gradeimage/다이아몬드.png">
 																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV5. 다이아몬드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 1000개 이상이면서 누적 활동점수 1,000,000점 이상인 회원</p>
+																	</div>	
 																</div>
 															</div>
 															
 														</div>
 													</div>
-													<div class="container" id="activityList" style="height:270px;">
-															<div class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
-																<h3>내 활동 내역</h3><hr>
-																	<ul>
-																		<li th:each="pol:${pointList}">
-																		<span th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
-																		<span th:text="( (${pol.accType} == '0')? '-' + ${pol.incDecPoint} : '+' + ${pol.incDecPoint})" >[[ ${pol.incDecPoint} ]]</span>
+													<div id="activityList">
+															<div>
+																<h4 style="padding-left:30px;font-weight:bold;">내 활동 내역</h4><hr>
+																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity1" th:each="acp:${activityList}">
+																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
+																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
+																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${acp.incDecActivityPoint}점 |"></span>
+																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${acp.incDecActivityPoint}점 |"></span>
+																		<br>
+																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
 																		<hr>
 																		</li>
+																		
 																	</ul>
 																
 															</div>
-														</div>
+													</div>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
@@ -392,11 +414,39 @@
 			</div>
 		</div>
 	</div>
-	<!-- ajax 바뀔부분 끝나는 부분 -->
 </div>
-<script>
+<script type="text/javascript">
 	const memberno = [[${session.member.memberNo}]]
 	function goEmoShop(){
 		location.href = '/emoMain';
 	}
+	function accumPoint(){
+		location.href = '/accountConnect';
+	}
+	
+	
+	function changePoint(){
+		let acpoint = document.getElementById('acpoint');
+			if([[${memberInfo.availableActivityPoint}]] >= 5000){
+				$.ajax({
+					type:"POST",
+					url : "/myPage",
+					data : {
+						"acpoint" : acpoint.value	
+					},
+					dataType: "json",
+					success:function(data){
+						this.$showSuccessAlert('','정상적으로 환전 되었습니다. ');
+						console.log(data);
+					}
+				}).done(result =>{
+					console.log("acpoint", acpoint);
+				}).fail(err => console.log(err));
+				
+			}else{
+				showWarningAlert("5,000점 이상부터 환전 가능합니다");
+				return;
+			}
+	}
+	
 </script>

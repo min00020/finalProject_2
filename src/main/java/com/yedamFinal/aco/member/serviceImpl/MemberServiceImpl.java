@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.NaverMailSender;
 import com.yedamFinal.aco.common.RandomString;
@@ -252,12 +253,16 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO) {
 		return memberMapper.selectPointDetailList(memberVO);
 	}
-
+	
 	@Override
 	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO) {
 		return memberMapper.selectQuestionList(memberVO);
 	}
-	
+	//활동내역점수
+	@Override
+	public List<ActivityPointVO> getActivityList(MemberVO memberVO) {
+		return memberMapper.selectActivityList(memberVO);
+	}
 
 	@Override
 	public Map<String, Object> findAccount(String email) {
@@ -353,4 +358,5 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 		return ret;
 	}
+
 }

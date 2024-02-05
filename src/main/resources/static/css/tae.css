@@ -169,5 +169,42 @@ tae_container1 {
 }
 input::placeholder 
 {
-	color:#e0e0e7;
+	color:#979da9;
+}
+.gradeimage{
+	width:50px;
+}
+.gradeinfo{
+	float:left;
+}
+.gradecontent{
+	display:inline-block;
+	padding-left:20px;
+}
+.grade-h5{
+	font-weight:bold;
+	padding-top:9px;
+}
+.grade-p{
+	margin-top:-30px;
+	color:#979da9;
+}
+.activity1{
+	list-style-type: none;
+}
+.increase-point{
+	font-weight : bold;
+	color: red;
+	padding-top:14px;
+	float:right;
+}
+.decrease-point{
+	font-weight : bold;
+	color: blue;
+	padding-top:14px;
+	float:right;
+}
+.tae_date{
+	color:#979da9;
+	
 }

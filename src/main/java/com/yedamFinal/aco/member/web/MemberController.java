@@ -14,17 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.bookmark.serviceImpl.BookmarkServiceImpl;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
-import com.yedamFinal.aco.member.Criteria;
 import com.yedamFinal.aco.member.MemberVO;
-import com.yedamFinal.aco.member.PageVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
@@ -90,7 +88,9 @@ public class MemberController {
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MyemoticonVO> emoinfo = memberService.getMyemoList(memberVO);
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
+		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
 		model.addAttribute("pointList", list);
+		model.addAttribute("activityList", list2);
 		model.addAttribute("emoInfo", emoinfo);
 		model.addAttribute("memberInfo", findVO);
 		return "common/myPage";
@@ -117,19 +117,17 @@ public class MemberController {
 		return "common/myPage2";
 	}
 	//페이지
-	@RequestMapping("/myPage2")
-	public String getMyPageForm2(Model model, Criteria cri) {
-		MemberVO memberVO = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-		}
-		List<MyquestionVO> question = memberService.getMyQuestionList(memberVO);
-		model.addAttribute("questionList", question);
-		model.addAttribute("pageMaker", new PageVO(cri, 123));
-		return "commin/myPage2";
-	}
+	/*
+	 * @RequestMapping("/myPage2") public String getMyPageForm2(Model model,
+	 * Criteria cri) { MemberVO memberVO = null; Authentication authentication =
+	 * SecurityContextHolder.getContext().getAuthentication(); if (authentication !=
+	 * null && authentication.getPrincipal() instanceof UserDetailVO) { UserDetailVO
+	 * userDetails = (UserDetailVO) authentication.getPrincipal(); memberVO =
+	 * userDetails.getMemberVO(); } List<MyquestionVO> question =
+	 * memberService.getMyQuestionList(memberVO); model.addAttribute("questionList",
+	 * question); model.addAttribute("pageMaker", new PageVO(cri, 123)); return
+	 * "commin/myPage2"; }
+	 */
 	
 	
 	// min 아이디 중복체크 요청

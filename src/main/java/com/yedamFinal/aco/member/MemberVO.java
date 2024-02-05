@@ -23,8 +23,11 @@ public class MemberVO {
 	private int acoMoney;
 	private int acoPoint;
 	private String memberLevel;
+	private String gradeName;
 	private String snsType;
 	private String banType;
 	private String banDate;
 	private String gitToken;
+	private int acoTotal;
+	private int availableAccumPoint;
 }
