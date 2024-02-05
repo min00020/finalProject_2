@@ -17,12 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-<<<<<<< HEAD
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
-=======
 import com.yedamFinal.aco.common.NaverMailSender;
 import com.yedamFinal.aco.common.RandomString;
->>>>>>> develop
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
@@ -225,7 +222,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 		return ret;
 	}
-<<<<<<< HEAD
 	
 	//회원 단건조회
 	@Override
@@ -262,7 +258,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return memberMapper.selectQuestionList(memberVO);
 	}
 	
-=======
 
 	@Override
 	public Map<String, Object> findAccount(String email) {
@@ -358,5 +353,4 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 		return ret;
 	}
->>>>>>> develop
 }
