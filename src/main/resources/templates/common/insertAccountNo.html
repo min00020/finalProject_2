@@ -85,7 +85,8 @@ console.log(date);
 		
 
 		let obj = {};
-		obj["Header"] = {
+		obj = {
+			Header:{
 			ApiNm : "InquireDepositorOtherBank"	,
 			Tsymd : today,
 			Trtm :"113300",
@@ -94,9 +95,11 @@ console.log(date);
 			ApiSvcCd : "DrawingTransferA",
 			IsTuno : [[${session.member.memberNo}]]+time,
 			AccessToken : accessToken,	
-		},
-		obj["Bncd"] = bankCode;
-		obj["Acno"] = account;
+			},
+		Bncd : bankCode,
+		Acno : account
+		}
+		
 		
 		let accountObj = {};
 		accountObj = {
@@ -127,10 +130,7 @@ console.log(date);
 					data : JSON.stringify(accountObj),
 					beforeSend : function(xhr){
 						xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
-
-	
 					},
-					
 				})
 				.done(res => {
 					console.log('계좌등록 성공');

@@ -11,4 +11,6 @@ public interface PointMapper {
 	public List<AccountVO> getAccountNumber();
 	public List<BankVO> getBank();
 	public int registAccountInfo(AccountVO accountVO);
+	public int UpdateAcoMoney();
+	public int getAcoMoney();
 }

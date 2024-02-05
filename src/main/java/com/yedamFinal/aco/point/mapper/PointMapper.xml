@@ -7,33 +7,49 @@
 		SELECT * FROM ACCOUNT
 	</select>
 
-		
+
 	<!-- 은행 목록 -->
 	<select id="getBank" resultType="BankVO">
-	SELECT * 
-	FROM BANK_CODE
-	ORDER BY BANK_CODE
+		SELECT *
+		FROM BANK_CODE
+		ORDER BY BANK_CODE
 	</select>
-	
+
 	<!-- 계좌 등록 -->
 	<insert id="registAccountInfo" parameterType="AccountVO">
-	INSERT INTO ACCOUNT
-	(
-	ACCOUNT_NO,
-	MEMBER_NO,
-	ACCOUNT_HOLDER,
-	BANK_CODE,
-	BANK_NAME
-	)
-	
-	VALUES
-	(
-	#{accountNo},
-	#{memberNo},
-	#{accountHolder},
-	#{bankCode},
-	#{bankName}
-	)
+		INSERT INTO ACCOUNT
+		(
+		ACCOUNT_NO,
+		MEMBER_NO,
+		ACCOUNT_HOLDER,
+		BANK_CODE,
+		BANK_NAME
+		)
+
+		VALUES
+		(
+		#{accountNo},
+		#{memberNo},
+		#{accountHolder},
+		#{bankCode},
+		#{bankName}
+		)
 
 	</insert>
+
+	<!-- AcoMoneyUpdate -->
+	<update id="UpdateAcoMoney">
+		UPDATE MEMBER
+			SET ACO_MONEY = ACO_MONEY + #{acoMoney}
+			WHERE MEMBER_NO = #{memberNo}
+
+	</update>
+	
+	<!-- getAcoMoney -->
+	<select id="getAcoMoney" resultType="int">
+		select aco_money 
+		from member 
+		where member_no = #{memberNo}
+	</select>
+
 </mapper>
