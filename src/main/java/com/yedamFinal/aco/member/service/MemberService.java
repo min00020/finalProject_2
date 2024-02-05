@@ -16,6 +16,9 @@ public interface MemberService {
 	public Map<String,Object> joinMember(MemberVO vo, MultipartFile file);
 	public Map<String,Object> loginMember(String userid, String userpw);
 	public Map<String,Object> processGitLink(String userid, String tempUserGitCode);
+	public Map<String,Object> findAccount(String email);
+	public boolean verifyChangePasswordForm(String accessKey);
+	public Map<String,Object> changePassword(String accessKey, String pwd, String pwdVerify);
 	
 	public List<TagVO> getTagList();
 }
