@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.yedamFinal.aco.answer.mapper.AnswerMapper">
+	<!-- 특정 질문글 답변글 조회 -->
+	<!-- <select id="getAnswerList" resultType="AnswerVO">
+		
+	</select> -->
+	
+
+	<!-- 답변글 작성 -->
+	<!-- <insert id="insertAnswer" parameterType="AnswerVO">
+		INSERT INTO ANSWER_BOARD (
+		    ANSWER_BOARD_NO,QUESTION_BOARD_NO,MEMBER_NO,TITLE,TAG,CONTENTS,
+		    WRITE_DATE,VIEW_CNT,RECOMMEND_CNT,ADOPT_STATUS
+		)
+	    VALUES(
+	    	answer_board_seq.NEXTVAL, #{questionBoardNo}, #{memberNo}, #{title}, #{tag},#{contents},SYSDATE,0,0,'I001'
+	    )
+	</insert> -->
+</mapper>
