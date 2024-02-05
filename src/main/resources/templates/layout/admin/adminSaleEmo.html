@@ -217,7 +217,7 @@
 						    판매상태
 						  </button>
 						  <ul class="dropdown-menu">
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminSaleEmo?emoState=D001'|">판매중</a></li>
+						   <li><a class="dropdown-item" th:onclick="|location.href='/adminSaleEmo?emoState=D001'|">판매중</a></li>
 						    <li><a class="dropdown-item" th:onclick="|location.href='/adminSaleEmo?emoState=D002'|">판매종료</a></li>
 						  </ul>
 						</div>
@@ -240,7 +240,7 @@
                                     </thead>
                                    
                                     <tbody>
-                                        <tr th:each="emo : ${adminEmo}">
+                                        <tr th:each="emo : ${adminSaleEmo}">
                                             <td th:text="${emo.emoName}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|"></td>
                                             <td th:text="${emo.emoDesc}"></td>
                                             <td th:text="${emo.emoPrice}"></td>

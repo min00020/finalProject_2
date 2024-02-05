@@ -1,29 +1,83 @@
 package com.yedamFinal.aco.admin.serviceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
-import com.yedamFinal.aco.admin.AdminMemberVO;
 import com.yedamFinal.aco.admin.AdminQnaVO;
 import com.yedamFinal.aco.admin.AdminReportVO;
 import com.yedamFinal.aco.admin.AdminSettleVO;
 import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.admin.service.AdminService;
+import com.yedamFinal.aco.common.PaginationDTO;
 
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
+	private Map<String,String> dropdownMember = new HashMap<String,String>();
+	
+	public AdminServiceImpl() {
+		// 정렬기준
+		dropdownMember.put("0", "notLeave");
+		dropdownMember.put("1", "Leave");
+	}
+	
+	
 	@Autowired
 	AdminMapper adminMapper;
 	
 	@Override
-	public List<AdminMemberVO> getAdMemberList(){
-		return adminMapper.getAdMemberList();
+	public  Map<String,Object> getAdNoticeList(int pageNo) {
+		Map<String,Object> mp = new HashMap<String, Object>();
+		var AdNoticeList = adminMapper.getAdNoticeList(pageNo);
+		PaginationDTO dto = null;
+		if(AdNoticeList.size() > 0) {
+			dto = new PaginationDTO(adminMapper.selectAdNoticeCount(), pageNo , 5);
+		}
+		
+		mp.put("noticeList", AdNoticeList);
+		mp.put("pageDTO", dto);
+		return mp;
+	}
+	@Override
+	public boolean deleteNotice(int noticeBoardNo) {
+		int result = adminMapper.deleteNotice(noticeBoardNo);
+		return result == 1? true : false;
+	}
+	@Override
+	public Map<String,Object> getAdMemberList(int pageNo,String leaveStatus){
+		String data = dropdownMember.get(leaveStatus);
+		
+		Map<String,Object> mp = new HashMap<String, Object>();
+		if(data == null) {
+			var AdMemberList = adminMapper.getAdMemberList(pageNo);
+			PaginationDTO dto = null;
+			if(AdMemberList.size() > 0) {
+				dto = new PaginationDTO(adminMapper.selectAdMemberCount(), pageNo , 10);
+			}
+			
+			mp.put("memberList", AdMemberList);
+			mp.put("pageDTO", dto);
+		}
+		else {
+			var AdMemberList = adminMapper.getAdDropMemberList(pageNo, data);
+			PaginationDTO dto = null;
+			if(AdMemberList.size() > 0) {
+				dto = new PaginationDTO(adminMapper.selectAdLeaveMemberCount(data), pageNo , 10);
+			}
+			
+			mp.put("memberList", AdMemberList);
+			mp.put("pageDTO", dto);
+		}
+		
+		
+		return mp;
 	}
 
 	@Override
@@ -76,10 +130,6 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.getAdCntList();
 	}
 
-	@Override
-	public List<AdminMainVO> getAdNoticeList() {
-		return adminMapper.getAdNoticeList();
-	}
 	//공지등록
 	@Override
 	public int insertNotice(AdminMainVO adminMainVO) {
@@ -94,5 +144,10 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<AdminEmoVO> getEmoBuyList(int memberNo) {
 		return adminMapper.getEmoBuyList(memberNo);
+	}
+	// 이모티콘 드롭박스
+	@Override
+	public List<AdminEmoVO> getSaleAdEmoList(String emoState) {
+		return adminMapper.getSaleAdEmoList(emoState);
 	}
 }

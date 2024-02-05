@@ -24,17 +24,28 @@ public class AdminController {
 	
 	
 	@GetMapping("/admin")
-	public String getAdminPageForm(Model model) {
+	public String getAdminPageForm(Model model, int pageNo) {
 		List<AdminMainVO> list = adminService.getAdCntList();
-		List<AdminMainVO> list1 = adminService.getAdNoticeList();
 		model.addAttribute("adminCnt", list);
-		model.addAttribute("adminNotice", list1);
+		
+		var ret = adminService.getAdNoticeList(pageNo);
+		model.addAttribute("adminNotice", ret.get("noticeList"));
+		model.addAttribute("pageDTO",ret.get("pageDTO"));
+		
 		return "layout/admin/adminTemplate";
 	}
+	@GetMapping("/deleteNotice")
+	public String deleteNoticeProcess(int noticeBoardNo) {
+		adminService.deleteNotice(noticeBoardNo);
+		return "redirect:admin?pageNo=1";
+	}
 	@GetMapping("/adminMember")
-	public String getAdminMemberPageForm(Model model) {
-		List<AdminMemberVO> list = adminService.getAdMemberList();
-		model.addAttribute("adminMember",list);
+	public String getAdminMemberPageForm(Model model, int pageNo, String leaveStatus) {
+		var ret = adminService.getAdMemberList(pageNo, leaveStatus);
+		model.addAttribute("adminMember",ret.get("memberList"));
+		model.addAttribute("pageDTO",ret.get("pageDTO"));
+		model.addAttribute("leaveStatus",leaveStatus);
+		
 		return "layout/admin/adminMember";
 	}
 	@GetMapping("/adminStat")
@@ -65,6 +76,7 @@ public class AdminController {
 		model.addAttribute("adminEmo", list);
 		return "layout/admin/adminEmo";
 	}
+	
 	//이모티콘 등록
 	@PostMapping("/insertEmo")
 	public String insertEmoProcess(AdminEmoVO adminEmoVO) {
@@ -94,5 +106,12 @@ public class AdminController {
 	public String insertNoticeProcess(AdminMainVO adminMainVO) {
 		adminService.insertNotice(adminMainVO);
 		return "redirect:insertNotice";
+	}
+	// 이모티콘 드롭박스
+	@GetMapping("/adminSaleEmo")
+	public String getSaleAdminEmoPageForm(Model model, String emoState) {
+		List<AdminEmoVO> list = adminService.getSaleAdEmoList(emoState);
+		model.addAttribute("adminSaleEmo", list);
+		return "layout/admin/adminSaleEmo";
 	}
 }

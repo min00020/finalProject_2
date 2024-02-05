@@ -1,22 +1,23 @@
 package com.yedamFinal.aco.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
-import com.yedamFinal.aco.admin.AdminMemberVO;
 import com.yedamFinal.aco.admin.AdminQnaVO;
 import com.yedamFinal.aco.admin.AdminReportVO;
 import com.yedamFinal.aco.admin.AdminSettleVO;
 
 
 public interface AdminService {
-	public List<AdminMemberVO> getAdMemberList();
+	public Map<String,Object> getAdNoticeList(int pageNo);
+	public boolean deleteNotice(int noticeBoardNo);
+	public Map<String,Object> getAdMemberList(int pageNo,String leaveStatus);
 	public List<AdminReportVO> getAdReportList();
 	public List<AdminQnaVO>    getAdQnaList();
 	public List<AdminSettleVO> getAdSettleList();	
 	public List<AdminMainVO> getAdCntList();
-	public List<AdminMainVO> getAdNoticeList();
 
 	public List<AdminEmoVO> getAdEmoList();
 	public List<AdminEmoVO> getMainEmoList();
@@ -33,4 +34,6 @@ public interface AdminService {
 	public List<AdminEmoVO> getEmoBuyList(int memberNo);
 	//	공지등록
 	public int insertNotice(AdminMainVO adminMainVO);
+	// 이모티콘 드롭박스
+	public List<AdminEmoVO> getSaleAdEmoList(String emoState);
 }
