@@ -61,7 +61,7 @@ public class MemberController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-        	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+        	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
             MemberVO username = userDetails.getMemberVO();
         }
 		
@@ -197,6 +197,36 @@ public class MemberController {
 		return "common/test";
 	}
 	
+	// min 계정찾기 폼
+	@GetMapping("/findAccount")
+	public String findAccountForm() {
+		return "common/findAccount";
+	}
+
+	// min 계정찾기 (이메일 전송)
+	@PostMapping("/findAccount")
+	@ResponseBody
+	public Map<String,Object> findAccount(@RequestParam String email) {
+		return memberService.findAccount(email);
+	}
+	
+	// min 계정찾기 (비밀번호 변경 화면 -> accessKey 검증)
+	@GetMapping("/changePassword")
+	public String changePasswordForm(@RequestParam String key, Model model) {
+		if(!memberService.verifyChangePasswordForm(key)) {
+			return "common/errorPage";
+		}
+		
+		model.addAttribute("accessKey",key);
+		return "common/changePassword";
+	}
+
+	// min 계정찾기 (비밀번호 변경 -> accessKey 검증)
+	@PostMapping("/changePassword")
+	@ResponseBody
+	public Map<String,Object> changePassword(@RequestParam String accessKey, @RequestParam String password, @RequestParam String passwordVerify) {
+		return memberService.changePassword(accessKey,password,passwordVerify);
+	}
 	
 }
 

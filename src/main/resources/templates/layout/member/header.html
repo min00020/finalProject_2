@@ -12,10 +12,9 @@
                 <li>질문&답변</li>
                 <li>자유게시판</li>
                 <li id="qna_li_c">
-                	<div class="dropdown" id="qnaDropdown">
-                		<button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownMenuButton1" type="button"
-                			style="font-weight:bold;">고객센터</button>
-                		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="display:none;"  id="qna_dropdown">
+                	<div id="qnaDropdown" class="dropdown" style="all: unset;">
+                		<button type="button" style="font-weight:bold;" data-bs-toggle="dropdown" aria-expanded="false">고객센터</button>
+                		<ul id="qna_dropdown" class="dropdown-menu">
 					    	<li><a class="dropdown-item" href="#">공지사항</a></li>
 					    	<li><a class="dropdown-item" href="/qnaBoard?pg=1">1:1 문의게시판</a></li>
 						</ul>
@@ -61,7 +60,6 @@
         
     </header>
     <script>
-
 
         // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
         function toggleDarkMode() {

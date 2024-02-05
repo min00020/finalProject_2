@@ -13,7 +13,6 @@ import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
-import lombok.RequiredArgsConstructor;
 @Service
 
 public interface MemberService {
@@ -24,6 +23,9 @@ public interface MemberService {
 	public Map<String,Object> joinMember(MemberVO vo, MultipartFile file);
 	public Map<String,Object> loginMember(String userid, String userpw);
 	public Map<String,Object> processGitLink(String userid, String tempUserGitCode);
+	public Map<String,Object> findAccount(String email);
+	public boolean verifyChangePasswordForm(String accessKey);
+	public Map<String,Object> changePassword(String accessKey, String pwd, String pwdVerify);
 	
 	//회원 정보 단건조회
 	public MemberVO getMemberInfo(MemberVO memberVO);
