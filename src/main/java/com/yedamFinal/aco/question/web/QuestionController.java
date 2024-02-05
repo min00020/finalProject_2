@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +13,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.service.QuestionService;
 
 @Controller
 
 public class QuestionController {
+	/*chae 질문&답변 게시판*/
+	
 	@Autowired
 	private QuestionService questionService;
+
 	
-	/*chae 질문&답변 게시판*/
 	//전체조회
 	@GetMapping("/questionList")
 	public String getquestionBoard(Model model) {
@@ -37,6 +43,20 @@ public class QuestionController {
 	@GetMapping("/questionInfo/{qno}")
 	public String getQuestionInfo(@PathVariable("qno") int qno, Model model) {
 		model.addAttribute("questionInfo", questionService.getQuestionInfo(qno));
+		// MemberVO 꺼내오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			MemberVO username = userDetails.getMemberVO();
+			
+			
+			
+			model.addAttribute("loginId", username.getId());
+		}
+		else {
+			model.addAttribute("loginId", "-1");
+		}
+		
 		return "question/questionInfo";
 	}
 	

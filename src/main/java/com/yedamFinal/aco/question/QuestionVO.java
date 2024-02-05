@@ -1,8 +1,10 @@
 package com.yedamFinal.aco.question;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 public class QuestionVO {
 	//questionBoard
 	private int questionBoardNo;
@@ -26,7 +28,6 @@ public class QuestionVO {
 	//answerBoard
 	private int answerBoardNo;
 	private String answerTitle;
-	private String answerTag;
 	private String answerContents;
 	private String answerWriteDate;
 	private int answerViewCnt;
