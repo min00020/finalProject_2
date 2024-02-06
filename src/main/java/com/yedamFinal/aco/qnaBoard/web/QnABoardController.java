@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.qnaBoard.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
@@ -58,5 +62,11 @@ public class QnABoardController {
 	@GetMapping("/qnaBoard/write")
 	public String getQnaBoardWriteForm(Model model) {
 		return "qnaboard/qnaWrite";
+	}
+	
+	@PostMapping("/qnaBoard/write")
+	@ResponseBody
+	public Map<String,Object> insertQnaBoardForm(@RequestParam String title, @RequestParam String content, MultipartFile[] attachFile) {
+		return new HashMap<String,Object>();
 	}
 }
