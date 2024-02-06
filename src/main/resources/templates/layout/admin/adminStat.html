@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head>
 
@@ -10,7 +10,13 @@
     <meta name="author" content="">
 
     <title>Ask Code 관리자 페이지</title>
-
+	<!-- 제이쿼리 -->
+		<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+		
+	<!-- 부트스트랩 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -31,7 +37,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin?pageNo=1">
                 <div class="sidebar-brand-text mx-3">관리자 페이지 </div>
             </a>
 
@@ -72,7 +78,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-               <a class="nav-link" href="/adminReport">
+               <a class="nav-link" href="/adminReport?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>신고관리</span>
                 </a>
@@ -80,20 +86,20 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                 <a class="nav-link" href="/adminQna">
+                 <a class="nav-link" href="/adminQna?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>문의관리</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="/adminSettle">
+                <a class="nav-link" href="/adminSettle?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>정산관리</span></a>
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="/adminEmo">
+                <a class="nav-link" href="/adminEmo?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>이모티콘관리</span></a>
             </li>
@@ -307,65 +313,48 @@
     <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+const emoList = [[${emoSaleList}]];
+const tagList = [[${tagList}]];
+
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
-
-  var data = google.visualization.arrayToDataTable([
-    ['Programming Language Tag', 'Count Per Board'],
-    ['Python',     15],
-    ['C',     11],
-    ['JAVA',      2],
-    ['C++',  2],
-    ['C#', 2],
-    ['JavaScript',    7],
-    ['PHP', 1],
-    ['JSP', 1],
-    ['Oracle', 0],
-    ['Kotlin', 0],
-    ['HTML/CSS', 0],
-    ['Unity', 0],
-    ['Unreal', 0],
-    ['jQuery', 0],
-    ['Vue.js', 0],
-    ['Mysql', 0],
-    ['React', 0],
-    ['Spring boot', 0],
-    ['Node.js', 0],
-    ['MSSQL', 0],
-    ['DirectX11', 0],
-    ['DirectX12', 0],
-    ['Git', 0],
-    ['GitHub', 0],
-    ['Tomcat', 0],
-    ['AWS', 0],
-    ['NOSQL', 0],
-    ['Redis', 0]
-  ]);
+	let table = [];
+		table.push(['태그', '게시글수'])
+		for(let i = 0; i<tagList.length; ++i){
+	  		let row = [];
+	  		row.push(tagList[i].tag)
+	  		row.push(tagList[i].cnt)
+	  		
+	  		table.push(row);
+	  	}
+  var data = google.visualization.arrayToDataTable(table);
 
   var options = {
     title: '태그별 게시글'
   };
 
   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
   chart.draw(data, options);
 }
+
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart2);
 
-function drawChart2() {
 
-  var data = google.visualization.arrayToDataTable([
-    ['EmoticonName', 'BuyCount'],
-    ['happy Emoticon',     11],
-    ['Basic',      2],
-    ['Sad Emoticon',  2],
-    ['Cute Dog', 2],
-    ['Big Bear',    7]
-  ]);
+function drawChart2() {
+  let table = [];
+  	table.push(['이모티콘', '판매량'])
+  	for(let i = 0; i<emoList.length; ++i){
+  		let row = [];
+  		row.push(emoList[i].emoName)
+  		row.push(emoList[i].cnt)
+  		
+  		table.push(row);
+  	}
+  var data = google.visualization.arrayToDataTable(table);
 
   var options = {
     title: '이모티콘별 판매수량'

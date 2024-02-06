@@ -10,19 +10,40 @@ import com.yedamFinal.aco.admin.AdminMemberVO;
 import com.yedamFinal.aco.admin.AdminQnaVO;
 import com.yedamFinal.aco.admin.AdminReportVO;
 import com.yedamFinal.aco.admin.AdminSettleVO;
+import com.yedamFinal.aco.admin.AdminTagChartVO;
 
 public interface AdminMapper { 
 	public List<AdminMainVO> getAdNoticeList(int pageNo);
 	public int selectAdNoticeCount();
 	public int deleteNotice(int noticeBoardNo);
+	
 	public List<AdminMemberVO> getAdMemberList(int pageNo);
 	public int selectAdMemberCount();
 	public int selectAdLeaveMemberCount(String leaveStatus);
-	public List<AdminReportVO> getAdReportList();
-	public List<AdminQnaVO>    getAdQnaList();
-	public List<AdminSettleVO> getAdSettleList();
-	public List<AdminEmoVO> getAdEmoList();
+	
+	public List<AdminReportVO> getAdReportList(int pageNo);
+	public int selectAdReportCount();
+	public int selectAdStateReportCount(String reportStatus);
+	
+	public List<AdminQnaVO>    getAdQnaList(int pageNo);
+	public int selectAdQnaCount();
+	public int selectAdStateQnaCount(String answerStatus);
+	
+	
+	public List<AdminSettleVO> getAdSettleList(int pageNo);
+	public int selectAdSettleCount();
+	public int selectAdStateSettleCount(String processStatus);
+	
+	
+	public List<AdminEmoVO> getAdEmoList(int pageNo);
+	public int selectAdEmoCount();
+	public int selectAdStateEmoCount(String emoStatus);
+	
 	public List<AdminEmoVO> getMainEmoList();
+	
+	public List<AdminEmoVO> getEmoSaleList();
+	public List<AdminTagChartVO> getTagListByCount();
+	
 	//이모티콘 등록
 	public int insertEmo(AdminEmoVO adminEmoVO);
 	//이모티콘 판매 종료
@@ -38,8 +59,14 @@ public interface AdminMapper {
 	//	공지등록
 	public int insertNotice(AdminMainVO adminMainVO);
 	// 이모티콘 드롭박스
-	public List<AdminEmoVO> getSaleAdEmoList(String emoState);
+	public List<AdminEmoVO> getAdDropEmoList(@Param(value="pageNo") int pageNo, @Param(value="emoStatus") String emoStatus);
 	// 멤버 드롭박스
-	public List<AdminEmoVO> getAdDropMemberList(@Param(value="pageNo") int pageNo, @Param(value="leaveStatus") String leaveStatus);
+	public List<AdminMemberVO> getAdDropMemberList(@Param(value="pageNo") int pageNo, @Param(value="leaveStatus") String leaveStatus);
+	// 신고 드롭박스
+	public List<AdminReportVO> getAdDropReportList(@Param(value="pageNo") int pageNo, @Param(value="reportStatus") String reportStatus);
+	// 문의 드롭박스
+	public List<AdminQnaVO> getAdDropQnaList(@Param(value="pageNo") int pageNo, @Param(value="answerStatus") String answerStatus);
+	// 정산 드롭박스
+	public List<AdminSettleVO> getAdDropSettleList(@Param(value="pageNo") int pageNo, @Param(value="processStatus") String processStatus);
 	
 }

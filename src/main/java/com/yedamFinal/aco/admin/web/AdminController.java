@@ -49,31 +49,40 @@ public class AdminController {
 		return "layout/admin/adminMember";
 	}
 	@GetMapping("/adminStat")
-	public String getAdminStatPageForm() {
+	public String getAdminStatPageForm(Model model) {
+		adminService.getEmoSaleList(model);
 		return "layout/admin/adminStat";
 	}
 	@GetMapping("/adminReport")
-	public String getAdminReportPageForm(Model model) {
-		List<AdminReportVO> list = adminService.getAdReportList();
-		model.addAttribute("adminReport", list);
+	public String getAdminReportPageForm(Model model, int pageNo, String reportStatus) {
+		var ret = adminService.getAdReportList(pageNo, reportStatus);
+		model.addAttribute("adminReport", ret.get("reportList"));
+		model.addAttribute("pageDTO",ret.get("pageDTO"));
+		model.addAttribute("reportStatus",reportStatus);
 		return "layout/admin/adminReport";
 	}
 	@GetMapping("/adminQna")
-	public String getAdminQnaPageForm(Model model) {
-		List<AdminQnaVO> list = adminService.getAdQnaList();
-		model.addAttribute("adminQna", list);
+	public String getAdminQnaPageForm(Model model, int pageNo, String answerStatus) {
+		var ret = adminService.getAdQnaList(pageNo, answerStatus);
+		model.addAttribute("adminQna", ret.get("qnaList"));
+		model.addAttribute("pageDTO",ret.get("pageDTO"));
+		model.addAttribute("answerStatus",answerStatus);
 		return "layout/admin/adminQna";
 	}
 	@GetMapping("/adminSettle")
-	public String getAdminSettlePageForm(Model model) {
-		List<AdminSettleVO> list = adminService.getAdSettleList();
-		model.addAttribute("adminSettle", list);
+	public String getAdminSettlePageForm(Model model, int pageNo, String processStatus) {
+		var ret = adminService.getAdSettleList(pageNo, processStatus);
+		model.addAttribute("adminSettle", ret.get("settleList"));
+		model.addAttribute("pageDTO",ret.get("pageDTO"));
+		model.addAttribute("processStatus",processStatus);
 		return "layout/admin/adminSettle";
 	}
 	@GetMapping("/adminEmo")
-	public String getAdminEmoPageForm(Model model) {
-		List<AdminEmoVO> list = adminService.getAdEmoList();
-		model.addAttribute("adminEmo", list);
+	public String getAdminEmoPageForm(Model model, int pageNo, String emoStatus) {
+		var ret = adminService.getAdEmoList(pageNo, emoStatus);
+		model.addAttribute("adminEmo", ret.get("emoList"));
+		model.addAttribute("pageDTO",ret.get("pageDTO"));
+		model.addAttribute("emoStatus",emoStatus);
 		return "layout/admin/adminEmo";
 	}
 	
@@ -87,13 +96,13 @@ public class AdminController {
 	@GetMapping("/updateEmo")
 	public String updateEmoProcess(int emoNo) {
 		adminService.updateEmo(emoNo);
-		return "redirect:adminEmo";
+		return "redirect:adminEmo?emoStatus=0&pageNo=1";
 	}
 	//이모티콘 판매재개
 	@GetMapping("/updateEmo2")
 	public String updateEmo2Process(int emoNo) {
 		adminService.updateEmo2(emoNo);
-		return "redirect:adminEmo";
+		return "redirect:adminEmo?emoStatus=1&pageNo=1";
 	}
 	
 	/*
@@ -106,12 +115,5 @@ public class AdminController {
 	public String insertNoticeProcess(AdminMainVO adminMainVO) {
 		adminService.insertNotice(adminMainVO);
 		return "redirect:insertNotice";
-	}
-	// 이모티콘 드롭박스
-	@GetMapping("/adminSaleEmo")
-	public String getSaleAdminEmoPageForm(Model model, String emoState) {
-		List<AdminEmoVO> list = adminService.getSaleAdEmoList(emoState);
-		model.addAttribute("adminSaleEmo", list);
-		return "layout/admin/adminSaleEmo";
 	}
 }

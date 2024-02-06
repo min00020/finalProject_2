@@ -19,4 +19,5 @@ public class AdminEmoVO {
 	private String emoticonState;	
 	
 	private Date emoBuydate;
+	private int cnt;
 }

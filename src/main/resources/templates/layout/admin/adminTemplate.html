@@ -74,7 +74,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-               <a class="nav-link" href="/adminReport">
+               <a class="nav-link" href="/adminReport?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>신고관리</span>
                 </a>
@@ -82,20 +82,20 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                 <a class="nav-link" href="/adminQna">
+                 <a class="nav-link" href="/adminQna?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>문의관리</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="/adminSettle">
+                <a class="nav-link" href="/adminSettle?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>정산관리</span></a>
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="/adminEmo">
+                <a class="nav-link" href="/adminEmo?pageNo=1">
                     <i class="fas fa-fw fa-table"></i>
                     <span>이모티콘관리</span></a>
             </li>
@@ -408,7 +408,7 @@
         		<a class="page-link" th:href="|/admin?pageNo=${pageNo}|">[[${pageNo}]]</a>
         </li>
         <li class="page-item">
-            <a class="page-link" th:href="|/adminMember?pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+            <a class="page-link" th:href="|/admin?pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>
