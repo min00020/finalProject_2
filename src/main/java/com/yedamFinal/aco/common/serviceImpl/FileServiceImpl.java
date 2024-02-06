@@ -27,6 +27,9 @@ public class FileServiceImpl implements FileService {
 	@Value("${file.upload.profile.path}")
 	private String profileUploadPath;
 	
+	@Value("${file.upload.attachFile.path}")
+	private String attachFileUploadPath;
+	
 	public void makeDir(String path) {
 		File uploadPathFoler = new File(path);
 		if(!uploadPathFoler.exists()) {
@@ -59,6 +62,21 @@ public class FileServiceImpl implements FileService {
 	    }
 		
 		return serverFileName;
+	}
+
+	//
+	@Override
+	public boolean uploadAttachFiles(MultipartFile[] files, int memberNo, String boardType, int boardNo ) {
+		// TODO Auto-generated method stub
+		makeDir(attachFileUploadPath);
+		String uuid = UUID.randomUUID().toString();
+	    //저장할 파일 이름 중간에 "_"를 이용하여 구분
+	     
+		Date date = new Date();
+		long time = date.getTime();
+		
+		
+		return false;
 	}
 	
 }

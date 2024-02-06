@@ -11,4 +11,6 @@ public interface QnABoardMapper {
 	public List<QnABoardVO> selectMyQnaBoardListFromSearch(@Param(value="pageNo") int pageNo, @Param(value="search") String search, @Param(value="memberNo") int memberNo, @Param(value="ob") String orderBy);
 	public int selectMyQnaBoardCount(int memberNo);
 	public int selectMyQnaBoardCountFromSearch(@Param(value="memberNo") int memberNo,@Param(value="search") String search);
+	public int insertQnaBoard(QnABoardVO qnaBoardVO);
+	public int deleteQnaBoard(int qnaBoardNo);
 }

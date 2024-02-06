@@ -95,4 +95,33 @@
             FROM QNA_BOARD
             WHERE MEMBER_NO = #{memberNo} AND UPPER(TITLE) LIKE '%' || UPPER(#{search}) || '%' 
 	</select>
+	
+	<insert id="insertQnaBoard" parameterType="QnABoardVO" useGeneratedKeys="true" keyProperty="pk"> 
+		INSERT INTO QNA_BOARD(
+			QNA_BOARD_NO,                
+			MEMBER_NO,               
+			TITLE,                         
+			CONTENT,                      
+			QNA_ANSWER_CONTENT,           
+			WRITE_DATE,            
+			CHANGE_DATE,                    
+			ANSWER_STATE,                        
+			VIEW_CNT                                       
+		)
+		VALUES(
+			QNA_BOARD_SEQ.NEXTVAL,
+			#{memberNo},
+			#{title},
+			#{content},
+			null
+			SYSDATE,
+			null,
+			'P001',
+			0
+		)
+	</insert>
+	
+	<delete id="deleteQnaBoard">
+		DELETE FROM QNA_BOARD WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</delete>
 </mapper>

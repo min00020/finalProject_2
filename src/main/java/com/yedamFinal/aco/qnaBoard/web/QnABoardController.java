@@ -66,7 +66,14 @@ public class QnABoardController {
 	
 	@PostMapping("/qnaBoard/write")
 	@ResponseBody
-	public Map<String,Object> insertQnaBoardForm(@RequestParam String title, @RequestParam String content, MultipartFile[] attachFile) {
-		return new HashMap<String,Object>();
+	public Map<String,Object> insertQnaBoard(@RequestParam String title, @RequestParam String content, MultipartFile[] attachFile) {
+		
+		MemberVO vo = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+        	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+        	vo = userDetails.getMemberVO();
+        }
+		return qnaBoardService.insertQnaBoard(vo.getMemberNo(), title, content, attachFile);
 	}
 }
