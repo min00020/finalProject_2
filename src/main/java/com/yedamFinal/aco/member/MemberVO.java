@@ -30,4 +30,5 @@ public class MemberVO {
 	private String gitToken;
 	private int acoTotal;
 	private int availableAccumPoint;
+	private int resPoint;
 }

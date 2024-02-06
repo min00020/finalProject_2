@@ -8,6 +8,7 @@ import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
+import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
@@ -33,11 +34,11 @@ public interface MemberMapper {
 	//활동점수 내역
 	public List<ActivityPointVO> selectActivityList(MemberVO memberVO);
 	
-	public int insertActivityPoint(MemberVO memberVO);
-	public int updateMemberPoint(MemberVO memberVO);
-	
-	
-	
+	public int insertPointDetail(PointDetailJoinVO pointVO);
+	public int insertActivityDetail(ActivityPointVO activityVO);
+	public int updateMemberPoint(@Param(value="resPoint") int resPoint, @Param(value="m") MemberVO memberVO);
+	public int delBookmark(@Param(value="qno") int qnaboardNo,@Param(value="mno") int memberNo);
+	public MemberQuestionChartVO selectMemberChart(MemberVO memberVO);
 	
 	public MemberVO selectCheckDuplicateId(String id);
 	public MemberVO selectCheckDuplicateEmail(String email);

@@ -15,7 +15,7 @@ public class PointDetailJoinVO {
 	private Date historyDate;
 	private int incDecPoint;
 	private String pointType;
-	private int accountNo;
+	private String accountNo;
 	private String accType;
 	
 }

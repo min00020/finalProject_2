@@ -25,6 +25,7 @@ import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
+import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
@@ -39,59 +40,59 @@ import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 
-
 @Service
 public class MemberServiceImpl implements MemberService, UserDetailsService {
 	private int test = 1;
-	
+
 	@Autowired
 	private MemberMapper memberMapper;
-	
+
 	@Value("${cool.sms.key}")
 	private String coolSmsApiKey;
-	
+
 	@Value("${cool.sms.secret.key}")
 	private String coolSmsApiSecretKey;
-	
+
 	@Value("${cool.sms.from.number}")
 	private String fromNumber;
 	//
-    private DefaultMessageService messageService;
-    
-    @Autowired
-    private PasswordEncoder bCryptPasswordEncoder;
-    
+	private DefaultMessageService messageService;
+
+	@Autowired
+	private PasswordEncoder bCryptPasswordEncoder;
+
 	@Autowired
 	private FileServiceImpl fileService;
-	
+
 	@Autowired
 	private GitHubServiceImpl githubService;
-	
+
 	@Autowired
 	private NaverMailSender mailSender;
-    
-    @PostConstruct
-    public void init() {
-        // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력해주셔야 합니다!
-        this.messageService = NurigoApp.INSTANCE.initialize(coolSmsApiKey, coolSmsApiSecretKey, "https://api.coolsms.co.kr");
-    }
-    
+
+	@PostConstruct
+	public void init() {
+		// 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력해주셔야 합니다!
+		this.messageService = NurigoApp.INSTANCE.initialize(coolSmsApiKey, coolSmsApiSecretKey,
+				"https://api.coolsms.co.kr");
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		MemberVO vo = memberMapper.selectLogin(username);
-		if(vo == null) {
+		if (vo == null) {
 			throw new UsernameNotFoundException("no name");
 		}
-		
+
 		return new UserDetailVO(vo);
 	}
 
 	@Override
-	public Map<String,Object> checkDuplicateId(String id) {
+	public Map<String, Object> checkDuplicateId(String id) {
 		// TODO Auto-generated method stub
 		MemberVO vo = memberMapper.selectCheckDuplicateId(id);
-		Map<String,Object> retByMemberVO = new HashMap<String, Object>();
+		Map<String, Object> retByMemberVO = new HashMap<String, Object>();
 		retByMemberVO.put("result", vo != null ? true : false);
 		return retByMemberVO;
 	}
@@ -99,7 +100,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public Map<String, Object> checkDuplicateEmail(String email) {
 		MemberVO vo = memberMapper.selectCheckDuplicateEmail(email);
-		Map<String,Object> retByMemberVO = new HashMap<String, Object>();
+		Map<String, Object> retByMemberVO = new HashMap<String, Object>();
 		retByMemberVO.put("result", vo != null ? true : false);
 		return retByMemberVO;
 	}
@@ -107,145 +108,153 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Override
 	public Map<String, Object> sendAuthNumberToPhone(String phoneNum) {
 		// TODO Auto-generated method stub
-		int randNumber = (int)(Math.random() * 8999) + 1000;
-		Map<String,Object> ret = new HashMap<String,Object>();
+		int randNumber = (int) (Math.random() * 8999) + 1000;
+		Map<String, Object> ret = new HashMap<String, Object>();
 		TestPhoneMessage m = new TestPhoneMessage();
-		
+
 		String existAuth = memberMapper.selectAuthNumber(phoneNum);
-		if(existAuth != null && !existAuth.isEmpty()) {
+		if (existAuth != null && !existAuth.isEmpty()) {
 			m.setStatusCode("9999");
 			ret.put("result", m);
-		}
-		else {
-			if(memberMapper.insertAuthNumber(String.valueOf(randNumber), phoneNum) <= 0) {
+		} else {
+			if (memberMapper.insertAuthNumber(String.valueOf(randNumber), phoneNum) <= 0) {
 				m.setStatusCode("10000");
 				ret.put("result", m);
 			}
-			
+
 			// 나중에 시연시에는 밑에걸로 바꾸기.
-			if(test == 0) {
+			if (test == 0) {
 				Message message = new Message();
 				message.setFrom(fromNumber);
-	        	message.setTo(phoneNum);
-	        	message.setText("[AskCode] 인증번호 "+randNumber+" 를 입력하세요.");
-	        
-	        	SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));        
-	        	ret.put("result", response);
-			}
-			else {
+				message.setTo(phoneNum);
+				message.setText("[AskCode] 인증번호 " + randNumber + " 를 입력하세요.");
+
+				SingleMessageSentResponse response = this.messageService
+						.sendOne(new SingleMessageSendingRequest(message));
+				ret.put("result", response);
+			} else {
 				m.setAuthCode(randNumber);
 				m.setStatusCode("9876");
 				ret.put("result", m);
 			}
 		}
-		        
+
 		return ret;
 	}
+
 	@Override
 	public Map<String, Object> verifyAuthNumber(String randNumber, String phoneNum) {
 		// TODO Auto-generated method stub
 		String result = memberMapper.selectVerifyAuthNumber(randNumber, phoneNum);
-		Map<String,Object> ret = new HashMap<String,Object>();
-		if(result == null || result.isEmpty()) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if (result == null || result.isEmpty()) {
 			ret.put("result", "400");
-		}
-		else {
+		} else {
 			ret.put("result", "200");
 			memberMapper.deleteAuthNumber(phoneNum);
 		}
 		return ret;
 	}
+
 	@Override
 	public List<TagVO> getTagList() {
 		// TODO Auto-generated method stub
 		return memberMapper.selectTagList();
 	}
+
 	@Override
 	public Map<String, Object> joinMember(MemberVO vo, MultipartFile file) {
-		Map<String,Object> ret = new HashMap<String,Object>();
-		if(file != null) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		if (file != null) {
 			String profileSaveName = fileService.profileUpload(file);
-			if(profileSaveName == null || profileSaveName.isEmpty()) {
+			if (profileSaveName == null || profileSaveName.isEmpty()) {
 				ret.put("result", "500");
 				return ret;
 			}
-			
+
 			vo.setProfileImage(profileSaveName);
 		}
-		
+
 		vo.setPermission("ROLE_USER");
 		vo.setAccumActivityPoint(0);
 		vo.setAvailableActivityPoint(0);
 		vo.setAcoMoney(0);
 		vo.setMemberLevel("K001");
-		
+
 		vo.setPassword(bCryptPasswordEncoder.encode(vo.getPassword()));
-		
+
 		int insertId = memberMapper.insertMember(vo);
-		if(insertId <= 0) {
+		if (insertId <= 0) {
 			ret.put("result", "500");
-		}
-		else {
+		} else {
 			ret.put("result", "200");
 			ret.put("vo", vo);
 		}
 		return ret;
 	}
+
 	@Override
-	public Map<String,Object> loginMember(String userid, String userpw) {
+	public Map<String, Object> loginMember(String userid, String userpw) {
 		// TODO Auto-generated method stub
 		MemberVO vo = memberMapper.selectLogin(userid);
-		Map<String,Object> ret = new HashMap<String,Object>();
+		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("result", "404");
-		if(vo != null) {
-			if(bCryptPasswordEncoder.matches(userpw, vo.getPassword())) {
-				ret.put("result","200");
+		if (vo != null) {
+			if (bCryptPasswordEncoder.matches(userpw, vo.getPassword())) {
+				ret.put("result", "200");
 			}
 		}
-		
+
 		return ret;
 	}
 
 	@Override
 	public Map<String, Object> processGitLink(String userid, String tempUserGitCode) {
 		// TODO Auto-generated method stub
-		Map<String,Object> ret = new HashMap<String, Object>();
-		Map<String,String> map = null;
+		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, String> map = null;
 		ret.put("result", "400");
-		
+
 		MemberVO vo = memberMapper.selectLogin(userid);
-		if(vo != null) {
+		if (vo != null) {
 			map = githubService.getAccessTokenByGitLink(tempUserGitCode);
 			String tokenValue = map.get("access_token");
-			if(memberMapper.updateMemberGitToken(tokenValue, userid) > 0) {
+			if (memberMapper.updateMemberGitToken(tokenValue, userid) > 0) {
 				ret.put("result", "200");
 			}
 		}
 		return ret;
 	}
-	
-	//회원 단건조회
+
+	// 회원 단건조회
 	@Override
 	public MemberVO getMemberInfo(MemberVO memberVO) {
 		return memberMapper.selectMemberInfo(memberVO);
 	}
-	//이모티콘 구매내역
+
+	// 이모티콘 구매내역
 	@Override
-	public List<MyemoticonVO> getMyemoList(MemberVO memberVO){
+	public List<MyemoticonVO> getMyemoList(MemberVO memberVO) {
 		return memberMapper.selectMyemoticonList(memberVO);
 	}
-	//책갈피 목록
+	// 차트
+	public MemberQuestionChartVO getMemberChart(MemberVO memberVO) {
+		return memberMapper.selectMemberChart(memberVO);
+	}
+	// 책갈피 목록
 	@Override
 	public List<MybookmarkVO> getMybmList(MemberVO memberVO) {
 		return memberMapper.selectMybmList(memberVO);
 	}
-	//내가 작성한 질문글 목록
+
+	// 내가 작성한 질문글 목록
 	@Override
 	public List<MyquestionVO> getMyqList(MemberVO memberVO) {
 		return memberMapper.selectMyqList(memberVO);
 	}
+
 	@Override
-	public List<MybookmarkVO> getMyBookList(MemberVO memberVO){
+	public List<MybookmarkVO> getMyBookList(MemberVO memberVO) {
 		return memberMapper.selectMyBookList(memberVO);
 	}
 
@@ -253,67 +262,89 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO) {
 		return memberMapper.selectPointDetailList(memberVO);
 	}
-	
+
 	@Override
 	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO) {
 		return memberMapper.selectQuestionList(memberVO);
 	}
-	//활동내역점수
+
+	// 활동내역점수
 	@Override
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO) {
 		return memberMapper.selectActivityList(memberVO);
 	}
-	@Override
-	public int addActivityPoint(MemberVO memberVO) {
-		int result = memberMapper.insertActivityPoint(memberVO);
-		if(result == 1) {
-			return memberVO.getAvailableAccumPoint();
-		}else {
-			return -1;
-		}
-	}
-	
-	@Override
-	public Map<String, Object> updateMemberPoint(MemberVO memberVO){
-		Map<String, Object> map = new HashMap<>();
-		boolean isSuccessed = false;
-			int result = memberMapper.updateMemberPoint(memberVO);
-			if(result == 1) {
-				isSuccessed = true;
-			}
-		map.put("result", isSuccessed);
-		map.put("target", memberVO);
-		return map;
-	}
-	
-	
+
+	/*
+	 * @Override public int addActivityPoint(MemberVO memberVO) { return
+	 * memberMapper.insertActivityPoint(memberVO); }
+	 */
 
 	@Override
-	public Map<String, Object> findAccount(String email) {
-		Map<String,Object> ret = new HashMap<String,Object>();
-		ret.put("result", "200");
+	@Transactional
+	public Map<String, Object> updateMemberPoint(int resPoint, MemberVO vo) {
+		// 포인트내역 insert
+		PointDetailJoinVO pointVO = new PointDetailJoinVO();
+		pointVO.setMemberNo(vo.getMemberNo());
+		pointVO.setLatestTotalPoints(vo.getAcoMoney() + vo.getAcoPoint());
+		pointVO.setLatestAcoMoney(vo.getAcoMoney());
+		pointVO.setLatestAcoPoint(vo.getAcoPoint());
+		pointVO.setHistoryType("F005");
+		pointVO.setHistoryDate(new Date());
+		pointVO.setIncDecPoint(resPoint);
+		pointVO.setPointType("G002");
+		pointVO.setAccountNo(null);
+		memberMapper.insertPointDetail(pointVO);
+
+		// 내활동점수 insert
+		ActivityPointVO activityVO = new ActivityPointVO();
+		activityVO.setAccumActivityPoint(vo.getAvailableAccumPoint());
+		activityVO.setMemberNo(vo.getMemberNo());
+		activityVO.setCurActivityPoint(vo.getAvailableActivityPoint());
+		activityVO.setActivityPointType("F005");
+		activityVO.setActivityPointDate(new Date());
+		activityVO.setIncDecActivityPoint(resPoint);
+		memberMapper.insertActivityDetail(activityVO);
+
+		// 멤버테이블 update
+		Map<String, Object> map = new HashMap<>();
+		vo.setAcoPoint(vo.getAcoPoint()+ resPoint);
+		vo.setAvailableActivityPoint(vo.getAvailableAccumPoint()- resPoint); 
+		int result = memberMapper.updateMemberPoint(resPoint,vo);
 		
+		return map;
+	}
+	@Override
+	public boolean delBookmarkList(int qnaboardNo, int memberNo) {
+		int result = memberMapper.delBookmark(qnaboardNo, memberNo);
+		return result == 1 ? true : false; 
+	}
+	
+	
+	@Override
+	public Map<String, Object> findAccount(String email) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+
 		MemberVO vo = memberMapper.selectCheckDuplicateEmail(email);
-		if(vo == null) {
+		if (vo == null) {
 			ret.put("result", "400");
 			return ret;
 		}
-		
+
 		Date curDate = new Date();
 		String dateStr = String.valueOf(curDate.getTime());
 		String randomAccessKey = RandomString.generateRandomString(40) + dateStr;
-		
+
 		FindAccountEmailLinkVO insertVO = new FindAccountEmailLinkVO();
 		insertVO.setAccessKey(randomAccessKey);
 		insertVO.setExpireDate(new Date(curDate.getTime() + (10 * 60 * 1000)));
 		insertVO.setMemberId(vo.getId());
-		
-		if(memberMapper.insertFindAccountEmailLink(insertVO) <= 0) {
+
+		if (memberMapper.insertFindAccountEmailLink(insertVO) <= 0) {
 			ret.put("result", "500");
 			return ret;
 		}
-		
-		
+
 		String emailTitle = "[AskCode] 계정찾기 이메일 정보입니다.";
 		StringBuilder emailBodyBuilder = new StringBuilder();
 		emailBodyBuilder.append("<div>");
@@ -328,19 +359,19 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 				+ ">비밀번호 변경하기 ></a>");
 		emailBodyBuilder.append("</div>");
 		emailBodyBuilder.append("</div>");
-		
+
 		mailSender.sendEmail(emailTitle, emailBodyBuilder.toString());
 		return ret;
 	}
 
 	@Override
 	public boolean verifyChangePasswordForm(String accessKey) {
-		if(accessKey == null || accessKey.isEmpty()) {
+		if (accessKey == null || accessKey.isEmpty()) {
 			return false;
 		}
-		 
+
 		FindAccountEmailLinkVO vo = memberMapper.selectFindAccountEmailInfo(accessKey);
-		if(vo == null) {
+		if (vo == null) {
 			return false;
 		}
 		return true;
@@ -350,37 +381,38 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	@Transactional
 	public Map<String, Object> changePassword(String accessKey, String pwd, String pwdVerify) {
 		// TODO Auto-generated method stub
-		Map<String, Object> ret = new HashMap<String,Object>();
+		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("result", "200");
-		
-		if(accessKey == null || accessKey.isEmpty()) {
+
+		if (accessKey == null || accessKey.isEmpty()) {
 			ret.put("result", "400");
 			return ret;
 		}
-		
-		if(!pwd.equals(pwdVerify)) {
+
+		if (!pwd.equals(pwdVerify)) {
 			ret.put("result", "400");
 			return ret;
 		}
-		
+
 		FindAccountEmailLinkVO vo = memberMapper.selectFindAccountEmailInfo(accessKey);
-		if(vo == null) {
+		if (vo == null) {
 			ret.put("result", "400");
 			return ret;
 		}
-		
+
 		String bCryptPassword = bCryptPasswordEncoder.encode(pwd);
 		String id = vo.getMemberId();
-		if(memberMapper.updateMemberPassword(id, bCryptPassword) <= 0) {
+		if (memberMapper.updateMemberPassword(id, bCryptPassword) <= 0) {
 			ret.put("result", "500");
 			return ret;
 		}
-		
-		if(memberMapper.deleteFindAccountEmailLink(accessKey) <= 0) {
+
+		if (memberMapper.deleteFindAccountEmailLink(accessKey) <= 0) {
 			ret.put("result", "500");
 			return ret;
 		}
 		return ret;
 	}
+
 
 }

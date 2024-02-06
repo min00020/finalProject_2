@@ -20,8 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
-import com.yedamFinal.aco.bookmark.serviceImpl.BookmarkServiceImpl;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
+import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
@@ -36,8 +36,6 @@ public class MemberController {
 	private MemberServiceImpl memberService;
 	@Autowired
 	private FreeBoardService freeBoardService;
-	@Autowired
-	private BookmarkServiceImpl mybookmarkService;
 
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
@@ -95,6 +93,49 @@ public class MemberController {
 		model.addAttribute("memberInfo", findVO);
 		return "common/myPage";
 	}
+	
+	
+	@PostMapping("/updateMemberPoint")
+	@ResponseBody
+	public Map<String,Object> updateResPoint(@RequestParam Integer resPoint) {
+		MemberVO memberVO = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			memberVO = userDetails.getMemberVO();
+		}
+		
+		MemberVO findVO = memberService.getMemberInfo(memberVO);
+		Map<String,Object> mp = memberService.updateMemberPoint(resPoint, findVO);
+		MemberVO findVO2 = memberService.getMemberInfo(memberVO);
+		mp.put("memberInfo", findVO2);
+		
+		return mp;
+	}
+
+	@GetMapping("/deleteBookmark")
+	@ResponseBody
+	public Map<String, Object>  delBookmarkList(@RequestParam Integer questionBoardNo) {
+		MemberVO memberVO = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			memberVO = userDetails.getMemberVO();
+		}
+		MemberVO findVO = memberService.getMemberInfo(memberVO);
+		Map<String, Object> map = new HashMap<>();
+		
+		boolean result = memberService.delBookmarkList(questionBoardNo, memberVO.getMemberNo());
+		
+		if(result) {
+			map.put("result", "200");
+		}else {
+			map.put("result", "500");
+		}
+		
+		return map;
+	}
+	
 
 	// 책갈피목록, 질문글 목록
 	@GetMapping("/myPage2")
@@ -105,6 +146,7 @@ public class MemberController {
 			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
 			memberVO = userDetails.getMemberVO();
 		}
+		MemberQuestionChartVO chartVO = memberService.getMemberChart(memberVO);
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
 		List<MyquestionVO> myquestion = memberService.getMyqList(memberVO);
@@ -113,22 +155,10 @@ public class MemberController {
 		model.addAttribute("bmarkList", bmark);
 		model.addAttribute("mquestionList", myquestion);
 		model.addAttribute("bookmarkList2", bmarkList);
+		model.addAttribute("memberChart", chartVO); 
 
 		return "common/myPage2";
 	}
-	//페이지
-	/*
-	 * @RequestMapping("/myPage2") public String getMyPageForm2(Model model,
-	 * Criteria cri) { MemberVO memberVO = null; Authentication authentication =
-	 * SecurityContextHolder.getContext().getAuthentication(); if (authentication !=
-	 * null && authentication.getPrincipal() instanceof UserDetailVO) { UserDetailVO
-	 * userDetails = (UserDetailVO) authentication.getPrincipal(); memberVO =
-	 * userDetails.getMemberVO(); } List<MyquestionVO> question =
-	 * memberService.getMyQuestionList(memberVO); model.addAttribute("questionList",
-	 * question); model.addAttribute("pageMaker", new PageVO(cri, 123)); return
-	 * "commin/myPage2"; }
-	 */
-	
 	
 	// min 아이디 중복체크 요청
 	@GetMapping("/checkId")

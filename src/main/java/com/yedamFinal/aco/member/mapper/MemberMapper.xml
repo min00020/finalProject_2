@@ -105,11 +105,24 @@
 	WHERE member_no = #{memberNo}
 	ORDER BY activity_point_date desc
 </select>
+<!-- 내 질답통계 -->
+<select id="selectMemberChart" resultType="MemberQuestionChartVO">
 
+	    SELECT (select count(answer_board_no) from answer_board where member_no=#{memberNo}) as answer_cnt,
+         	   (select count(adopt_status) from answer_board where member_no=#{memberNo} and adopt_status='I002') as adopt_cnt,
+           	   (select count(question_board_no) from question_board where member_no =#{memberNo}) as question_cnt 
+    	FROM dual
+
+</select>
 <!-- 사이드프로젝트 목록(더보기보달) 이거는 패키지 새로 만들기 -->
 <!-- <select id="selectSideProjectList" resultType="com.yedamFinal.aco.sideboard.SideVO">
 	 
 </select> -->
+<!-- 북마크 삭제 -->
+<delete id="delBookmark" parameterType="com.yedamFinal.aco.bookmark.MybookmarkVO">
+	DELETE FROM my_bookmark
+	WHERE member_no= #{mno} AND question_board_no=#{qno}
+</delete>
 
 <!-- 포인트사용내역 리스트 -->
 <select id="selectPointDetailList" resultType="com.yedamFinal.aco.point.PointDetailJoinVO">
@@ -120,7 +133,7 @@
     ORDER BY history_date desc
 </select>
 
-<insert id="insertActivityPoint" parameterType="com.yedamFinal.aco.point.PointDetailJoinVO">
+<insert id="insertPointDetail" parameterType="com.yedamFinal.aco.point.PointDetailJoinVO">
 	INSERT INTO point_detail (point_detail_no, 
 	                          member_no, 
 	                          latest_total_points, 
@@ -144,11 +157,31 @@
       
 </insert>
 
+<insert id="insertActivityDetail" parameterType="com.yedamFinal.aco.activity.ActivityPointVO">
+INSERT INTO activity_point_detail(activity_point_no, 
+                                  member_no, 
+                                  accum_activity_point, 
+                                  cur_activity_point, 
+                                  activity_point_type, 
+                                  activity_point_date, 
+                                  inc_dec_activity_point) 
+VALUES (activity_point_detail_seq.NEXTVAL,
+		#{memberNo},
+        #{accumActivityPoint},
+        #{curActivityPoint},
+        #{activityPointType},
+        #{activityPointDate},
+        #{incDecActivityPoint})
+
+</insert>
+
 
 <update id="updateMemberPoint" parameterType="MemberVO">
 	UPDATE member
-    SET available_activity_point = available_activity_point - #{resPoint}, aco_point = aco_point + #{resPoint}
-    WHERE member_no = #{memberNo}
+    SET available_activity_point = available_activity_point - #{resPoint}, 
+        aco_point = aco_point + #{resPoint}
+    
+    WHERE member_no = #{m.memberNo}
 
 </update>
 

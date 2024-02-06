@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
+import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
@@ -47,10 +48,7 @@ public interface MemberService {
 	public List<TagVO> getTagList();
 	//활동점수 내역 리스트 가져오기
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO);
-	
-
-	public int addActivityPoint(MemberVO memberVO);
-	public Map<String, Object> updateMemberPoint(MemberVO memberVO);
-	
-	
+	public Map<String, Object> updateMemberPoint(int resPoint, MemberVO memberVO);
+	boolean delBookmarkList(int qnaboardNo, int memberNo);
+	public MemberQuestionChartVO getMemberChart(MemberVO memberVO);
 }

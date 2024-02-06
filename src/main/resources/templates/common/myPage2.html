@@ -30,16 +30,12 @@
 								th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|"
 								logo="" style="width: 30px;"> <span class="card-text"
 								th:text="${memberInfo.gradeName}">\</span>
-							<h6 class="card-text" th:text="${memberInfo.accumActivityPoint}">\</h6>
-
-
-
-
+							<h6 class="card-text" th:text="|${#numbers.formatInteger(memberInfo.accumActivityPoint, 0, 'COMMA')} P|">\</h6>
 
 						</div>
 					</div>
 
-								<!-- summary -->
+					<!-- summary -->
 
 					<div class="card container"
 						style="width: 270px; height: 400px; margin-top: 30px; margin-left: 15px;">
@@ -56,9 +52,8 @@
 								</div>
 								<div class="tae-box2 col-2" style="width: 140px;">
 									<h6 style="font-weight: bold;">POINT</h6>
-									<h6 class="card-text"
-										th:text="${memberInfo.acoPoint} + 정산가능 + ${memberInfo.availableActivityPoint} + P">
-										\</h6>
+									<h6 id="pointMypage" class="card-text" style="color:#3e6ce3;font-weight:bold;"
+										th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h6>
 								</div>
 								<div class="col-1" style="width: 55px;">
 									<!-- 모달버튼 -->
@@ -93,44 +88,43 @@
 															<div class="point-image" style="width:350px;">
 																<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
 																<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
-																<h3 style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
+																<h3 id="totalPointMypage" style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
 															</div>
-															<div class="point-acc" style="hegiht:700px;">
-																<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
-																	<h4 style="font-weight:bold;">애코포인트 정산</h4>
-																	<br>
-																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산 가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
-																	<br>
-																	<div class="input-group mb-3" style="width:600px;height:50px;">
-																		<input type="text" class="form-control" th:placeholder="|정산가능 포인트 ${#numbers.formatInteger(memberInfo.acoPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
-																		<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
-																		<button class="btn btn-outline-secondary" type="button" onclick="accumPoint()" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">정산요청</button>
-																		<!-- 계좌가 있는 경우 계좌 목록 표시 -->
-																		
+																<div class="point-acc" style="hegiht:700px;">
+																	<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																		<h4 style="font-weight:bold;">애코포인트 정산</h4>
+																		<br>
+																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
+																		<br>
+																		<div class="input-group mb-3" style="width:600px;height:50px;">
+																			<input type="text" id="accumPointMypage" class="form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
+																			<button class="btn btn-outline-secondary" onclick="accumPoint()" type="button" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
+																			<!-- 계좌가 있는 경우 계좌 목록 표시 -->
+																			
+																		</div>
+																	</div>
+																	<div class="point-acc-1" style="width:750px;hegiht:450px;">
+																		<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
+																		<br>
+																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
+																		<br>
+																		<div class="input-group mb-3" style="width:600px;height:50px;">
+																			<input type="text" class="form-control" id="activityMypage" name="resPoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<button class="btn btn-outline-secondary" type="button" id="changepoint" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
+																		</div>
 																	</div>
 																</div>
-																<div class="point-acc-1" style="width:750px;hegiht:450px;">
-																	<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
-																	<br>
-																	<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
-																	<br>
-																	<div class="input-group mb-3" style="width:600px;height:50px;">
-																		<input type="text" class="form-control" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;">
-																		<button class="btn btn-outline-secondary" type="button" id="button-addon2" style="font-weight:bold;background-color:#ced9ea;color:#fff;border:none;">환전요청</button>
-																	</div>
-																</div>
-															</div>
-														
 														</div>
 													</div>
 														<div id="activityList">
 															<div>
 																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4><hr>
 																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
-																		<li class="activity1" th:each="pol:${pointList}">
-																		<span style="font-weight:bold;'" th:text="${pol.historyType}"></span>
-																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${pol.incDecPoint}P |"></span>
-																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${pol.incDecPoint}P |"></span>
+																		<li id="activityMypage" class="activity1" th:each="pol:${pointList}">
+																		<span style="font-weight:bold;font-size:large;" th:text="${pol.historyType}"></span>
+																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
+																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
 																		<br>
 																		<span class="tae_date" th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
 																		<hr>
@@ -255,8 +249,8 @@
 																<h4 style="padding-left:30px;font-weight:bold;">내 활동 내역</h4><hr>
 																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
 																		<li class="activity1" th:each="acp:${activityList}">
-																		<span th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
-																		<span th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
+																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
+																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
 																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${acp.incDecActivityPoint}점 |"></span>
 																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${acp.incDecActivityPoint}점 |"></span>
 																		<br>
@@ -298,8 +292,7 @@
 									<!-- 모달버튼 -->
 									<button type="button" class="btn btn-modal"
 										data-bs-toggle="modal" data-bs-target="#point"
-										style="text-decoration: none; float: right; color: #979da9;">
-
+										style="text-decoration: none;color: #979da9;">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
@@ -307,24 +300,20 @@
 										<polyline points="9 18 15 12 9 6"></polyline></svg>
 									</button>
 									<!-- 모달시작 -->
-									<div class="modal fade" id="point" tabindex="-1" role="dialog"
-										aria-labelledby="pointModalLabel" aria-hidden="true">
+									<div class="modal fade" id="modify" tabindex="-1" role="dialog"
+										aria-labelledby="modifyModalLabel" aria-hidden="true">
 										<div class="modal-dialog modal-xl" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
-													<h5 class="modal-title" id="pointModalLabel"
-														style="font-weight: bold;">회원정보수정</h5>
-													<button type="button" class="close" data-bs-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
+													<h3 class="modal-title" id="modifyModalLabel"
+														style="font-weight: bold;">
+														<img src="/commonResource/icon/modifyinfo.png"
+															style="width: 70px; height: 70px;">회원정보수정
+													</h3>
 												</div>
+												<!-- 회원정보수정모달영역 전민교가 연동하기로함 -->
 												<div class="modal-body">
-													<ul class="tab-ul">
-														<li th:each="myq:${mquestionList}">[[ ${myq.title} ]]<span>
-																[[${myq.writeDate}]] </span>
-															<hr></li>
-													</ul>
+													
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
@@ -337,6 +326,7 @@
 									</div>
 									<!-- 모달 끝 -->
 								</div>
+								
 							</div>
 						</div>
 						<!-- 위에까지 회원정보 수정 끝 -->
@@ -347,7 +337,7 @@
 		<!-- 메인바디영역 -->
 		<div class="container" style="background-color: #aebfec;">
 			<div class="container">
-				<div class="card" id="myTabContent" style="height: 850px;">
+				<div class="card" id="myTabContent" style="height: 900px;">
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
@@ -366,9 +356,9 @@
 					</ul>
 					<div>
 
-						<div class="card" style="width: 900px; border: 0px;">
+						<div class="card" style="width: auto; border: 0px;">
 							<div class="card-body" id="card-1" style="margint-top: 20px;">
-								<div id="piechart" style="width: 500px; height: 300px;"></div>
+								<div id="piechart" style="width: 900px; height: 500px;"></div>
 							</div>
 						</div>
 
@@ -409,20 +399,17 @@
 										<span aria-hidden="true">&times;</span>
 									</button> -->
 											</div>
-											<div class="modal-body">
-												<div id="container">
-													<ul class="tab">
-														<li data-tab="tab1" class='tabmenu' id="default"><a
-															href="#">질답형 게시판</a></li>
-														<li data-tab="tab2" class='tabmenu'><a href="#">사이드프로젝트</a></li>
+											<div class="modal-body" style="text-align:center;">
+													<ul class="tab d-flex justify-content-center">
+														<li data-tab="tab1" class='tabmenu' id="default" style="margin-top:20px;float:left;list-style-type: none;text-decoration: none;"><a style="font-size:large;font-weight:bold;color:black;text-decoration: none;" href="#">질답형 게시판</a></li>
+														<li data-tab="tab2" class='tabmenu' style="margin-top:20px;float:left;padding-left:20px;list-style-type: none;"><a style="font-size:large;font-weight:bold;color:#979da9;text-decoration: none;" href="#">사이드프로젝트</a></li>
 													</ul>
 													<div id="tabcontent"></div>
-												</div>
 
-												<div class="container" style="padding-top: 100px;">
+												<div class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;padding-top: 40px;">
 													<table class="table">
 														<thead>
-															<tr>
+															<tr style="border-top: 1px;border-top-style: double;">
 																<th>No.</th>
 																<th>제목</th>
 																<th>작성일자</th>
@@ -440,27 +427,6 @@
 															</tr>
 														</tbody>
 													</table>
-												</div>
-												<div>
-													<!-- Pagination -->
-													<ul class="pagination justify-content-center">
-														<th:block th:if="${pageMaker.prev}">
-														<li class="page-item"><a class="page-link" href="#"
-															aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-																<span class="sr-only">Previous</span>
-														</a></li>
-														</th:block>
-														<th:each var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-														<li class="page-item"><a class="page-link" href="#" th:text="${num}">1</a>
-														</li>
-														
-														<th:block th:if="${pageMaker.next}">
-														<li class="page-item"><a class="page-link" href="#"
-															aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-																<span class="sr-only">Next</span>
-														</a></li>
-														</th:block>
-													</ul>
 												</div>
 											</div>
 											<div class="modal-footer">
@@ -527,7 +493,8 @@
 																		th:text="${#dates.format(bml2.registDate, 'yyyy-MM-dd')}">작성일자
 																		: [[${bml2.registDate}]]</p>
 																	<button type="button" id="deleteBookamrk"
-																		style="background-color: #fff; border: 0px; float: right;">
+																		style="background-color: #fff; border: 0px; float: right;"
+																		th:onclick="delMark([[${bml2.questionBoardNo}]])">
 																		<img src="/commonResource/icon/bookmark2.png"
 																			style="width: 50px;">
 																	</button>
@@ -544,7 +511,6 @@
 											</div>
 										</div>
 									</div>
-									<hr>
 								</div>
 								<!-- 모달 끝 -->
 								<ul class="tab-ul">
@@ -564,17 +530,33 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+	const mymemberNo = [[${session.member.memberNo}]]
+	
 	google.charts.load('current', {
 		'packages' : [ 'corechart' ]
 	});
 	google.charts.setOnLoadCallback(drawChart);
 
+	/* var answerCnt = [[${memberChart.answerCnt}]]
+	var adoptCnt = [[${memberChart.adoptCnt}]]
+	var questionCnt = [[${memberChart.questionCnt}]] */
+	var myqnaList = [[${memberChart}]]
+	console.log(myqnaList);
 	function drawChart() {
-
-		var data = google.visualization.arrayToDataTable([
-				[ 'Task', 'Hours per Day' ], [ '내가 질문한 글', 11 ], [ '내가 답변한 글', 2 ],
-				[ '채택된 글', 15 ] ]);
+		let table = [];
+			table.push(["내가 질문한 글", "내가 답변한 글"])
+			
+			table.push(['질문 글',myqnaList.questionCnt]);
+			table.push(['답변 글',myqnaList.answerCnt]);
+			table.push(['채택 글',myqnaList.adoptCnt]);
+				
+		
+		
+		
+		var data = google.visualization.arrayToDataTable(table);
+				/* [ 'Task', 'Hours per Day' ], [ '내가 질문한 글', questionCnt + "건" ], [ '내가 답변한 글', answerCnt + "건" ],
+				[ '채택된 글', adoptCnt+ "건" ] ]); */
 
 		var options = {
 			title : '내 질답통계'
@@ -586,64 +568,18 @@
 		chart.draw(data, options);
 	}
 
-	const memberno = [[${session.member.memberNo}]]
 	function goMypage(){
 		location.href='/myPage';
 		
 	}
-
-	function addBookmark() {
-	    var mybookVO = {
-	        memberNo: memberno, 
-	        questionBoardNo: [[${bml2.questionBoardNo}]]  
-	    };
 	
-	    $.ajax({
-	        type: "POST",
-	        contentType: "application/json",
-	        url: "myPage2",
-	        data: JSON.stringify(mybookVO),
-	        success: function (response) {
-	            console.log(response);
-	        },
-	        error: function (error) {
-	            console.error(error);
-	        }
-	    });
-	}
-	
-	
-	function deleteBookmark() {
-	    var mybookVO = {
-	    	memberNo: memberno, 
-		    questionBoardNo: [[${bml2.questionBoardNo}]]  
-	    };
-	
-	    $.ajax({
-	        type: "DELETE",
-	        contentType: "application/json",
-	        url: "myPage2",
-	        data: mybookVO,
-	        success: function (response) {
-	            console.log(response);
-	        },
-	        error: function (error) {
-	            console.error(error);
-	        }
-	    });
-	}
-	
-	function checkBookmark() {
-	    var memberNo = memberno;  
-	    var questionBoardNo = [[${bml2.questionBoardNo}]]; 
-	
-	    $.ajax({
+	function delMark(questionBoardNo){
+		//mymemberNo
+		const url = "/deleteBookmark?questionBoardNo=" + questionBoardNo;
+		
+		$.ajax({
 	        type: "GET",
-	        url: "myPage2",
-	        data: {
-	            memberNo: memberNo,
-	            questionBoardNo: questionBoardNo
-	        },
+	        url: url,
 	        success: function (response) {
 	            console.log(response);
 	        },
@@ -652,9 +588,56 @@
 	        }
 	    });
 	}
-
-	$("#addBookmark").click(addBookmark);
-	$("#deleteBookmark").click(deleteBookmark);
-	$("#checkBookmark").click(checkBookmark);
+	
+	let csrfPara = $('meta[name="csrfPara"]').attr("content");
+	let csrfToken = $('meta[name="csrf"]').attr("content");
+	
+		const memberno = [[${session.member.memberNo}]]
+		function goEmoShop(){
+			location.href = '/emoMain';
+		}
+		function accumPoint(){
+			location.href = '/accountConnect';
+		}
+		
+		$('#changepoint').on('click', pointUpdateAjax);
+		
+			function pointUpdateAjax(event){
+				if (!validation()) return;
+				let resPoint = $('input[name="resPoint"]');
+				let obj = {
+					resPoint : resPoint.val(),
+				}
+				obj[csrfPara] = csrfToken;
+				
+				$.ajax('/updateMemberPoint',{
+					type:"POST",
+					data : obj				
+				}).done(result =>{
+					showSuccessAlert('정상적으로 환전되었습니다.');
+					
+					const commaActivityPoint = Number(result.memberInfo.availableActivityPoint).toLocaleString();
+					const commaAccummPoint = Number(result.memberInfo.availableAccumPoint).toLocaleString();
+					const commaTotalPoint = Number(result.memberInfo.acoTotal).toLocaleString();
+					
+					$('#activityMypage').val('');
+					
+					$('#pointMypage').text(commaTotalPoint);
+					$('#totalPointMypage').text(commaTotalPoint);
+					$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+					$('#activityMypage').attr("placeholder", "가용 활동점수 " + commaActivityPoint + " 점");
+					
+				}).fail(err => console.log(err));
+			}
+				
+			function validation(){
+				let resPoint = $('input[name="resPoint"]');
+				const numPoint = Number(resPoint.val());
+				if(numPoint < 5000 || (numPoint % 1000) != 0){
+					showWarningAlert("5,000점 이상부터 1,000점 단위로 환전 가능합니다");
+					return false;
+				}
+				return true;
+			}	
 
 </script>

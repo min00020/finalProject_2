@@ -52,8 +52,8 @@
 								</div>
 								<div class="tae-box2 col-2" style="width: 140px;">
 									<h6 style="font-weight: bold;">POINT</h6>
-									<h6 class="card-text" style="color:#3e6ce3;font-weight:bold;"
-										th:text="|${#numbers.formatInteger(memberInfo.acoPoint, 0, 'COMMA')} P|"></h6>
+									<h6 id="pointMypage" class="card-text" style="color:#3e6ce3;font-weight:bold;"
+										th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h6>
 								</div>
 								<div class="col-1" style="width: 55px;">
 									<!-- 모달버튼 -->
@@ -88,9 +88,8 @@
 															<div class="point-image" style="width:350px;">
 																<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
 																<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
-																<h3 style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
+																<h3 id="totalPointMypage" style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
 															</div>
-															<form id="updatePoint">
 																<div class="point-acc" style="hegiht:700px;">
 																	<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
 																		<h4 style="font-weight:bold;">애코포인트 정산</h4>
@@ -98,9 +97,9 @@
 																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
 																		<br>
 																		<div class="input-group mb-3" style="width:600px;height:50px;">
-																			<input type="text" class="form-control" name="resPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<input type="text" id="accumPointMypage" class="form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
 																			<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
-																			<button class="btn btn-outline-secondary" type="button" onclick="accumPoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
+																			<button class="btn btn-outline-secondary" onclick="accumPoint()" type="button" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
 																			<!-- 계좌가 있는 경우 계좌 목록 표시 -->
 																			
 																		</div>
@@ -111,22 +110,21 @@
 																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
 																		<br>
 																		<div class="input-group mb-3" style="width:600px;height:50px;">
-																			<input type="text" class="form-control" name="acpoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
-																			<button class="btn btn-outline-secondary" type="button" id="changepoint" onclick="changePoint()" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
+																			<input type="text" class="form-control" id="activityMypage" name="resPoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<button class="btn btn-outline-secondary" type="button" id="changepoint" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
 																		</div>
 																	</div>
 																</div>
-															</form>
 														</div>
 													</div>
 														<div id="activityList">
 															<div>
 																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4><hr>
 																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
-																		<li class="activity1" th:each="pol:${pointList}">
+																		<li id="activityMypage" class="activity1" th:each="pol:${pointList}">
 																		<span style="font-weight:bold;font-size:large;" th:text="${pol.historyType}"></span>
-																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${pol.incDecPoint}P |"></span>
-																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${pol.incDecPoint}P |"></span>
+																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
+																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
 																		<br>
 																		<span class="tae_date" th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
 																		<hr>
@@ -328,6 +326,7 @@
 									</div>
 									<!-- 모달 끝 -->
 								</div>
+								
 							</div>
 						</div>
 						<!-- 위에까지 회원정보 수정 끝 -->
@@ -417,6 +416,8 @@
 	</div>
 </div>
 <script type="text/javascript">
+let csrfPara = $('meta[name="csrfPara"]').attr("content");
+let csrfToken = $('meta[name="csrf"]').attr("content");
 	const memberno = [[${session.member.memberNo}]]
 	function goEmoShop(){
 		location.href = '/emoMain';
@@ -425,41 +426,43 @@
 		location.href = '/accountConnect';
 	}
 	
-	$('button').on('click', changePoint);
+	$('#changepoint').on('click', pointUpdateAjax);
 	
 		function pointUpdateAjax(event){
 			if (!validation()) return;
-			let pointDta = changePoint();		
-			console.log('pointDta', pointDta);
-			$.ajax('updateMemberPoint'{
+			let resPoint = $('input[name="resPoint"]');
+			let obj = {
+				resPoint : resPoint.val(),
+			}
+			obj[csrfPara] = csrfToken;
+			
+			$.ajax('/updateMemberPoint',{
 				type:"POST",
-				data : JSON.stringify(pointDta),
-				contentType : 'application/json',				
+				data : obj				
 			}).done(result =>{
-				this.$showSuccessAlert('','정상적으로 환전 되었습니다. ');
-				console.log(result);
+				showSuccessAlert('정상적으로 환전되었습니다.');
+				
+				const commaActivityPoint = Number(result.memberInfo.availableActivityPoint).toLocaleString();
+				const commaAccummPoint = Number(result.memberInfo.availableAccumPoint).toLocaleString();
+				const commaTotalPoint = Number(result.memberInfo.acoTotal).toLocaleString();
+				
+				$('#activityMypage').val('');
+				
+				$('#pointMypage').text(commaTotalPoint);
+				$('#totalPointMypage').text(commaTotalPoint);
+				$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+				$('#activityMypage').attr("placeholder", "가용 활동점수 " + commaActivityPoint + " 점");
+				
 			}).fail(err => console.log(err));
 		}
 			
 		function validation(){
-			let resPoint = $('[name="resPoint"]');
-			if(resPoint.val() < 5000){
-			showWarningAlert("5,000점 이상부터 환전 가능합니다");
+			let resPoint = $('input[name="resPoint"]');
+			const numPoint = Number(resPoint.val());
+			if(numPoint < 5000 || (numPoint % 1000) != 0){
+				showWarningAlert("5,000점 이상부터 1,000점 단위로 환전 가능합니다");
 				return false;
 			}
 			return true;
 		}	
-			
-	function changePoint(){
-		let formAry = $('form[name="updateMemberPoint"]').serializeArray();
-		console.log(formAry);
-		
-		let formObj = {};
-		$(formAry).each(idx, tag)=>{
-			console.log(tag);
-			formObj[tag.name] = tag.value;
-		});
-		return formObj;
-	}
-	
 </script>
