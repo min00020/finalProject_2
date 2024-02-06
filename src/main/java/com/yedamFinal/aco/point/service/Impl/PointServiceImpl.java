@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.BankVO;
 import com.yedamFinal.aco.point.mapper.PointMapper;
@@ -17,10 +18,16 @@ import com.yedamFinal.aco.point.service.PointService;
 public class PointServiceImpl implements PointService {
 	@Autowired
 	private PointMapper pointMapper;
+	
 
 	@Override
-	public void getPointMainData(Model model, int memberNo) {
+	public void getPointMainData(Model model, int memberNo) {		
+		int acoMoney = pointMapper.getAcoMoney(memberNo);
+		
 		model.addAttribute("getAccountList", pointMapper.getAccountNumber());
+		model.addAttribute("getAcoMoney", pointMapper.getAcoMoney(memberNo));
+		model.addAttribute("updateAcoMoney", pointMapper.updateAcoMoney(acoMoney, memberNo));
+		
 		return;
 	}
 

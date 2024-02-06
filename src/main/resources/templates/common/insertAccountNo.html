@@ -121,7 +121,7 @@ console.log(date);
 		})
 		.done(res => {
 			console.log(res);
-			if(res.Dpnm==[[${session.member.name}]]){
+			if(res.Dpnm == name ){
 				console.log('이름 일치')
 				//이름이 일치하면 계좌를 DB에 등록
 				$.ajax('/registAccount', {
@@ -133,9 +133,19 @@ console.log(date);
 					},
 				})
 				.done(res => {
-					console.log('계좌등록 성공');
 					if(res.result == '200'){
-						showSuccessAlert('계좌를 등록했습니다.')
+						Swal.fire({
+							  title: '계좌등록 성공',
+							  text: '',
+							  icon: 'success',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+							    location.href = '/point';
+							  }
+							});
+							
 					}else{
 						showFailAlert('에러가 발생했습니다.')
 					}
@@ -146,6 +156,7 @@ console.log(date);
 					console.log(accountObj);
 					console.log(name);
 					console.log(account);
+					
 					console.log('accountHolder : ',accountHolder);
 					console.log('accountNo : ',accountNo);
 					
@@ -153,8 +164,12 @@ console.log(date);
 				
 			}else{	
 				console.log('일치안함')
-				
+				if(res.Header.Rsms == "정상처리 되었습니다."){
+					showFailAlert('이름이 일치하지 않습니다')	
+					
+				}else{
 				showFailAlert(res.Header.Rsms)
+				}
 			}
 		})
 		.fail(err => {

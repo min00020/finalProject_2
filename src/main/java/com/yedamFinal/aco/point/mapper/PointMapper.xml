@@ -38,7 +38,7 @@
 	</insert>
 
 	<!-- AcoMoneyUpdate -->
-	<update id="UpdateAcoMoney">
+	<update id="updateAcoMoney">
 		UPDATE MEMBER
 			SET ACO_MONEY = ACO_MONEY + #{acoMoney}
 			WHERE MEMBER_NO = #{memberNo}

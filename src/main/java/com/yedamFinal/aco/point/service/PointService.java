@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.BankVO;
 

@@ -354,7 +354,10 @@ justify-content: center;
 /*pointAsideMainCss END*/
 
 /*pointChargingCss*/
-
+.park_account:hover {
+	background-color: #F2F2F2;
+	cursor: pointer;
+}
 .park_AA {
 	margin-top: 30px;
 	justify-content: end;
@@ -548,7 +551,7 @@ justify-content: center;
 }
 
 .park_bank:hover {
-	background-color: #E2E2E2;
+	background-color: #F2F2F2;
 	cursor: pointer;
 }
 

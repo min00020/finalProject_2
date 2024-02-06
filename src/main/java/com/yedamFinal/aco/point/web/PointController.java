@@ -40,8 +40,30 @@ public class PointController {
 			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
 			MemberVO username = userDetails.getMemberVO();
 			
+			
+			
 			pointService.getPointMainData(model, username.getMemberNo());
+			
 		}
+		//model.addAttribute("getAccountList", pointService.getAccountAll());
+		model.addAttribute("Iscd", nhIscd);
+		model.addAttribute("nhAccessToken", nhAccessToken);
+		return "common/pointCharging";
+	}
+	
+	@PostMapping("/point")
+	@ResponseBody
+	public String charginAcoMoney(int memberNo,int acoMoney,Model model) {
+		// MemberVO 꺼내오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			MemberVO username = userDetails.getMemberVO();
+			
+			pointService.getPointMainData(model, username.getMemberNo());
+			
+		}
+
 		//model.addAttribute("getAccountList", pointService.getAccountAll());
 		
 		return "common/pointCharging";
@@ -60,7 +82,6 @@ public class PointController {
 	public String getInserstAccountNo(@RequestParam String bankCode, @RequestParam String bankName, Model model) {
 		model.addAttribute("bankCode", bankCode);
 		model.addAttribute("bankName", bankName);
-
 		model.addAttribute("Iscd", nhIscd);
 		model.addAttribute("nhAccessToken", nhAccessToken);
 
@@ -76,6 +97,8 @@ public class PointController {
 		return pointService.insertAccountInfo(accountVO);
 
 	}
+	
+
 
 
 
