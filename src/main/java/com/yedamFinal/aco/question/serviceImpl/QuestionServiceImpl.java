@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.mapper.QuestionMapper;
@@ -29,17 +30,34 @@ public class QuestionServiceImpl implements QuestionService{
 	 * public List<QuestionVO> getQuestionInfo(int qno) { return
 	 * questionMapper.getQuestionInfo(qno); }
 	 */
-	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno) {
+	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model) {
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
 		
+		//번호 boardNo 기준 > 0부터 시작하게 변경
 		Map<Integer, List<QuestionVO>> ret = new HashMap<Integer, List<QuestionVO>>();
 		Integer idx = 0;
 		for ( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
 		    ret.put(idx++, entry.getValue());
 		}
-			
+		
+		model.addAttribute("isAdopt",false);
+		//답변 채택상태 확인
+		for ( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
+			System.out.println("value : " + entry.getValue());
+			List<QuestionVO> adoptStatus = entry.getValue();
+			for(QuestionVO vo : adoptStatus) {
+				if(vo.getAnswerAdoptStatus() == null) {
+					continue;
+				}
+				if(vo.getAnswerAdoptStatus().equals("I002")) {
+					model.addAttribute("isAdopt",true);
+					System.out.print("test");
+					break;
+				}
+			}
+		}		
 		return ret;
 	}
 	

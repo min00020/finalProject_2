@@ -42,7 +42,7 @@ public class QuestionController {
 
 	@GetMapping("/questionInfo/{qno}")
 	public String getQuestionInfo(@PathVariable("qno") int qno, Model model) {
-		model.addAttribute("questionInfo", questionService.getQuestionInfo(qno));
+		model.addAttribute("questionInfo", questionService.getQuestionInfo(qno,model));
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
@@ -66,7 +66,7 @@ public class QuestionController {
 		return "question/questionWrite";
 	}
 	
-	@PostMapping("/write")
+	@PostMapping("/question/write")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
 		Map<String, Object> ret = new HashMap<String, Object>();

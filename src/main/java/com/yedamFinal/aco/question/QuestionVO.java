@@ -19,11 +19,16 @@ public class QuestionVO {
 	private int recommendCnt;
 	private int bookmarkCnt;
 	private int answerCnt;
+	private int replyCnt;
 	
 	//member
 	private String id;
 	private String profileImage;
 	private String memberLevel;
+	
+	private String answerId;
+	private String answerProfileImage;
+	private String answerMemberLevel;
 	
 	//answerBoard
 	private int answerBoardNo;
@@ -33,10 +38,12 @@ public class QuestionVO {
 	private int answerViewCnt;
 	private int answerRecommendCnt;
 	private String answerAdoptStatus;
+	private int answerReplyCnt;
 	
 	//questionAdd
 	private int questionAddNo;
 	private String addContents;
 	private String addWriterType;
 	private String addWriteDate;
+	private String addStatus;
 }

@@ -119,6 +119,29 @@
 	    justify-content: center;
 	}
 	
+	.min_search-align-self-center {
+		width: 200px;
+		position: relative;
+	}
+	.min_searchInput {
+		padding-right: 30px;
+		transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+			border-color 0.3s ease-in-out;
+		width: 100%;
+		border: 1px solid #bbb;
+		border-radius: 38px;
+		padding: 10px 12px;
+		font-size: 14px;
+		 position: relative;
+	}
+	.min_searchImg{
+		position: absolute;
+		top:14px;
+	    right: 12px; /* 이미지를 오른쪽에 위치시키고자 하는 간격을 조절합니다. */
+	    width: 20px; /* 이미지의 너비를 조절합니다. */
+	    height: 20px; /* 이미지의 높이를 조절합니다. */
+    }
+	
 	
 /*question info page*/
 .questionInfo{

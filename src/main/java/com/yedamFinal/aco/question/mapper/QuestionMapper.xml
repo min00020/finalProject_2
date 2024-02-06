@@ -27,18 +27,21 @@
 	
 	<!-- 질문글 단건조회 -->
 	<select id="getQuestionInfo" resultType="QuestionVO">	
-		SELECT m.id, m.profile_image,SUBCODE_TO_NAME(m.member_level) as member_level,
+		SELECT m.ID, m.PROFILE_IMAGE,SUBCODE_TO_NAME(m.MEMBER_LEVEL) as member_level,
+		 		m2.ID as answer_id , m2.PROFILE_IMAGE as answer_profile_image,SUBCODE_TO_NAME(m2.MEMBER_LEVEL) as answer_member_level,
 			    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
 			    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT,q.REPLY_CNT,
 	            a.ANSWER_BOARD_NO,a.QUESTION_BOARD_NO,a.MEMBER_NO,a.TITLE as answer_title,a.CONTENTS as answer_contents, 
-	            TO_CHAR(a.WRITE_DATE, 'YYYY.MM.DD') as ANSWER_WRITE_DATE,a.RECOMMEND_CNT,a.ADOPT_STATUS as answer_adopt_status,a.REPLY_CNT,
-	            d.QUESTION_ADD_NO,d.ANSWER_BOARD_NO,d.CONTENTS as add_contents,d.WRITER_TYPE as add_writer_type,TO_CHAR(d.WRITE_DATE, 'YYYY.MM.DD') as ADD_WRITE_DATE
+	            TO_CHAR(a.WRITE_DATE, 'YYYY.MM.DD') as ANSWER_WRITE_DATE,a.RECOMMEND_CNT,a.ADOPT_STATUS as answer_adopt_status,a.REPLY_CNT as answer_reply_cnt,
+	            d.QUESTION_ADD_NO,d.ANSWER_BOARD_NO,d.CONTENTS as add_contents,d.WRITER_TYPE as add_writer_type,TO_CHAR(d.WRITE_DATE, 'YYYY.MM.DD') as add_write_date, d.ADD_STATUS
 			FROM QUESTION_BOARD q LEFT JOIN MEMBER m
 	                              ON q.MEMBER_NO = m.MEMBER_NO
 	                              LEFT JOIN ANSWER_BOARD a
 	                              ON q.QUESTION_BOARD_NO = a.QUESTION_BOARD_NO
 	                              LEFT JOIN QUESTION_ADD d
 	                              ON a.ANSWER_BOARD_NO = d.ANSWER_BOARD_NO
+	                              LEFT JOIN MEMBER m2
+	                              ON a.MEMBER_NO = m2.MEMBER_NO
 	        WHERE q.QUESTION_BOARD_NO = #{questionBoardNo}
 	        ORDER BY a.ADOPT_STATUS DESC, a.WRITE_DATE DESC
 	</select>
