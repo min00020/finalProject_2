@@ -36,7 +36,7 @@
 					<div class="d-flex justify-content-between">
 						<h6 style="font-weight : bold; margin-top:15px;">첨부 파일</h6>
 						<label for="attachFile" class="btn text-white" style="background-color:#3e6ce3; margin-bottom:8px;">파일 선택</label>
-						<input id="attachFile" type="file" class="px-3 py-2 w-25 rounded" name="attachFile" style="display:none;">
+						<input id="attachFile" type="file" class="px-3 py-2 w-25 rounded" name="attachFile" style="display:none;" multiple>
 					</div>
 					<ul class="mink_scroll_ul" id="fileScroll">
 						
@@ -53,17 +53,48 @@
 	</section>
 	
 	<script th:inline="javascript">
+		const fileDataTransfer = new DataTransfer();
+		let fileIndex = 0;
+		function pasteAttachFile() {
+			// 새롭게 추가할 시 덮어씌운다.
+			let files = Array.from($('#attachFile')[0].files);
+			files.splice(fileIndex, 1);	
+			files.forEach(file => { dataTransfer.items.add(file); });
+			    
+			$('#attachFile')[0].files = dataTransfer.files;
+		}
+		
+		function deleteAttachFile(deleteli, fileIndex) {
+			$("li").remove('#' + deleteli);
+			pasteAttachFile();
+		}	
+	
 		let attachFileList = [];
-		$("#profileImg").on('change', (e) => {
-			const fileName = $("#profileImg")[0].files[0].name;
-			const extensionName = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase();
+		let fileScroll = $('#fileScroll');
+		$("#attachFile").on('change', (e) => {
+			const files = e.target.files;
+			const addedFileName = files[files.length - 1].name;
+			const liID = 'file' + fileIndex++;
+			
+			const tagString = `
+				<li id="${liID}" class="my-1">
+					<div class="d-flex justify-content-between">
+						<p>${addedFileName}</p>
+						<button type="button" class="btn text-white" style="background-color:#3e6ce3; padding:5px;" onclick="deleteAttachFile('${liID}',${fileIndex})">삭제</button>		
+					</div>
+				</li>
+			`;
+			fileScroll.append(tagString);
+			pasteAttachFile();
+			//const fileName = $("#profileImg")[0].files[0].name;
+			//const extensionName = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase();
 		
-			if(allowImgExtension.indexOf(extensionName) < 0) {
-				showWarningAlert('이미지파일만 삽입해주세요');
-				return;
-			}
+			//if(allowImgExtension.indexOf(extensionName) < 0) {
+				//showWarningAlert('이미지파일만 삽입해주세요');
+				//return;
+			//}
 		
-			$('#fileScroll').val($("#profileImg")[0].files[0].name);
+			//$('#fileScroll').val($("#profileImg")[0].files[0].name);
 		})
 	</script>
 </div>

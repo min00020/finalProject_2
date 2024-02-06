@@ -29,8 +29,6 @@ public class QnABoardServiceImpl implements QnABoardService {
 	@Override
 	public Map<String, Object> getMyQnaBoardList(int pageNo, MemberVO vo, String ob) {
 		// 적용할 orderby value
-		
-		boolean correctOb = false;
 		String orderby = orderbyByReqOb.get(ob);
 		if(orderby == null) {
 			orderby = "Latest";
@@ -55,7 +53,6 @@ public class QnABoardServiceImpl implements QnABoardService {
 
 	@Override
 	public Map<String, Object> getMyQnaBoardListFromSearch(int pageNo, String search, MemberVO vo, String ob) {
-		boolean correctOb = false;
 		String orderby = orderbyByReqOb.get(ob);
 		if(orderby == null) {
 			orderby = "Latest";
