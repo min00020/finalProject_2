@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+* {
+	font-family: 'Noto Sans KR', sans-serif;
+	/* 	font-family: 'Gowun Dodum', sans-serif; */
+	/* font-family: 'Grandiflora One', cursive; */
+	/* font-family: 'Nanum Gothic', sans-serif; */
+	/* font-family: 'Orbit', sans-serif; */
+}
 #mainBody {
 	min-height: 1200px;
 }
@@ -169,13 +176,7 @@ header {
 	right: 12px;
 }
 
-* {
-	font-family: 'Noto Sans KR', sans-serif;
-	/* 	font-family: 'Gowun Dodum', sans-serif; */
-	/* font-family: 'Grandiflora One', cursive; */
-	/* font-family: 'Nanum Gothic', sans-serif; */
-	/* font-family: 'Orbit', sans-serif; */
-}
+
 
 .park_logout-button {
 	padding: 10px 20px;
@@ -217,8 +218,8 @@ header {
 	object-fit: cover;
 	object-position: center top;
 	position: absolute;
-	top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
-	transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
+	top: 50%; 
+	transform: translateY(-50%); 
 }
 
 /* 랭킹 */
@@ -292,6 +293,7 @@ header {
 	font-weight: bold;
 	text-align: left;
 	border: none;
+	background-color: #e0e0e7;
 }
 
 #park_board {
@@ -327,25 +329,282 @@ header {
 	width: 100%;
 	transition: transform 2s ease;
 }
+
+
 /*슬라이드*/
 /* @keyframes slideAnimation { 0% { */
-/* 	transform: translateX(100%); */
-/* } */
-/* 100 */
+/* 	transform: translateX(100%); } 100 % { transform :translateX ( 0); }} */
 
-/* % */
-/* { */
-/* transform */
+/*pointAsideMainCss*/
+.park_pointAside {
+	border: 1px solid #BDBDBD;
+}
+.park_aside{
+text-align : left;
+list-style:none;
+justify-content: center;
+padding:20px;
 
-/* : */
 
-/* translateX */
-/* ( */
+}
+.park_pointAside ul li{
+justify-content: center;
 
-/* 0 */
+}
+/*pointAsideMainCss END*/
 
-/* ) */
-/* ; */
+/*pointChargingCss*/
+.park_account:hover {
+	background-color: #F2F2F2;
+	cursor: pointer;
+}
+.park_AA {
+	margin-top: 30px;
+	justify-content: end;
+}
 
-/* } */
-/* } */
+.park_summary-container {
+	border-radius: 8px;
+	padding: 20px;
+	font-size: larger;
+	margin-top: 30px;
+	width: 38%;
+	display: inline-block; 
+	margin-left: 20px;
+	
+}
+
+.park_summary-item {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.park_summary-total {
+	font-weight: bold;
+	color: red;
+	margin-bottom: 20px;
+}
+
+.park_Abutton {
+	background-color: #3e6ce3;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	margin: 5px;
+	
+}
+
+.park_termsParent {
+	margin-top: 30px;
+	width: 60%;
+	border: 1px solid;
+	padding: 15px;
+	background-color: #F2F2F2
+}
+
+.park_terms-container {
+	width: 300px;
+	border: 1px solid #000;
+	padding: 10px;
+	overflow-y: scroll;
+	height: 180px;
+	width: 100%;
+	background-color: #fff
+}
+
+.park_agree-chkbox {
+	margin-top: 10px;
+	text-align: right;
+	margin-right: 0px;
+}
+
+.park_addAcount {
+	text-align: center;
+	color: #3e6ce3;
+	font-weight: bold;
+}
+
+.park_account {
+	border: 1px solid #BDBDBD;
+	height: 80px;
+	border-radius: 5px;
+	text-align: left;
+	margin-bottom: 10px;
+}
+
+.park_accountSelect {
+	text-align: left;
+}
+
+.park_pointHeader {
+	background-color: #3e6ce3;
+	color: white;
+	padding: 20px;
+	text-align: left;
+	border-radius: 5px;
+	width: 1000px;
+	height: 80px;
+	margin-left: 50px;
+	position: relative;
+	/* 상대 위치 설정 */
+}
+
+.park_pointHeader p {
+	font-size: 27px;
+	font-weight: bold;
+	position: absolute;
+	/* 절대 위치 설정 */
+	top: 7%;
+	/* 상단으로부터 30% 위치 */
+	left: 20px;
+	/* 텍스트 정렬을 위한 왼쪽 여백 */
+}
+
+.park_pointHeader span {
+	position: absolute;
+	top: 59%;
+	font-size: 16px;
+}
+
+.park_pointCharegingMain {
+	border: 1px solid #BDBDBD;
+	margin-left: 50px;
+	margin-top: 20px;
+	width: 1000px;
+	height: 1200px;
+}
+
+.park_chargePointSelect {
+	text-align: center;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.park_chargePointSelect p {
+	margin-bottom: 10px;
+}
+
+.park_points button {
+	background-color: #f1f1f1;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 7px 20px;
+	margin: 0 5px;
+	font-size: 16px;
+	cursor: pointer;
+	width: 100px;
+}
+
+.park_points button:hover {
+	background-color: #e9e9e9;
+}
+
+.park_pointInput {
+	width: 300px;
+	font-size: 16px;
+}
+
+.park_input-container {
+	font-family: 'Noto Sans KR', sans-serif;
+	margin-bottom: 12px;
+}
+
+.park_input-container label {
+	display: block;
+	margin-bottom: 10px;
+}
+
+#park_amountInput {
+	width: 100%;
+	padding: 8px;
+	border: none;
+	border-radius: 4px;
+	margin-bottom: -20px;
+	margin-top: 0px;
+	font-size: 28px;
+	/* 입력 텍스트의 글자 크기를 설정 */
+}
+
+#park_amountInput::placeholder {
+	font-size: 28px;
+	/* 원하는 텍스트 크기로 조정 */
+}
+
+#park_amountInput:focus {
+	outline: none;
+	border-color: #3e6ce3;
+	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
+}
+
+/*pointChargingCss End*/
+
+/*accountConnectCss*/
+.park_bank {
+	border: 1px solid #BDBDBD;
+	height: 80px;
+	border-radius: 5px;
+	justify-content: center;
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+
+.park_bank:hover {
+	background-color: #F2F2F2;
+	cursor: pointer;
+}
+
+.park_bank p {
+	justify-content: center;
+	align-items: flex-end;
+	text-align: center;
+	font-weight: bold;
+}
+/*accountConnectCss END*/
+
+/*insertAccountCss*/
+
+/*input type = number 에서 위아래 화살표 없애기*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.park_account_input-container {
+    display: flex; /* Flexbox 레이아웃을 활성화 */
+    align-items: center; /* 수직 방향으로 중앙 정렬 */
+    margin-top: 10px; /* 상단 여백 추가 */
+  
+    
+}
+
+.park_ia_pointCharegingMain {
+	border: 1px solid #BDBDBD;
+	margin-left: 50px;
+	margin-top: 20px;
+	width: 1000px;
+	height: 1000px;
+}
+
+.park_ia_amountInput {
+	width: 100%;
+	padding: 8px;
+	border: none;
+	border-radius: 4px;
+	margin-bottom: -20px;
+	margin-top: 0px;
+	font-size: 28px;
+	/* 입력 텍스트의 글자 크기를 설정 */
+}
+
+.park_ia_amountInput::placeholder {
+	font-size: 28px;
+	/* 원하는 텍스트 크기로 조정 */
+}
+
+.park_ia_amountInput:focus {
+	outline: none;
+	border-color: #3e6ce3;
+	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
+}
+/*insertAccountCss End*/
