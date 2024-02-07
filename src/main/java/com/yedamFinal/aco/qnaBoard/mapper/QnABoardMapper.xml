@@ -113,7 +113,7 @@
 			#{memberNo},
 			#{title},
 			#{content},
-			null
+			null,
 			SYSDATE,
 			null,
 			'P001',

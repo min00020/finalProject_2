@@ -16,4 +16,7 @@ public class QnABoardVO {
 	private String answerState;
 	private int viewCnt;
 	private String nickname;
+	
+	// pk property
+	private int pk;
 }
