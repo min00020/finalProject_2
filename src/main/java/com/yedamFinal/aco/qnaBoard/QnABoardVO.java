@@ -17,6 +17,5 @@ public class QnABoardVO {
 	private int viewCnt;
 	private String nickname;
 	
-	// pk property
 	private int pk;
 }

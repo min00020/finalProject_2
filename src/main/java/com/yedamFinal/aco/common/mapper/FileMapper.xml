@@ -4,6 +4,32 @@
 
 
 <mapper namespace="com.yedamFinal.aco.common.mapper.FileMapper">
-	<insert id="">
+	<insert id="insertFile">
+		INSERT INTO ATTACHED_FILE 
+		(
+			ATTACHED_FILE_NO,        
+			BOARD_TYPE,       
+			BOARD_NO,        
+			ORIGIN_FILE_NAME, 
+			SERVER_FILE_NAME, 
+			FILE_EXTENSION,  
+			FILE_ORDER,        
+			FILE_PATH, 
+			REGISTER_DATE 
+		)
+		VALUES 
+		(
+			ATTACHED_FILE_SEQ.NEXTVAL,
+			#{attachedFileNo},
+			#{boardType},
+			#{boardNo},
+			#{originFileName},
+			#{serverFileName},
+			#{fileExtension},
+			#{fileOrder},
+			#{filePath},
+			#{registerDate}
+		)
+		
 	</insert>
 </mapper>

@@ -90,11 +90,12 @@ public class QnABoardServiceImpl implements QnABoardService {
 		vo.setMemberNo(memberNo);
 		vo.setTitle(title);
 		vo.setContent(content);
+		vo.setAnswerState("P001");
 		if(qnaMapper.insertQnaBoard(vo) <= 0) {
 			ret.put("result", "500");
 			return ret;
 		}
-		int boardNo = vo.getQnaBoardNo();
+		int boardNo = vo.getPk();
 		if(files != null && files.length > 0) {
 			if(!fileService.uploadAttachFiles(files, memberNo, new String("N005"), boardNo)) {
 				ret.put("result", "500");

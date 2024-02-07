@@ -96,7 +96,7 @@
             WHERE MEMBER_NO = #{memberNo} AND UPPER(TITLE) LIKE '%' || UPPER(#{search}) || '%' 
 	</select>
 	
-	<insert id="insertQnaBoard" parameterType="QnABoardVO" useGeneratedKeys="true" keyProperty="pk"> 
+	<insert id="insertQnaBoard" parameterType="QnABoardVO" useGeneratedKeys="false"> 
 		INSERT INTO QNA_BOARD(
 			QNA_BOARD_NO,                
 			MEMBER_NO,               
@@ -116,9 +116,12 @@
 			null,
 			SYSDATE,
 			null,
-			'P001',
+			#{answerState},
 			0
 		)
+		<selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT QNA_BOARD_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
 	</insert>
 	
 	<delete id="deleteQnaBoard">
