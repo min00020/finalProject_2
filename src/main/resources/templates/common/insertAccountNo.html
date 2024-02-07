@@ -1,0 +1,195 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+
+
+	<div class="d-flex">
+
+		<aside th:replace="@{/layout/member/pointAsideMain.html}"></aside>
+
+		<section class="main">
+
+			<div class="park_ia_pointCharegingMain">
+				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+					<div class="park_chargePointSelect">
+						<div class="park_account_input-container">
+						<div class="bankNameImage">
+						<img th:src="|/commonResource/bankImage/${bankName}.png|" th:alt="${bankName}"
+										style="height: 40px; margin-right : 10px; margin-top:-5px"><span style = "font-size : larger; font-weight : bold; color : #808080 ">[[${bankName}]]</span></div>
+							</div>
+							
+							<div class="accountAndNext" style="margin-top:-20px;">
+							<input type="text" class="park_ia_amountInput" id="nameInput" name ="nameInput" placeholder="이름 입력" style="margin-top : 30px;"/><hr style="margin-top: 0;">
+							<input type="Number" class="park_ia_amountInput" id="accountInput" name="accountInput" placeholder="-없이 계좌번호 입력" />
+						
+						<hr style="margin-top: 0;">
+						<button class="next" style ="width : 100%; border : none; height : 50px;" id="nextBtn">다음</button>
+					</div>
+				</div>
+				<div class="accountInfo" style="margin-top:130px;color : #808080">
+				<p style="font-weight : bold;">간편결제로 연결할 수 없는 계좌</p><hr>
+				<p>
+					·본인 명의가 아닌 계좌<br>
+					·가상계좌/적금/펀드/정기예금 등의 계좌<br>
+					·휴대폰 번호 등으로 만든 평생 계좌번호<br>
+					·계좌에 문제가 있는 경우 (예: 지급정지 또는 해약된 경우)</p><hr><br><br><br>
+					
+					<p style="font-weight : bold;">내 명의 계좌인데 연결이 안될 때</p><hr>
+				<p>
+					
+					아래에 해당하는 경우 실명 정보를 수정하신 후 연결해 주세요.
+
+					·이름을 개명한 경우
+					·주민등록번호를 변경한 경우
+					·실명 정보를 오랫동안 업데이트 하지 않은 경우
+					·실명 정보 수정하기</p><hr>
+				</div>
+
+			</div>
+			</div>
+
+		</section>
+	</div>
+
+</div>
+
+<script th:inline="javascript">	
+
+
+const csrfPara = [[${_csrf.parameterName}]];
+const csrfToken = [[${_csrf.token}]];
+
+// const accountNo =account;
+// const memberNo= [[${memberNo}]];
+// const accountHolder = name;
+// const bankName = [[${bankName}]];
+// const bankCode = [[${bankCode}]];
+
+const accessToken = [[${nhAccessToken}]];
+const Iscd = [[${Iscd}]];
+
+const date = new Date();
+let today = getFormatDate(date);
+const time = date.getTime()
+console.log(date);
+
+	$('#nextBtn').on('click', function(e) {
+		let name = $('#nameInput').val();
+		let account = $('#accountInput').val();
+		const accountNo =account;
+		const memberNo= [[${memberNo}]];
+		const accountHolder = name;
+		const bankName = [[${bankName}]];
+		const bankCode = [[${bankCode}]];
+		
+
+		let obj = {};
+		obj = {
+			Header:{
+			ApiNm : "InquireDepositorOtherBank"	,
+			Tsymd : today,
+			Trtm :"113300",
+			Iscd : Iscd,
+			FintechApsno : "001",
+			ApiSvcCd : "DrawingTransferA",
+			IsTuno : [[${session.member.memberNo}]]+time,
+			AccessToken : accessToken,	
+			},
+		Bncd : bankCode,
+		Acno : account
+		}
+		
+		
+		let accountObj = {};
+		accountObj = {
+				accountNo : account,
+				memberNo : [[${session.member.memberNo}]], 
+				accountHolder : name,
+				bankCode : bankCode,
+				bankName : bankName
+		};
+		//accountObj[csrfPara]=csrfToken;
+		
+	
+
+		
+		$.ajax('https://developers.nonghyup.com/InquireDepositorOtherBank.nh', {
+			type:'post',
+			contentType: 'application/json',
+			data : JSON.stringify(obj)
+		})
+		.done(res => {
+			console.log(res);
+			if(res.Dpnm == name ){
+				console.log('이름 일치')
+				//이름이 일치하면 계좌를 DB에 등록
+				$.ajax('/registAccount', {
+					type : 'post',
+					contentType : 'application/json',
+					data : JSON.stringify(accountObj),
+					beforeSend : function(xhr){
+						xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+					},
+				})
+				.done(res => {
+					if(res.result == '200'){
+						Swal.fire({
+							  title: '계좌등록 성공',
+							  text: '',
+							  icon: 'success',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+							    location.href = '/point';
+							  }
+							});
+							
+					}else{
+						showFailAlert('에러가 발생했습니다.')
+					}
+				})
+				.fail(err => {
+					console.log('계좌등록 실패',err);
+					showFailAlert('계좌등록 실패!')
+					console.log(accountObj);
+					console.log(name);
+					console.log(account);
+					
+					console.log('accountHolder : ',accountHolder);
+					console.log('accountNo : ',accountNo);
+					
+				});
+				
+			}else{	
+				console.log('일치안함')
+				if(res.Header.Rsms == "정상처리 되었습니다."){
+					showFailAlert('이름이 일치하지 않습니다')	
+					
+				}else{
+				showFailAlert(res.Header.Rsms)
+				}
+			}
+		})
+		.fail(err => {
+			console.log(err);
+		})
+	})
+	
+	
+	function getFormatDate(date){
+    	var year = date.getFullYear();              //yyyy
+    	var month = (1 + date.getMonth());          //M
+    	month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    	var day = date.getDate();                   //d
+    	day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    	
+    	return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+	}
+	
+</script>
+
+<style>
+
+</style>

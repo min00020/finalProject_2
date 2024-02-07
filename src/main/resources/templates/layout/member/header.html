@@ -9,7 +9,7 @@
         
             <ul class="list-unstyled d-flex gap-3 align-self-center ml-3">
                 <li>사이드 프로젝트</li>
-                <li>질문&답변</li>
+                <li onclick="location.href='/questionList'">질문&답변</li>
                 <li>자유게시판</li>
                 <li id="qna_li_c">
                 	<div id="qnaDropdown" class="dropdown" style="all: unset;">
@@ -21,7 +21,7 @@
 					</div>
                 </li>
                 <li><a href="/emoMain">이모티콘 상점</a></li>
-                <li>포인트 충전</li>
+                 <li onclick="location.href='/point'">포인트 충전</li>
             </ul>
             <div class="park_search-align-self-center">
              <input type="text" placeholder="검색어 입력" class="park_searchInput">
@@ -44,6 +44,15 @@
             </th:block>
             <th:block sec:authorize="isAuthenticated()"> 
                 <div class = "park_align-self-center d-flex gap-2">
+                          <div class="park_alert" style="width :45px; margin-top:13px;  ">
+                              <a href='/' class="position-relative">
+  								<img class="bell" src="commonResource/bell.png" alt="bell" style="width:50%">
+  								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+   									 99+<span class="visually-hidden">unread messages</span>
+  								</span>
+							</a>
+                    
+               </div>
                     <div class="mink_box">
                     	<a th:href="|/myPage?memberNo=${session.member.memberNo}|">
                     		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />

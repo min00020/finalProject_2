@@ -95,8 +95,8 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByChae() {
-		permitAllUrl.add("/questionBoard");
-		permitAllUrl.add("/questionInfo");
+		permitAllUrl.add("/questionInfo/**");
+		permitAllUrl.add("/questionList");
 		permitAllUrl.add("/questionWrite");
 	}
 	
@@ -117,8 +117,9 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByKyung() {
-		permitAllUrl.add("/zxc");
 		permitAllUrl.add("/freeBoard/freeBoardList");
+//		permitAllUrl.add("/point");
+		
 	}
 	
 	private void insertPermitAllUrlByTae() {

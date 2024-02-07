@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedamFinal.aco.point.mapper.PointMapper">
+	<!-- 계좌 조회 -->
+	<select id="getAccountNumber" resultType="AccountVO">
+		SELECT * FROM ACCOUNT
+	</select>
+
+
+	<!-- 은행 목록 -->
+	<select id="getBank" resultType="BankVO">
+		SELECT *
+		FROM BANK_CODE
+		ORDER BY BANK_CODE
+	</select>
+
+	<!-- 계좌 등록 -->
+	<insert id="registAccountInfo" parameterType="AccountVO">
+		INSERT INTO ACCOUNT
+		(
+		ACCOUNT_NO,
+		MEMBER_NO,
+		ACCOUNT_HOLDER,
+		BANK_CODE,
+		BANK_NAME
+		)
+
+		VALUES
+		(
+		#{accountNo},
+		#{memberNo},
+		#{accountHolder},
+		#{bankCode},
+		#{bankName}
+		)
+
+	</insert>
+
+	<!-- AcoMoneyUpdate -->
+	<update id="updateAcoMoney">
+		UPDATE MEMBER
+			SET ACO_MONEY = ACO_MONEY + #{acoMoney}
+			WHERE MEMBER_NO = #{memberNo}
+
+	</update>
+	
+	<!-- getAcoMoney -->
+	<select id="getAcoMoney" resultType="int">
+		select aco_money 
+		from member 
+		where member_no = #{memberNo}
+	</select>
+	
+	<insert id="insertAcoMoneyHistory" parameterType="PointDetailVO">
+								INSERT INTO POINT_DETAIL(
+								
+								  POINT_DETAIL_NO,
+                                   MEMBER_NO,
+                                  LATEST_TOTAL_POINTS,
+                                 LASTEST_ACO_MONEY,
+                                 LASTEST_ACO_POINT,
+                                  HISTORY_TYPE,
+                                   HISTORY_DATE,
+                                   INC_DEC_POINT,
+                                   POINT_TYPE,
+                                 ACCOUNT_NO)
+                                 
+                           		 VALUES(
+                           		 
+                           		 POINT_DETAIL_seq.nextval,
+                           		 #{memberNo},
+                           		 #{latestTotalPoints},
+                           		 #{latestAcoMoney},
+                           		 #{latestAcoPoint},
+                           		 #{historyType},
+                           		 #{historyDate},
+                           		 #{incDecPoint},
+                           		 #{pointType},
+                           		 #{accountNo}
+                           		 )
+ 	</insert>
+
+
+</mapper>
