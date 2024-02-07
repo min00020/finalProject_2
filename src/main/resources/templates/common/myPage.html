@@ -1,0 +1,553 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+	<div class="d-flex">
+		<section class="d-flex" style="float: left;">
+			<aside style="width: 100%; background-color: #aebfec;">
+				<div class="flex-shrink-0">
+					<!-- 프로필-->
+					<div class="card justify-content-center align-items-center"
+						style="text-align: center; width: 270px; margin: 15px;">
+						<!-- 프사 -->
+						<div class="box-1">
+							<th:block th:if="${memberInfo.profileImage} == null">
+								<img class="profile-1" src="commonResource/default_profile.jpg"
+									style="width: 100%; height: 100%;" alt="profile">
+							</th:block>
+							<th:block th:unless="${memberInfo.profileImage} == null">
+								<img class="profile-1 mx-auto d-block"
+									style="width: 100%; height: 100%;"
+									th:src="|upload/profile/${memberInfo.profileImage}|" alt="...">
+							</th:block>
+						</div>
+						<!-- grade image -->
+						<div class="card-body">
+							<h6 class="card-text" style="font-weight: bold;"
+								th:text="${memberInfo.nickname}">\</h6>
+							<h6 class="card-text" th:text="${memberInfo.email}">\</h6>
+							<img
+								th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|"
+								logo="" style="width: 30px;"> <span class="card-text"
+								th:text="${memberInfo.gradeName}">\</span>
+							<h6 class="card-text" th:text="|${#numbers.formatInteger(memberInfo.accumActivityPoint, 0, 'COMMA')} P|">\</h6>
+
+						</div>
+					</div>
+
+					<!-- summary -->
+
+					<div class="card container"
+						style="width: 270px; height: 400px; margin-top: 30px; margin-left: 15px;">
+						<h5
+							style="padding-top: 30px; padding-bottom: 30px; font-weight: bold; text-align: center;">SUMMARY</h5>
+						<!-- 정산요청 div -->
+						<div class="container2"
+							style="background-color: #aebfec; border-radius: 20px; padding: 10px 10px 10px 5px;">
+							<div class="row"
+								style="width: auto; height: auto; overflow: visible;">
+								<div class="tae-box1 col-1" style="width: 50px;">
+									<img class="img1" src="commonResource/icon/point.png"
+										style="width: 50px; height: auto;">
+								</div>
+								<div class="tae-box2 col-2" style="width: 140px;">
+									<h6 style="font-weight: bold;">POINT</h6>
+									<h6 id="pointMypage" class="card-text" style="color:#3e6ce3;font-weight:bold;"
+										th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h6>
+								</div>
+								<div class="col-1" style="width: 55px;">
+									<!-- 모달버튼 -->
+									<button type="button" class="btn btn-modal"
+										data-bs-toggle="modal" data-bs-target="#point"
+										style="text-decoration: none;color: #979da9;">
+
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+									<!-- 모달시작 -->
+									<div class="modal fade" id="point" tabindex="-1" role="dialog"
+										aria-labelledby="pointModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-xl" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+
+													<h3 class="modal-title" id="pointModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/point.png"
+															style="width: 70px; height: 70px;">포인트뱅크
+													</h3>
+
+												</div>
+												<div class="modal-body">
+													<!-- 포인트뱅크모달영역 -->
+													<div style="height:430px;">
+														<div class="d-flex">
+															<div class="point-image" style="width:350px;">
+																<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
+																<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
+																<h3 id="totalPointMypage" style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
+															</div>
+																<div class="point-acc" style="hegiht:700px;">
+																	<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																		<h4 style="font-weight:bold;">애코포인트 정산</h4>
+																		<br>
+																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
+																		<br>
+																		<div class="input-group mb-3" style="width:600px;height:50px;">
+																			<input type="text" id="accumPointMypage" class="form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<button class="btn btn-outline-secondary" id="accountApprove" type="button" data-bs-toggle="modal" data-bs-target="#accountList" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
+																		</div>
+																	</div>
+																	<div class="point-acc-1" style="width:750px;hegiht:450px;">
+																		<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
+																		<br>
+																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
+																		<br>
+																		<div class="input-group mb-3" style="width:600px;height:50px;">
+																			<input type="text" class="form-control" id="activityMypage" name="resPoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
+																			<button class="btn btn-outline-secondary" type="button" id="changepoint" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
+																		</div>
+																	</div>
+																</div>
+														</div>
+													</div>
+														<div id="activityList">
+															<div>
+																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4><hr>
+																	<ul class="scroll type3" id="accumList" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity1" th:each="pol:${pointList}">
+																		<span style="font-weight:bold;font-size:large;" th:text="${pol.historyType}"></span>
+																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
+																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
+																		<br>
+																		<span class="tae_date" th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
+																		<hr>
+																		</li>
+																	</ul>
+																
+															</div>
+														</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달 끝 -->
+									
+								</div>
+							</div>
+						</div>
+						<!-- 활동점수 -->
+						<div class="container2"
+							style="background-color: #aebfec; border-radius: 20px; padding: 10px 10px 10px 5px;">
+							<div class="row"
+								style="width: auto; height: auto; overflow: visible;">
+								<div class="tae-box1 col-1" style="width: 50px;">
+									<img class="img2" src="commonResource/icon/activity.png"
+										style="width: 50px; height: auto;">
+								</div>
+								<div class="tae-box2 col-2" style="width: 140px;">
+									<h6 style="font-weight: bold;">내 활동 관리</h6>
+									<h6 class="card-text">활동/등급 관리</h6>
+								</div>
+								<div class="col-1" style="width: 55px;">
+									<!-- 모달버튼 -->
+									<button type="button" class="btn btn-modal"
+										data-bs-toggle="modal" data-bs-target="#activity"
+										style="text-decoration: none; color: #979da9;">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+									<!-- 모달시작 -->
+									<div class="modal fade" id="activity" tabindex="-1"
+										role="dialog" aria-labelledby="activityModalLabel"
+										aria-hidden="true">
+										<div class="modal-dialog modal-xl" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h3 class="modal-title" id="activityModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/activity.png"
+															style="width: 70px; height: 70px;">내활동관리
+													</h3>
+												</div>
+												<div class="modal-body">
+													<div class="d-flex" style="hegiht:700px;">
+														<div class="activity-image" style="width:350px;hegiht:700px;padding-left:30px;">
+															<img th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|" style="width:300px;padding:left:50px;">
+															<h4 style="text-align:center;font-weight:bold;">내 등급</h4>
+														</div>
+														<div class="grade" style="hegiht:700px;padding-left:80px;">
+															<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																<div class="grade">
+																	<div class="gradeinfo" style="float:left;">
+																		<img class="gradeimage" src="commonResource/gradeimage/루키.png">
+																	</div>
+																	<div class="gradecontent" style="display:inline-block;padding-left:20px;" >
+																		<h5 class="grade-h5" style="font-weight:bold;padding-top:9px;">LV1. 루키</h5>
+																		<br>
+																		<p class="grade-p" style="margin-top:-30px;">가입한 모든 회원</p>
+																	</div>
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/브론즈.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV2. 브론즈</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 20개 이상이면서 누적 활동점수 30,000점 이상인 회원</p>
+																	</div>
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/실버.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV3. 실버</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 100개 이상이면서 누적 활동점수 200,000점 이상인 회원</p>
+																	</div>																
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/골드.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV4. 골드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 500개 이상이면서 누적 활동점수 500,000점 이상인 회원</p>
+																	</div>	
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage"  src="commonResource/gradeimage/다이아몬드.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV5. 다이아몬드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 1000개 이상이면서 누적 활동점수 1,000,000점 이상인 회원</p>
+																	</div>	
+																</div>
+															</div>
+															
+														</div>
+													</div>
+													<div id="activityList">
+															<div>
+																<h4 style="padding-left:30px;font-weight:bold;">내 활동 내역</h4><hr>
+																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity1" th:each="acp:${activityList}">
+																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
+																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
+																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${acp.incDecActivityPoint}점 |"></span>
+																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${acp.incDecActivityPoint}점 |"></span>
+																		<br>
+																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
+																		<hr>
+																		</li>
+																		
+																	</ul>
+																
+															</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달 끝 -->
+									<!-- 정산 계좌 Modal -->
+									
+										<div th:if="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
+											      </div>
+											      <div class="modal-body">
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+												      	<div class="bankcard">
+												       		<p style="text-align:center;color:#979da9;">"현재 등록된 계좌가 없습니다."</p>
+												       	</div>
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <button type="button" class="btn btn-primary">정산요청</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
+										<div th:unless="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											      </div>
+											      <div class="modal-body">
+											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+												       <div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
+												       		<button type="button" style="border:0;" th:onclick="choiceAccount([[${acc.accountNo}]])">
+												       			<img th:src="|commonResource/bankImage/${acc.bankName}.png|" style="width:80px;height:auto;text-align:center;">
+															</button>											       		
+												       		<p th:text="${acc.bankName}" style="float:left;">/</p>
+												       </div>
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <button type="button" class="btn btn-primary">정산요청</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 회원정보수정 -->
+						<div class="container2"
+							style="background-color: #aebfec; border-radius: 20px; padding: 10px 10px 10px 5px;">
+							<div class="row"
+								style="width: auto; height: auto; overflow: visible;">
+								<div class="tae-box1 col-1" style="width: 50px;">
+									<img class="profile" src="commonResource/icon/modifyinfo.png"
+										style="width: 50px; height: auto;">
+								</div>
+								<div class="tae-box2 col-2" style="width: 140px;">
+									<h6 style="font-weight: bold;">회원정보수정</h6>
+									<h6 class="card-text">정보,비밀번호</h6>
+								</div>
+								<div class="col-1" style="width: 55px;">
+									<!-- 모달버튼 -->
+									<button type="button" class="btn btn-modal"
+										data-bs-toggle="modal" data-bs-target="#point"
+										style="text-decoration: none;color: #979da9;">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+									<!-- 모달시작 -->
+									<div class="modal fade" id="modify" tabindex="-1" role="dialog"
+										aria-labelledby="modifyModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-xl" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h3 class="modal-title" id="modifyModalLabel"
+														style="font-weight: bold;">
+														<img src="/commonResource/icon/modifyinfo.png"
+															style="width: 70px; height: 70px;">회원정보수정
+													</h3>
+												</div>
+												<!-- 회원정보수정모달영역 전민교가 연동하기로함 -->
+												<div class="modal-body">
+													
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">Close</button>
+													<button type="button" class="btn btn-primary">Save
+														changes</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달 끝 -->
+								</div>
+								
+							</div>
+						</div>
+						<!-- 위에까지 회원정보 수정 끝 -->
+					</div>
+				</div>
+			</aside>
+		</section>
+		<!-- 메인바디영역 -->
+		<!-- mypage1 -->
+		<div class="container" style="background-color: #aebfec;">
+			<div class="container">
+				<div class="card" id="myTabContent" style="height: 850px;">
+					<ul class="nav nav-tabs" id="myTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="home-tab"
+								data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+								type="button" role="tab" aria-controls="home-tab-pane"
+								aria-selected="true" style="width: 380px;">내가 참여한 프로젝트</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+								data-bs-target="#profile-tab-pane" type="button" role="tab"
+								aria-controls="profile-tab-pane" aria-selected="false"
+								style="width: 380px;" onclick="location.href='/myPage2'">내
+								질답통계</button>
+						</li>
+					</ul>
+					<div class="card d-flex">
+						<div class="card">
+							<div class="card-body" id="card-1">
+								<h5 class="card-title">🏃‍♀️참여프로젝트 목록</h5>
+								<h6 class="card-subtitle mb-2 text-body-secondary">Card
+									subtitle</h6>
+								<p class="card-text">Some quick example text to build on the
+									card title and make up the bulk of the card's content.</p>
+								<a href="#" class="card-link">Card link</a> <a href="#"
+									class="card-link">Another link</a>
+							</div>
+						</div>
+					</div>
+					<div>
+
+						<div class="card d-flex"
+							style="width: 437px; height: 277px; float: left; margin-top: 30px; margin-left: 20px; overflow: visible;">
+							<div class="card-body" id="card-1"
+								style="width: 437px; height: 277px;">
+								<h5 style="text-align: center; font-weight: bold;">내 관심주제</h5>
+								<ul class="tab-ul">
+									<li th:text="${memberInfo.topicHashtag}"></li>
+								</ul>
+							</div>
+						</div>
+						<div class="card d-flex"
+							style="width: 437px; height: 277px; float: left; margin-top: 30px; margin-left: 20px; overflow: visible;">
+							<div class="card-body" id="card-1"
+								style="width: 437px; height: 277px;">
+								<h5 style="margin-bottom: -8px; font-weight: bold;">
+									😉 이모티콘 구매내역
+									<button type="button" class="btn btn-modal"
+										onclick="goEmoShop()" data-bs-toggle="modal"
+										data-bs-target="#bookmark"
+										style="text-decoration: none; color: #979da9;">
+										더보기
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+								</h5>
+									<hr>
+								<ul class="emoticon-list" style="list-style: none;float:left;display:inline-block;padding: 10px;margin: 0px;">
+									<li th:each="emo:${emoInfo}">[[ ${emo.emoName} ]] 
+									<span th:text="|구매날짜 ${#dates.format(emo.emoBuydate, 'yyyy-MM-dd')}|"
+										style="padding-left: 133px; float: right;">
+											[[${emo.emoBuydate}]] </span>
+
+										<hr>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+let choiceAccountObj = null;
+function choiceAccount(accountObj){
+	if(choiceAccountObj != null  || choiceAccountObj == accountObj){
+		$('#'+ choiceAccountObj).css("border", "");
+		if(choiceAccountObj == accountObj) {
+			choiceAccountObj = null;
+			return;
+		}
+	}
+	choiceAccountObj = accountObj
+	
+	$('#'+ accountObj).css("border", "1px solid skyblue");
+	
+}
+
+
+let csrfPara = $('meta[name="csrfPara"]').attr("content");
+let csrfToken = $('meta[name="csrf"]').attr("content");
+	const memberno = [[${session.member.memberNo}]]
+	function goEmoShop(){
+		location.href = '/emoMain';
+	}
+	
+	
+	//활동점수환전
+	$('#changepoint').on('click', pointUpdateAjax);
+	
+		function pointUpdateAjax(event){
+			if (!validation()) return;
+			let resPoint = $('input[name="resPoint"]');
+			let obj = {
+				resPoint : resPoint.val(),
+			}
+			//post 에서만 사용
+			obj[csrfPara] = csrfToken;
+			
+			$.ajax('/updateMemberPoint',{
+				type:"POST",
+				data : obj				
+			}).done(result =>{
+				showSuccessAlert('정상적으로 환전되었습니다.');
+				
+				function dateFormat(date) {
+					let dateFormat2 = date.getFullYear() +
+						'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+						'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+					return dateFormat2;
+				}
+
+				const toDate = dateFormat(new Date());
+				const commaIncDecPoint = Number(resPoint.val()).toLocaleString();
+				
+				const commaActivityPoint = Number(result.memberInfo.availableActivityPoint).toLocaleString();
+				const commaAccummPoint = Number(result.memberInfo.availableAccumPoint).toLocaleString();
+				const commaTotalPoint = Number(result.memberInfo.acoTotal).toLocaleString();
+				const liString = `
+									<li class="activity1">
+										<span style="font-weight:bold;font-size:large;">포인트 전환</span>
+										<span class="increase-point">+ ${commaIncDecPoint}P</span>
+										<br>
+										<span class="tae_date">${toDate}</span>
+										<hr>
+									</li>`;
+				
+				$('#activityMypage').val('');
+				
+				
+				const accumList = $('#accumList');
+				accumList.prepend(liString);
+				
+				$('#pointMypage').text(commaTotalPoint);
+				$('#totalPointMypage').text(commaTotalPoint);
+				$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+				$('#activityMypage').attr("placeholder", "가용 활동점수 " + commaActivityPoint + " 점");
+				
+			}).fail(err => console.log(err));
+		}
+			
+		function validation(){
+			let resPoint = $('input[name="resPoint"]');
+			const numPoint = Number(resPoint.val());
+			if(numPoint < 5000 || (numPoint % 1000) != 0){
+				showWarningAlert("5,000점 이상부터 1,000점 단위로 환전 가능합니다");
+				return false;
+			}
+			return true;
+		}	
+</script>
