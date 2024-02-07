@@ -184,7 +184,11 @@ VALUES (activity_point_detail_seq.NEXTVAL,
     WHERE member_no = #{m.memberNo}
 
 </update>
+<select id="selectMemberAccount" resultType="">
 
+
+
+</select>
 
 
 
