@@ -66,7 +66,7 @@ public class QuestionController {
 		return "question/questionWrite";
 	}
 	
-	@PostMapping("/question/write")
+	@PostMapping("/questionWrite/write")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
 		Map<String, Object> ret = new HashMap<String, Object>();

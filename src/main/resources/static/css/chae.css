@@ -137,9 +137,8 @@
 	.min_searchImg{
 		position: absolute;
 		top:14px;
-	    right: 12px; /* 이미지를 오른쪽에 위치시키고자 하는 간격을 조절합니다. */
-	    width: 20px; /* 이미지의 너비를 조절합니다. */
-	    height: 20px; /* 이미지의 높이를 조절합니다. */
+	    right: 12px;
+	    width: 17px; 
     }
 	
 	
