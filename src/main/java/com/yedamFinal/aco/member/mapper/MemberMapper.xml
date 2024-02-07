@@ -175,7 +175,6 @@ VALUES (activity_point_detail_seq.NEXTVAL,
 
 </insert>
 
-
 <update id="updateMemberPoint" parameterType="MemberVO">
 	UPDATE member
     SET available_activity_point = available_activity_point - #{resPoint}, 
@@ -184,13 +183,13 @@ VALUES (activity_point_detail_seq.NEXTVAL,
     WHERE member_no = #{m.memberNo}
 
 </update>
-<select id="selectMemberAccount" resultType="">
 
-
-
+<select id="selectMemberAccountList" resultType="com.yedamFinal.aco.point.AccountVO">
+	SELECT a.member_no, b.account_no, b.account_holder, b.bank_code, b.bank_name
+	FROM member a
+	JOIN account b ON a.member_no = b.member_no
+	WHERE a.member_no= #{memberNo}
 </select>
-
-
 
 <select id="selectCheckDuplicateId" resultType="MemberVO">
 	SELECT id

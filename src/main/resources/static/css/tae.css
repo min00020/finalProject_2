@@ -207,5 +207,11 @@ input::placeholder
 }
 .tae_date{
 	color:#979da9;
-	
+}
+.bank{
+	width:100px;
+	height:100px;
+	display:inlineblock;
+	background-color:beige;"
+	border : 0px;
 }

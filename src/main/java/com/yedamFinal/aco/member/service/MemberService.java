@@ -12,6 +12,7 @@ import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
@@ -46,6 +47,8 @@ public interface MemberService {
  	//포인트 사용내역
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO);
 	public List<TagVO> getTagList();
+	public List<AccountVO> getMemberAccountList(MemberVO memberVO);
+	
 	//활동점수 내역 리스트 가져오기
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO);
 	public Map<String, Object> updateMemberPoint(int resPoint, MemberVO memberVO);

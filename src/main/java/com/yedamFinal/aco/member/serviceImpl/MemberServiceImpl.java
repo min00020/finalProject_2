@@ -31,6 +31,7 @@ import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
@@ -192,7 +193,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 		return ret;
 	}
-
+	
 	@Override
 	public Map<String, Object> loginMember(String userid, String userpw) {
 		// TODO Auto-generated method stub
@@ -312,6 +313,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		int result = memberMapper.updateMemberPoint(resPoint,vo);
 		
 		return map;
+	}
+	
+	@Override
+	public List<AccountVO> getMemberAccountList(MemberVO memberVO){
+		return memberMapper.selectMemberAccountList(memberVO);
+		
 	}
 	@Override
 	public boolean delBookmarkList(int qnaboardNo, int memberNo) {

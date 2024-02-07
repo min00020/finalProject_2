@@ -98,10 +98,7 @@
 																		<br>
 																		<div class="input-group mb-3" style="width:600px;height:50px;">
 																			<input type="text" id="accumPointMypage" class="form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
-																			<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
-																			<button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#accountApprove" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
-																			<!-- 계좌가 있는 경우 계좌 목록 표시 -->
-																			
+																			<button class="btn btn-outline-secondary" id="accountApprove" type="button" data-bs-toggle="modal" data-bs-target="#accountList" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
 																		</div>
 																	</div>
 																	<div class="point-acc-1" style="width:750px;hegiht:450px;">
@@ -142,6 +139,7 @@
 										</div>
 									</div>
 									<!-- 모달 끝 -->
+									
 								</div>
 							</div>
 						</div>
@@ -271,6 +269,55 @@
 										</div>
 									</div>
 									<!-- 모달 끝 -->
+									<!-- 정산 계좌 Modal -->
+									
+										<div th:if="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
+											      </div>
+											      <div class="modal-body">
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+												      	<div class="bankcard">
+												       		<p style="text-align:center;color:#979da9;">"현재 등록된 계좌가 없습니다."</p>
+												       	</div>
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <button type="button" class="btn btn-primary">정산요청</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
+										<div th:unless="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											      </div>
+											      <div class="modal-body">
+											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+												       <div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
+												       		<button type="button" style="border:0;" th:onclick="choiceAccount([[${acc.accountNo}]])">
+												       			<img th:src="|commonResource/bankImage/${acc.bankName}.png|" style="width:80px;height:auto;text-align:center;">
+															</button>											       		
+												       		<p th:text="${acc.bankName}" style="float:left;">/</p>
+												       </div>
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <button type="button" class="btn btn-primary">정산요청</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
 								</div>
 							</div>
 						</div>
@@ -415,17 +462,32 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+let choiceAccountObj = null;
+function choiceAccount(accountObj){
+	if(choiceAccountObj != null  || choiceAccountObj == accountObj){
+		$('#'+ choiceAccountObj).css("border", "");
+		if(choiceAccountObj == accountObj) {
+			choiceAccountObj = null;
+			return;
+		}
+	}
+	choiceAccountObj = accountObj
+	
+	$('#'+ accountObj).css("border", "1px solid skyblue");
+	
+}
+
+
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 	const memberno = [[${session.member.memberNo}]]
 	function goEmoShop(){
 		location.href = '/emoMain';
 	}
-	function accumPoint(){
-		location.href = '/accountConnect';
-	}
 	
+	
+	//활동점수환전
 	$('#changepoint').on('click', pointUpdateAjax);
 	
 		function pointUpdateAjax(event){
@@ -434,6 +496,7 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 			let obj = {
 				resPoint : resPoint.val(),
 			}
+			//post 에서만 사용
 			obj[csrfPara] = csrfToken;
 			
 			$.ajax('/updateMemberPoint',{

@@ -26,6 +26,7 @@ import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
@@ -87,6 +88,8 @@ public class MemberController {
 		List<MyemoticonVO> emoinfo = memberService.getMyemoList(memberVO);
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
+		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
+		model.addAttribute("accountList", list3);
 		model.addAttribute("pointList", list);
 		model.addAttribute("activityList", list2);
 		model.addAttribute("emoInfo", emoinfo);
