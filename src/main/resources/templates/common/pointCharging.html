@@ -1,0 +1,264 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+
+
+	<div class="d-flex">
+
+		<aside th:replace="@{/layout/member/pointAsideMain.html}"></aside>
+
+		<section class="main">
+			<div class="park_pointHeader">
+				<p>애코머니 충전</p>
+				<span>질문게시판, 이모티콘 상점에서 사용되는 애코머니를 간편하게 충전할 수 있습니다.</span>
+			</div>
+			<div class="park_pointCharegingMain">
+				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+					<div class="park_chargePointSelect">
+						<div class="park_input-container">
+							<label for="park_amountInput"></label> <input type="text" name ="park_amountInput"
+								id="park_amountInput" placeholder="충전할 금액을 입력해 주세요"
+								oninput="formatNumber(this)" />
+						</div>
+						<hr style="margin-top: 0;">
+						<p style="text-align : right; color : #808080; font-size:small; margin-top : -10px;">일일 최대 충전 한도 : 1,000,000 원<br>최소 충전금액 : 1,000 원</p>
+						<div class="park_points">
+							<button>+1,000</button>
+							<button>+3,000</button>
+							<button>+5,000</button>
+							<button>+10,000</button>
+							<button>+30,000</button>
+							<button>+50,000</button>
+						</div>
+						<div class="park_accountSelect">		
+							<br> <br>
+							<h3>내 출금 계좌</h3>
+							<hr>
+						</div>
+					  <div th:each="account : ${getAccountList}">
+						<div class="park_account d-flex align-items-center" th:data-accountname="${account.bankName}">
+						<img th:src="|/commonResource/bankImage/${account.bankName}.png|" th:alt="${account.bankName}"
+										style="height: 40px; width : 40px; content-align : center; margin-left : 15px;">
+							<div style="margin-top:10px; margin-left:10px;">
+								<p style="color : #808080; display:block; margin-bottom : 0px; font-weight : bold;">[[${account.bankName}]]</p>
+								<p style = "color : #808080; ">[[${account.bankName}]] [[${account.accountNo}]]</p>
+							</div>
+						</div>
+					  </div><!-- th:each end -->
+					</div>
+					<p class="selectMyAccount" style="color: #808080">선택 : </p>
+					<span class="park_addAcount">
+						<p><a href="/accountConnect" style="text-decoration-line: none; color : #3e6ce3;">
+							<img id="plus" src="commonResource/plus.png" alt="logo"
+								style="width: 2%; margin-bottom:3px;"> 계좌 등록하기</a>
+						</p>
+					</span>
+					<hr>
+					<div class="park_termsParentParent d-flex">
+						<div class="park_termsParent">
+							<div class="park_terms-container">
+								<p>제 1장 총칙</p>
+								<p>제 1조 (목적)</p>
+								<!-- 약관의 내용을 여기에 넣으세요. -->
+								<p>이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여
+									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br>
+									이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여
+									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br>
+									이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여
+									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+								<!-- ... -->
+							</div>
+							<div class="park_agree-chkbox">
+								<input type="checkbox" id="termsAgree"> <label
+									for="termsAgree">위 내용에 동의합니다.</label>
+							</div>
+						</div>
+						<div class="park_summary-container">
+							<hr>
+							<div class="park_summary-item">
+
+								<span>현재 보유 애코머니 :</span> <span th:text='|${getAcoMoney} P|'></span>
+							</div>
+							<div class="park_summary-item">
+								<span>충전할 애코머니 :</span> <span  class= "park_am_input"></span>
+							</div>
+							<div class="park_summary-item park_summary-total">
+								<span>결제할 금액 :</span> <span class= "park_money_input"></span>
+							</div>
+							<hr>
+							<div class="park_summary-item park_summary-total">
+								<span>충전후 애코머니 :</span> <span class ="park_summary" th:text=${getAcoMoney}></span>
+							</div>
+						</div>
+					</div>
+					<hr style="margin-top: 50px;">
+					<div class="park_AA d-flex justify-content-end">
+						<button class="park_Abutton" onclick="submitPayment()">충전하기</button>
+						<button class="park_Abutton" onclick="cancelPayment()"
+							style="background-color: #808080">취소</button>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+</div>
+<style>
+
+</style>
+
+<script th:inline="javascript">
+// function cancelPayment(){
+// 	alert('asd')
+// };
+const csrfPara = [[${_csrf.parameterName}]];
+const csrfToken = [[${_csrf.token}]];
+const date = new Date();
+const time = date.getTime();
+let today = getFormatDate(date);
+const accessToken = [[${nhAccessToken}]];
+const Iscd = [[${Iscd}]];
+const memberNo= [[${session.member.memberNo}]];
+const acoMoney= [[${acoMoney}]];
+
+
+function submitPayment(){
+	let chargingMoney = $('#park_amountInput').val().replaceAll(',', '');
+
+	let obj={};
+	obj={	
+		 Header:{
+	        ApiNm:"DrawingTransfer",
+	        Tsymd:today,
+	        Trtm:"125237",
+	        Iscd:Iscd,
+	        FintechApsno : "001",
+	        ApiSvcCd:"DrawingTransferA",
+	        IsTuno:"memberNo+time", 
+	        AccessToken: accessToken
+	    },
+	FinAcno:"00820100023050000000000017722",
+	Tram:chargingMoney,
+	DractOtlt:"테스트",
+	MractOtlt:"테스트"
+	}
+	
+	let memObj = {};
+	memObj = {		
+			memberNo : memberNo,
+			acoMoney : chargingMoney
+	};
+	
+
+	$.ajax('https://developers.nonghyup.com/DrawingTransfer.nh', {
+		type:'post',
+		contentType: 'application/json',
+		data : JSON.stringify(obj)
+	})
+	.done(res =>{
+		console.log(res);
+		$.ajax('/point', {
+			type : 'post',
+			contentType : 'application/json',
+			data : JSON.stringify(memObj),
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			showSuccessAlert('충전 성공')
+		
+				
+				
+				
+		}).fail(err=>{
+			console.log(memberNo,acoMoney,Iscd,chargingMoney)
+			console.log(memObj);
+			console.log(obj);
+		showFailAlert('충전 실패')
+		});
+})
+	
+
+}//submit end
+
+
+
+const accountElements = document.querySelectorAll('.park_account');
+accountElements.forEach((accountElement) => {
+	accountElement.addEventListener('click', () => {
+
+	 
+	    const selectedAccount = accountElement.getAttribute('data-accountname');
+
+	    
+	    const selectionText = document.querySelector('.selectMyAccount');
+	    //removeAttribute : 새 은행을 선택할 때마다 이전에 선택된 은행의 id 정보를 제거하기 위해 사용
+	    selectionText.removeAttribute("id");
+	    selectionText.id = selectedAccount ;
+	    selectionText.textContent = `선택 : ${selectedAccount}`;
+	  });
+	});
+	
+//은행 요소를 선택
+const accountElements2 = document.querySelectorAll('.park_account');
+
+// 이전에 선택한 은행 요소를 저장할 변수를 초기화
+let previousSelectedAccount = null;
+
+// 각 은행 요소에 클릭 이벤트를 추가
+accountElements2.forEach((accountElement) => {
+	accountElement.addEventListener('click', () => {
+
+    // 클릭 시 푸른 테두리 추가.
+    accountElement.style.border = '2px solid #3e6ce3';
+
+    // 이전에 선택한 은행 테두리 제거
+    if (previousSelectedAccount !== null) {
+    	previousSelectedAccount.style.border = '1px solid #BDBDBD';
+    }
+
+    previousSelectedAccount = accountElement;
+  });
+});
+
+
+
+const money = $('.park_money_input');
+const am = $('.park_am_input');
+const sum = $('.park_summary');
+	$('#park_amountInput').on('input', function(e) {
+		const inVal = Number(e.target.value.replaceAll(',',''));
+		if(inVal > 0){
+			money.text(inVal+' 원');
+			am.text(inVal+' P');
+			sum.text(inVal+[[${getAcoMoney}]]+ ' P')
+		}
+	})
+	
+	function formatNumber(input) {
+		 let numbers = input.value.replace(/\D/g, '');
+
+		    // 문자열을 정수로 변환(10진수).
+		    let integerNumber = parseInt(numbers, 10);
+
+		    // 숫자가 1,000,000을 초과하는 경우 1,000,000으로 설정.
+		    if (integerNumber > 1000000) {
+		        integerNumber = 1000000;
+		    }
+
+		    // 숫자를 콤마 형식으로 변환하여 input 값으로 설정.
+		    input.value = integerNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
+	
+	function getFormatDate(date){
+    	var year = date.getFullYear();              //yyyy
+    	var month = (1 + date.getMonth());          //M
+    	month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    	var day = date.getDate();                   //d
+    	day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    	
+    	return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+	}
+</script>
