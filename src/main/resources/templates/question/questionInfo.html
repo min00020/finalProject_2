@@ -54,8 +54,8 @@
 						<p  th:text="${questionInfo[0][0].writeDate}">2023.01.28</p>
 				</div>
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
-			<div class="qna_contents" th:utext="${questionInfo[0][0].contents}"> <!-- 질문 내용 -->
-				<p>node.js를 이해하기 위해 질문드립니다.
+			<div class="qna_contents" > <!-- 질문 내용 -->
+				<p th:utext="${questionInfo[0][0].contents}">node.js를 이해하기 위해 질문드립니다.
 					블로그 같은 곳에서 node.js에 대해서 공부 하다보니, 개념이 이해가 안 되는데,
 					
 					1. 일종의 javascript를 돌리기 위한 일종의 서버라고 이해하면 되죠?
@@ -63,7 +63,7 @@
 					2.Node.js가 나오기 전까지는 자바스크립트가 브라우저의 동작을 제어하는데 사용되었고 브라우저에서만 실행할 수 있다는데,
 					  여기서 말하는 브라우저 바깥에서 자바 스크립트를 어떤 상황에서 쓴다는 말인가요?
 				</p>
-				<p style="color:blue">#node.js #mysql</p>
+				<p style="color:blue" th:text="${questionInfo[0][0].tag}">#node.js #mysql</p>
 			</div>
 			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
 				<div id="member" class="col-8" style="height:40px;">
@@ -89,10 +89,9 @@
 		</div>
 		<!-- questionInfo 질문글 끝-->
 		 
-		<!-- 답변 작성폼 -->
-	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id}" >
+		<!-- 답변 작성폼 / 작성자 != 로그인유저 and 답변 단 적 없을 때-->
+	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id and writePost == false}" >
 		 	<div style="width:900px;margin: 0 auto;">
-				<!-- 위에 만약 답변 작성했을 경우도 안뜨게 조건 추가해야함! -->
 				<div class="answer-top" style="height:80px;">
 					<div class="min_answerbox" >
 					   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
@@ -181,7 +180,7 @@
 			<div class="questionInfo" th:each="questionIdx : ${questionInfo}">
 				<th:block th:each="question: ${questionIdx.value}">	
 					<div th:if="${question.addStatus == 'R002'}">
-							<div id="qna_add" >
+							<div id="qna_add">
 								<!-- 질문자/작성자 구분 -->
 								<img th:if="${question.addWriterType == 'J001'}"
 									class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
@@ -286,13 +285,14 @@
 <script th:inline="javascript">
 	 let test = [[${questionInfo}]];
 	 let test2 = Object.values(test)[0][1];
-	 let test3 = [[${isAdopt}]]
+	 let test3 = [[${writePost}]]
 </script>
 
 <!-- text editor -->
 <script>
 let html = null;
 const editor = CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+	
   toolbar: {
     items: [
       //'exportPDF', 'exportWord', '|',
@@ -310,18 +310,6 @@ const editor = CKEDITOR.ClassicEditor.create(document.getElementById("editor"), 
       'sourceEditing'
     ],
     shouldNotGroupWhenFull: true
-  },
-  simpleUpload: {
-      // The URL that the images are uploaded to.
-      uploadUrl: 'http://example.com',
-
-      // Enable the XMLHttpRequest.withCredentials property.
-      withCredentials: true,
-
-      // Headers sent along with the XMLHttpRequest to the upload server.
-      headers: {
-          'X-CSRF-TOKEN': 'CSRF-Token',
-          Authorization: 'Bearer <JSON Web Token>'
   },
   list: {
     properties: {
@@ -417,7 +405,8 @@ const editor = CKEDITOR.ClassicEditor.create(document.getElementById("editor"), 
     'Pagination',
     'WProofreader',
     'MathType'
-  ]
+  ],
+
 }).then( newEditor => {
     html = newEditor;
 })

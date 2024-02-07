@@ -20,7 +20,7 @@ public class QuestionVO {
 	private int bookmarkCnt;
 	private int answerCnt;
 	private int replyCnt;
-	
+	 
 	//member
 	private String id;
 	private String profileImage;
@@ -31,6 +31,7 @@ public class QuestionVO {
 	private String answerMemberLevel;
 	
 	//answerBoard
+	private int answerMemberNo;
 	private int answerBoardNo;
 	private String answerTitle;
 	private String answerContents;

@@ -23,6 +23,11 @@ public class QuestionServiceImpl implements QuestionService{
 	public List<QuestionVO> getQuestionList() {
 		return questionMapper.getQuestionList();
 	}
+	
+	@Override
+	public List<QuestionVO> getQuestionListSelect(String topic) {
+		return questionMapper.getQuestionListSelect(topic);
+	}
 
 	//단건조회
 	@Override
@@ -30,7 +35,7 @@ public class QuestionServiceImpl implements QuestionService{
 	 * public List<QuestionVO> getQuestionInfo(int qno) { return
 	 * questionMapper.getQuestionInfo(qno); }
 	 */
-	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model) {
+	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model, int memberNo) {
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
@@ -42,8 +47,8 @@ public class QuestionServiceImpl implements QuestionService{
 		    ret.put(idx++, entry.getValue());
 		}
 		
-		model.addAttribute("isAdopt",false);
 		//답변 채택상태 확인
+		model.addAttribute("isAdopt",false);
 		for ( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
 			System.out.println("value : " + entry.getValue());
 			List<QuestionVO> adoptStatus = entry.getValue();
@@ -53,11 +58,23 @@ public class QuestionServiceImpl implements QuestionService{
 				}
 				if(vo.getAnswerAdoptStatus().equals("I002")) {
 					model.addAttribute("isAdopt",true);
-					System.out.print("test");
 					break;
 				}
 			}
-		}		
+		}	
+		System.out.print(memberNo);
+		//로그인 유저의 답변글 작성 여부 체크
+		model.addAttribute("writePost",false);
+		for( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
+			List<QuestionVO> writeStatus = entry.getValue();
+			for(QuestionVO vo : writeStatus) {
+				if(vo.getAnswerMemberNo() == memberNo) {
+					model.addAttribute("writePost", true);
+					System.out.print("test22");
+					break;
+				}
+			}
+		}
 		return ret;
 	}
 	
@@ -87,6 +104,7 @@ public class QuestionServiceImpl implements QuestionService{
 		return questionMapper.deleteQuestion(qno);
 	}
 
+	
 
 
 	

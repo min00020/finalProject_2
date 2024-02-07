@@ -208,7 +208,7 @@ function sendQuestion(){
 	formData.append("contents", html.getData());
 
 	
-	$.ajax('/question/write', {
+	$.ajax('/write', {
 		type : "POST",
 		data : formData,
 		contentType : false,

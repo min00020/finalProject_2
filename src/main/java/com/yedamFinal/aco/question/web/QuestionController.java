@@ -31,6 +31,33 @@ public class QuestionController {
 	@GetMapping("/questionList")
 	public String getquestionBoard(Model model) {
 		model.addAttribute("questionList", questionService.getQuestionList());
+		// MemberVO 꺼내오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			MemberVO username = userDetails.getMemberVO();
+			model.addAttribute("loginId", username.getId());
+		}
+		else {
+			model.addAttribute("loginId", "-1");
+		}		
+		return "question/questionList";
+	}
+	
+	@GetMapping("/questionList/{topic}")
+	public String getquestionSelect(@PathVariable("topic") String topic, Model model) {
+		model.addAttribute("questionList", questionService.getQuestionListSelect(topic));
+		// MemberVO 꺼내오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			MemberVO username = userDetails.getMemberVO();
+			model.addAttribute("loginId", username.getId());
+		}
+		else {
+			model.addAttribute("loginId", "-1");
+		}
+		
 		return "question/questionList";
 	}
 	
@@ -42,20 +69,20 @@ public class QuestionController {
 
 	@GetMapping("/questionInfo/{qno}")
 	public String getQuestionInfo(@PathVariable("qno") int qno, Model model) {
-		model.addAttribute("questionInfo", questionService.getQuestionInfo(qno,model));
 		// MemberVO 꺼내오기.
+		MemberVO username = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
 			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
-			MemberVO username = userDetails.getMemberVO();
-			
-			
-			
+			username = userDetails.getMemberVO();
 			model.addAttribute("loginId", username.getId());
 		}
 		else {
 			model.addAttribute("loginId", "-1");
 		}
+		
+		int memberNo = username != null ? username.getMemberNo():-1;
+		model.addAttribute("questionInfo", questionService.getQuestionInfo(qno,model,memberNo));
 		
 		return "question/questionInfo";
 	}
@@ -66,7 +93,7 @@ public class QuestionController {
 		return "question/questionWrite";
 	}
 	
-	@PostMapping("/questionWrite/write")
+	@PostMapping("/questionWrite")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -76,7 +103,7 @@ public class QuestionController {
 	}
 	
 	//질문글 수정
-
+	
 	//질문글 삭제
 	
 }

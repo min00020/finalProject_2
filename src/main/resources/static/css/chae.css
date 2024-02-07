@@ -178,16 +178,6 @@
 }
 
 /*버튼색상*/
-/* .qna_grayBtn{ 
-	font-size: 13px;
-	background-color: #e0e0e7;
-    display: inline-block;
-    border-radius: 15%;
-    max-width: 100%; 최대 가로 길이를 부모 요소에 맞게 설정
-    box-sizing: border-box; padding과 border를 포함한 크기 계산
-	margin: 10px 0;
-    padding:3px 10px;
-} */
 .qna_blueBtn{ 
 	font-size: 13px;
 	color:white;
@@ -198,7 +188,6 @@
     border-radius: 15%;
     max-width: 100%; /* 최대 가로 길이를 부모 요소에 맞게 설정 */
     box-sizing: border-box; /* padding과 border를 포함한 크기 계산 */
-/* 	margin: 5px; */
 }
 
 .qna_second_line{
