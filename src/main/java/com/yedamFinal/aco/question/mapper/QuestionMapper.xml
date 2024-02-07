@@ -4,20 +4,80 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
+	<!-- 질문글 전체조회 -->
 	<select id="getQuestionList" resultType="QuestionVO">
-		SELECT QUESTION_BOARD_NO,
-		        MEMBER_NO,
-		        TOPIC,
-		        POINT,
-		        TITLE,
-		        TAG,
-		        CONTENTS,
-		        WRITE_DATE,
-		        VIEW_CNT,
-		        RECOMMEND_CNT,
-		        BOOKMARK_CNT,
-		        ANSWER_CNT
-		FROM QUESTION_BOARD
+		SELECT m.id, m.profile_image,
+		        q.QUESTION_BOARD_NO,
+		        q.MEMBER_NO,
+		        SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+		        q.POINT,
+		        q.TITLE,
+		        q.TAG,
+		        q.CONTENTS,
+		        TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
+		        q.VIEW_CNT,
+		        q.RECOMMEND_CNT,
+		        q.BOOKMARK_CNT,
+		        q.ANSWER_CNT
+		FROM QUESTION_BOARD q
+		JOIN MEMBER m
+		ON q.MEMBER_NO = m.MEMBER_NO
 		ORDER BY WRITE_DATE DESC
 	</select>
+	
+	<!-- 질문글 단건조회 -->
+	<select id="getQuestionInfo" resultType="QuestionVO">	
+		SELECT m.id, m.profile_image,SUBCODE_TO_NAME(m.member_level) as member_level,
+			    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
+			    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT,q.REPLY_CNT,
+	            a.ANSWER_BOARD_NO,a.QUESTION_BOARD_NO,a.MEMBER_NO,a.TITLE as answer_title,a.CONTENTS as answer_contents, 
+	            TO_CHAR(a.WRITE_DATE, 'YYYY.MM.DD') as ANSWER_WRITE_DATE,a.RECOMMEND_CNT,a.ADOPT_STATUS as answer_adopt_status,a.REPLY_CNT,
+	            d.QUESTION_ADD_NO,d.ANSWER_BOARD_NO,d.CONTENTS as add_contents,d.WRITER_TYPE as add_writer_type,TO_CHAR(d.WRITE_DATE, 'YYYY.MM.DD') as ADD_WRITE_DATE
+			FROM QUESTION_BOARD q LEFT JOIN MEMBER m
+	                              ON q.MEMBER_NO = m.MEMBER_NO
+	                              LEFT JOIN ANSWER_BOARD a
+	                              ON q.QUESTION_BOARD_NO = a.QUESTION_BOARD_NO
+	                              LEFT JOIN QUESTION_ADD d
+	                              ON a.ANSWER_BOARD_NO = d.ANSWER_BOARD_NO
+	        WHERE q.QUESTION_BOARD_NO = #{questionBoardNo}
+	        ORDER BY a.ADOPT_STATUS DESC, a.WRITE_DATE DESC
+	</select>
+	<!-- <select id="getQuestionInfo" resultType="QuestionVO">
+		SELECT m.id, m.profile_image,SUBCODE_TO_NAME(m.member_level) as member_level,
+		    q.QUESTION_BOARD_NO,q.MEMBER_NO,SUBCODE_TO_NAME(q.TOPIC) as topic,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
+		    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT
+		FROM QUESTION_BOARD q
+		JOIN MEMBER m
+		ON q.MEMBER_NO = m.MEMBER_NO
+		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</select> -->
+	
+	<!-- 질문글 작성 -->
+	<insert id="insertQuestion" parameterType="QuestionVO">
+		INSERT INTO QUESTION_BOARD (
+		    QUESTION_BOARD_NO,MEMBER_NO,TOPIC, POINT, TITLE, TAG, 
+		    CONTENTS, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT, BOOKMARK_CNT, ANSWER_CNT
+	    )
+	    VALUES(
+		    question_board_seq.NEXTVAL, #{memberNo}, #{topic}, #{point}, 
+		    #{title}, #{tag},#{contents},SYSDATE,0,0,0,0
+	    )
+	</insert>
+	
+	<!-- 질문글 수정 -->
+	<update id="updateQuestion" parameterType="QuestionVO">
+		UPDATE QUESTION_BOARD
+	    SET TOPIC = #{topic},
+	        POINT = #{point},
+	        TITLE = #{title},
+	        TAG = #{tag},
+	        CONTENTS = #{contents}
+	    WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	
+	<!-- 질문글 삭제 -->
+	<delete id="deleteQuestion">
+		DELETE QUESTION_BOARD
+		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</delete>
 </mapper>
