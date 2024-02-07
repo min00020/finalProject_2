@@ -54,8 +54,9 @@
                     
                </div>
                     <div class="mink_box">
-                    	<a th:href="|/myPage?memberNo=${session.member.memberNo}|">
-                    		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
+                    	<a th:href="|/myPage|">
+                    		<img class="mink_profile" th:src="|upload/profile/${session.member.profileImage}|" alt ="profile" />
+
                     	</a>
                     </div> 
                     <form action="/logout" method="post">
