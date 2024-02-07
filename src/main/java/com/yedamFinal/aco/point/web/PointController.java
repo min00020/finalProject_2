@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.point.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.point.AccountVO;
+import com.yedamFinal.aco.point.PointDetailVO;
+import com.yedamFinal.aco.point.UpdateAcoMoneyDTO;
 import com.yedamFinal.aco.point.service.PointService;
 
 @Controller
@@ -48,25 +51,16 @@ public class PointController {
 		//model.addAttribute("getAccountList", pointService.getAccountAll());
 		model.addAttribute("Iscd", nhIscd);
 		model.addAttribute("nhAccessToken", nhAccessToken);
-		return "common/pointCharging";
-	}
-	
-	@PostMapping("/point")
-	@ResponseBody
-	public String charginAcoMoney(int memberNo,int acoMoney,Model model) {
-		// MemberVO 꺼내오기.
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
-			MemberVO username = userDetails.getMemberVO();
-			
-			pointService.getPointMainData(model, username.getMemberNo());
-			
-		}
-
-		//model.addAttribute("getAccountList", pointService.getAccountAll());
 		
 		return "common/pointCharging";
+	}
+	//애코머니,포인트내역
+	@PostMapping("/updateAmAndInsertPointDetail")
+	@ResponseBody
+	public Map<String, Object> updateAmAndInsertPointDetail(int acoMoney, PointDetailVO pointDetailVO) {
+		
+		return pointService.updateAcoMoneyAndInsertPointDetail(acoMoney, pointDetailVO);
+
 	}
 
 	// 계좌 연결 은행 선택

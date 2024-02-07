@@ -14,6 +14,7 @@ public interface PointMapper {
 	public List<BankVO> getBank();
 	public int registAccountInfo(AccountVO accountVO);
 	public int getAcoMoney(int memberNo);
+	public int getAcoPoint(int memberNo);
 	public int updateAcoMoney(@Param(value="acoMoney") int acoMoney, @Param(value="memberNo") int memberNo);
 	public int insertAcoMoneyHistory(PointDetailVO pointDetailVO);
 	

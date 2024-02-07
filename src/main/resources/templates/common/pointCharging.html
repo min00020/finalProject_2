@@ -21,6 +21,7 @@
 								id="park_amountInput" placeholder="충전할 금액을 입력해 주세요"
 								oninput="formatNumber(this)" />
 						</div>
+						
 						<hr style="margin-top: 0;">
 						<p style="text-align : right; color : #808080; font-size:small; margin-top : -10px;">일일 최대 충전 한도 : 1,000,000 원<br>최소 충전금액 : 1,000 원</p>
 						<div class="park_points">
@@ -112,6 +113,7 @@
 // function cancelPayment(){
 // 	alert('asd')
 // };
+
 const csrfPara = [[${_csrf.parameterName}]];
 const csrfToken = [[${_csrf.token}]];
 const date = new Date();
@@ -120,12 +122,23 @@ let today = getFormatDate(date);
 const accessToken = [[${nhAccessToken}]];
 const Iscd = [[${Iscd}]];
 const memberNo= [[${session.member.memberNo}]];
-const acoMoney= [[${acoMoney}]];
+const acoMoney= [[${getAcoMoney}]];
+
+const latestTotalPoints = [[${getAcoMoney}]] + [[${getAcoPoint}]];
+const latestAcoMoney = [[${getAcoMoney}]] ;
+const latestAcoPoint = [[${getAcoPoint}]] ;
+const historyType = 'F001';
+const historyDate = '2024/02/07';
+//const incDecPoint =;
+const pointType = 'G001';
+const accountNo = '3020000010135';
 
 
 function submitPayment(){
+	
 	let chargingMoney = $('#park_amountInput').val().replaceAll(',', '');
-
+	const incDecPoint = parseInt(chargingMoney, 10);
+	
 	let obj={};
 	obj={	
 		 Header:{
@@ -135,7 +148,7 @@ function submitPayment(){
 	        Iscd:Iscd,
 	        FintechApsno : "001",
 	        ApiSvcCd:"DrawingTransferA",
-	        IsTuno:"memberNo+time", 
+	        IsTuno:memberNo+time, 
 	        AccessToken: accessToken
 	    },
 	FinAcno:"00820100023050000000000017722",
@@ -150,6 +163,32 @@ function submitPayment(){
 			acoMoney : chargingMoney
 	};
 	
+	let pointObj = {};
+	pointObj = {
+			memberNo : memberNo,
+			latestTotalPoints : latestTotalPoints,
+			latestAcoMoney : latestAcoMoney,
+			latestAcoPoint : latestAcoPoint,
+			historyType : historyType,
+			historyDate : historyDate,
+			incDecPoint : incDecPoint,
+			pointType : pointType,
+			accountNo : accountNo
+	}
+	
+	const pointUpdateObj = {
+		acoMoney : chargingMoney,
+		memberNo : memberNo,
+		latestTotalPoints : latestTotalPoints,
+		latestAcoMoney : latestAcoMoney,
+		latestAcoPoint : latestAcoPoint,
+		historyType : historyType,
+		historyDate : historyDate,
+		incDecPoint : incDecPoint,
+		pointType : pointType,
+		accountNo : accountNo
+	};
+	
 
 	$.ajax('https://developers.nonghyup.com/DrawingTransfer.nh', {
 		type:'post',
@@ -158,25 +197,34 @@ function submitPayment(){
 	})
 	.done(res =>{
 		console.log(res);
-		$.ajax('/point', {
+		console.log(JSON.stringify(pointUpdateObj));
+		$.ajax('/updateAmAndInsertPointDetail', {
 			type : 'post',
-			contentType : 'application/json',
-			data : JSON.stringify(memObj),
+			data : pointUpdateObj,
 			beforeSend : function(xhr){
 				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
 			},
 		})
 		.done(res => {
-			showSuccessAlert('충전 성공')
-		
-				
-				
-				
+			if(res.result == '200'){
+				Swal.fire({
+					  title: '충전이 완료되었습니다.',
+					  text: '',
+					  icon: 'success',
+					  confirmButtonClass: "btn-danger",
+					  confirmButtonText: "확인",
+					}).then((result) => {
+					  if (result.value) {
+					    location.href = '/point';
+					  }
+					});
+					
+			}else{
+				showFailAlert('에러가 발생했습니다.')
+			}
 		}).fail(err=>{
-			console.log(memberNo,acoMoney,Iscd,chargingMoney)
-			console.log(memObj);
-			console.log(obj);
-		showFailAlert('충전 실패')
+			console.log(err);
+			showFailAlert('충전 실패')
 		});
 })
 	

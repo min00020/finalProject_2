@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.ui.Model;
 
-import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.BankVO;
 import com.yedamFinal.aco.point.PointDetailVO;
@@ -23,7 +22,7 @@ public interface PointService {
 //	//InsertPointDetail
 //	public Map<String, Object> InsertPointDetail(PointDetailVO pointDetailVO);
 //	
-	public Map<String, Object> updateAcoMoneyAndInsertPointDetail(Model model, int acoMoney, int memberNo, PointDetailVO pointDetailVO);
+	public Map<String, Object> updateAcoMoneyAndInsertPointDetail(int acoMoney, PointDetailVO pointDetailVO);
 	
 	
 }

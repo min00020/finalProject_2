@@ -12,7 +12,8 @@
 	<select id="getBank" resultType="BankVO">
 		SELECT *
 		FROM BANK_CODE
-		ORDER BY BANK_CODE
+		ORDER BY
+		BANK_CODE
 	</select>
 
 	<!-- 계좌 등록 -->
@@ -40,46 +41,53 @@
 	<!-- AcoMoneyUpdate -->
 	<update id="updateAcoMoney">
 		UPDATE MEMBER
-			SET ACO_MONEY = ACO_MONEY + #{acoMoney}
-			WHERE MEMBER_NO = #{memberNo}
+		SET ACO_MONEY = ACO_MONEY + #{acoMoney}
+		WHERE MEMBER_NO = #{memberNo}
 
 	</update>
-	
+
 	<!-- getAcoMoney -->
 	<select id="getAcoMoney" resultType="int">
-		select aco_money 
-		from member 
+		select aco_money
+		from member
 		where member_no = #{memberNo}
 	</select>
 	
+	<!-- getAcoPoint -->
+	<select id="getAcoPoint" resultType="int">
+		select aco_point
+		from member
+		where member_no = #{memberNo}
+	</select>
+
 	<insert id="insertAcoMoneyHistory" parameterType="PointDetailVO">
-								INSERT INTO POINT_DETAIL(
-								
-								  POINT_DETAIL_NO,
-                                   MEMBER_NO,
-                                  LATEST_TOTAL_POINTS,
-                                 LASTEST_ACO_MONEY,
-                                 LASTEST_ACO_POINT,
-                                  HISTORY_TYPE,
-                                   HISTORY_DATE,
-                                   INC_DEC_POINT,
-                                   POINT_TYPE,
-                                 ACCOUNT_NO)
-                                 
-                           		 VALUES(
-                           		 
-                           		 POINT_DETAIL_seq.nextval,
-                           		 #{memberNo},
-                           		 #{latestTotalPoints},
-                           		 #{latestAcoMoney},
-                           		 #{latestAcoPoint},
-                           		 #{historyType},
-                           		 #{historyDate},
-                           		 #{incDecPoint},
-                           		 #{pointType},
-                           		 #{accountNo}
-                           		 )
- 	</insert>
+		INSERT INTO POINT_DETAIL(
+
+		POINT_DETAIL_NO,
+		MEMBER_NO,
+		LATEST_TOTAL_POINTS,
+		LASTEST_ACO_MONEY,
+		LASTEST_ACO_POINT,
+		HISTORY_TYPE,
+		HISTORY_DATE,
+		INC_DEC_POINT,
+		POINT_TYPE,
+		ACCOUNT_NO)
+
+		VALUES(
+
+		POINT_DETAIL_seq.nextval,
+		#{memberNo},
+		#{latestTotalPoints},
+		#{latestAcoMoney},
+		#{latestAcoPoint},
+		#{historyType},
+		#{historyDate},
+		#{incDecPoint},
+		#{pointType},
+		#{accountNo}
+		)
+	</insert>
 
 
 </mapper>

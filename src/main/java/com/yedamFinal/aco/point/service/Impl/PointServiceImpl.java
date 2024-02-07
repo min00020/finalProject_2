@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.BankVO;
 import com.yedamFinal.aco.point.PointDetailVO;
@@ -20,15 +19,13 @@ import com.yedamFinal.aco.point.service.PointService;
 public class PointServiceImpl implements PointService {
 	@Autowired
 	private PointMapper pointMapper;
-	
 
 	@Override
-	public void getPointMainData(Model model, int memberNo) {		
-		
-		
+	public void getPointMainData(Model model, int memberNo) {
+
 		model.addAttribute("getAccountList", pointMapper.getAccountNumber());
 		model.addAttribute("getAcoMoney", pointMapper.getAcoMoney(memberNo));
-		
+		model.addAttribute("getAcoPoint", pointMapper.getAcoPoint(memberNo));
 		return;
 	}
 
@@ -55,30 +52,28 @@ public class PointServiceImpl implements PointService {
 
 	@Override
 	@Transactional
-	public Map<String, Object> updateAcoMoneyAndInsertPointDetail(Model model, int acoMoney, int memberNo,
+	public Map<String, Object> updateAcoMoneyAndInsertPointDetail(int acoMoney,
 			PointDetailVO pointDetailVO) {
-		Map<String,Object> ret = new HashMap<>();
-		int updateId = pointMapper.updateAcoMoney(acoMoney, memberNo);
-		if(updateId <= 0) {
-			ret.put("result","500");
-		}else {
+		Map<String, Object> ret = new HashMap<>();
+		int updateId = pointMapper.updateAcoMoney(acoMoney, pointDetailVO.getMemberNo());
+		if (updateId <= 0) {
+			ret.put("result", "500");
+		} else {
 			ret.put("result", "200");
-			ret.put("acoMoney",acoMoney);
+			ret.put("acoMoney", acoMoney);
 		}
-		
-		Map<String,Object> ret2 = new HashMap<>();
+
 		int insertId = pointMapper.insertAcoMoneyHistory(pointDetailVO);
 		if (insertId <= 0) {
-			ret2.put("result", "500");
+			ret.put("result", "500");
 		} else {
-			ret2.put("result", "200");
-			ret2.put("pointDetailVO", pointDetailVO);
-	}	
-		model.addAttribute("updateAcoMoney", pointMapper.updateAcoMoney(acoMoney, memberNo));
+			ret.put("result", "200");
+			ret.put("pointDetailVO", pointDetailVO);
+		}
 		return ret;
-		}						
 	}
 
+}
 
 //	@Override
 //	public Map<String, Object> updateAcoMoney(Model model, int acoMoney, int memberNo ) {
@@ -101,10 +96,3 @@ public class PointServiceImpl implements PointService {
 //	public Map<String, Object> InsertPointDetail(PointDetailVO pointDetailVO) {
 //		return null;
 //	}
-	
-	
-
-	
-	
-
-
