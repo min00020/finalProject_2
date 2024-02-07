@@ -41,8 +41,12 @@ public interface AdminMapper {
 	
 	public List<AdminEmoVO> getMainEmoList();
 	
-	public List<AdminEmoVO> getEmoSaleList();
-	public List<AdminTagChartVO> getTagListByCount();
+	//통계기간 조회
+	public List<AdminTagChartVO> getTagListByCount(String date);
+	public List<AdminEmoVO> getEmoSaleList(String date);
+	//통계달력 기간 조회
+	public List<AdminTagChartVO> getTagListByCountByPeriod(String sday, String eday);
+	public List<AdminEmoVO> getEmoSaleListByPeriod(String sday, String eday);
 	
 	//이모티콘 등록
 	public int insertEmo(AdminEmoVO adminEmoVO);

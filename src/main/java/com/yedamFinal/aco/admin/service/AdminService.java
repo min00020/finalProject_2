@@ -25,10 +25,14 @@ public interface AdminService {
 	public Map<String,Object> getAdEmoList(int pageNo, String emoStatus);
 	
 	
+	//통계조회
+	public Map<String, Object> getTagEmoList(String date);
+	
+	//통계 달력기간 조회
+	public Map<String, Object> getTagEmoPeriodList(String sday, String eday);
+	
+	//이모티콘 상점 메인
 	public List<AdminEmoVO> getMainEmoList();
-	
-	public void getEmoSaleList(Model model);
-	
 	//이모티콘 등록
 	public int insertEmo(AdminEmoVO adminEmoVO);
 	//public int insertEmo(AdminEmoVO adminEmoVO, MultipartFile[] file);	

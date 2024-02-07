@@ -111,6 +111,8 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/emoMain");
 		permitAllUrl.add("/emoDetail");
 		//permitAllUrl.add("/emoBuyList");
+		permitAllUrl.add("/adminStatAjax");
+		permitAllUrl.add("/adminStatAjax2");
 		
 	}
 	

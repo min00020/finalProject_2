@@ -287,7 +287,11 @@
 												<div id="image_container2"></div>
 												</td>	
 												</tr>
-												
+												<tr>
+												<th>사용이미지</th>
+												<td><input type="file" id="image" accept="image/*" onchange="setThumbnail(event);" multiple/>
+    											<div id="image_container"></div></td>
+												</tr>
 												</table>
 												</div>
 												
@@ -519,13 +523,29 @@
 
 				        reader.readAsDataURL(event.target.files[0]);
 				      }
-					
+					function setThumbnail(event) {
+				        for (var image of event.target.files) {
+				          var reader = new FileReader();
+
+				          reader.onload = function(event) {
+				        	  
+				            var img = document.createElement("img");
+				            img.setAttribute("src", event.target.result);
+				            img.setAttribute("width", "100px");
+				            document.querySelector("div#image_container").appendChild(img);
+				          };
+
+				          console.log(image);
+				          reader.readAsDataURL(image);
+				        }
+				      }
 					 $(document).ready(function(){
 					        $('#AddNotice').on('hidden.bs.modal', function () {
 					            // 해당 모달이 닫힐 때마다 input 요소들의 값을 초기화합니다.
 					            $(this).find('form')[0].reset();
 					            document.querySelector("div#image_container1").innerHTML = "";
 					            document.querySelector("div#image_container2").innerHTML = "";
+					            document.querySelector("div#image_container").innerHTML = "";
 					        });
 					    });
 		</script>

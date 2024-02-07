@@ -218,13 +218,19 @@
                             <h6 class="m-0 font-weight-bold text-primary">통계 내역</h6>
                         </div>
                          <div class="card-body" style="text-align: right">
-                           <button>오늘</button>
-                           <button>7일</button>
-                           <button>1개월</button>
-                           <button>3개월</button>
-                           <button>6개월</button>
-                           <input type="date" name="startDay">
-                           <input type="date" name="endDay">
+                           <button  type="button" class="btn"  id="selectDate" onclick="changeDate('0')" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+                             --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">오늘</button>
+                           <button  type="button" class="btn"  id="selectDate" onclick="changeDate('1')" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+                             --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">7일</button>
+                           <button  type="button" class="btn"  id="selectDate" onclick="changeDate('2')" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+                             --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">1개월</button>
+                           <button  type="button" class="btn"  id="selectDate" onclick="changeDate('3')" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+                             --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">3개월</button>
+                           <button  type="button" class="btn"  id="selectDate" onclick="changeDate('4')" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;margin-right:1%;
+                             --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">6개월</button>
+                           <input type="date" id="sday" name="startDay" max="endDay">
+                           <input type="date" id="eday" name="endDay">
+                           <button type="button" class="btn text-white" id="selectDate" onclick="changeDate2()"  style="background-color:#80a9e8;font-size:12px; margin-left:15px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">검색</button>
                         </div> 
                         <div class="row">
                             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -314,13 +320,47 @@
 
 </body>
 <script type="text/javascript" th:inline="javascript">
-const emoList = [[${emoSaleList}]];
-const tagList = [[${tagList}]];
+
+// date 
+
+// 얘는 처음에 호출하는거
+$.ajax('/adminStatAjax', {
+	type: "GET",
+}).done(res => {
+	google.charts.setOnLoadCallback(drawChart(res.tagList));
+	google.charts.setOnLoadCallback(drawChart2(res.emoSaleList));
+}).fail(err => console.log(err));
+
+// 얘는 버튼클릭해서 호출하는거
+function changeDate(date){
+	const url = '/adminStatAjax?date=' + date;
+	$.ajax(url,{
+		type:"get",
+	}).done(result =>{
+		google.charts.setOnLoadCallback(drawChart(result.tagList));
+		google.charts.setOnLoadCallback(drawChart2(result.emoSaleList));
+	}).fail(err=>console.log(err));
+	
+}
+
+// 달력 조회
+function changeDate2(){
+	const sday = $('#sday').val();
+	const eday = $('#eday').val();
+	
+	const url = '/adminStatAjax2?sday=' + sday + '&eday=' + eday;
+	$.ajax(url,{
+		type:"get",
+	}).done(result =>{
+		google.charts.setOnLoadCallback(drawChart(result.tagList));
+		google.charts.setOnLoadCallback(drawChart2(result.emoSaleList));
+	}).fail(err=>console.log(err));
+}
+
 
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
+function drawChart(tagList) {
 	let table = [];
 		table.push(['태그', '게시글수'])
 		for(let i = 0; i<tagList.length; ++i){
@@ -341,10 +381,9 @@ function drawChart() {
 }
 
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart2);
 
 
-function drawChart2() {
+function drawChart2(emoList) {
   let table = [];
   	table.push(['이모티콘', '판매량'])
   	for(let i = 0; i<emoList.length; ++i){
@@ -364,5 +403,7 @@ function drawChart2() {
 
   chart.draw(data, options);
 }
+
+
 </script>
 </html>

@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.admin.web;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
@@ -49,10 +51,22 @@ public class AdminController {
 		return "layout/admin/adminMember";
 	}
 	@GetMapping("/adminStat")
-	public String getAdminStatPageForm(Model model) {
-		adminService.getEmoSaleList(model);
+	public String getAdminStatPageForm() {
 		return "layout/admin/adminStat";
 	}
+	
+	
+	@ResponseBody
+	@GetMapping("/adminStatAjax")
+	public Map<String, Object> getAdminStatPageFormAjax(String date) {
+		return adminService.getTagEmoList(date);
+	}
+	@ResponseBody
+	@GetMapping("/adminStatAjax2")
+	public Map<String, Object> getAdminStatPageFormAjax2(String sday, String eday) {
+		return adminService.getTagEmoPeriodList(sday, eday);
+	}
+	
 	@GetMapping("/adminReport")
 	public String getAdminReportPageForm(Model model, int pageNo, String reportStatus) {
 		var ret = adminService.getAdReportList(pageNo, reportStatus);

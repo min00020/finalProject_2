@@ -27,6 +27,8 @@ public class AdminServiceImpl implements AdminService {
 	private Map<String,String> dropdownSettle = new HashMap<String,String>();
 	private Map<String,String> dropdownEmo = new HashMap<String,String>();
 	
+	private Map<String,String> selectDate = new HashMap<String,String>();
+	
 	public AdminServiceImpl() {
 		// 정렬기준
 		dropdownMember.put("0", "notLeave");
@@ -41,6 +43,13 @@ public class AdminServiceImpl implements AdminService {
 		dropdownSettle.put("1", "complete");
 		dropdownEmo.put("0", "sale");
 		dropdownEmo.put("1", "end");
+		
+		selectDate.put("0", "today");
+		selectDate.put("1", "7day");
+		selectDate.put("2", "1month");
+		selectDate.put("3", "3month");
+		selectDate.put("4", "6month");
+		
 	}
 	
 	
@@ -211,6 +220,30 @@ public class AdminServiceImpl implements AdminService {
 		}
 		return mp;
 	}
+	
+	// 통계조회
+	@Override
+	public Map<String, Object> getTagEmoList(String date) {
+		String data = selectDate.get(date);
+		if(data == null) {
+			date = "null".toString();
+		}
+		Map<String, Object> mp = new HashMap<String, Object>();		
+		mp.put("tagList",adminMapper.getTagListByCount(date));
+		mp.put("emoSaleList", adminMapper.getEmoSaleList(date));
+		
+		return mp;
+	}
+	//통계 달력기간 조회
+	@Override
+	public Map<String, Object> getTagEmoPeriodList(String sday, String eday) {
+		Map<String, Object> mp = new HashMap<String, Object>();
+		mp.put("tagList", adminMapper.getTagListByCountByPeriod(sday, eday));
+		mp.put("emoSaleList", adminMapper.getEmoSaleListByPeriod(sday, eday));
+		return mp;
+	}
+	
+	
 	@Override
 	public List<AdminEmoVO> getMainEmoList() {
 		return adminMapper.getMainEmoList();
@@ -256,10 +289,5 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<AdminEmoVO> getEmoBuyList(int memberNo) {
 		return adminMapper.getEmoBuyList(memberNo);
-	}
-	@Override
-	public void  getEmoSaleList(Model model) {
-		model.addAttribute("tagList",adminMapper.getTagListByCount());
-		model.addAttribute("emoSaleList", adminMapper.getEmoSaleList());
 	}
 }

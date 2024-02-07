@@ -431,14 +431,21 @@ SELECT *
 				</choose>
 </select>
 <select id="getTagListByCount" resultType="AdminTagChartVO">
-<![CDATA[
 WITH DATA AS (
   SELECT 
     TAG, 
     ROW_NUMBER() OVER (ORDER BY TAG) AS ID
   FROM 
     QUESTION_BOARD
+    			<choose>
+						<when test='date =="0"'>WHERE WRITE_DATE BETWEEN  to_char(sysdate,'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('1'.toString())">WHERE WRITE_DATE BETWEEN  to_char(sysdate-7,'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('2'.toString())">WHERE WRITE_DATE BETWEEN  to_char(add_months(sysdate,-1),'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('3'.toString())">WHERE WRITE_DATE BETWEEN  to_char(add_months(sysdate,-3),'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('4'.toString())">WHERE WRITE_DATE BETWEEN  to_char(add_months(sysdate,-6),'YYYYMMDD') AND SYSDATE</when>
+				</choose> 
 ),
+<![CDATA[
 SPLIT_DATA AS (
   SELECT 
     ID,
@@ -463,7 +470,52 @@ ORDER BY SPLIT_VALUE
 	SELECT 
 	EMO_NAME, 
 	COUNT(*) AS CNT 
-	FROM MY_EMOTICON 
+	FROM MY_EMOTICON
+				<choose>
+						<when test="date.equals('0'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(sysdate,'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('1'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(sysdate-7,'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('2'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(add_months(sysdate,-1),'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('3'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(add_months(sysdate,-3),'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('4'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(add_months(sysdate,-6),'YYYYMMDD') AND SYSDATE</when>
+				</choose> 
+	GROUP BY EMO_NAME
+</select>
+<select id="getTagListByCountByPeriod" resultType="AdminTagChartVO">
+WITH DATA AS (
+  SELECT 
+    TAG, 
+    ROW_NUMBER() OVER (ORDER BY TAG) AS ID
+  FROM 
+    QUESTION_BOARD
+    			WHERE WRITE_DATE BETWEEN #{sday} AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+),
+<![CDATA[
+SPLIT_DATA AS (
+  SELECT 
+    ID,
+    REGEXP_SUBSTR(TAG, '[^,]+', 1, LEVEL) AS SPLIT_VALUE,
+    LEVEL AS LVL
+  FROM 
+    DATA
+  CONNECT BY 
+    REGEXP_SUBSTR(TAG, '[^,]+', 1, LEVEL) IS NOT NULL
+    AND PRIOR ID = ID
+    AND PRIOR SYS_GUID() IS NOT NULL
+    AND LEVEL <= REGEXP_COUNT(TAG, '[^,]+')
+)
+SELECT DISTINCT SPLIT_VALUE as tag, COUNT(SPLIT_VALUE) as cnt
+FROM 
+  SPLIT_DATA
+GROUP BY SPLIT_VALUE
+ORDER BY SPLIT_VALUE
+]]>
+</select>
+<select id="getEmoSaleListByPeriod" resultType="AdminEmoVO">
+	SELECT 
+	EMO_NAME, 
+	COUNT(*) AS CNT 
+	FROM MY_EMOTICON
+				WHERE EMO_BUYDATE BETWEEN #{sday} AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
 	GROUP BY EMO_NAME
 </select>
 </mapper>
