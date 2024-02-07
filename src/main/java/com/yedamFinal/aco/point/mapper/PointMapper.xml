@@ -51,5 +51,35 @@
 		from member 
 		where member_no = #{memberNo}
 	</select>
+	
+	<insert id="insertAcoMoneyHistory" parameterType="PointDetailVO">
+								INSERT INTO POINT_DETAIL(
+								
+								  POINT_DETAIL_NO,
+                                   MEMBER_NO,
+                                  LATEST_TOTAL_POINTS,
+                                 LASTEST_ACO_MONEY,
+                                 LASTEST_ACO_POINT,
+                                  HISTORY_TYPE,
+                                   HISTORY_DATE,
+                                   INC_DEC_POINT,
+                                   POINT_TYPE,
+                                 ACCOUNT_NO)
+                                 
+                           		 VALUES(
+                           		 
+                           		 POINT_DETAIL_seq.nextval,
+                           		 #{memberNo},
+                           		 #{latestTotalPoints},
+                           		 #{latestAcoMoney},
+                           		 #{latestAcoPoint},
+                           		 #{historyType},
+                           		 #{historyDate},
+                           		 #{incDecPoint},
+                           		 #{pointType},
+                           		 #{accountNo}
+                           		 )
+ 	</insert>
+
 
 </mapper>
