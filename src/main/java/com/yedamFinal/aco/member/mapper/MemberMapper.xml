@@ -114,10 +114,7 @@
     	FROM dual
 
 </select>
-<!-- 사이드프로젝트 목록(더보기보달) 이거는 패키지 새로 만들기 -->
-<!-- <select id="selectSideProjectList" resultType="com.yedamFinal.aco.sideboard.SideVO">
-	 
-</select> -->
+
 <!-- 북마크 삭제 -->
 <delete id="delBookmark" parameterType="com.yedamFinal.aco.bookmark.MybookmarkVO">
 	DELETE FROM my_bookmark

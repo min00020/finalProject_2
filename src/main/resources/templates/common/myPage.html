@@ -249,8 +249,8 @@
 																		<li class="activity1" th:each="acp:${activityList}">
 																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
 																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
-																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${acp.incDecActivityPoint}점 |"></span>
-																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${acp.incDecActivityPoint}점 |"></span>
+																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
+																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점  |"></span>
 																		<br>
 																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
 																		<hr>

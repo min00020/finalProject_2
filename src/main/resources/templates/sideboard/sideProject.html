@@ -1,0 +1,43 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+	<!-- header tab -->
+	<div class="publishingStatus">
+		<hr id="tae-hr">	
+		<a style="margin-left: 50px;text-decoration: none;font-weight:bold; color:#000;"href="/sideProject/Q001">모집중</a><span>
+		<a style="margin-left: 30px;text-decoration: none;font-weight:bold; color:#979da9;" href="/sideProject/Q002">협업중</a>
+		</span>
+		<hr id="tae-hr">	
+	</div>
+	<!-- banner -->
+	<div class="sidebanner">
+		<div class="recbanner">
+			<img id="bannerImage" src="/commonResource/taefolder/sidebanner1.png" alt="side">
+			<hr id="tae-hr">	
+		</div>
+	</div>
+	<!-- recList -->
+	<div class="recList_2" style="height:350px;">
+		<!-- <h3 style="font-weight:bold;color:#0C5FEC">협업중</h3> -->
+			<div class="recList_1" th:each="rec:${recList}">
+				<h5 style="padding-left:5px;font-weight:bold;color:#009630">모집중</h5>
+				<h4 style="font-weight:bold;">[[ ${rec.title }]]</h4>
+				<br>
+				<h5 style="font-weight:bold;">[[${ rec.content }]]</h5>
+				<br>
+				<p style="font-weight:bold;color:#979da9;float:left;">기간 | [[${rec.devPeriod}]]일  모집인원 [[${rec.recruitPersonnel}]]명</p>
+				<span><p style="font-weight:bold;float:right;color:#979da9;">조회수 [[ ${rec.viewCnt} ]]회  댓글수 [[ ${rec.replyCnt} ]]개</p></span>
+				<br>
+				<hr id="tae-hr">	
+			</div>
+	</div>
+	
+	
+	
+	
+</div> <!-- header -->
+<script type="text/javascript">
+	
+
+</script>

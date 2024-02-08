@@ -98,10 +98,7 @@
 																		<br>
 																		<div class="input-group mb-3" style="width:600px;height:50px;">
 																			<input type="text" id="accumPointMypage" class="form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
-																			<!-- 계좌가 없는 경우 계좌 등록 경로로 이동 -->
-																			<button class="btn btn-outline-secondary" onclick="accumPoint()" type="button" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
-																			<!-- 계좌가 있는 경우 계좌 목록 표시 -->
-																			
+																			<button class="btn btn-outline-secondary" id="accountApprove" type="button" data-bs-toggle="modal" data-bs-target="#accountList" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
 																		</div>
 																	</div>
 																	<div class="point-acc-1" style="width:750px;hegiht:450px;">
@@ -120,8 +117,8 @@
 														<div id="activityList">
 															<div>
 																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4><hr>
-																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
-																		<li id="activityMypage" class="activity1" th:each="pol:${pointList}">
+																	<ul class="scroll type3" id="accumList" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity1" th:each="pol:${pointList}">
 																		<span style="font-weight:bold;font-size:large;" th:text="${pol.historyType}"></span>
 																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
 																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
@@ -142,6 +139,7 @@
 										</div>
 									</div>
 									<!-- 모달 끝 -->
+									
 								</div>
 							</div>
 						</div>
@@ -251,8 +249,8 @@
 																		<li class="activity1" th:each="acp:${activityList}">
 																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
 																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
-																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${acp.incDecActivityPoint}점 |"></span>
-																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${acp.incDecActivityPoint}점 |"></span>
+																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
+																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점  |"></span>
 																		<br>
 																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
 																		<hr>
@@ -271,6 +269,55 @@
 										</div>
 									</div>
 									<!-- 모달 끝 -->
+									<!-- 정산 계좌 Modal -->
+									
+										<div th:if="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
+											      </div>
+											      <div class="modal-body">
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+												      	<div class="bankcard">
+												       		<p style="text-align:center;color:#979da9;">"현재 등록된 계좌가 없습니다."</p>
+												       	</div>
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <button type="button" class="btn btn-primary">정산요청</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
+										<div th:unless="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											      </div>
+											      <div class="modal-body">
+											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+												       <div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
+												       		<button type="button" style="border:0;" th:onclick="choiceAccount([[${acc.accountNo}]])">
+												       			<img th:src="|commonResource/bankImage/${acc.bankName}.png|" style="width:80px;height:auto;text-align:center;">
+															</button>											       		
+												       		<p th:text="${acc.bankName}" style="float:left;">/</p>
+												       </div>
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <button type="button" class="btn btn-primary">정산요청</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
 								</div>
 							</div>
 						</div>
@@ -482,7 +529,7 @@
 													<div class="row">
 														<div class="col-sm-3 mb-3 mb-sm-0"
 															th:each="bml2:${bookmarkList2}">
-															<div class="card align-items-center"
+															<div class="card align-items-center" id="bookmarkcard"
 																style="height: auto;">
 																<div class="card-body">
 																	<h5 class="card-title"
@@ -574,19 +621,20 @@
 	}
 	
 	function delMark(questionBoardNo){
-		//mymemberNo
-		const url = "/deleteBookmark?questionBoardNo=" + questionBoardNo;
+			//mymemberNo
+			const url = "/deleteBookmark?questionBoardNo=" + questionBoardNo;
+			
+			$.ajax({
+		        type: "GET",
+		        url: url
+		        
+			}).done(result =>{
+			            console.log(result);
+			            showSuccessAlert('북마크에서 삭제되었습니다.');
+			            $("#bookmarkcard").remove();
+			        	location.href="/myPage2"
+			}).fail(err => console.log(err));
 		
-		$.ajax({
-	        type: "GET",
-	        url: url,
-	        success: function (response) {
-	            console.log(response);
-	        },
-	        error: function (error) {
-	            console.error(error);
-	        }
-	    });
 	}
 	
 	let csrfPara = $('meta[name="csrfPara"]').attr("content");
@@ -639,5 +687,84 @@
 				}
 				return true;
 			}	
+			let choiceAccountObj = null;
+			function choiceAccount(accountObj){
+				if(choiceAccountObj != null  || choiceAccountObj == accountObj){
+					$('#'+ choiceAccountObj).css("border", "");
+					if(choiceAccountObj == accountObj) {
+						choiceAccountObj = null;
+						return;
+					}
+				}
+				choiceAccountObj = accountObj
+				
+				$('#'+ accountObj).css("border", "1px solid skyblue");
+				
+			}
+
+				
+				//활동점수환전
+				$('#changepoint').on('click', pointUpdateAjax);
+				
+					function pointUpdateAjax(event){
+						if (!validation()) return;
+						let resPoint = $('input[name="resPoint"]');
+						let obj = {
+							resPoint : resPoint.val(),
+						}
+						//post 에서만 사용
+						obj[csrfPara] = csrfToken;
+						
+						$.ajax('/updateMemberPoint',{
+							type:"POST",
+							data : obj				
+						}).done(result =>{
+							showSuccessAlert('정상적으로 환전되었습니다.');
+							
+							function dateFormat(date) {
+								let dateFormat2 = date.getFullYear() +
+									'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+									'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+								return dateFormat2;
+							}
+
+							const toDate = dateFormat(new Date());
+							const commaIncDecPoint = Number(resPoint.val()).toLocaleString();
+							
+							const commaActivityPoint = Number(result.memberInfo.availableActivityPoint).toLocaleString();
+							const commaAccummPoint = Number(result.memberInfo.availableAccumPoint).toLocaleString();
+							const commaTotalPoint = Number(result.memberInfo.acoTotal).toLocaleString();
+							const liString = `
+												<li class="activity1">
+													<span style="font-weight:bold;font-size:large;">포인트 전환</span>
+													<span class="increase-point">+ ${commaIncDecPoint}P</span>
+													<br>
+													<span class="tae_date">${toDate}</span>
+													<hr>
+												</li>`;
+							
+							$('#activityMypage').val('');
+							
+							
+							const accumList = $('#accumList');
+							accumList.prepend(liString);
+							
+							$('#pointMypage').text(commaTotalPoint);
+							$('#totalPointMypage').text(commaTotalPoint);
+							$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+							$('#activityMypage').attr("placeholder", "가용 활동점수 " + commaActivityPoint + " 점");
+							
+						}).fail(err => console.log(err));
+					}
+						
+					function validation(){
+						let resPoint = $('input[name="resPoint"]');
+						const numPoint = Number(resPoint.val());
+						if(numPoint < 5000 || (numPoint % 1000) != 0){
+							showWarningAlert("5,000점 이상부터 1,000점 단위로 환전 가능합니다");
+							return false;
+						}
+						return true;
+					}	
 
 </script>
