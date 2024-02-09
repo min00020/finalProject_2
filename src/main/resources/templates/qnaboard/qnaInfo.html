@@ -21,7 +21,20 @@
 						</small>
 					</span> 
 					<span style="float:right;">
-						<button class="btn" style="border:0; border-radius:20px; background-color:white;">[[${qnaInfo[0].answerState}]]</button> 
+						<button th:if="${session.member.memberNo == qnaInfo[0].memberNo} and ${qnaInfo[0].state != 'P003'}" class="btn" style="border:0; border-radius:20px; background-color:white;" id="qnaDropDown" data-bs-toggle="dropdown" aria-expanded="false">[[${qnaInfo[0].answerState}]]</button>
+						<button th:unless="${session.member.memberNo == qnaInfo[0].memberNo} and ${qnaInfo[0].state != 'P003'}" class="btn" style="border:0; border-radius:20px; background-color:white;">[[${qnaInfo[0].answerState}]]</button>
+						<!--/* 자기자신일 때 + 해결완료상태가 아닐때만 해당 드랍다운 메뉴 동작가능 */-->
+						<th:block th:if="${session.member.memberNo == qnaInfo[0].memberNo} and ${qnaInfo[0].state != 'P003'}">
+							<ul class="dropdown-menu" aria-labelledby="qnaDropDown">
+							<th:block th:if="${qnaInfo[0].state == 'P001'}">
+    							<li><button class="dropdown-item" onclick="changeQnaState('P003')">해결 완료</button></li>
+    						</th:block>
+    						<th:block th:if="${qnaInfo[0].state == 'P002'}">
+    							<li><button class="dropdown-item" onclick="changeQnaState('P001')">답변 대기중</button></li>
+    							<li><button class="dropdown-item" onclick="changeQnaState('P003')">해결 완료</button></li>
+    						</th:block>
+  							</ul>
+  						</th:block>
 					</span>
 				</div>
 			</div>
@@ -94,14 +107,99 @@
 		
 		<div class="mt-2">		
 			<button class="btn btn-outline-secondary ms-2" style="float:right;" data-url="/homeBoard/hpBoardList" onclick="location.href='/qnaBoard?pg=1'">목록</button>
-			<button class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')">답변 작성</button>
+			<button th:if="${qnaInfo[0].qnaAnswerContent} == null" class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')" data-bs-toggle="modal" data-bs-target="#adminAnswerModal">답변 작성</button>
+			<button th:unless="${qnaInfo[0].qnaAnswerContent} == null" class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')" data-bs-toggle="modal" data-bs-target="#adminAnswerModal">답변 수정</button>
 		</div>
+		
+		<!-- 관리자 답변 작성 모달 시작 -->
+		<!-- Modal -->
+		<div class="modal fade" id="adminAnswerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  			<div class="modal-dialog">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<h1 class="modal-title fs-5" id="exampleModalLabel">답변 작성</h1>
+        				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      				</div>
+      				<div class="modal-body">
+      					<!-- 나중에 에디터로 변경되어야함. -->
+        				<div>
+        					<textarea name="adminAnswer" class="form-control" style="height:300px;"></textarea>
+        				</div>
+      				</div>
+      				<div class="modal-footer">
+        				<button type="button" class="btn" data-bs-dismiss="modal" style="background-color:#989daa; color:white;">취소</button>
+        				<button id="postBtn" type="button" class="btn" style="background-color:#3e6ce3; color:white;" onclick="postAnswer()">등록</button>
+      				</div>
+    			</div>
+  			</div>
+		</div>
+		<!-- 관리자 답변 작성 모달 끝 -->
 	</section>	
-	</div>
+</div>
 	
 <script th:inline="javascript">
 	$("#attached_toggleButton").click(function(){
     	$("#attached_content").slideToggle();
 	});
+	
+
+	$('#postBtn').on('click', function(e) {
+		$('#adminAnswerModal').modal('hide');
+	})
+	
+	const qnaBoardNo = [[${qnaInfo[0].qnaBoardNo}]]
+	const csrfPara = $('meta[name="csrfPara"]').attr("content");
+	const csrfToken = $('meta[name="csrf"]').attr("content");
+	
+	function postAnswer() {
+		const answerString = $('textarea[name="adminAnswer"]').val();
+		if(answerString.length <= 0) {
+			showWarningAlert('답변을 작성해주세요.');
+			return;
+		}
+	
+		const object = {
+			answer : answerString,
+			csrfPara : csrfToken
+		}
+		
+		$.ajax('/qnaBoard/' + qnaBoardNo, {
+			type: "POST",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	function changeQnaState(changeState) {
+		const object = {
+			state : changeState 
+		};
+		
+		$.ajax('/qnaBoard/' + qnaBoardNo, {
+			type: "PUT",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	
 </script>
 </div>

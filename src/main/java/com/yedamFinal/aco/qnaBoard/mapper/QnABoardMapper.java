@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.qnaBoard.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -16,4 +17,6 @@ public interface QnABoardMapper {
 	public int deleteQnaBoard(int qnaBoardNo);
 	public List<QnABoardJoinVO> selectQnaBoardDetail(int qnaBoardNo);
 	public int updateQnABoardViewCnt(int qnaBoardNo);
+	public int updateQnAAnswer(@Param(value="qnaBoardNo") int qnaBoardNo, @Param(value="answer") String answer);
+	public int updateQnAState(@Param(value="qnaBoardNo") int qnaBoardNo, @Param(value="state") String state);
 }

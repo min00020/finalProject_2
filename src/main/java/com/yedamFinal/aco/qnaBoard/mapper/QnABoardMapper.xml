@@ -138,6 +138,7 @@
     		A.WRITE_DATE,
     		A.CHANGE_DATE,
     		SUBCODE_TO_NAME(A.ANSWER_STATE) AS ANSWER_STATE,
+    		ANSWER_STATE AS STATE,
     		A.VIEW_CNT,
     		B.ATTACHED_FILE_NO,
     		B.SERVER_FILE_NAME,
@@ -150,5 +151,11 @@
 	</select>
 	<update id="updateQnABoardViewCnt" parameterType="int">
 		UPDATE QNA_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
+	<update id="updateQnAAnswer">
+		UPDATE QNA_BOARD SET QNA_ANSWER_CONTENT = #{answer}, ANSWER_STATE = 'P002' WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
+	<update id="updateQnAState">
+		UPDATE QNA_BOARD SET ANSWER_STATE = #{state} WHERE QNA_BOARD_NO = #{qnaBoardNo}
 	</update>
 </mapper>

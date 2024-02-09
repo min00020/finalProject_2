@@ -13,4 +13,6 @@ public interface QnABoardService {
 	public Map<String, Object> getMyQnaBoardListFromSearch(int pageNo, String search, MemberVO vo, String orderby);
 	public Map<String, Object> insertQnaBoard(int memberNo, String title, String content, MultipartFile[] files);
 	public List<QnABoardJoinVO> getQnaBoardDetailInfo(int qnaBoardNo);
+	public Map<String, Object> postQnAAnswer(int qnaBoardNo, String answer);
+	public Map<String, Object> changeQnAState(int qnaBoardNo, String state);
 }

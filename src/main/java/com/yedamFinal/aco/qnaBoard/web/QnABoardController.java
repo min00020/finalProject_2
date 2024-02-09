@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.qnaBoard.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -112,5 +114,17 @@ public class QnABoardController {
     	
 		model.addAttribute("qnaInfo",boardInfo);
 		return "qnaboard/qnaInfo";
+	}
+	
+	@PostMapping("/qnaBoard/{boardNo}")
+	@ResponseBody
+	public Map<String,Object> postQnABoardAnswer(@PathVariable("boardNo") int qnaBoardNo, String answer) {
+		return qnaBoardService.postQnAAnswer(qnaBoardNo, answer);
+	}
+	
+	@PutMapping("/qnaBoard/{boardNo}")
+	@ResponseBody
+	public Map<String, Object> changeQnABoardState(@PathVariable("boardNo") int qnaBoardNo, String state) {
+		return qnaBoardService.changeQnAState(qnaBoardNo, state);
 	}
 }

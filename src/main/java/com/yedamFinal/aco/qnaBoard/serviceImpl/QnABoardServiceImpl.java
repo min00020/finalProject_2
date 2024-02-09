@@ -112,4 +112,34 @@ public class QnABoardServiceImpl implements QnABoardService {
 		qnaMapper.updateQnABoardViewCnt(qnaBoardNo);
 		return qnaMapper.selectQnaBoardDetail(qnaBoardNo);
 	}
+
+	@Override
+	public Map<String, Object> postQnAAnswer(int qnaBoardNo, String answer) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = qnaMapper.updateQnAAnswer(qnaBoardNo, answer);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		return ret;
+	}
+
+	@Override
+	public Map<String, Object> changeQnAState(int qnaBoardNo, String state) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = qnaMapper.updateQnAState(qnaBoardNo, state);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		return ret;
+	}
 }
