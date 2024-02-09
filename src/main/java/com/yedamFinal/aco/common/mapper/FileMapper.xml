@@ -4,7 +4,7 @@
 
 
 <mapper namespace="com.yedamFinal.aco.common.mapper.FileMapper">
-	<insert id="insertFile">
+	<insert id="insertFile" parameterType="AttachedFileVO">
 		INSERT INTO ATTACHED_FILE 
 		(
 			ATTACHED_FILE_NO,        
@@ -20,7 +20,6 @@
 		VALUES 
 		(
 			ATTACHED_FILE_SEQ.NEXTVAL,
-			#{attachedFileNo},
 			#{boardType},
 			#{boardNo},
 			#{originFileName},
@@ -28,8 +27,22 @@
 			#{fileExtension},
 			#{fileOrder},
 			#{filePath},
-			#{registerDate}
+			SYSDATE
 		)
 		
 	</insert>
+	<select id="selectFile" parameterType="int" resultType="AttachedFileVO">
+		SELECT 
+			ATTACHED_FILE_NO,        
+			BOARD_TYPE,       
+			BOARD_NO,        
+			ORIGIN_FILE_NAME, 
+			SERVER_FILE_NAME, 
+			FILE_EXTENSION,  
+			FILE_ORDER,        
+			FILE_PATH, 
+			REGISTER_DATE 
+		FROM ATTACHED_FILE
+		WHERE ATTACHED_FILE_NO = #{fileNo}
+	</select>
 </mapper>

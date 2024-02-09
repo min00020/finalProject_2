@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.qnaBoard.serviceImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
-import com.yedamFinal.aco.member.mapper.MemberMapper;
+import com.yedamFinal.aco.qnaBoard.QnABoardJoinVO;
 import com.yedamFinal.aco.qnaBoard.QnABoardVO;
 import com.yedamFinal.aco.qnaBoard.mapper.QnABoardMapper;
 import com.yedamFinal.aco.qnaBoard.service.QnABoardService;
@@ -104,5 +105,11 @@ public class QnABoardServiceImpl implements QnABoardService {
 		}
 		
 		return ret;
+	}
+	
+	@Override
+	public List<QnABoardJoinVO> getQnaBoardDetailInfo(int qnaBoardNo) {
+		qnaMapper.updateQnABoardViewCnt(qnaBoardNo);
+		return qnaMapper.selectQnaBoardDetail(qnaBoardNo);
 	}
 }

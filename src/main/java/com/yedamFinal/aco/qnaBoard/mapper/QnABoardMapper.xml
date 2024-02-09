@@ -114,7 +114,7 @@
 			#{title},
 			#{content},
 			null,
-			SYSDATE,
+			SYSTIMESTAMP,
 			null,
 			#{answerState},
 			0
@@ -127,4 +127,28 @@
 	<delete id="deleteQnaBoard">
 		DELETE FROM QNA_BOARD WHERE QNA_BOARD_NO = #{qnaBoardNo}
 	</delete>
+	
+	<select id="selectQnaBoardDetail" parameterType="int" resultType="QnABoardJoinVO">
+		SELECT 
+    		A.QNA_BOARD_NO,
+    		A.MEMBER_NO,
+    		A.TITLE,
+    		A.CONTENT,
+    		A.QNA_ANSWER_CONTENT,
+    		A.WRITE_DATE,
+    		A.CHANGE_DATE,
+    		SUBCODE_TO_NAME(A.ANSWER_STATE) AS ANSWER_STATE,
+    		A.VIEW_CNT,
+    		B.ATTACHED_FILE_NO,
+    		B.SERVER_FILE_NAME,
+    		B.ORIGIN_FILE_NAME,
+    		B.FILE_PATH,
+    		B.REGISTER_DATE
+    	FROM QNA_BOARD A
+    	LEFT JOIN ATTACHED_FILE B ON A.QNA_BOARD_NO = B.BOARD_NO AND B.BOARD_TYPE = 'N005'
+    	WHERE A.QNA_BOARD_NO = #{qnaBoardNo}
+	</select>
+	<update id="updateQnABoardViewCnt" parameterType="int">
+		UPDATE QNA_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
 </mapper>

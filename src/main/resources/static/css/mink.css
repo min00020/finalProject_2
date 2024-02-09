@@ -1,6 +1,24 @@
 @charset "UTF-8";
 
 
+#attached_content {
+	display: none;
+}
+
+#attached_toggleButton {
+	cursor: pointer;
+}
+.mink_li_highlight {
+	font-size: 1.5rem; 
+	text-decoration: none;
+	color:black;
+}
+
+.mink_li_highlight:hover {
+    color: #3e6ce3;
+    cursor: pointer;
+}
+
 .mink_scroll_ul {
 	border : 1px solid black;
 	overflow-y:scroll;

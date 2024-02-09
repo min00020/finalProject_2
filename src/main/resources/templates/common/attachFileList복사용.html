@@ -4,56 +4,14 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content"	  
 >
-	<!-- html 태그 작성. -->
-	<section style="margin-top: 20px;">
-		<!-- <div id="qna_banner">
-			<h3>질문&답변</h3>
-			<p>좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
-		</div> -->
-		<div class="container" style="width:1344px;">
-			<div style="margin:0 auto; padding-left:195px;">
-				<h3 style="font-weight:bold; color:#3e6ce3;">질문 작성하기</h3>
-				<p>문의 답변은 1~2일 소요됩니다.</p>
-			</div>
-			<hr style="margin:0 auto; width:900px;">
-			<!-- 질문 작성폼 시작 -->
-			<form name="qnaWrite">
-				<div style="width:900px; margin:0 auto; ">
-					<br>
-					<div>
-						<div>
-							<h6 style="font-weight : bold;">제목</h6>
-							<input name="title" type="text" class="form-control" placeholder="제목을 입력해주세요">
-							<br>
-						</div>
-					
-						<h6 style="font-weight : bold;">문의 내용</h6>
-						<textarea name="content" class="form-control" style="height:300px;"></textarea>
-						<br>
-					</div>
-				
-					<div>
-						<!-- style="height:30px;" -->
-						<div class="d-flex justify-content-between">
-							<h6 style="font-weight : bold; margin-top:15px;">첨부 파일</h6>
-							<label for="attachFile" class="btn text-white" style="background-color:#3e6ce3; margin-bottom:8px;">파일 선택</label>
-							<input id="attachFile" type="file" class="px-3 py-2 w-25 rounded" name="attachFile" style="display:none;" multiple>
-						</div>
-						<ul class="mink_scroll_ul" id="fileScroll">
+	<div class="d-flex justify-content-between">
+		<h6 style="font-weight : bold; margin-top:15px;">첨부 파일</h6>
+		<label for="attachFile" class="btn text-white" style="background-color:#3e6ce3; margin-bottom:8px;">파일 선택</label>
+		<input id="attachFile" type="file" class="px-3 py-2 w-25 rounded" name="attachFile" style="display:none;" multiple>
+	</div>
+	<ul class="mink_scroll_ul" id="fileScroll">
 						
-						</ul>
-					</div>
-				
-					<div style="float: right;margin-bottom:10px;">
-						<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
-						<button type="button" class="btn text-white" style="background-color:#3e6ce3;" onclick="registBoard()">등록</button>
-					</div>
-				</div>
-			</form>
-			<!-- 질문 작성폼 끝 -->
-		</div>
-	</section>
-	
+	</ul>
 	<script th:inline="javascript">
 		// 실제 input의 fileList는 게시판 등록시점에 fileDataTransfer에 있는 내용을 복사해 보낸다.
 		let fileArray = [];
