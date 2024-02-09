@@ -92,6 +92,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/gitLinkPage");
 		permitAllUrl.add("/findAccount");
 		permitAllUrl.add("/changePassword");
+		permitAllUrl.add("/attachFile/**");
 	}
 	
 	private void insertPermitAllUrlByChae() {
@@ -111,6 +112,7 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByTae() {
-		
+		//permitAllUrl.add("/myPage");
+		//permitAllUrl.add("/myPage2");
 	}
 }

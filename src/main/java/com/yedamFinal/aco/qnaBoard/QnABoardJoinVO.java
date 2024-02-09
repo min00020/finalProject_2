@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class QnABoardVO {
+public class QnABoardJoinVO {
 	private int qnaBoardNo;
 	private int memberNo;
 	private String title;
@@ -15,7 +15,10 @@ public class QnABoardVO {
 	private Date changeDate;
 	private String answerState;
 	private int viewCnt;
+	private int attachedFileNo;
 	private String nickname;
-	
-	private int pk;
+	private String serverFileName;
+	private String originFileName;
+	private String filePath;
+	private Date registerDate;
 }
