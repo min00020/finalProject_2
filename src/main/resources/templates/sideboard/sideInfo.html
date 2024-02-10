@@ -5,12 +5,12 @@
 	<!-- header tab -->
 	<div class="publishingStatus">
 		<hr id="tae-hr">
-			<th:block th:if="${status} == 'Q001'">	
+			<th:block th:if="${sideInfo.publishingStatus} == 'Q001'">	
 				<a id="a-1" style="margin-left: 50px;text-decoration: none;font-weight:bold;color:#000" href="/sideProject/Q001">모집중</a><span>
 				<a id="a-2" style="margin-left: 30px;text-decoration: none;font-weight:bold;color:#979da9" href="/sideProject/Q002">협업중</a>
 				</span>
 			</th:block>
-			<th:block th:unless="${status} == 'Q001'">	
+			<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'">	
 				<a id="a-1" style="margin-left: 50px;text-decoration: none;font-weight:bold;color:#979da9" href="/sideProject/Q001">모집중</a><span>
 				<a id="a-2" style="margin-left: 30px;text-decoration: none;font-weight:bold;color:#000" href="/sideProject/Q002">협업중</a>
 				</span>
@@ -19,11 +19,11 @@
 	</div>
 	<!-- contents -->
 	<div class="conetents">
-				<th:block th:if="${status} == 'Q001'" >
+				<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
 				<h6 style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
 				<h6 style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
 				</th:block>
-				<th:block th:unless="${status} == 'Q001'" >
+				<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'" >
 				<h6 style="padding-left:5px;font-weight:bold;color:#0C5FEC">모집중</h6>
 				<h6 style="padding-left:5px;font-weight:bold;color:#009630">협업중</h6>
 				</th:block>

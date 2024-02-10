@@ -33,8 +33,8 @@ public class SideController {
 		return "sideboard/sideProject";
 	}
 	
-	@GetMapping("/sideInfo/{status}/{bno}")
-    public String getSideProjectDetails(@PathVariable("status") String status, @PathVariable("bno") int bno,
+	@GetMapping("/sideInfo/{bno}")
+    public String getSideProjectDetails(@PathVariable("bno") int bno,
                                         Model model) {
 		MemberVO memberVO = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
