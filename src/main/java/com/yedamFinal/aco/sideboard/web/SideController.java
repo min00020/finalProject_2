@@ -47,8 +47,9 @@ public class SideController {
         String isCheckMember = null;
         if(memberVO != null && memberVO.getMemberNo() == vo.getMemberNo()) {
         	model.addAttribute("isCheckMember", "1");
+        	return isCheckMember;
         	}
-		return isCheckMember;
+        return "sideboard/sideInfo";
     }
 	
 	/*
