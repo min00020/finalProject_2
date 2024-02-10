@@ -39,7 +39,13 @@
 	FROM side_project_board
 	WHERE side_board_no= #{bno}
 </select>
+<update id="updateStatus" parameterType="SideVO">
+	UPDATE 	side_project_board
+	SET publishing_status = #{status}
+	WHERE side_board_no= #{bno}
 
+
+</update>
 
 
 

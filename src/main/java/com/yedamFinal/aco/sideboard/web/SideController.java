@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedamFinal.aco.member.MemberVO;
@@ -47,23 +47,33 @@ public class SideController {
         String isCheckMember = null;
         if(memberVO != null && memberVO.getMemberNo() == vo.getMemberNo()) {
         	model.addAttribute("isCheckMember", "1");
-        	return isCheckMember;
         	}
         return "sideboard/sideInfo";
     }
 	
-	/*
-	 * @PostMapping("/updateStatus")
-	 * 
-	 * @ResponseBody public Map<String, Object> updateStatus(@RequestBody String
-	 * status) { MemberVO memberVO = null; Authentication authentication =
-	 * SecurityContextHolder.getContext().getAuthentication(); if (authentication !=
-	 * null && authentication.getPrincipal() instanceof UserDetailVO) { UserDetailVO
-	 * userDetails = (UserDetailVO) authentication.getPrincipal(); memberVO =
-	 * userDetails.getMemberVO(); }
-	 * 
-	 * 
-	 * return map; }
-	 */
+	
+	 @PostMapping("/updateStatus")
+	 @ResponseBody
+	 public Map<String, Object> updateBoardStatus(@RequestParam(value="bno") int bno,@RequestParam String status, SideVO sideVO, Model model) {
+		 MemberVO memberVO = null;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+				UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+				memberVO = userDetails.getMemberVO();
+			}
+	        SideVO vo = sideService.getSideInfo(bno);
+	        model.addAttribute("sideInfo", vo);
+	        String isCheckMember = null;
+	        if(memberVO != null && memberVO.getMemberNo() == vo.getMemberNo()) {
+	        	model.addAttribute("isCheckMember", "1");
+	        	}
+	        Map<String, Object> map = sideService.updateBoardStatus(bno, status, vo);
+	        
+	        SideVO vo2 = sideService.getSideInfo(bno);
+	        map.put("sideInfo", vo2);
+	        return map;
+	 }
+	
+	 
 	
 }
