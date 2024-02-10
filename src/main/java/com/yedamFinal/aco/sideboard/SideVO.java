@@ -20,5 +20,6 @@ public class SideVO {
 	private int memberNo;
 	
 	private String status;
+	private int bno;
 	
 }

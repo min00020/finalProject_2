@@ -6,38 +6,39 @@
 <!-- 모집중list 가져오기 -->
 <select id="selectRecruitingList" resultType="SideVO">
 	SELECT side_board_no, 
-	            publishing_status, 
-	            title, 
-	            content,
-	            writer, 
-	            write_date, 
-	            recruit_personnel, 
-	            dev_period, 
-	            git_address, 
-	            view_cnt, 
-	            reply_cnt,
-	            tech_of_use,
-	            member_no 
+	       publishing_status, 
+	       title, 
+	       content,
+	       writer, 
+	       write_date, 
+           recruit_personnel, 
+	       dev_period, 
+	       git_address, 
+	       view_cnt, 
+	       reply_cnt,
+	       tech_of_use,
+	       member_no 
 	FROM side_project_board
 	WHERE publishing_status = #{publishingStatus}
 </select>
-<!-- 협업중list 가져오기 -->
-<select id="selectCollaboratingList" resultType="SideVO">
+<!-- 게시글 단건조회 가져오기 -->
+<select id="selectSideInfo" parameterType="String" resultType="SideVO">
 	SELECT side_board_no, 
-	            publishing_status, 
-	            title, 
-	            content, 
-	            writer, 
-	            write_date, 
-	            recruit_personnel, 
-	            dev_period, 
-	            git_address, 
-	            view_cnt, 
-	            reply_cnt,
-	            tech_of_use,
-	            member_no 
+	       publishing_status, 
+	       title, 
+	       content, 
+	       writer, 
+	       write_date, 
+	       recruit_personnel, 
+	       dev_period, 
+           git_address, 
+           view_cnt, 
+	       reply_cnt,
+	       tech_of_use,
+	       member_no 
 	FROM side_project_board
-	WHERE publishing_status = #{publishingStatus}
+	WHERE publishing_status = #{status} 
+	AND side_board_no= #{bno}
 </select>
 
 

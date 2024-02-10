@@ -12,7 +12,7 @@
 						<!-- 프사 -->
 						<div class="box-1">
 							<th:block th:if="${memberInfo.profileImage} == null">
-								<img class="profile-1" src="commonResource/default_profile.jpg"
+								<img class="profile-1" th:src="commonResource/default_profile.jpg"
 									style="width: 100%; height: 100%;" alt="profile">
 							</th:block>
 							<th:block th:unless="${memberInfo.profileImage} == null">
