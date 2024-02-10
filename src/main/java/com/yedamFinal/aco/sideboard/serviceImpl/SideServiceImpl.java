@@ -23,8 +23,8 @@ public class SideServiceImpl implements SideService{
 	}
 	
 	@Override
-    public SideVO getSideInfo(String status, int bno) {
-        return sideMapper.selectSideInfo(status, bno);
+    public SideVO getSideInfo(int bno) {
+        return sideMapper.selectSideInfo(bno);
     }
 	
 	

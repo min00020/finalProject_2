@@ -9,5 +9,5 @@ import com.yedamFinal.aco.sideboard.SideVO;
 @Mapper
 public interface SideMapper {
 	public List<SideVO> selectRecruitingList(String status);
-	public SideVO selectSideInfo(@Param("status") String status ,@Param("bno") int bno);
+	public SideVO selectSideInfo(@Param("bno") int bno);
 }

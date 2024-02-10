@@ -42,7 +42,7 @@ public class SideController {
 			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
 			memberVO = userDetails.getMemberVO();
 		}
-        SideVO vo = sideService.getSideInfo(status, bno);
+        SideVO vo = sideService.getSideInfo(bno);
         model.addAttribute("sideInfo", vo);
         String isCheckMember = null;
         if(memberVO != null && memberVO.getMemberNo() == vo.getMemberNo()) {

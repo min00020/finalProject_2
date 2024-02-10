@@ -17,7 +17,6 @@
 		</th:block>
 		<hr id="tae-hr">	
 	</div>
-	<div >
 		<!-- banner -->
 		<div class="sidebanner">
 			<div class="recbanner">
@@ -32,10 +31,10 @@
 		</div>
 		<!-- recList -->
 		<div class="recList_2" style="height:350px;">
-				<div class="recList_1" th:each="rec:${recList}" th:onclick="goInfoPage()">
+				<div class="recList_1" th:each="rec:${recList}">
 					<h6 th:if="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
 					<h6 th:unless="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
-					<h5 style="font-weight:bolder;">[[ ${rec.title }]]</h5>
+					<h5 th:onclick="goInfoPage(${rec.sideBoardNo})" style="font-weight:bolder;">[[ ${rec.title }]]</h5>
 					<br>
 					<p style="font-weight:bold;">[[${rec.content}]]</p>
 					<br>
@@ -52,8 +51,8 @@
 <script type="text/javascript">
 
 	const memberNo = [[${session.member.memberNo}]]
-	function goInfoPage(){
-		location.href='/sideInfo/{status}/{bno}' + status + bno;
+	function goInfoPage(bno){
+		location.href='/sideInfo/' +  bno;
 	}
 
 </script>

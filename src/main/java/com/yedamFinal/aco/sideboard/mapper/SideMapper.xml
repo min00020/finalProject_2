@@ -37,8 +37,7 @@
 	       tech_of_use,
 	       member_no 
 	FROM side_project_board
-	WHERE publishing_status = #{status} 
-	AND side_board_no= #{bno}
+	WHERE side_board_no= #{bno}
 </select>
 
 
