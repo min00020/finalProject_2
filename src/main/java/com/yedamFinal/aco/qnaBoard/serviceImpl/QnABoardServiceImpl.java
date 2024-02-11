@@ -6,10 +6,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
+import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.qnaBoard.QnABoardJoinVO;
 import com.yedamFinal.aco.qnaBoard.QnABoardVO;
@@ -21,6 +23,9 @@ public class QnABoardServiceImpl implements QnABoardService {
 	
 	@Autowired
 	private FileServiceImpl fileService;
+	
+	@Autowired
+	private ReplyServiceImpl replyService;
 	
 	private Map<String,String> orderbyByReqOb = new HashMap<String,String>();
 	
@@ -108,9 +113,12 @@ public class QnABoardServiceImpl implements QnABoardService {
 	}
 	
 	@Override
-	public List<QnABoardJoinVO> getQnaBoardDetailInfo(int qnaBoardNo) {
+	public boolean getQnaBoardDetailInfo(Model model, int qnaBoardNo) {
 		qnaMapper.updateQnABoardViewCnt(qnaBoardNo);
-		return qnaMapper.selectQnaBoardDetail(qnaBoardNo);
+		
+		model.addAttribute("replyList",replyService.getReplyList("N005", qnaBoardNo));
+		model.addAttribute("qnaInfo",qnaMapper.selectQnaBoardDetail(qnaBoardNo));
+		return true;
 	}
 
 	@Override

@@ -153,7 +153,7 @@
 		UPDATE QNA_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE QNA_BOARD_NO = #{qnaBoardNo}
 	</update>
 	<update id="updateQnAAnswer">
-		UPDATE QNA_BOARD SET QNA_ANSWER_CONTENT = #{answer}, ANSWER_STATE = 'P002' WHERE QNA_BOARD_NO = #{qnaBoardNo}
+		UPDATE QNA_BOARD SET QNA_ANSWER_CONTENT = #{answer}, ANSWER_STATE = 'P002', CHANGE_DATE = SYSDATE WHERE QNA_BOARD_NO = #{qnaBoardNo}
 	</update>
 	<update id="updateQnAState">
 		UPDATE QNA_BOARD SET ANSWER_STATE = #{state} WHERE QNA_BOARD_NO = #{qnaBoardNo}
