@@ -46,7 +46,7 @@
                 <div class = "park_align-self-center d-flex gap-2">
                           <div class="park_alert" style="width :45px; margin-top:13px;  ">
                               <a href='/' class="position-relative">
-  								<img class="bell" src="commonResource/bell.png" alt="bell" style="width:50%">
+  								<img class="bell" src="/commonResource/bell.png" alt="bell" style="width:50%">
   								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
    									 99+<span class="visually-hidden">unread messages</span>
   								</span>
@@ -54,8 +54,9 @@
                     
                </div>
                     <div class="mink_box">
-                    	<a th:href="|/myPage?memberNo=${session.member.memberNo}|">
-                    		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
+                    	<a th:href="|/myPage|">
+                    		<img class="mink_profile" th:src="|upload/profile/${session.member.profileImage}|" alt ="profile" />
+
                     	</a>
                     </div> 
                     <form action="/logout" method="post">

@@ -12,6 +12,184 @@
 		WHERE MID = #{mid}
 		
 </select>
+<!-- 회원정보조회 -->
+<select id="selectMemberInfo" resultType="MemberVO">
+	    SELECT member_no, 
+	 	   email, 
+	 	   nickname, 
+	 	   profile_image, 
+	 	   topic_hashtag, 
+	 	   accum_activity_point, 
+	 	   available_activity_point, 
+           aco_money,
+	 	   aco_point, 
+           member_level,
+	 	   subcode_to_name(member_level) as grade_name,
+           NVL(aco_money,0) + NVL(aco_point,0) as aco_total,
+           CASE WHEN member_level = 'K001' AND aco_point <![CDATA[ >= ]]> 15000 THEN NVL(aco_money,0) + NVL(aco_point,0)
+           WHEN member_level = 'K002' AND aco_point <![CDATA[ >= ]]> 12000 THEN NVL(aco_money,0) + NVL(aco_point,0)
+           WHEN member_level = 'K003' AND aco_point <![CDATA[ >= ]]> 9000 THEN NVL(aco_money,0) + NVL(aco_point,0)
+           WHEN member_level = 'K004' AND aco_point <![CDATA[ >= ]]> 7000 THEN NVL(aco_money,0) + NVL(aco_point,0)
+           WHEN member_level = 'K005' AND aco_point <![CDATA[ >= ]]> 5000 THEN NVL(aco_money,0) + NVL(aco_point,0)
+           else NVL(aco_money,0)
+           END AS available_accum_point
+    FROM member m
+    WHERE member_no = #{memberNo}
+
+
+</select>
+<!-- 내이모티콘구매내역조회 -->
+<select id="selectMyemoticonList" resultType="com.yedamFinal.aco.myemoticon.MyEmoticonJoinVO">
+	SELECT 
+    ROWNUM, A.*
+	FROM
+	 ( SELECT 
+	           m.member_no,
+	           m.emo_name, 
+		       m.emo_buydate
+	 FROM my_emoticon m
+	 ORDER BY m.emo_buydate desc ) A
+	 JOIN member B ON A.member_no = B.member_no
+	 WHERE A.member_no= #{memberNo} AND ROWNUM <![CDATA[ <= ]]> 3
+</select>
+<!-- 북마크리스트 -->
+<select id="selectMybmList" resultType="com.yedamFinal.aco.bookmark.MybookmarkVO">
+	 SELECT ROWNUM, A.*
+	 FROM
+	   (SELECT m.title,
+		       m.regist_date,
+		       m.member_no,
+               m.question_board_no
+		FROM my_bookmark m
+		ORDER BY m.regist_date desc ) A
+	JOIN member B ON A.member_no = B.member_no
+    JOIN question_board C ON C.question_board_no = A.question_board_no
+	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 3
+</select>
+<!-- 북마크 상세 -->
+<select id="selectMyBookList" resultType="com.yedamFinal.aco.bookmark.MybookmarkVO">
+	SELECT title, regist_date, member_no, question_board_no
+	FROM my_bookmark
+	WHERE member_no = #{memberNo}
+	ORDER BY regist_date desc
+	
+</select>
+<!-- 내가 질문한글 리스트 -->
+<select id="selectMyqList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
+	 SELECT ROWNUM, A.*
+	 FROM
+	   (SELECT q.question_board_no,
+		       q.title,write_date,
+		       q.answer_cnt,
+	           q.member_no
+		FROM question_board q
+		ORDER BY q.write_date desc ) A
+	JOIN member B ON A.member_no = B.member_no
+	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 3
+</select>
+<!-- 내가 질문한 리스트전체 페이지처리 -->
+<select id="selectQuestionList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
+	 SELECT question_board_no,
+		    title,write_date,
+		    answer_cnt,
+	        member_no
+	FROM question_board
+	WHERE member_no= #{memberNo}
+	ORDER BY write_date desc
+</select>
+<!-- 활동점수 리스트 -->
+<select id="selectActivityList" resultType="com.yedamFinal.aco.activity.ActivityPointVO">
+	SELECT activity_point_date, inc_dec_activity_point,
+	       subcode_to_name(activity_point_type) as history_type
+	FROM activity_point_detail
+	WHERE member_no = #{memberNo}
+	ORDER BY activity_point_date desc
+</select>
+<!-- 내 질답통계 -->
+<select id="selectMemberChart" resultType="MemberQuestionChartVO">
+
+	    SELECT (select count(answer_board_no) from answer_board where member_no=#{memberNo}) as answer_cnt,
+         	   (select count(adopt_status) from answer_board where member_no=#{memberNo} and adopt_status='I002') as adopt_cnt,
+           	   (select count(question_board_no) from question_board where member_no =#{memberNo}) as question_cnt 
+    	FROM dual
+
+</select>
+<!-- 사이드프로젝트 목록(더보기보달) 이거는 패키지 새로 만들기 -->
+<!-- <select id="selectSideProjectList" resultType="com.yedamFinal.aco.sideboard.SideVO">
+	 
+</select> -->
+<!-- 북마크 삭제 -->
+<delete id="delBookmark" parameterType="com.yedamFinal.aco.bookmark.MybookmarkVO">
+	DELETE FROM my_bookmark
+	WHERE member_no= #{mno} AND question_board_no=#{qno}
+</delete>
+
+<!-- 포인트사용내역 리스트 -->
+<select id="selectPointDetailList" resultType="com.yedamFinal.aco.point.PointDetailJoinVO">
+	SELECT member_no, history_date, INC_DEC_POINT, CASE WHEN INC_DEC_POINT <![CDATA[ > ]]> 0 THEN '0'
+               ELSE '1' END AS acc_type, subcode_to_name(history_type) as history_type
+    FROM point_detail
+    WHERE member_no=#{memberNo}
+    ORDER BY history_date desc
+</select>
+
+<insert id="insertPointDetail" parameterType="com.yedamFinal.aco.point.PointDetailJoinVO">
+	INSERT INTO point_detail (point_detail_no, 
+	                          member_no, 
+	                          latest_total_points, 
+	                          lastest_aco_money, 
+	                          lastest_aco_point, 
+	                          history_type, 
+	                          history_date, 
+	                          inc_dec_point, 
+	                          point_type, 
+	                          account_no)
+    VALUES (point_detail_seq.NEXTVAL, 
+            #{memberNo}, 
+            #{latestTotalPoints}, 
+            #{latestAcoMoney}, 
+            #{latestAcoPoint}, 
+            #{historyType}, 
+            #{historyDate}, 
+            #{incDecPoint}, 
+            #{pointType}, 
+            #{accountNo})
+      
+</insert>
+
+<insert id="insertActivityDetail" parameterType="com.yedamFinal.aco.activity.ActivityPointVO">
+INSERT INTO activity_point_detail(activity_point_no, 
+                                  member_no, 
+                                  accum_activity_point, 
+                                  cur_activity_point, 
+                                  activity_point_type, 
+                                  activity_point_date, 
+                                  inc_dec_activity_point) 
+VALUES (activity_point_detail_seq.NEXTVAL,
+		#{memberNo},
+        #{accumActivityPoint},
+        #{curActivityPoint},
+        #{activityPointType},
+        #{activityPointDate},
+        #{incDecActivityPoint})
+
+</insert>
+
+<update id="updateMemberPoint" parameterType="MemberVO">
+	UPDATE member
+    SET available_activity_point = available_activity_point - #{resPoint}, 
+        aco_point = aco_point + #{resPoint}
+    
+    WHERE member_no = #{m.memberNo}
+
+</update>
+
+<select id="selectMemberAccountList" resultType="com.yedamFinal.aco.point.AccountVO">
+	SELECT a.member_no, b.account_no, b.account_holder, b.bank_code, b.bank_name
+	FROM member a
+	JOIN account b ON a.member_no = b.member_no
+	WHERE a.member_no= #{memberNo}
+</select>
 
 <select id="selectCheckDuplicateId" resultType="MemberVO">
 	SELECT id

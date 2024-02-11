@@ -21,8 +21,8 @@ public class PaginationDTO {
         this.showContentCnt = showContentCnt;
         this.total = total;
 
-        this.lastPage = (int) (Math.ceil((total / showContentCnt)));
-        this.endPage = (int) (Math.ceil((curPage / 10.0)) * 10);
+        this.lastPage = (int) (Math.ceil(((double)total / showContentCnt)));
+        this.endPage = (int) (Math.ceil(((double)curPage / 10.0)) * 10);
         this.startPage = this.endPage - 9;
         this.endPage = this.endPage > this.lastPage ? this.lastPage : this.endPage;
         this.prev = this.curPage > 1;
