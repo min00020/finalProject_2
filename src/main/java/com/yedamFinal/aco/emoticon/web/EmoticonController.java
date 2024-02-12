@@ -13,11 +13,15 @@ import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.service.AdminService;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
+import com.yedamFinal.aco.member.service.MemberService;
 
 @Controller
 public class EmoticonController {
 	@Autowired
 	AdminService adminService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@GetMapping("/emoMain")
 	public String getEmoMain(Model model) {
@@ -29,6 +33,18 @@ public class EmoticonController {
 	//이모티콘 상세
 	@GetMapping("/emoDetail")
 	public String getEmoDetail(AdminEmoVO adminEmoVO, Model model) {
+		// MemberVO 꺼내오기.
+		int memberNo = -1;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			MemberVO username = userDetails.getMemberVO();
+			username = memberService.getMemberInfo(username); // 최신화된 현재회원의 vo를 가져와서
+			memberNo = username.getMemberNo();
+			model.addAttribute("user", username);
+			
+		}
+		
 		AdminEmoVO emoVO = adminService.getEmoDetail(adminEmoVO);
 		model.addAttribute("emoDetail",emoVO);
 		return "emoticon/emoDetail";

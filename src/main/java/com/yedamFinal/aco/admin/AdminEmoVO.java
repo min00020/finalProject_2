@@ -20,4 +20,8 @@ public class AdminEmoVO {
 	
 	private Date emoBuydate;
 	private int cnt;
+	
+	private String emoUseimg;
+	
+	private int pk;
 }

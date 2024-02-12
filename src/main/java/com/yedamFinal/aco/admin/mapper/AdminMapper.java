@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedamFinal.aco.admin.AdminEmoUseImgVO;
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
 import com.yedamFinal.aco.admin.AdminMemberVO;
@@ -50,6 +51,7 @@ public interface AdminMapper {
 	
 	//이모티콘 등록
 	public int insertEmo(AdminEmoVO adminEmoVO);
+	public int insertUseEmo(AdminEmoUseImgVO adminEmoUseImgVO);
 	//이모티콘 판매 종료
 	public int updateEmo(int emoNo);
 	//이모티콘 판매 재개
@@ -72,5 +74,7 @@ public interface AdminMapper {
 	public List<AdminQnaVO> getAdDropQnaList(@Param(value="pageNo") int pageNo, @Param(value="answerStatus") String answerStatus);
 	// 정산 드롭박스
 	public List<AdminSettleVO> getAdDropSettleList(@Param(value="pageNo") int pageNo, @Param(value="processStatus") String processStatus);
+	//이모티콘 구매하기 버튼
+	public int buyEmo(int emoNo, int memberNo);
 	
 }

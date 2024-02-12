@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
@@ -34,7 +35,7 @@ public interface AdminService {
 	//이모티콘 상점 메인
 	public List<AdminEmoVO> getMainEmoList();
 	//이모티콘 등록
-	public int insertEmo(AdminEmoVO adminEmoVO);
+	public Map<String, Object> insertEmo(AdminEmoVO adminEmoVO, MultipartFile[] files);
 	//public int insertEmo(AdminEmoVO adminEmoVO, MultipartFile[] file);	
 	//이모티콘 판매종료
 	public boolean updateEmo(int emoNo);
@@ -44,6 +45,8 @@ public interface AdminService {
 	public AdminEmoVO getEmoDetail(AdminEmoVO adminEmoVO);
 	//이모티콘 구매 내역
 	public List<AdminEmoVO> getEmoBuyList(int memberNo);
+	//이모티콘 구매하기
+	public boolean buyEmo(int emoNo, int memberNo);
 	//	공지등록
 	public int insertNotice(AdminMainVO adminMainVO);
 }

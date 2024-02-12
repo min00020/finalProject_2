@@ -259,7 +259,7 @@
 			                              </button>
 			                           </div>
 			                           <div class="modal-body" style="width: 500px">
-			                           		<form name="insertForm" action="/insertEmo" method="post">	
+			                           	<form name="insertForm" action="/insertEmo" method="post" enctype="multipart/form-data">	
 			                           		<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
 												<div>
 												<table>
@@ -277,19 +277,19 @@
 												</tr>
 												<tr>
 												<th>대표이미지</th>
-												<td><input type="file" name="emoFirstimg" accept="image/*" onchange="setThumbnail1(event)"/>
+												<td><input type="file" name="files" accept="image/*" onchange="setThumbnail1(event)"/>
 												<div id="image_container1"></div>	
 												</td>
 												</tr>
 												<tr>
 												<th>상세이미지</th>
-												<td><input type="file" name="emoInnerimg" accept="image/*" onchange="setThumbnail2(event)"/>
+												<td><input type="file" name="files" accept="image/*" onchange="setThumbnail2(event)"/>
 												<div id="image_container2"></div>
 												</td>	
 												</tr>
 												<tr>
 												<th>사용이미지</th>
-												<td><input type="file" id="image" accept="image/*" onchange="setThumbnail(event);" multiple/>
+												<td><input type="file" name="files" accept="image/*" onchange="setThumbnail(event);" multiple/>
     											<div id="image_container"></div></td>
 												</tr>
 												</table>
@@ -486,6 +486,10 @@
 			<!--자바 스크립트-->
 		<script>
 		
+			function postEmoticon() {
+				
+			}
+		
 			document.querySelector('form[name="insertForm"]')
 					.addEventListener('submit', boardInsertJs);
 
@@ -498,9 +502,9 @@
 					function setThumbnail1(event) {
 				        var reader = new FileReader();
 
+					     document.querySelector("div#image_container1").innerHTML = "";
 				        reader.onload = function(event) {
 
-					      document.querySelector("div#image_container1").innerHTML = "";
 				          var img = document.createElement("img");
 				          img.setAttribute("src", event.target.result);
 				          img.setAttribute("width", "100px");
@@ -513,8 +517,8 @@
 					function setThumbnail2(event) {
 				        var reader = new FileReader();
 						
+				         document.querySelector("div#image_container2").innerHTML = "";
 				        reader.onload = function(event) {
-				          document.querySelector("div#image_container2").innerHTML = "";
 				          var img = document.createElement("img");
 				          img.setAttribute("src", event.target.result);
 				          img.setAttribute("width", "100px");
@@ -524,11 +528,12 @@
 				        reader.readAsDataURL(event.target.files[0]);
 				      }
 					function setThumbnail(event) {
+						
+						document.querySelector("div#image_container").innerHTML = "";
 				        for (var image of event.target.files) {
 				          var reader = new FileReader();
 
 				          reader.onload = function(event) {
-				        	  
 				            var img = document.createElement("img");
 				            img.setAttribute("src", event.target.result);
 				            img.setAttribute("width", "100px");

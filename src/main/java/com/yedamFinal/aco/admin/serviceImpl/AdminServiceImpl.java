@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.admin.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.admin.AdminEmoUseImgVO;
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
 import com.yedamFinal.aco.admin.AdminQnaVO;
@@ -16,6 +19,7 @@ import com.yedamFinal.aco.admin.AdminSettleVO;
 import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.admin.service.AdminService;
 import com.yedamFinal.aco.common.PaginationDTO;
+import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 
 
 @Service
@@ -55,6 +59,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	AdminMapper adminMapper;
+	
+	@Autowired
+	private FileServiceImpl fileService;
 	
 	@Override
 	public  Map<String,Object> getAdNoticeList(int pageNo) {
@@ -250,13 +257,17 @@ public class AdminServiceImpl implements AdminService {
 	}
 	//이모티콘 등록
 	@Override
-	public int insertEmo(AdminEmoVO adminEmoVO) {
-		int result = adminMapper.insertEmo(adminEmoVO);
-		if(result == 1) {
-			return adminEmoVO.getEmoNo();
-		}else {
-			return -1;
+	public Map<String, Object> insertEmo(AdminEmoVO adminEmoVO, MultipartFile[] files) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		if(files != null) {
+			List<AdminEmoUseImgVO> useImgList = new ArrayList<>();
+			fileService.emoticonUpload(files, adminEmoVO, useImgList);
+			return ret;
 		}
+		 
+		return ret;
 	}
 	//이모티콘 판매종료
 	@Override
@@ -289,5 +300,10 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<AdminEmoVO> getEmoBuyList(int memberNo) {
 		return adminMapper.getEmoBuyList(memberNo);
+	}
+	@Override
+	public boolean buyEmo(int emoNo, int memberNo) {
+		int result = adminMapper.buyEmo(emoNo, memberNo);
+		return result == 1? true : false;
 	}
 }

@@ -7,15 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
-import com.yedamFinal.aco.admin.AdminMemberVO;
-import com.yedamFinal.aco.admin.AdminQnaVO;
-import com.yedamFinal.aco.admin.AdminReportVO;
-import com.yedamFinal.aco.admin.AdminSettleVO;
 import com.yedamFinal.aco.admin.service.AdminService;
 
 
@@ -102,9 +98,13 @@ public class AdminController {
 	
 	//이모티콘 등록
 	@PostMapping("/insertEmo")
-	public String insertEmoProcess(AdminEmoVO adminEmoVO) {
-		adminService.insertEmo(adminEmoVO);
-		return "redirect:adminEmo";
+	public String insertEmoProcess(String emoName, int emoPrice, String emoDesc, MultipartFile[] files) {
+		AdminEmoVO vo = new AdminEmoVO();
+		vo.setEmoName(emoName);
+		vo.setEmoPrice(emoPrice);
+		vo.setEmoDesc(emoDesc);
+		adminService.insertEmo(vo, files);
+		return "redirect:/adminEmo?pageNo=1";
 	}
 	//이모티콘 판매종료
 	@GetMapping("/updateEmo")

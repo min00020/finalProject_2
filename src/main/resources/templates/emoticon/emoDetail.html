@@ -18,8 +18,52 @@
                                 <p class="lead fw-normal text-black-50 mb-4" th:text="${emoDetail.emoDesc}"></p>
                                 <p class="lead fw-normal" style="color: red" th:text="${emoDetail.emoPrice}+포인트"></p>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">구매하기</a>
+                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3"
+		                        data-bs-toggle="modal" data-bs-target="#AddNotice"
+		                        style="text-decoration: none; color: white;">
+		                        구매하기
+		                     </button>
                                 </div>
+                                <!-- Modal -->
+			                  <div class="modal fade" id=AddNotice tabindex="-1" role="dialog"
+			                     aria-labelledby="AddNoticeLabel" aria-hidden="true">
+			                     <div class="modal-dialog modal-m" role="document">
+			                        <div class="modal-content">
+			                           <div class="modal-header" style="margin: auto;">
+			                              <h4 class="modal-title" id="AddNoticeLabel"
+			                                 style="font-weight: bold;">이모티을 구매하시겠습니까?</h4>
+			                           </div>
+			                            <div class="modal-body" style="width: 500px">
+			                            <div style="text-align: center;">
+			                            <table style="width: 100%" >
+			                            	<tbody>
+											<tr>
+												<th>현재 보유 에코포인트</th>
+												<td th:text="${user.acoPoint}"></td>
+											</tr>		                            
+											<tr>	
+												<th>현재 보유 에코머니</th>
+												<td th:text="${user.acoMoney}"></td>
+											</tr>												
+											<tr style="border-top: 1px solid #dee2e6">
+												<th>구매 후 포인트(+머니)</th>
+												<td style="color: red" th:text="${user.acoPoint + user.acoMoney - emoDetail.emoPrice}"></td>
+											</tr>
+											</tbody>		                            
+			                            </table>
+			                            </div>
+			                            </div>
+			                           <div class="modal-footer" style="margin: auto;">
+			                              <button type="submit" class="btn btn-primary">
+			                              구매</button>
+			                              <button type="button" class="btn btn-secondary"
+			                                 data-bs-dismiss="modal">취소</button>
+			                           </div>
+			                        </div>
+			                     </div>
+			                     <hr>
+			                  </div>
+                  <!-- 모달 끝 -->
                             </div>
                         </div>
                     </div>

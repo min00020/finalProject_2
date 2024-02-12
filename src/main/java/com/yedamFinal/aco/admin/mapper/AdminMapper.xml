@@ -142,15 +142,8 @@ SELECT *
 				ORDER BY E.EMO_NO
 </select>
 <!-- 이모티콘 등록 -->
-<insert id="insertEmo" parameterType="AdminEmoVO">
-	 		<selectKey keyProperty="emoNo"
- 				 resultType="int"
- 				 order="BEFORE">
- 			SELECT NVL(MAX(EMO_NO), 0) + 1
- 			FROM EMOTICON
- 		</selectKey>
-  		INSERT INTO EMOTICON
-  			 (
+<insert id="insertEmo" parameterType="AdminEmoVO" useGeneratedKeys="false">
+	 	INSERT INTO EMOTICON (
   			 		EMO_NO
   				 	,EMO_NAME
   					,EMO_PRICE
@@ -161,15 +154,31 @@ SELECT *
   					,EMO_STATE
   			)
   			VALUES(
-  					#{emoNo}
+  					EMOTICON_SEQ.NEXTVAL
   				 	,#{emoName}
   					,#{emoPrice}
   					,#{emoDesc}
   					,#{emoFirstimg}
   					,#{emoInnerimg}
-  					,'commonResource/emoticon/'
+  					,#{emoPath}
   					,'D001'
-  			)		
+  			)
+		<selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT EMOTICON_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
+</insert>
+
+<insert id="insertUseEmo" parameterType="AdminEmoUseImgVO">
+	INSERT INTO EMOTICON_IMG ( 
+				EMO_USEIMG_NO
+					,EMO_NO
+					,EMO_USEIMG
+	)
+	VALUES(
+			EMOTICON_IMG_SEQ.NEXTVAL
+			,#{emoNo}
+			,#{emoUseimg}
+	)
 </insert>
 <!-- 이모티콘 판매종료 -->
 <update id="updateEmo" parameterType="int">
