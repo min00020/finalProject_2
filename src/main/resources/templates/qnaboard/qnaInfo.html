@@ -1,0 +1,107 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+>
+	<div class="container" style="width:1344px;">
+		<div style="margin:0 auto;" class="my-3">
+			<h3 style="font-weight:bold; color:#3e6ce3;">문의답변</h3>
+		</div>
+		<section>
+			<!-- 질문자 영역 -->
+			<div class="p-3" style="background-color:#aebfec">
+				<div class="clearfix">
+					<span style="float:left; padding-top:0.25rem;">
+						<span class="font-weight-bold m-0">[[${qnaInfo[0].title}]]</span>
+						<small>
+							<span class="bi bi-clock px-1" th:text="${#dates.format(qnaInfo[0].writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+							<span class="px-2"> | </span> 
+							[[${qnaInfo[0].viewCnt}]]
+						</small>
+					</span> 
+					<span style="float:right;">
+						<button class="btn" style="border:0; border-radius:20px; background-color:white;">[[${qnaInfo[0].answerState}]]</button> 
+					</span>
+				</div>
+			</div>
+			
+			<!-- 내용부분 나중에 텍스트에디터로 교체되어야함. -->
+			<div class="p-3" style="min-height: 300px;">
+				<span>[[${qnaInfo[0].content}]]</span>
+			</div>
+			
+			<div class="p-3" style="background-color:#aebfec">
+				<div class="clearfix">
+					<span style="float:left">첨부파일 리스트</span>
+					<span style="float:right; font-size:1rem;" id="attached_toggleButton" class="mink_li_highlight">목록확인</span>
+				</div>
+				<div id="attached_content" class="mt-1">
+					<ul class="list-unstyled" style="margin:0;">
+						<li th:each="file : ${qnaInfo}">
+							<button class="btn" th:text="${file.originFileName}" style="color:#007BFF;" th:onclick="|location.href='/attachFile/${file.attachedFileNo}'|"></button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- 질문자 영역 끗 -->
+		
+		
+			<!-- 관리자 영역 시작 -->
+			<th:block th:if="${qnaInfo[0].qnaAnswerContent} == null">
+				<div class="p-3 mt-3" style="background-color:#aebfec">
+					<div class="clearfix">
+						<span style="float:left; padding-top:0.25rem;">
+							<span class="font-weight-bold m-0">관리자</span>
+						</span> 
+						<span style="float:right;">
+							<small>
+								<span class="bi bi-clock px-1" th:text="${#dates.format(qnaInfo[0].changeDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+							</small> 
+						</span>
+					</div>
+				</div>
+			
+				<!-- 내용부분 나중에 텍스트에디터로 교체되어야함. -->
+				<div class="p-3" style="min-height: 300px;">
+					<span style="color:red;">아직 등록된 답변이 없습니다.</span>
+				</div>
+			</th:block>
+			
+			<th:block th:unless="${qnaInfo[0].qnaAnswerContent} == null">
+				<div class="p-3 mt-3" style="background-color:#aebfec">
+					<div class="clearfix">
+						<span style="float:left; padding-top:0.25rem;">
+							<span class="font-weight-bold m-0">관리자 답변</span>
+						</span> 
+						<span style="float:right;">
+							<small>
+								<span class="bi bi-clock px-1" th:text="${#dates.format(qnaInfo[0].changeDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+							</small> 
+						</span>
+					</div>
+				</div>
+			
+				<!-- 내용부분 나중에 텍스트에디터로 교체되어야함. -->
+				<div class="p-3" style="min-height: 300px;">
+					<span>[[${qnaInfo[0].qnaAnswerContent}]]</span>
+				</div>
+			</th:block>
+		
+		<!-- 댓글  E -->
+		
+		<hr>
+		
+		<div class="mt-2">		
+			<button class="btn btn-outline-secondary ms-2" style="float:right;" data-url="/homeBoard/hpBoardList" onclick="location.href='/qnaBoard?pg=1'">목록</button>
+			<button class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')">답변 작성</button>
+		</div>
+	</section>	
+	</div>
+	
+<script th:inline="javascript">
+	$("#attached_toggleButton").click(function(){
+    	$("#attached_content").slideToggle();
+	});
+</script>
+</div>

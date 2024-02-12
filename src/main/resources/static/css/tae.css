@@ -163,7 +163,7 @@ tae_container1 {
     float: right;
     box-sizing: border-box;
 }
-.form-control{
+.tae-form-control{
 	height: 50px;
 	width: 600px;
 	background-color: bdcde4;
