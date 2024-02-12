@@ -73,7 +73,24 @@ public class PointServiceImpl implements PointService {
 		return ret;
 	}
 
+	@Override
+	public void getAcoMoneyChargeAndUse(Model model, int memberNo) {
+		model.addAttribute("acoMoneyChargeInquiry", pointMapper.acoMoneyChargeInquiry(memberNo));
+		model.addAttribute("acoMoneyUseInquiry", pointMapper.acoMoneyUseInquiry(memberNo));
+		return;
+		
+	}
+
+	@Override
+	public void getAcoPointAcquireAndUse(Model model, int memberNo) {
+		model.addAttribute("acoPointAcquireInquiry", pointMapper.acoPointAcquireInquiry(memberNo));
+		model.addAttribute("acoPointUseInquiry", pointMapper.acoPointUseInquiry(memberNo));
+		return;		
+	}
+
 }
+
+
 
 //	@Override
 //	public Map<String, Object> updateAcoMoney(Model model, int acoMoney, int memberNo ) {

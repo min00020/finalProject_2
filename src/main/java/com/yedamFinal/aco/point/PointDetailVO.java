@@ -16,5 +16,6 @@ public class PointDetailVO {
     private int incDecPoint;
     private String pointType;
     private String accountNo;
+    private String bankName;
     
 }
