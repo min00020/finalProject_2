@@ -18,7 +18,7 @@ public class SideVO {
 	private int replyCnt;
 	private String techOfUse;
 	private int memberNo;
-	
+	private String projectOutline;
 	private String status;
 	private int bno;
 	

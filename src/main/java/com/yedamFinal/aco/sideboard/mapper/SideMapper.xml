@@ -8,16 +8,17 @@
 	SELECT side_board_no, 
 	       publishing_status, 
 	       title, 
-	       content,
+	       content, 
+	       project_outline,
 	       writer, 
 	       write_date, 
-           recruit_personnel, 
+	       recruit_personnel, 
 	       dev_period, 
 	       git_address, 
-	       view_cnt, 
+	       view_cnt,
 	       reply_cnt,
 	       tech_of_use,
-	       member_no 
+	       member_no
 	FROM side_project_board
 	WHERE publishing_status = #{publishingStatus}
 </select>
@@ -27,15 +28,16 @@
 	       publishing_status, 
 	       title, 
 	       content, 
+	       project_outline,
 	       writer, 
 	       write_date, 
 	       recruit_personnel, 
 	       dev_period, 
-           git_address, 
-           view_cnt, 
+	       git_address, 
+	       view_cnt,
 	       reply_cnt,
 	       tech_of_use,
-	       member_no 
+	       member_no
 	FROM side_project_board
 	WHERE side_board_no= #{bno}
 </select>
@@ -43,9 +45,39 @@
 	UPDATE 	side_project_board
 	SET publishing_status = #{status}
 	WHERE side_board_no= #{bno}
-
-
 </update>
+<insert id="insertSideProject" parameterType="SideVO">
+	INSERT INTO side_project_board(side_board_no, 
+	                              publishing_status, 
+	                              title, 
+	                              content, 
+	                              project_outline,
+	                              writer, 
+	                              write_date, 
+	                              recruit_personnel, 
+	                              dev_period, 
+	                              git_address, 
+	                              view_cnt,
+	                              reply_cnt,
+	                              tech_of_use,
+	                              member_no
+	                              )
+	VALUES (side_project_board_seq.NEXTVAL,
+	         default,
+			 #{title},
+			 #{content},
+			 #{projectOutline},
+			 #{writer},
+			 default,
+			 #{recruitPersonnel},
+			 #{devPeriod},
+			 #{gitAddress},
+			 0,
+			 0,
+			 #{techOfUse}, 
+			 #{memberNo}
+			 )
+</insert>
 
 
 

@@ -4,15 +4,15 @@
 	layout:fragment="content">
 	<!-- header tab -->
 	<div class="publishingStatus">
-		<hr style="width:1200px;">
+		<hr id="tae-hr">
 			<th:block th:if="${sideInfo.publishingStatus} == 'Q001'">	
-				<a id="a-1" style="margin-left: 50px;text-decoration: none;font-weight:bold;color:#000" href="/sideProject/Q001">모집중</a><span>
-				<a id="a-2" style="margin-left: 30px;text-decoration: none;font-weight:bold;color:#979da9" href="/sideProject/Q002">협업중</a>
+				<a id="a-1" href="/sideProjectList/Q001">모집중</a><span>
+				<a id="a-2" href="/sideProjectList/Q002">협업중</a>
 				</span>
 			</th:block>
 			<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'">	
-				<a id="a-1" style="margin-left: 50px;text-decoration: none;font-weight:bold;color:#979da9" href="/sideProject/Q001">모집중</a><span>
-				<a id="a-2" style="margin-left: 30px;text-decoration: none;font-weight:bold;color:#000" href="/sideProject/Q002">협업중</a>
+				<a id="a-1" href="/sideProjectList/Q001">모집중</a><span>
+				<a id="a-2" href="/sideProjectList/Q002">협업중</a>
 				</span>
 			</th:block>
 		<hr id="tae-hr">	
@@ -20,21 +20,21 @@
 	<!-- contents -->
 	<div class="conetents">
 				<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
-				<h6 style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
+				<h6 class="tae-side-h6-1">모집중</h6>
 				</th:block>
 				<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'" >
-				<h6 style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
+				<h6 class="tae-side-h6-2">협업중</h6>
 				</th:block>
 					<h5 style="font-weight:bolder;">[[ ${sideInfo.title }]]</h5>
 					<br>
-					<p style="font-weight:bold;">[[${sideInfo.content}]]</p>
+					<p style="font-weight:bold;">[[${sideInfo.projectOutline}]]</p>
 					<br>
 					<p style="color:#979da9;float:left;">기간 | [[${sideInfo.devPeriod}]]일  모집인원 [[${sideInfo.recruitPersonnel}]]명</p>
 				    <span>
 					<p style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</p></span> 
 					<br>
 					<th:block>
-						<div style="margin-top:20px;">
+						<div class="tae-side-btn1" style="margin-top:20px;">
 							<th:block th:if="${isCheckMember} == 1">
 								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 								  	<button class="btn text-white" id="modifyCentent" type="button" style="background-color:#e0e0e7;color:#3e6ce3;">글수정</button>
@@ -43,9 +43,19 @@
 							</th:block>
 						</div>
 					</th:block>
-				<hr id="tae-hr">	
+				<hr id="tae-hr">
+				<div class="container" id="tae-container-5">
+				<h5 style="font-weight:bold;">프로그램 소개</h5>
+				<p style="font-weight:bold;">[[${sideInfo.content}]]</p>
+				</div>	
 	</div>
-	
+	<div class="tae-reply mb-3">
+		<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}"> [[${sideInfo.gitAddress}]]</a></p>
+	  <label for="exampleFormControlTextarea1" class="form-label">댓글 [[${sideInfo.replyCnt}]]</label>
+	  <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" th:placeholder="|댓글을 입력하세요|"></textarea>
+	  <button class="btn btn-primary" id="tae-insertReply" type="button">댓글등록</button>
+	</div>
+		
 	
 	
 	
@@ -56,11 +66,12 @@
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 
+//협업시작
+let obj = {		
+		  status : "Q002" 
+		   }
  $(document).ready(function() {
 	$('#changeStatusButton').click(function() {
-		let obj = {
-				status : "Q002" 
-			}
 		console.log(status);
 		obj[csrfPara] = csrfToken;
 		$.ajax({
@@ -74,6 +85,8 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 		}).fail(err => console.log(err));
 	})
 });
+
+//게시글 작성
 
 
 </script>

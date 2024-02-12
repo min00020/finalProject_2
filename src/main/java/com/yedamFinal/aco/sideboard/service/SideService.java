@@ -11,4 +11,5 @@ public interface SideService {
 	public List<SideVO> getRecruitingList(String status);
 	public SideVO getSideInfo(int bno);
 	public Map<String, Object> updateBoardStatus(int bno, String status, SideVO sideVO);
+	public Map<String, Object> insertProject(SideVO vo);
 }

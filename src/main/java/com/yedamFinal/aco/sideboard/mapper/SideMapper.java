@@ -11,4 +11,5 @@ public interface SideMapper {
 	public List<SideVO> selectRecruitingList(String status);
 	public SideVO selectSideInfo(@Param("bno") int bno);
 	public int updateStatus(@Param(value="bno") int bno, @Param(value="status") String status, SideVO sideVO);
+	public int insertSideProject(SideVO sideVO);
 }
