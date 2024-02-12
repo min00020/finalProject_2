@@ -9,4 +9,5 @@ public interface FileService {
 	public String profileUpload(MultipartFile file);
 	public boolean uploadAttachFiles(MultipartFile[] files, int memberNo, String boardType, int boardNo);
 	public AttachedFileVO getFile(int fileNo);
+
 }
