@@ -77,6 +77,10 @@
 			 #{techOfUse}, 
 			 #{memberNo}
 			 )
+	<selectKey keyProperty="pk" resultType="int" order="AFTER">
+		SELECT side_project_board_seq.currval 
+		FROM dual
+	</selectKey>
 </insert>
 
 

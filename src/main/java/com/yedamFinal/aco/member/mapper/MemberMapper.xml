@@ -15,7 +15,17 @@
 <!-- 회원정보조회 -->
 <select id="selectMemberInfo" resultType="MemberVO">
 	    SELECT member_no, 
-	 	   email, 
+	       id,
+	       password,
+	 	   email,
+	 	   phone_num,
+	 	   name,
+	 	   git_token,
+	 	   permission,
+	 	   leave_date,
+	 	   sns_type,
+	 	   ban_type,
+	 	   ban_date,
 	 	   nickname, 
 	 	   profile_image, 
 	 	   topic_hashtag, 

@@ -21,5 +21,6 @@ public class SideVO {
 	private String projectOutline;
 	private String status;
 	private int bno;
+	private int pk;
 	
 }

@@ -55,6 +55,8 @@ public class SideServiceImpl implements SideService{
 			vo.setGitAddress(vo.getGitAddress());
 			vo.setTechOfUse(vo.getTechOfUse());
 			vo.setContent(vo.getContent());
+			vo.setSideBoardNo(vo.getSideBoardNo());
+			vo.setPk(vo.getPk());
 			int result = sideMapper.insertSideProject(vo);
 			if( result <= 0) {
 				map.put("result", "500");

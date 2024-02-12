@@ -74,29 +74,40 @@ public class SideController {
 	        map.put("sideInfo", vo2);
 	        return map;
 	 }
-	
 
-	 @PostMapping("/insertSideProject")
+	 @GetMapping("/insertSideProject")
+	 public String insertProject(Model model) {
+		 MemberVO memberVO = null;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+				UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+				memberVO = userDetails.getMemberVO();
+			}
+
+			MemberVO findVO = memberService.getMemberInfo(memberVO);
+			if(findVO.getGitToken() == null) {
+				return "redirect:/gitLinkPage?id=" + findVO.getId();
+			}
+			
+		 var tagList = memberService.getTagList();
+		 model.addAttribute("memberInfo",findVO);
+		 model.addAttribute("tagList", tagList);
+		 return "sideboard/sideInsert";
+	 }
+	 
+	 @PostMapping("/insertAjax")
 	 @ResponseBody
-	 public Map<String ,Object> insertProject(@RequestParam(value="bno") int bno, SideVO sideVO, Model model){
+	 public Map<String ,Object> insertProject(SideVO sideVO, Model model){
 		 	MemberVO memberVO = null;
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
 				UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
 				memberVO = userDetails.getMemberVO();
 			}
-	        SideVO vo = sideService.getSideInfo(bno);
-	        model.addAttribute("sideInfo", vo);
-	        String isCheckMember = null;
-	        if(memberVO != null && memberVO.getMemberNo() == vo.getMemberNo()) {
-	        	model.addAttribute("isCheckMember", "1");
-	        	}
+			
 	        Map<String, Object> map = new HashMap<String, Object>();
-	        sideService.insertProject(vo);
-	        SideVO vo2 = sideService.getSideInfo(bno);
 	        
 		 map.put("result", "400");
-		 map.put("sideInfo", vo2);
 		 return map;
 	 }
 	 

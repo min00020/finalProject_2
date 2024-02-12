@@ -35,7 +35,7 @@
 					<br>
 					<th:block>
 						<div class="tae-side-btn1" style="margin-top:20px;">
-							<th:block th:if="${isCheckMember} == 1">
+							<th:block th:if="|${isCheckMember} == 1 and ${status} == 'Q001'|">
 								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 								  	<button class="btn text-white" id="modifyCentent" type="button" style="background-color:#e0e0e7;color:#3e6ce3;">글수정</button>
 								  	<button class="btn btn-primary" id="changeStatusButton" type="button" style="background-color:#0C5FEC;">협업시작</button>
@@ -61,22 +61,27 @@
 	
 	
 </div>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
 
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 
-//협업시작
-let obj = {		
-		  status : "Q002" 
-		   }
+const status = 'Q002';
+const bno = [[${sideInfo.sideBoardNo}]];
+
  $(document).ready(function() {
 	$('#changeStatusButton').click(function() {
 		console.log(status);
+		console.log(bno);
+		
+		//협업시작
+		let obj = {		
+				  status : status,
+				  bno : bno
+				   }
 		obj[csrfPara] = csrfToken;
-		$.ajax({
+		$.ajax('/updateStatus',{
 			type: "POST",
-			url: "/updateStatus", 
 			data: obj
 			}).done(result =>{
 				console.log(result);
