@@ -40,6 +40,7 @@
         		A.member_no AS parent_member_no, 
         		A.NICKNAME AS parent_nickname,
         		A.profile_image AS parent_image,
+        		B.reply_pno as child_reply_pno,
         		B.reply_no as child_reply_no, 
         		B.contents as child_comment, 
         		B.WRITE_DATE as child_WRITE_date, 

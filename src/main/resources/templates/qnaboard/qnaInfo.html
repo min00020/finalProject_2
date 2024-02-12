@@ -4,7 +4,6 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content"	  
 >
-
 	<div class="container" style="width:1400px;">
 	
 		<div style="margin:0 auto;" class="my-3">
@@ -125,56 +124,56 @@
 								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
 									<div>
 										<!--/* 프로필이미지가 null이라면 */-->
-										<img th:if="${reply.parentImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-										<img th:unless="${reply.parentImage} == null" style="width:5%;" th:src="|upload/profile/${reply.parentImage}|" alt="profile" />
-										<span>[[${reply.parentNickname}]]</span>
-										<small th:text="${#dates.format(reply.parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+										<img th:if="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+										<img th:unless="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|upload/profile/${reply.value[0].parentImage}|" alt="profile" />
+										<span>[[${reply.value[0].parentNickname}]]</span>
+										<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
 									</div>
 									<div>
 										<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-										[[${reply.parentRecCnt}]]
+										[[${reply.value[0].parentRecCnt}]]
 										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
 									</div>
 								</div>
 								<!--/*댓글 내용구간  */-->
 								<div style="width:90%; margin-left:93px;">
-									<p style="margin-bottom:0px;">[[${reply.parentComment}]]</p>
+									<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
 								</div>
 								
 								<div style="width:90%; margin-left:80px;">
-									<button type="button" class="btn" th:id="|nested${reply.parentReplyNo}|" th:onclick="|openNestedTextarea('nested${reply.parentReplyNo}','nestedComment${reply.parentReplyNo}')|">답글달기</button>
+									<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
 								</div>
 								<!--/* 답글영역 */-->
-								<div style="display:none;" th:id="|nestedComment${reply.parentReplyNo}|">
+								<div style="display:none;" th:id="|nestedComment${reply.key}|">
 									<div class="d-flex justify-content-center">
-										<textarea th:id="|nestedComment${reply.parentReplyNo}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+										<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
 									</div>
 									<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
-										<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.parentReplyNo})|">답글등록</button>
+										<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
 										<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
 									</div>
 								</div>
 							</div>
 							<!-- /* 대댓글(자식) */-->
-							<th:block th:if="${reply.childReplyNo} != null">
-								<div class="ms-4">
+							<th:block th:if="${reply.value[0].childReplyNo} != null">
+								<div class="ms-4" th:each="innerReply : ${replyList[reply.key]}">
 									<!--/*댓글 헤더구간  */-->
 									<div class="mx-5 d-flex justify-content-between" style="width:90%;">
 										<div>
-											└<img th:if="${reply.childImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-											<img th:unless="${reply.childImage} == null" style="width:5%;" th:src="|upload/profile/${reply.childImage}|" alt="profile" />
-											<span>[[${reply.childNickname}]]</span>
-											<small th:text="${#dates.format(reply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+											└<img th:if="${innerReply.childImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+											<img th:unless="${innerReply.childImage} == null" style="width:5%;" th:src="|upload/profile/${innerReply.childImage}|" alt="profile" />
+											<span>[[${innerReply.childNickname}]]</span>
+											<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
 										</div>
 										<div>
 											<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-											[[${reply.childRecCnt}]]
+											[[${innerReply.childRecCnt}]]
 											<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
 										</div>
 									</div>
 									<!--/*댓글 내용구간  */-->
 									<div style="width:90%; margin-left:108px;">
-										<p style="margin-bottom:0px;">[[${reply.childComment}]]</p>
+										<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
 									</div>
 								</div>
 							</th:block>
@@ -319,14 +318,14 @@
 		})
 	}
 	
-	function registNestedReply(int replyPno) {
+	function registNestedReply(replyPno) {
 		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
 		if(typeof memberNo == "undefined" || memberNo == null) {
 			showFailAlert("로그인 후 진행해주세요.");
 			return;
 		}
 		
-		const textareaId = '#' + nestedComment + replyPno;
+		const textareaId = '#nestedTextarea' + replyPno;
 		const text = $(textareaId).val();
 		if(text == null || text == '') {
 			showWarningAlert('댓글을 입력해주세요.');
@@ -338,9 +337,9 @@
 		const object = {
 			boardType : boardType,
 			boardNo : qnaBoardNo,
-			replyBody : comment,
+			replyBody : text,
 			isEmoticon : "0",
-			replyPno : null
+			replyPno : replyPno
 		};
 		
 		$.ajax('/reply', {
