@@ -52,7 +52,7 @@
 		from member
 		where member_no = #{memberNo}
 	</select>
-	
+
 	<!-- getAcoPoint -->
 	<select id="getAcoPoint" resultType="int">
 		select aco_point
@@ -61,13 +61,14 @@
 	</select>
 
 	<insert id="insertAcoMoneyHistory" parameterType="PointDetailVO">
-		INSERT INTO POINT_DETAIL(
+		INSERT INTO
+		POINT_DETAIL(
 
 		POINT_DETAIL_NO,
 		MEMBER_NO,
 		LATEST_TOTAL_POINTS,
-		LASTEST_ACO_MONEY,
-		LASTEST_ACO_POINT,
+		latest_ACO_MONEY,
+		latest_ACO_POINT,
 		HISTORY_TYPE,
 		HISTORY_DATE,
 		INC_DEC_POINT,
@@ -89,5 +90,54 @@
 		)
 	</insert>
 
+	<!-- AcoMoneyChargeInquiry -->
+	<select id="acoMoneyChargeInquiry" resultType="PointDetailVO">
+		SELECT
+		A.ACCOUNT_NO,
+		A.POINT_TYPE,
+		A.HISTORY_DATE,
+		A.INC_DEC_POINT,
+		B.BANK_NAME,
+		A.latest_ACO_MONEY
+		FROM POINT_DETAIL A JOIN
+		ACCOUNT B ON A.account_no = B.account_no
+		WHERE B.MEMBER_NO = #{memberNo}
+		 AND POINT_TYPE = 'G001'
+		 AND INC_DEC_POINT <![CDATA[>]]> 0
+	</select>
+
+	<!-- AcoMoneyUseInquiry -->
+	<select id="acoMoneyUseInquiry" resultType="PointDetailVO">
+		SELECT
+		HISTORY_DATE,
+		SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE,
+		INC_DEC_POINT
+		FROM point_detail
+		WHERE member_no = #{memberNo}
+		AND POINT_TYPE = 'G001' 
+		AND( history_type = 'F004' OR history_type ='F006')
+		AND INC_DEC_POINT <![CDATA[<]]> 0
+			 
+	</select>
+	
+	<!-- 애코포인트 획득 내역 -->
+	<select id="acoPointAcquireInquiry" resultType="PointDetailVO">
+		SELECT  HISTORY_DATE,INC_DEC_POINT,SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
+		FROM POINT_DETAIL
+		WHERE MEMBER_NO = #{memberNo}
+		AND POINT_TYPE = 'G002' 
+		AND INC_DEC_POINT <![CDATA[>]]> 0
+			 
+	</select>
+	
+	<!-- 애코포인트 사용 내역 -->
+	<select id="acoPointUseInquiry" resultType="PointDetailVO">
+		SELECT  HISTORY_DATE,INC_DEC_POINT,SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
+		FROM POINT_DETAIL 
+		WHERE MEMBER_NO = #{memberNo}
+		AND POINT_TYPE = 'G002' 
+		AND INC_DEC_POINT <![CDATA[<]]> 0
+			 
+	</select>
 
 </mapper>

@@ -17,5 +17,8 @@ public interface PointMapper {
 	public int getAcoPoint(int memberNo);
 	public int updateAcoMoney(@Param(value="acoMoney") int acoMoney, @Param(value="memberNo") int memberNo);
 	public int insertAcoMoneyHistory(PointDetailVO pointDetailVO);
-	
+	public List<PointDetailVO> acoMoneyChargeInquiry(int memberNo);
+	public List<PointDetailVO> acoMoneyUseInquiry(int memberNo);
+	public List<PointDetailVO> acoPointAcquireInquiry(int memberNo);
+	public List<PointDetailVO> acoPointUseInquiry(int memberNo);
 }
