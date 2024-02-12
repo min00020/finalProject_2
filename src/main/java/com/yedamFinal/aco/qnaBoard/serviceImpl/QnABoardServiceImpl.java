@@ -6,14 +6,21 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.PaginationDTO;
+import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.qnaBoard.QnABoardJoinVO;
+import com.yedamFinal.aco.qnaBoard.QnABoardVO;
 import com.yedamFinal.aco.qnaBoard.mapper.QnABoardMapper;
 import com.yedamFinal.aco.qnaBoard.service.QnABoardService;
 
 @Service
 public class QnABoardServiceImpl implements QnABoardService {
+	
+	@Autowired
+	private FileServiceImpl fileService;
 	
 	private Map<String,String> orderbyByReqOb = new HashMap<String,String>();
 	
@@ -29,8 +36,6 @@ public class QnABoardServiceImpl implements QnABoardService {
 	@Override
 	public Map<String, Object> getMyQnaBoardList(int pageNo, MemberVO vo, String ob) {
 		// 적용할 orderby value
-		
-		boolean correctOb = false;
 		String orderby = orderbyByReqOb.get(ob);
 		if(orderby == null) {
 			orderby = "Latest";
@@ -55,7 +60,6 @@ public class QnABoardServiceImpl implements QnABoardService {
 
 	@Override
 	public Map<String, Object> getMyQnaBoardListFromSearch(int pageNo, String search, MemberVO vo, String ob) {
-		boolean correctOb = false;
 		String orderby = orderbyByReqOb.get(ob);
 		if(orderby == null) {
 			orderby = "Latest";
@@ -75,5 +79,37 @@ public class QnABoardServiceImpl implements QnABoardService {
 		ret.put("isExistOb", ob != null);
 		
 		return ret;
+	}
+
+	@Override
+	public Map<String, Object> insertQnaBoard(int memberNo, String title, String content, MultipartFile[] files) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String,Object>();
+		ret.put("result", "200");
+		
+		QnABoardVO vo = new QnABoardVO();
+		vo.setMemberNo(memberNo);
+		vo.setTitle(title);
+		vo.setContent(content);
+		vo.setAnswerState("P001");
+		if(qnaMapper.insertQnaBoard(vo) <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		int boardNo = vo.getPk();
+		if(files != null && files.length > 0) {
+			if(!fileService.uploadAttachFiles(files, memberNo, new String("N005"), boardNo)) {
+				ret.put("result", "500");
+				return ret;
+			}
+		}
+		
+		return ret;
+	}
+	
+	@Override
+	public List<QnABoardJoinVO> getQnaBoardDetailInfo(int qnaBoardNo) {
+		qnaMapper.updateQnABoardViewCnt(qnaBoardNo);
+		return qnaMapper.selectQnaBoardDetail(qnaBoardNo);
 	}
 }
