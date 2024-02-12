@@ -47,4 +47,6 @@ public class QuestionVO {
 	private String addWriterType;
 	private String addWriteDate;
 	private String addStatus;
+	
+	private int pk;
 }

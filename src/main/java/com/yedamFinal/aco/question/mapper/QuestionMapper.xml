@@ -77,6 +77,9 @@
 		    question_board_seq.NEXTVAL, #{memberNo}, #{topic}, #{point}, 
 		    #{title}, #{tag},#{contents},SYSDATE,0,0,0,0
 	    )
+	    <selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT question_board_seq.CURRVAL FROM DUAL
+    	</selectKey>
 	</insert>
 	
 	<!-- 질문글 수정 -->
