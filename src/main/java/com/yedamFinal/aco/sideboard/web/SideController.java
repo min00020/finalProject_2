@@ -97,18 +97,9 @@ public class SideController {
 	 
 	 @PostMapping("/insertAjax")
 	 @ResponseBody
-	 public Map<String ,Object> insertProject(SideVO sideVO, Model model){
-		 	MemberVO memberVO = null;
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-				UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-				memberVO = userDetails.getMemberVO();
-			}
-			
-	        Map<String, Object> map = new HashMap<String, Object>();
-	        
-		 map.put("result", "400");
-		 return map;
+	 public Map<String ,Object> insertProject(SideVO sideVO){
+
+	        return sideService.insertProject(sideVO);
 	 }
 	 
 	

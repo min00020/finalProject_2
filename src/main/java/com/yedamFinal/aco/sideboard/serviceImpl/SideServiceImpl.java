@@ -45,24 +45,16 @@ public class SideServiceImpl implements SideService{
 	}
 	//새글 작성
 	@Override
-	public Map<String, Object> insertProject (SideVO vo){
+	public Map<String, Object> insertProject (SideVO sideVO){
+
 			Map<String, Object> map = new HashMap<>();
-			vo.setMemberNo(vo.getMemberNo());
-			vo.setTitle(vo.getTitle());
-			vo.setProjectOutline(vo.getProjectOutline());
-			vo.setRecruitPersonnel(vo.getRecruitPersonnel());
-			vo.setDevPeriod(vo.getDevPeriod());
-			vo.setGitAddress(vo.getGitAddress());
-			vo.setTechOfUse(vo.getTechOfUse());
-			vo.setContent(vo.getContent());
-			vo.setSideBoardNo(vo.getSideBoardNo());
-			vo.setPk(vo.getPk());
-			int result = sideMapper.insertSideProject(vo);
+			int result = sideMapper.insertSideProject(sideVO);
+			int pk = sideVO.getPk();
 			if( result <= 0) {
 				map.put("result", "500");
 			} else {
 				map.put("result", "200");
-				map.put("vo", vo);
+				map.put("vo", sideVO);
 			}
 			return map;
 	}

@@ -311,7 +311,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		vo.setAcoPoint(vo.getAcoPoint()+ resPoint);
 		vo.setAvailableActivityPoint(vo.getAvailableAccumPoint()- resPoint); 
 		int result = memberMapper.updateMemberPoint(resPoint,vo);
-		
+		if(result <= 0) {
+			map.put("result", "400");
+		}
 		return map;
 	}
 	

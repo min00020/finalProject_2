@@ -21,6 +21,7 @@
 	       member_no
 	FROM side_project_board
 	WHERE publishing_status = #{publishingStatus}
+	ORDER BY write_date desc
 </select>
 <!-- 게시글 단건조회 가져오기 -->
 <select id="selectSideInfo" parameterType="int" resultType="SideVO">
@@ -63,12 +64,12 @@
 	                              member_no
 	                              )
 	VALUES (side_project_board_seq.NEXTVAL,
-	         default,
+	         'Q001',
 			 #{title},
 			 #{content},
 			 #{projectOutline},
 			 #{writer},
-			 default,
+			 sysdate,
 			 #{recruitPersonnel},
 			 #{devPeriod},
 			 #{gitAddress},
@@ -82,7 +83,22 @@
 		FROM dual
 	</selectKey>
 </insert>
-
-
+<update id="updateSide" parameterType="SideVO">
+	UPDATE side_project_board
+	SET side_board_no = #{bno}, 
+	    publishing_status = #{status}, 
+	    title = #{title}, 
+	    content = #{content}, 
+	    project_outline = #{projectOutline}, 
+	    recruit_personnel = #{recruitPersonnel},  
+	    dev_period = #{devPeriod}, 
+	    git_address = #{gitAddress}, 
+	    tech_of_use = #{techOfUse}
+	WHERE side_board_no = #{bno}
+</update>
+<delete id="deleteSide" parameterType="SideVO">
+	DELETE FROM side_project_board
+	WHERE side_board_no = #{bno}
+</delete>
 
 </mapper>
