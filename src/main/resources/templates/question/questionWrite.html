@@ -28,7 +28,7 @@
 							<p style="font-size:14px; margin-bottom:8px;">답변자에게 지급할 포인트 금액을 입력해주세요. </p>
 		                   <!-- 	<input type="text" class="form-control" value="0"> -->
 		                   	<div class="chae_input-container" style="width:100%;">
-							    <input id="point" name="point" type="text" class="form-control" value="0" style="color:#3e6ce3;">
+							    <input id="point" name="point" type="text" class="chae_form-control" value="0" style="color:#3e6ce3;">
 							    <button class="chae_pointBtn">전액사용</button>
 							</div>
 						</div>
@@ -133,8 +133,8 @@ function sendQuestion(){
 	})
 	.done(res => {
 		showSuccessAlert('등록성공');
+    	window.location.href = "/questionList";
 		console.log(res);
-    	/* window.location.href = "/gitLinkPage?id=" + $('input[name="userid"]').val(); */
     })
     .fail(err => {
     	console.log(err);

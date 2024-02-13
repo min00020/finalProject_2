@@ -6,23 +6,59 @@
 <mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
 	<!-- 질문글 전체조회 -->
 	<select id="getQuestionList" resultType="QuestionVO">
-		SELECT m.id, m.profile_image,
-		        q.QUESTION_BOARD_NO,
-		        q.MEMBER_NO,
-		        SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
-		        q.POINT,
-		        q.TITLE,
-		        q.TAG,
-		        q.CONTENTS,
-		        TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
-		        q.VIEW_CNT,
-		        q.RECOMMEND_CNT,
-		        q.BOOKMARK_CNT,
-		        q.ANSWER_CNT
-		FROM QUESTION_BOARD q
-		JOIN MEMBER m
-		ON q.MEMBER_NO = m.MEMBER_NO
-		ORDER BY WRITE_DATE DESC
+	  SELECT
+            a.id, a.profile_image,
+            a.QUESTION_BOARD_NO,
+            a.MEMBER_NO,
+            a.TOPIC,
+            a.POINT,
+            a.TITLE,
+            a.TAG,
+            a.CONTENTS,
+            a.WRITE_DATE,
+            a.VIEW_CNT,
+            a.RECOMMEND_CNT,
+            a.BOOKMARK_CNT,
+            a.ANSWER_CNT
+	    FROM (
+	        SELECT 
+	            ROWNUM AS RN,
+	            b.id, b.profile_image,
+	            b.QUESTION_BOARD_NO,
+	            b.MEMBER_NO,
+	            b.TOPIC,
+	            b.POINT,
+	            b.TITLE,
+	            b.TAG,
+	            b.CONTENTS,
+	            b.WRITE_DATE,
+	            b.VIEW_CNT,
+	            b.RECOMMEND_CNT,
+	            b.BOOKMARK_CNT,
+	            b.ANSWER_CNT
+	            FROM(
+	                SELECT m.id, m.profile_image,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+	                    q.POINT,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
+	                    q.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.BOOKMARK_CNT,
+	                    q.ANSWER_CNT
+	            FROM QUESTION_BOARD q
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            ORDER BY WRITE_DATE DESC
+	            )B
+	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
 	</select>
 	<!-- 질문글 분류 조회 -->
 	<select id="getQuestionListSelect" resultType="QuestionVO">
