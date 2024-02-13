@@ -71,6 +71,9 @@
 <script>
 	let csrfPara = $('meta[name="csrfPara"]').attr("content");
 	let csrfToken = $('meta[name="csrf"]').attr("content");
+	
+	const imageNoArray = [];
+	
 	const editor = new toastui.Editor({
 	    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
 	    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
@@ -81,9 +84,7 @@
         hooks: {
             async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
                 try {
-                    /*
-                     * 1. 에디터에 업로드한 이미지를 FormData 객체에 저장
-                     */
+                    //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
                     const formData = new FormData();
                     formData.append(csrfPara, csrfToken);
                     formData.append('image', blob);
@@ -95,11 +96,12 @@
                     });
 
                     // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
-                    const filename = await response.text();
-                    console.log('서버에 저장된 파일명 : ', filename);
+                    const res = await response.json();
+                    console.log('서버에 저장된 파일명 : ', res);
 
                     // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
-                    const imageUrl = `/tui-editor/image-print?filename=${filename}`;
+                    const imageUrl = res.imageUrl;
+                    imageNoArray.push(res.imageNo);
                     callback(imageUrl, 'image alt attribute');
 
                 } catch (error) {
@@ -113,9 +115,6 @@
 </script>
 
 <script th:inline="javascript">
-let csrfPara = $('meta[name="csrfPara"]').attr("content");
-let csrfToken = $('meta[name="csrf"]').attr("content");
-
 
 function sendQuestion(){
 	console.log('test',[[${session.member.memberNo}]]);
