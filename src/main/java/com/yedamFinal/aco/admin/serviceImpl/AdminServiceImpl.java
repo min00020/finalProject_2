@@ -7,15 +7,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.admin.AdminEmoUseImgVO;
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
-import com.yedamFinal.aco.admin.AdminQnaVO;
-import com.yedamFinal.aco.admin.AdminReportVO;
-import com.yedamFinal.aco.admin.AdminSettleVO;
 import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.admin.service.AdminService;
 import com.yedamFinal.aco.common.PaginationDTO;
@@ -73,6 +70,18 @@ public class AdminServiceImpl implements AdminService {
 		}
 		
 		mp.put("noticeList", AdNoticeList);
+		mp.put("pageDTO", dto);
+		return mp;
+	}
+	@Override
+	public Map<String, Object> getMainEmoList(@RequestParam int pageNo) {
+		Map<String, Object> mp = new HashMap<String, Object>();
+		var MainEmoList = adminMapper.getMainEmoList(pageNo);
+		PaginationDTO dto = null;
+		if(MainEmoList.size() > 0) {
+			dto = new PaginationDTO(adminMapper.MainEmoListCount(), pageNo, 9);
+		}
+		mp.put("mainEmoList", MainEmoList);
 		mp.put("pageDTO", dto);
 		return mp;
 	}
@@ -251,10 +260,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	
-	@Override
-	public List<AdminEmoVO> getMainEmoList() {
-		return adminMapper.getMainEmoList();
-	}
+	
 	//이모티콘 등록
 	@Override
 	public Map<String, Object> insertEmo(AdminEmoVO adminEmoVO, MultipartFile[] files) {
@@ -302,8 +308,11 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.getEmoBuyList(memberNo);
 	}
 	@Override
-	public boolean buyEmo(int emoNo, int memberNo) {
-		int result = adminMapper.buyEmo(emoNo, memberNo);
-		return result == 1? true : false;
+	public int buyEmo(AdminEmoVO adminEmoVO) {
+		int result = adminMapper.buyEmo(adminEmoVO);
+		if(result == 1) {
+			return adminMapper.insertMyemoticon(adminEmoVO);
+		}
+			return 0;
 	}
 }

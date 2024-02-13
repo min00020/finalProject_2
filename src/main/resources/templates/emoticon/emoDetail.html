@@ -18,11 +18,14 @@
                                 <p class="lead fw-normal text-black-50 mb-4" th:text="${emoDetail.emoDesc}"></p>
                                 <p class="lead fw-normal" style="color: red" th:text="${emoDetail.emoPrice}+포인트"></p>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3"
-		                        data-bs-toggle="modal" data-bs-target="#AddNotice"
-		                        style="text-decoration: none; color: white;">
-		                        구매하기
-		                     </button>
+                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#AddNotice"  style="text-decoration: none; color: white;"
+                                    th:if = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0">
+		                        		구매가능
+		                     		</button>
+                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#AddNotice"  style="text-decoration: none; color: white;"
+                                    th:unless = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0" disabled="disabled">
+		                        		구매불가
+		                     		</button>
                                 </div>
                                 <!-- Modal -->
 			                  <div class="modal fade" id=AddNotice tabindex="-1" role="dialog"
@@ -54,10 +57,9 @@
 			                            </div>
 			                            </div>
 			                           <div class="modal-footer" style="margin: auto;">
-			                              <button type="submit" class="btn btn-primary">
-			                              구매</button>
-			                              <button type="button" class="btn btn-secondary"
-			                                 data-bs-dismiss="modal">취소</button>
+			                              <button type="button" class="btn btn-primary" 
+			                              onclick="buyEmo()">구매</button>
+			                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 			                           </div>
 			                        </div>
 			                     </div>
@@ -82,13 +84,23 @@
 				<a class="btn btn-primary" href="/emoMain">목록으로</a>
              </div>
         </div>
-		
-		
-		
-		
+        
+        <form action="buyEmo" method="post" name="buyForm">
+        <input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+        <input type="hidden" name="memberNo" th:value="${user.memberNo}">
+        <input type="hidden" name="acoPoint" th:value="${user.acoPoint}">
+        <input type="hidden" name="acoMoney" th:value="${user.acoMoney}">
+        <input type="hidden" name="emoPrice" th:value="${emoDetail.emoPrice}">
+        <input type="hidden" name="emoNo" th:value="${emoDetail.emoNo}">
+        <input type="hidden" name="emoName" th:value="${emoDetail.emoName}">
+        </form>
 </section>
-
-
-
-
 </div>
+<script th:inline="javascript">
+//var user = [[${user}]]
+//var emoDetail = [[${emoDetail}]]
+ 	function buyEmo(){
+		document.buyForm.submit();
+		//location.href=`/buyEmo?memberNo=${user.memberNo}&acoPoint=${user.acoPoint}&acoMoney=${user.acoMoney}&emoPrice=${emoDetail.emoPrice}&emoNo=${emoDetail.emoNo}&emoName=${emoDetail.emoName}`
+	} 
+</script>

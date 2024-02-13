@@ -128,7 +128,11 @@ SELECT *
     ]]>
 </select>
 <select id="getMainEmoList" resultType="AdminEmoVO">
-	SELECT E.EMO_NO, 
+	SELECT *
+    	FROM (
+        SELECT  
+            ROWNUM AS RN, 
+            E.EMO_NO, 
 			E.EMO_NAME, 
 			E.EMO_PRICE, 
 			E.EMO_DESC, 
@@ -139,7 +143,16 @@ SELECT *
 				FROM EMOTICON E
 				JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
 				WHERE E.EMO_STATE = 'D001'
-				ORDER BY E.EMO_NO
+				ORDER BY E.EMO_NO)
+				<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 9) AND RN <= (#{pageNo}) * 9    
+    ]]>
+</select>
+<select id="MainEmoListCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM EMOTICON
+            WHERE EMO_STATE = 'D001'
 </select>
 <!-- 이모티콘 등록 -->
 <insert id="insertEmo" parameterType="AdminEmoVO" useGeneratedKeys="false">
@@ -527,4 +540,26 @@ ORDER BY SPLIT_VALUE
 				WHERE EMO_BUYDATE BETWEEN #{sday} AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
 	GROUP BY EMO_NAME
 </select>
+<update id="buyEmo">
+	UPDATE MEMBER
+	<choose>
+		<when test="((acoPoint - emoPrice) >= 0)">
+			SET ACO_POINT = #{acoPoint} - #{emoPrice}
+		</when>
+		<otherwise>
+			SET ACO_POINT = 0, ACO_MONEY = #{acoMoney} + #{acoPoint} - #{emoPrice} 
+		</otherwise>
+	</choose>
+		WHERE MEMBER_NO = #{memberNo}
+</update>
+<insert id="insertMyemoticon">
+	INSERT INTO MY_EMOTICON
+	VALUES(
+		#{memberNo}
+		,#{emoNo}
+		,SYSDATE
+		,0
+		,#{emoName}
+	)
+</insert>
 </mapper>

@@ -33,7 +33,7 @@ public interface AdminService {
 	public Map<String, Object> getTagEmoPeriodList(String sday, String eday);
 	
 	//이모티콘 상점 메인
-	public List<AdminEmoVO> getMainEmoList();
+	public Map<String, Object> getMainEmoList(int pageNo);
 	//이모티콘 등록
 	public Map<String, Object> insertEmo(AdminEmoVO adminEmoVO, MultipartFile[] files);
 	//public int insertEmo(AdminEmoVO adminEmoVO, MultipartFile[] file);	
@@ -46,7 +46,7 @@ public interface AdminService {
 	//이모티콘 구매 내역
 	public List<AdminEmoVO> getEmoBuyList(int memberNo);
 	//이모티콘 구매하기
-	public boolean buyEmo(int emoNo, int memberNo);
+	public int buyEmo(AdminEmoVO adminEmoVO);
 	//	공지등록
 	public int insertNotice(AdminMainVO adminMainVO);
 }

@@ -24,9 +24,10 @@ public class EmoticonController {
 	MemberService memberService;
 	
 	@GetMapping("/emoMain")
-	public String getEmoMain(Model model) {
-		List<AdminEmoVO> list = adminService.getMainEmoList();
-		model.addAttribute("emoList",list);
+	public String getEmoMain(Model model, int pageNo) {
+		var ret = adminService.getMainEmoList(pageNo);
+		model.addAttribute("emoList",ret.get("mainEmoList"));
+		model.addAttribute("pageDTO",ret.get("pageDTO"));
 		return "emoticon/emoMain";
 	}
 	

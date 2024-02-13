@@ -118,7 +118,12 @@ public class AdminController {
 		adminService.updateEmo2(emoNo);
 		return "redirect:adminEmo?emoStatus=1&pageNo=1";
 	}
-	
+	//이모티콘 구매버튼 (포인트 차감)
+	@PostMapping("/buyEmo")
+	public String buyEmoProcess(AdminEmoVO adminVO) {
+		adminService.buyEmo(adminVO);
+		return "redirect:emoBuyList";
+	}
 	/*
 	 * public String insertEmoProcess(AdminEmoVO adminEmoVO, MultipartFile[] files)
 	 * { adminService.insertEmo(adminEmoVO, files); return "redirect:adminEmo"; }

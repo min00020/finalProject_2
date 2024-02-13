@@ -24,4 +24,9 @@ public class AdminEmoVO {
 	private String emoUseimg;
 	
 	private int pk;
+	
+	private int memberNo;
+	private int acoPoint;
+	private int acoMoney;
+	
 }

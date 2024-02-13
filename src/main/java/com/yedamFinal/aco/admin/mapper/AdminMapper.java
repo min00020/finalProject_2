@@ -40,7 +40,8 @@ public interface AdminMapper {
 	public int selectAdEmoCount();
 	public int selectAdStateEmoCount(String emoStatus);
 	
-	public List<AdminEmoVO> getMainEmoList();
+	public List<AdminEmoVO> getMainEmoList(int pageNo);
+	public int MainEmoListCount();
 	
 	//통계기간 조회
 	public List<AdminTagChartVO> getTagListByCount(String date);
@@ -74,7 +75,8 @@ public interface AdminMapper {
 	public List<AdminQnaVO> getAdDropQnaList(@Param(value="pageNo") int pageNo, @Param(value="answerStatus") String answerStatus);
 	// 정산 드롭박스
 	public List<AdminSettleVO> getAdDropSettleList(@Param(value="pageNo") int pageNo, @Param(value="processStatus") String processStatus);
-	//이모티콘 구매하기 버튼
-	public int buyEmo(int emoNo, int memberNo);
-	
+	//이모티콘 구매하기 버튼 (포인트 차감)
+	public int buyEmo(AdminEmoVO adminEmoVO);
+	//이모티콘 구매하기 버튼 (마이 이모티콘 추가)
+	public int insertMyemoticon(AdminEmoVO adminEmoVO);
 }
