@@ -465,21 +465,22 @@ input::placeholder
 	padding-bottom:10px;
 }
 .tae-form-control2 {
-		width: 600px;
-		height: 55px;
-		padding-right: 40px;
-		border: 1px solid #ccc;
-		border-radius: 4px;
-		box-sizing: border-box; 
+	width: 600px;
+	height: 55px;
+	padding-right: 40px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box; 
+	padding-left:10px;
 }
 .tae-form-control3 {
-		width: 400px;
-		height: 55px;
-		padding-right: 40px;
-		border: 1px solid #ccc;
-		border-radius: 4px; 
-		box-sizing: border-box; 
-		text-align:right;
+	width: 400px;
+	height: 55px;
+	padding-right: 40px;
+	border: 1px solid #ccc;
+	border-radius: 4px; 
+	box-sizing: border-box; 
+	text-align:right;
 }
 .sidetextarea{
 	overflow: scroll;

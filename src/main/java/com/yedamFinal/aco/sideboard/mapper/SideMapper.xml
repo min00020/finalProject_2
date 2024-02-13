@@ -5,23 +5,36 @@
 
 <!-- 모집중list 가져오기 -->
 <select id="selectRecruitingList" resultType="SideVO">
-	SELECT side_board_no, 
-	       publishing_status, 
-	       title, 
-	       content, 
-	       project_outline,
-	       writer, 
-	       write_date, 
-	       recruit_personnel, 
-	       dev_period, 
-	       git_address, 
-	       view_cnt,
-	       reply_cnt,
-	       tech_of_use,
-	       member_no
+	SELECT *
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            side_board_no, 
+	        publishing_status, 
+	        title, 
+	        content, 
+	        project_outline,
+	        writer, 
+	        write_date, 
+	        recruit_personnel, 
+	        dev_period, 
+	        git_address, 
+	        view_cnt,
+	        reply_cnt,
+	        tech_of_use,
+	        member_no	
 	FROM side_project_board
-	WHERE publishing_status = #{publishingStatus}
-	ORDER BY write_date desc
+	WHERE publishing_status = #{status}
+    ORDER BY write_date desc
+    )
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
+</select>
+<select id="selectProjectListCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM side_project_board
+    WHERE publishing_status = #{status}
 </select>
 <!-- 게시글 단건조회 가져오기 -->
 <select id="selectSideInfo" parameterType="int" resultType="SideVO">
@@ -85,8 +98,7 @@
 </insert>
 <update id="updateSide" parameterType="SideVO">
 	UPDATE side_project_board
-	SET side_board_no = #{bno}, 
-	    publishing_status = #{status}, 
+	SET publishing_status = #{status}, 
 	    title = #{title}, 
 	    content = #{content}, 
 	    project_outline = #{projectOutline}, 

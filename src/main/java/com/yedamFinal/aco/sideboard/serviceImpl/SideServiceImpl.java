@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.sideboard.SideVO;
 import com.yedamFinal.aco.sideboard.mapper.SideMapper;
@@ -14,14 +15,23 @@ import com.yedamFinal.aco.sideboard.service.SideService;
 
 @Service
 public class SideServiceImpl implements SideService{
+	
 	@Autowired
 	SideMapper sideMapper;
 	@Autowired
 	MemberMapper memberMapper;
-
+	
 	@Override
-	public List<SideVO> getRecruitingList(String status) {
-		return sideMapper.selectRecruitingList(status);
+	public Map<String, Object> getRecruitingList(int pageNo, String status) {
+		Map<String, Object> map = new HashMap<>();
+		var RecruitingList = sideMapper.selectRecruitingList(pageNo, status);
+		PaginationDTO dto = null;
+		if(RecruitingList.size() > 0) {
+			dto = new PaginationDTO(sideMapper.selectProjectListCnt(status), pageNo, 10);
+		}
+		map.put("sideList", RecruitingList);
+		map.put("pageDTO", dto);
+		return map;
 	}
 	
 	@Override
@@ -58,5 +68,24 @@ public class SideServiceImpl implements SideService{
 			}
 			return map;
 	}
+	@Override
+	public Map<String, Object> modifyProject(SideVO sideVO, int bno){
+		Map<String, Object> map = new HashMap<>();
+		int result = sideMapper.modifyProject(bno, sideVO);
+		int pk = sideVO.getPk();
+		if( result <= 0) {
+			map.put("result", "500");
+		} else {
+			map.put("result", "200");
+			map.put("vo", sideVO);
+		}
+		return map;
+	}
+	
+	@Override
+	public int deleteProject(int bno){
+		return sideMapper.deleteSide(bno);
+	}
+
 	
 }

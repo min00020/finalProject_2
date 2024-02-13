@@ -6,14 +6,12 @@
 	<div class="publishingStatus">
 		<hr id="tae-hr">
 			<th:block th:if="${sideInfo.publishingStatus} == 'Q001'">	
-				<a id="a-1" href="/sideProjectList/Q001">모집중</a><span>
-				<a id="a-2" href="/sideProjectList/Q002">협업중</a>
-				</span>
+				<a id="a-1" th:href="|/sideProjectList/Q001/?pageNo=1|">모집중</a><span>
+				<a id="a-2" th:href="|/sideProjectList/Q002/?pageNo=1|">협업중</a></span>
 			</th:block>
 			<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'">	
-				<a id="a-1" href="/sideProjectList/Q001">모집중</a><span>
-				<a id="a-2" href="/sideProjectList/Q002">협업중</a>
-				</span>
+				<a id="a-2" th:href="|/sideProjectList/Q001/?pageNo=1|">모집중</a><span>
+				<a id="a-1" th:href="|/sideProjectList/Q002/?pageNo=1|">협업중</a></span>
 			</th:block>
 		<hr id="tae-hr">	
 	</div>
@@ -37,7 +35,8 @@
 						<div class="tae-side-btn1" style="margin-top:20px;">
 							<th:block th:if="${isCheckMember} == 1 and ${sideInfo.publishingStatus} == 'Q001'">
 								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-								  	<button class="btn text-white" id="modifyCentent" type="button" style="background-color:#e0e0e7;color:#3e6ce3;">글수정</button>
+								  	<button class="btn text-white" id="modifyContent" type="button" style="background-color:#aebfec;">글수정</button>
+								  	<button class="btn text-white" id="deleteProject" type="button" style="background-color:#80a9e8;">글삭제</button>
 								  	<button class="btn btn-primary" id="changeStatusButton" type="button" style="background-color:#0C5FEC;">협업시작</button>
 								</div>
 							</th:block>
@@ -50,7 +49,7 @@
 				</div>	
 	</div>
 	<div class="tae-reply mb-3">
-		<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}"> [[${sideInfo.gitAddress}]]</a></p>
+		<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}" th:text="${sideInfo.gitAddress}"></a></p>
 	  <label for="exampleFormControlTextarea1" class="form-label">댓글 [[${sideInfo.replyCnt}]]</label>
 	  <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" th:placeholder="|댓글을 입력하세요|"></textarea>
 	  <button class="btn btn-primary" id="tae-insertReply" type="button">댓글등록</button>
@@ -71,10 +70,8 @@ const bno = [[${sideInfo.sideBoardNo}]];
 
  $(document).ready(function() {
 	$('#changeStatusButton').click(function() {
-		console.log(status);
-		console.log(bno);
 		
-		//협업시작
+		
 		let obj = {		
 				  status : status,
 				  bno : bno
@@ -91,7 +88,33 @@ const bno = [[${sideInfo.sideBoardNo}]];
 	})
 });
 
-//게시글 작성
+//게시글 수정폼 이동
+$(document).ready(function(){
+	$('#modifyContent').click(function(){
+		window.location.href= "/insertSideProject?bno=" + bno ;
+	})
+});
 
+//게시글 삭제
+$(document).ready(function(){
+	$('#deleteProject').click(function(){
+		let obj = {
+				bno : bno
+		}
+		obj[csrfPara] = csrfToken;
+		
+		$.ajax('/deleteAjax', {
+			type: "get",
+			data : obj
+		}).done(result => {
+			console.log(result);
+			showSuccessAlert("게시글이 삭제되었습니다.");
+			window.location.href="/sideProjectList/Q001/?pageNo=1";
+		}).fail(err => {
+			console.log(err);
+			showWarningAlert("삭제 실패하였습니다.");
+		});
+	});
+});
 
 </script>

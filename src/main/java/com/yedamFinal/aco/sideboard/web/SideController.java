@@ -1,7 +1,5 @@
 package com.yedamFinal.aco.sideboard.web;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +26,10 @@ public class SideController {
 	MemberServiceImpl memberService;
 	
 	@GetMapping("/sideProjectList/{status}")
-	public String getsideProjectForm(@PathVariable("status") String status, Model model) {
-		List<SideVO> list = sideService.getRecruitingList(status);
-		model.addAttribute("recList", list);
+	public String getsideProjectForm(@PathVariable("status") String status,@RequestParam("pageNo") int pageNo,  Model model) {
+		var ret = sideService.getRecruitingList(pageNo, status);
+		model.addAttribute("recList", ret.get("sideList"));
+		model.addAttribute("pageDTO", ret.get("pageDTO"));
 		return "sideboard/sideProjectList";
 	}
 	
@@ -76,21 +75,28 @@ public class SideController {
 	 }
 
 	 @GetMapping("/insertSideProject")
-	 public String insertProject(Model model) {
+	 public String insertProject(Integer bno, Model model) {
 		 MemberVO memberVO = null;
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-				UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-				memberVO = userDetails.getMemberVO();
-			}
-
-			MemberVO findVO = memberService.getMemberInfo(memberVO);
-			if(findVO.getGitToken() == null) {
-				return "redirect:/gitLinkPage?id=" + findVO.getId();
-			}
-			
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		 if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			 UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			 memberVO = userDetails.getMemberVO();
+		 }
+		 
+		 MemberVO findVO = memberService.getMemberInfo(memberVO);
+		 if(findVO.getGitToken() == null) {
+			 return "redirect:/gitLinkPage?id=" + findVO.getId();
+		 }
+		 
+		 //수정폼
+		 if(bno != null) {
+			 model.addAttribute("bno", bno);
+			 SideVO vo = sideService.getSideInfo(bno);
+		     model.addAttribute("sideInfo", vo);
+		      
+			 
+		 }
 		 var tagList = memberService.getTagList();
-		 model.addAttribute("memberInfo",findVO);
 		 model.addAttribute("tagList", tagList);
 		 return "sideboard/sideInsert";
 	 }
@@ -98,9 +104,20 @@ public class SideController {
 	 @PostMapping("/insertAjax")
 	 @ResponseBody
 	 public Map<String ,Object> insertProject(SideVO sideVO){
-
 	        return sideService.insertProject(sideVO);
 	 }
 	 
-	
+	 @PostMapping("/updateAjax")
+	 @ResponseBody
+	 public Map<String ,Object> updateProject(@PathVariable(value="bno") int bno, Model model, SideVO vo) {
+			return sideService.modifyProject(vo, bno);
+		 
+	 }
+	 
+	 @GetMapping("/deleteAjax")
+	 public String deleteProject(@RequestParam int bno) {
+		 sideService.deleteProject(bno);
+		 return "redirect:sideProjectList/Q001/?pageNo=1";
+	 }
+	 
 }

@@ -6,18 +6,18 @@
 	<div class="publishingStatus">
 		<hr id="tae-hr">	
 		<th:block th:if="${status} == 'Q001'" >
-			<a id="a-1" href="/sideProjectList/Q001">모집중</a><span>
-			<a id="a-2" href="/sideProjectList/Q002">협업중</a></span>
+			<a id="a-1" th:href="|/sideProjectList/Q001/?pageNo=1|">모집중</a><span>
+			<a id="a-2" th:href="|/sideProjectList/Q002/?pageNo=1|">협업중</a></span>
 		</th:block>
 		<th:block th:unless="${status} == 'Q001'" >
-			<a id="a-1" href="/sideProjectList/Q001">모집중</a><span>
-			<a id="a-2" href="/sideProjectList/Q002">협업중</a></span>
+			<a id="a-2" th:href="|/sideProjectList/Q001/?pageNo=1|">모집중</a><span>
+			<a id="a-1" th:href="|/sideProjectList/Q002/?pageNo=1|">협업중</a></span>
 		</th:block>
 		<hr id="tae-hr">	
 	</div>
 	
 		<!-- banner -->
-		<div class="sidebanner" th:onclick="goWriting()">
+		<div class="sidebanner" th:onclick="goWriting()" style="text-align: center;">
 			<div class="recbanner">
 				<th:block th:if="${status} == 'Q001'">
 					<img id="bannerImage" th:src="@{/commonResource/taefolder/sidebanner2.png}" alt="side">
@@ -29,8 +29,8 @@
 			</div>
 		</div>
 		<!-- List -->
-		<div class="recList_2" style="height:350px;">
-				<div class="recList_1" th:each="rec:${recList}">
+		<div class="recList_2">
+				<div class="recList_1 clearfix" th:each="rec:${recList}">
 					<h6 th:if="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
 					<h6 th:unless="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
 					<h5 th:onclick="goInfoPage([[${rec.sideBoardNo}]])" style="font-weight:bolder;">[[ ${rec.title }]]</h5>
@@ -43,7 +43,28 @@
 					<hr id="tae-hr">	
 				</div>
 		</div>
-	
+		<!-- 페이지 -->
+		<th:block th:if="${pageDTO != null}">
+			<div>
+			    <ul class="pagination justify-content-center">
+			        <li class="page-item" th:if="${pageDTO.prev}">
+			            <a class="page-link" th:href="|/admin?pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+			                <span aria-hidden="true">&laquo;</span>
+			                <span class="sr-only">Previous</span>
+			            </a>
+			        </li>
+			        <li th:class="${pageNo == pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(pageDTO.startPage, pageDTO.endPage)}">
+			        		<a class="page-link" th:href="|/sideProjectList/${status}/?pageNo=${pageNo}|">[[${pageNo}]]</a>
+			        </li>
+			        <li class="page-item">
+			            <a class="page-link" th:href="|/sideProjectList/${status}/?pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+			                <span aria-hidden="true">&raquo;</span>
+			                <span class="sr-only">Next</span>
+			            </a>
+			        </li>
+			    </ul>
+			</div>
+	    </th:block>
 	
 	
 </div> <!-- header -->
