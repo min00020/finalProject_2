@@ -192,7 +192,7 @@ const latestTotalPoints = [[${getAcoMoney}]] + [[${getAcoPoint}]];
 const latestAcoMoney = [[${getAcoMoney}]] ;
 const latestAcoPoint = [[${getAcoPoint}]] ;
 const historyType = 'F001';
-const historyDate = '2024/02/07';
+const historyDate = new Date();
 //const incDecPoint =;
 const pointType = 'G001';
 const accountNo = '3020000010135';
@@ -253,7 +253,7 @@ function submitPayment(){
              // 입력 필드에 하이라이트 테두리 추가
             
 
-             // 화면을 가장 위로 이동
+             // 화면 위로 이동
              $('html, body').animate({ scrollTop: 0 }, 'fast');
              $('#park_amountInput').focus();
              $('#park_amountInput').addClass('highlight-border');

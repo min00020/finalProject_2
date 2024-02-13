@@ -21,9 +21,9 @@ public class PointServiceImpl implements PointService {
 	private PointMapper pointMapper;
 
 	@Override
-	public void getPointMainData(Model model, int memberNo) {
+	public void getPointMainData(int pageNo, Model model, int memberNo) {
 
-		model.addAttribute("getAccountList", pointMapper.getAccountNumber(memberNo));
+		model.addAttribute("getAccountList", pointMapper.getAccountNumber(memberNo,pageNo));
 		model.addAttribute("getAcoMoney", pointMapper.getAcoMoney(memberNo));
 		model.addAttribute("getAcoPoint", pointMapper.getAcoPoint(memberNo));
 		return;

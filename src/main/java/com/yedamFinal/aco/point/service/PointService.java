@@ -11,7 +11,7 @@ import com.yedamFinal.aco.point.PointDetailVO;
 
 public interface PointService {
 
-	public void getPointMainData(Model model, int memberNo);
+	public void getPointMainData(int pageNo, Model model, int memberNo);
 
 	public List<BankVO> getBankAll();
 
