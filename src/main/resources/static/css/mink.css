@@ -1,6 +1,14 @@
 @charset "UTF-8";
 
 
+#comment_box {
+	display: none;
+}
+
+#comment_togglebutton {
+	cursor: pointer;
+}
+
 #attached_content {
 	display: none;
 }

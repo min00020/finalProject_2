@@ -14,6 +14,7 @@ public class QnABoardJoinVO {
 	private Date writeDate;
 	private Date changeDate;
 	private String answerState;
+	private String state;
 	private int viewCnt;
 	private int attachedFileNo;
 	private String nickname;

@@ -82,7 +82,11 @@ public class FileServiceImpl implements FileService {
 		String serverName = uuid + "_" + time + "_" + memberNo;
 		for(int i = 0; i < files.length; ++i) {
 			String originFileName = files[i].getOriginalFilename();
-			String fileExtension = originFileName.substring(originFileName.lastIndexOf("."));
+			int dotIndex = originFileName.lastIndexOf(".");
+			if(dotIndex < 0) {
+				continue;
+			}
+			String fileExtension = originFileName.substring(dotIndex);
 			String serverFileName = serverName + "_" + originFileName;
 			
 			String saveName = savePath + File.separator + serverFileName;
