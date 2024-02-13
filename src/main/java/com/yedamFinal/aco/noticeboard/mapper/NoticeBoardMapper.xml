@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedamFinal.aco.noticeboard.mapper.NoticeBoardMapper">
+	<select id="getAdNoticeList" resultType="NoticeBoardVO">
+	 SELECT *
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            NOTICE_BOARD_NO, TITLE, CONTENT, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT 
+            FROM NOTICE_BOARD
+				ORDER BY NOTICE_BOARD_NO)
+   <![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10   
+    ]]>  
+</select>
+<select id="selectAdNoticeCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM NOTICE_BOARD
+</select>
+</mapper>

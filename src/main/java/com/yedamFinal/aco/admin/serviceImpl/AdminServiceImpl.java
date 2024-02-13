@@ -315,4 +315,13 @@ public class AdminServiceImpl implements AdminService {
 		}
 			return 0;
 	}
+	@Override
+	public List<AdminEmoVO> getMyEmoList(int memberNo) {
+		return adminMapper.getMyEmoList(memberNo);
+	}
+	@Override
+	public boolean deleteEmo(AdminEmoVO adminEmoVO) {
+		int result = adminMapper.deleteEmo(adminEmoVO);
+		return result == 1? true : false;
+	}
 }

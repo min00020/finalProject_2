@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;

@@ -241,7 +241,7 @@
                                     </thead>
                                    
                                     <tbody>
-                                        <tr th:each="qna : ${adminQna}">
+                                        <tr th:each="qna : ${adminQna}" th:onclick="|location.href='/qnaBoard/${qna.qnaBoardNo}'|">
                                             <td th:text="${qna.qnaName}"></td>
                                             <td th:text="${qna.title}"></td>
                                             <td th:text="${qna.content}"></td>

@@ -2,7 +2,11 @@ package com.yedamFinal.aco.admin.web;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
 import com.yedamFinal.aco.admin.service.AdminService;
+import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.UserDetailVO;
 
 
 @Controller
@@ -120,8 +126,21 @@ public class AdminController {
 	}
 	//이모티콘 구매버튼 (포인트 차감)
 	@PostMapping("/buyEmo")
-	public String buyEmoProcess(AdminEmoVO adminVO) {
+	public String buyEmoProcess(HttpServletRequest request, AdminEmoVO adminVO) {
 		adminService.buyEmo(adminVO);
+		MemberVO vo = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+        	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+        	vo = userDetails.getMemberVO();
+        }
+		
+		request.getSession().setAttribute("myEmoList", adminService.getMyEmoList(vo.getMemberNo()));
+		return "redirect:emoBuyList";
+	}
+	@GetMapping("/deleteEmo")
+	public String deleteEmoProcess(AdminEmoVO adminEmoVO) {
+		adminService.deleteEmo(adminEmoVO);
 		return "redirect:emoBuyList";
 	}
 	/*

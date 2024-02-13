@@ -219,18 +219,19 @@
   				<div class="modal-dialog">
     				<div class="modal-content">
       					<div class="modal-header">
-        					<h1 class="modal-title fs-5" id="exampleModalLabel">답변 작성</h1>
+        					<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
         					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       					</div>
       					<div class="modal-body">
-      						<!-- 나중에 에디터로 변경되어야함. -->
-        					<div>
-        						<textarea name="adminAnswer" class="form-control" style="height:300px;"></textarea>
-        					</div>
+        					 <div class="row">
+					        <div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            <div class="card h-100" th:onclick="registReply(tttt)">
+					                <img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            </div>
+					        </div>
+					    </div>
       					</div>
       					<div class="modal-footer">
-        					<button type="button" class="btn" data-bs-dismiss="modal" style="background-color:#989daa; color:white;">취소</button>
-        					<button id="postBtn" type="button" class="btn" style="background-color:#3e6ce3; color:white;" onclick="postAnswer()">등록</button>
       					</div>
     				</div>
   				</div>
@@ -331,28 +332,44 @@
 	}
 	
 	
-	function registReply() {
+	function registReply(ttttt) {
 		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
 		if(typeof memberNo == "undefined" || memberNo == null) {
 			showFailAlert("로그인 후 진행해주세요.");
 			return;
 		}
 		
-		const comment = $('#commentInput').val();
-		if(comment == null || comment == '') {
-			showWarningAlert('댓글을 입력해주세요.');
-			return;
+		let object = {
+				
 		}
 		
-		// 이모티콘인지 체크?
-		const boardType = 'N005';
-		const object = {
-			boardType : boardType,
-			boardNo : qnaBoardNo,
-			replyBody : comment,
-			isEmoticon : "0",
-			replyPno : null
-		};
+		if(typeof ttttt == "not defined") {
+			const comment = $('#commentInput').val();
+			if(comment == null || comment == '') {
+				showWarningAlert('댓글을 입력해주세요.');
+				return;
+			}
+			// 이모티콘인지 체크?
+			const boardType = 'N005';
+			const object = {
+				boardType : boardType,
+				boardNo : qnaBoardNo,
+				replyBody : comment,
+				isEmoticon : "0",
+				replyPno : null
+			};	
+		}
+		else {
+			const boardType = 'N005';
+			const object = {
+				boardType : boardType,
+				boardNo : qnaBoardNo,
+				replyBody : ttttt,
+				isEmoticon : "1",
+				replyPno : null
+			};	
+		}
+		
 		
 		$.ajax('/reply', {
 			type: "POST",

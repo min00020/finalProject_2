@@ -213,13 +213,18 @@ SELECT *
 </select>
 <!-- 이모티콘 구매내역 -->
 <select id="getEmoBuyList" resultType="AdminEmoVO">
-	SELECT E.EMO_FIRSTIMG, E.EMO_NAME, E.EMO_PRICE, M.EMO_BUYDATE, E.EMO_PATH, E.EMO_NO
+	SELECT E.EMO_FIRSTIMG, E.EMO_NAME, E.EMO_PRICE, M.EMO_BUYDATE, E.EMO_PATH, E.EMO_NO, M.MEMBER_NO
 	FROM MY_EMOTICON M JOIN EMOTICON E ON M.EMO_NO = E.EMO_NO
 	WHERE M.MEMBER_NO=#{memberNo}
 	ORDER BY M.EMO_BUYDATE
 </select>
-
-
+<!-- //내이모티콘 (댓글) -->
+<select id="getMyEmoList">
+	SELECT * 
+    FROM EMOTICON_IMG E
+    LEFT JOIN MY_EMOTICON M ON E.EMO_NO = M.EMO_NO
+    WHERE M.MEMBER_NO = #{membeNo}
+</select>
 <select id="getAdCntList" resultType="AdminMainVO">
 	SELECT COUNT(CASE WHEN REPORT_STATE = 'B001' THEN 1 END)AS SCOUNT FROM REPORT UNION ALL
     SELECT COUNT(CASE WHEN ANSWER_STATE = 'P001' THEN 1 END) FROM QNA_BOARD UNION ALL
@@ -562,4 +567,10 @@ ORDER BY SPLIT_VALUE
 		,#{emoName}
 	)
 </insert>
+<delete id="deleteEmo">
+	DELETE MY_EMOTICON
+	WHERE MEMBER_NO=#{memberNO}
+	EMO_NO=#{emoNo}
+	, 	
+</delete>
 </mapper>

@@ -1,0 +1,144 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"
+>
+<section>
+	<div id="qna_banner">
+		<h3>질문&답변</h3>
+		<p style="color:#76767e">좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
+	</div>
+	<div class="container">
+		<!-- 상단 선택 메뉴 -->
+		<div>
+			<ul id="qna_topic" class="list-unstyled d-flex gap-3 align-self-center ml-3">
+	             <li>전체</li>
+	             <li>기술</li>
+	             <li>사이드 프로젝트</li>
+	        </ul>
+	        <hr>
+		</div>
+		<!--/* 질문글 */-->
+		<div class="questionInfo">
+			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
+				<div id="questionTitle" class="col-9">  <!-- 사이드 태그 / 질문제목, 포인트 -->
+					<h1 class="qna_logo" style="margin-bottom:8px;">Q</h1>
+					<div class="qna_title">
+						<div>
+							<button th:if="${questionInfo[0][0].topic == 'H001'}"
+								type="button" class="btn" 
+								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+								사이드프로젝트
+							</button>
+							<button th:unless="${questionInfo[0][0].topic == 'H001'}"
+								type="button" class="btn" 
+								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+								기술
+							</button>
+							<!-- <p class="qna_grayBtn">사이드프로젝트</p> -->
+							<h4 th:text="${questionInfo[0][0].title}" style="font-weight:bold">Node.js에 관련된 질문이 있습니다.</h4>
+						</div>
+					</div>
+					<div class="qna_second_line">
+						<p class="qna_blueBtn" th:text="${questionInfo[0][0].point}">1000</p>
+					</div>
+				</div>
+				<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+						<div th:if="${loginId == questionInfo[0][0].id}">
+							<span>수정</span><span>삭제</span>
+						</div>
+						<span th:unless="${loginId == questionInfo[0][0].id}">신고</span>
+						<p  th:text="${questionInfo[0][0].writeDate}">2023.01.28</p>
+				</div>
+			</div><!-- 질문글 제목 / 신고삭제 끝-->
+			<div class="qna_contents" th:text="${questionInfo[0][0].contents}"> <!-- 질문 내용 -->
+				<p>node.js를 이해하기 위해 질문드립니다.
+					블로그 같은 곳에서 node.js에 대해서 공부 하다보니, 개념이 이해가 안 되는데,
+					
+					1. 일종의 javascript를 돌리기 위한 일종의 서버라고 이해하면 되죠?
+					
+					2.Node.js가 나오기 전까지는 자바스크립트가 브라우저의 동작을 제어하는데 사용되었고 브라우저에서만 실행할 수 있다는데,
+					  여기서 말하는 브라우저 바깥에서 자바 스크립트를 어떤 상황에서 쓴다는 말인가요?
+				</p>
+				<p style="color:blue">#node.js #mysql</p>
+			</div>
+			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
+				<div id="member" class="col-8" style="height:40px;">
+					<div class="qna_box2">
+					   <img class="qna_profile" th:src="|/upload/profile/${questionInfo[0][0].profileImage}|" alt="profile">
+					</div>
+					<p class="m-0" th:text="${questionInfo[0][0].id}">cookie123</p>
+					<p class="m-0" th:text="${questionInfo[0][0].memberLevel}">silver</p>
+				</div>
+				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
+				<div id="qna_iconAll" class="col-3"> 
+					<span>					
+						<img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye">
+					</span>
+					<span th:text="${questionInfo[0][0].viewCnt}">10</span>
+					<span>					
+						<img class="qna_icon" src="/commonResource/icon/bookmark.png" alt="bookmark">
+					</span>
+					<span th:text="${questionInfo[0][0].bookmarkCnt}">13</span>
+					<span>					
+						<img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
+					</span>
+					<span th:text="${questionInfo[0][0].recommendCnt}">9</span>
+					<span>					
+						<img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply">
+					</span>
+					<span th:text="${questionInfo[0][0].answerCnt}">7</span>
+				</div>
+			</div>
+			<hr>	
+		</div>
+		<!-- questionInfo 질문글 끝-->
+		
+		<!-- 답변 작성폼 -->
+	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[1][0].id}">
+			<!-- 위에 만약 답변 작성했을 경우도 안뜨게 조건 추가해야함! -->
+			<div class="answer-top" style="height:80px;">
+				<div class="min_answerbox" >
+				   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
+				</div>
+				<div class="min_align_bottom">
+					<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님 답변해주세요!</h6>
+					<p class="m-0" style="font-size:13px;color:#989daa;"> 답변하시면 활동점수 50점을 드립니다.</p>
+				</div>
+			</div>
+			
+			<h6 style="font-weight : bold;">제목</h6>
+			<input type="text" class="form-control" placeholder="제목을 입력해주세요">
+			<br>
+			<h6 style="font-weight : bold;">답변 내용</h6>
+			<textarea class="form-control" style="height:300px;"></textarea>
+			<br>
+			
+			<div style="float: right;margin-bottom:10px;">
+				<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+				<button type="button" class="btn text-white" style="background-color:#3e6ce3;">등록</button>
+			</div>
+			<br><br><br>
+			<hr>
+		</th:block>
+		<!-- 답변 작성폼 끝 -->
+		체크
+		<div th:each="questionIdx : ${questionInfo}">
+			<div th:each="question: ${questionIdx}">
+				<p>[[${questionIdx}]]</p>
+			</div>
+		</div>
+		체크 
+		[[${questionInfo[0]}]]
+	</div>
+	<!-- end of container -->
+</section>
+</div>
+
+<script th:inline="javascript">
+	 let test = [[${questionInfo}]];
+	 let test2 = Object.values(test)[0][1];
+</script>

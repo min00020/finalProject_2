@@ -79,4 +79,8 @@ public interface AdminMapper {
 	public int buyEmo(AdminEmoVO adminEmoVO);
 	//이모티콘 구매하기 버튼 (마이 이모티콘 추가)
 	public int insertMyemoticon(AdminEmoVO adminEmoVO);
+	//이모티콘 구매목록 삭제
+	public int deleteEmo(AdminEmoVO adminEmoVO);
+	//내이모티콘 (댓글)
+	public List<AdminEmoVO> getMyEmoList(int memberNo);
 }

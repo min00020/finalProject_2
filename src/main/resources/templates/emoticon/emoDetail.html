@@ -34,7 +34,7 @@
 			                        <div class="modal-content">
 			                           <div class="modal-header" style="margin: auto;">
 			                              <h4 class="modal-title" id="AddNoticeLabel"
-			                                 style="font-weight: bold;">이모티을 구매하시겠습니까?</h4>
+			                                 style="font-weight: bold;">이모티콘을 구매하시겠습니까?</h4>
 			                           </div>
 			                            <div class="modal-body" style="width: 500px">
 			                            <div style="text-align: center;">
@@ -100,6 +100,7 @@
 //var user = [[${user}]]
 //var emoDetail = [[${emoDetail}]]
  	function buyEmo(){
+ 		showSuccessAlert('구매 완료');
 		document.buyForm.submit();
 		//location.href=`/buyEmo?memberNo=${user.memberNo}&acoPoint=${user.acoPoint}&acoMoney=${user.acoMoney}&emoPrice=${emoDetail.emoPrice}&emoNo=${emoDetail.emoNo}&emoName=${emoDetail.emoName}`
 	} 
