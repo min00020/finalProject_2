@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartRequest;
 
 import com.yedamFinal.aco.common.AttachedFileVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
