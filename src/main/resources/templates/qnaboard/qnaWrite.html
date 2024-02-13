@@ -78,6 +78,14 @@
 		$("#attachFile").on('change', (e) => {
 			const files = e.target.files;
 			let requestFileSize = 0;
+			const currentUploadFileCount = files.length;
+			const arrayFileLength = fileArray.length;
+			if(currentUploadFileCount + arrayFileLength > 5) {
+				showWarningAlert('파일 첨부실패','최대 5개까지 파일첨부가 가능합니다.');
+				return;
+			}
+			
+			
 			for(let i = 0; i < files.length; ++i) {
 				if(files[i].size >= maxFileUploadSize) {
 					showWarningAlert('파일 첨부실패','최대 업로드(10MB) 크기를 넘어서는 파일을 첨부할 수 없습니다.');

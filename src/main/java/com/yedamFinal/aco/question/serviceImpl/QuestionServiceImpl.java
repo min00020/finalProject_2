@@ -83,13 +83,16 @@ public class QuestionServiceImpl implements QuestionService{
 	public Map<String, Object> writeQuestion(QuestionVO vo) {
 		Map<String,Object> ret = new HashMap<String,Object>();
 		int insertId = questionMapper.insertQuestion(vo);
+		int bno = vo.getPk();
 		if(insertId <= 0) {
 			ret.put("result", "500");
 		}
 		else {
 			ret.put("result", "200");
 			ret.put("vo", vo);
+			ret.put("bno", bno);
 		}
+		
 		return ret;
 	}
 

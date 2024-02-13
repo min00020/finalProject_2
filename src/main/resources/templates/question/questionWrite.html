@@ -28,7 +28,7 @@
 							<p style="font-size:14px; margin-bottom:8px;">답변자에게 지급할 포인트 금액을 입력해주세요. </p>
 		                   <!-- 	<input type="text" class="form-control" value="0"> -->
 		                   	<div class="chae_input-container" style="width:100%;">
-							    <input id="point" name="point" type="text" class="form-control" value="0" style="color:#3e6ce3;">
+							    <input id="point" name="point" type="text" class="chae_form-control" value="0" style="color:#3e6ce3;">
 							    <button class="chae_pointBtn">전액사용</button>
 							</div>
 						</div>
@@ -50,7 +50,7 @@
 						<br> -->
 						
 						<label for="editor" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
-						<div id="editor" name="editor" style="height:300px;"></div>
+						<div id="editor" name="editor"></div>
 						<br>
 					</div>
 					
@@ -69,135 +69,52 @@
 
 <!-- text editor -->
 <script>
-let html = null;
-const editor = CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
-  toolbar: {
-    items: [
-      //'exportPDF', 'exportWord', '|',
-      'findAndReplace', 'selectAll', '|',
-      'heading', '|',
-      'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-      'bulletedList', 'numberedList', 'todoList', '|',
-      'outdent', 'indent', '|',
-      'undo', 'redo', '|',
-      'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-      'alignment', '|',
-      'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
-      'specialCharacters', 'horizontalLine', 'pageBreak', '|',
-      'textPartLanguage', '|',
-      'sourceEditing'
-    ],
-    shouldNotGroupWhenFull: true
-  },
-  list: {
-    properties: {
-      styles: true,
-      startIndex: true,
-      reversed: true
-    }
-  },
-  heading: {
-    options: [
-      { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-      { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-      { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-      { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-      { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-      { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-      { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
-    ]
-  },
-  placeholder: 'Welcome to CKEditor 5!',
-  fontFamily: {
-    options: [
-      'default',
-      'Arial, Helvetica, sans-serif',
-      'Courier New, Courier, monospace',
-      'Georgia, serif',
-      'Lucida Sans Unicode, Lucida Grande, sans-serif',
-      'Tahoma, Geneva, sans-serif',
-      'Times New Roman, Times, serif',
-      'Trebuchet MS, Helvetica, sans-serif',
-      'Verdana, Geneva, sans-serif'
-    ],
-    supportAllValues: true
-  },
-  fontSize: {
-    options: [10, 12, 14, 'default', 18, 20, 22],
-    supportAllValues: true
-  },
-  htmlSupport: {
-    allow: [
-      {
-        name: /.*/,
-        attributes: true,
-        classes: true,
-        styles: true
-      }
-    ]
-  },
-  htmlEmbed: {
-    showPreviews: true
-  },
-  link: {
-    decorators: {
-      addTargetToExternalLinks: true,
-      defaultProtocol: 'https://',
-      toggleDownloadable: {
-        mode: 'manual',
-        label: 'Downloadable',
-        attributes: {
-          download: 'file'
-        }
-      }
-    }
-  },
-  mention: {
-    feeds: [
-      {
-        marker: '@',
-        feed: [
-          '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
-          '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
-          '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
-          '@sugar', '@sweet', '@topping', '@wafer'
-        ],
-        minimumCharacters: 1
-      }
-    ]
-  },
-  removePlugins: [
-    'ExportPdf',
-    'ExportWord',
-    'CKBox',
-    'CKFinder',
-    'EasyImage',
-    'RealTimeCollaborativeComments',
-    'RealTimeCollaborativeTrackChanges',
-    'RealTimeCollaborativeRevisionHistory',
-    'PresenceList',
-    'Comments',
-    'TrackChanges',
-    'TrackChangesData',
-    'RevisionHistory',
-    'Pagination',
-    'WProofreader',
-    'MathType'
-  ]
-}).then( newEditor => {
-    html = newEditor;
-})
-.catch( error => {
-  console.error( error );
-});
+	let csrfPara = $('meta[name="csrfPara"]').attr("content");
+	let csrfToken = $('meta[name="csrf"]').attr("content");
+	
+	const imageNoArray = [];
+	
+	const editor = new toastui.Editor({
+	    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
+	    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+	    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+	    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+	    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
+	    /* start of hooks */
+        hooks: {
+            async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+                try {
+                    //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+                    const formData = new FormData();
+                    formData.append(csrfPara, csrfToken);
+                    formData.append('image', blob);
 
+                    // 2. FileApiController - uploadEditorImage 메서드 호출
+                    const response = await fetch('/texteditorimage', {
+                        method : 'POST',
+                        body : formData,
+                    });
+
+                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+                    const res = await response.json();
+                    console.log('서버에 저장된 파일명 : ', res);
+
+                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+                    const imageUrl = res.imageUrl;
+                    imageNoArray.push(res.imageNo);
+                    callback(imageUrl, 'image alt attribute');
+
+                } catch (error) {
+                    console.error('업로드 실패 : ', error);
+                }
+            }
+        }
+        /* end of hooks */
+	});
 
 </script>
 
 <script th:inline="javascript">
-let csrfPara = $('meta[name="csrfPara"]').attr("content");
-let csrfToken = $('meta[name="csrf"]').attr("content");
-
 
 function sendQuestion(){
 	console.log('test',[[${session.member.memberNo}]]);
@@ -205,10 +122,10 @@ function sendQuestion(){
 	
 	formData.append(csrfPara, csrfToken);
 	formData.append("memberNo", [[${session.member.memberNo}]]);
-	formData.append("contents", html.getData());
+	formData.append("contents", editor.getHTML());
 
 	
-	$.ajax('/write', {
+	$.ajax('/questionWrite', {
 		type : "POST",
 		data : formData,
 		contentType : false,
@@ -216,8 +133,8 @@ function sendQuestion(){
 	})
 	.done(res => {
 		showSuccessAlert('등록성공');
+    	window.location.href = "/questionList";
 		console.log(res);
-    	/* window.location.href = "/gitLinkPage?id=" + $('input[name="userid"]').val(); */
     })
     .fail(err => {
     	console.log(err);

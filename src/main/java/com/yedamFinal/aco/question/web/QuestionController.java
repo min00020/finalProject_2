@@ -21,8 +21,14 @@ import com.yedamFinal.aco.question.service.QuestionService;
 @Controller
 
 public class QuestionController {
-	/*chae 질문&답변 게시판*/
-	
+	/**
+	 * @author 김채민
+	 * @since 20240213
+	 * @version 1.0
+	 * @see
+	 */
+
+
 	@Autowired
 	private QuestionService questionService;
 
