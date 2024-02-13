@@ -16,4 +16,5 @@ public interface QnABoardService {
 	public boolean getQnaBoardDetailInfo(Model model, int qnaBoardNo);
 	public Map<String, Object> postQnAAnswer(int qnaBoardNo, String answer);
 	public Map<String, Object> changeQnAState(int qnaBoardNo, String state);
+	public Map<String, Object> modifyQnAQuestion(int qnaBoardNo, String comment);
 }

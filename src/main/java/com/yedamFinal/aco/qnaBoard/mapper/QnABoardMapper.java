@@ -19,4 +19,5 @@ public interface QnABoardMapper {
 	public int updateQnABoardViewCnt(int qnaBoardNo);
 	public int updateQnAAnswer(@Param(value="qnaBoardNo") int qnaBoardNo, @Param(value="answer") String answer);
 	public int updateQnAState(@Param(value="qnaBoardNo") int qnaBoardNo, @Param(value="state") String state);
+	public int updateQnAQuestion(@Param(value="qnaBoardNo") int qnaBoardNo, @Param(value="question") String question);
 }

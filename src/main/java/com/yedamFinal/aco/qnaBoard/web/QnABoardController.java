@@ -138,7 +138,13 @@ public class QnABoardController {
 	
 	@PutMapping("/qnaBoard/{boardNo}")
 	@ResponseBody
-	public Map<String, Object> changeQnABoardState(@PathVariable("boardNo") int qnaBoardNo, String state) {
-		return qnaBoardService.changeQnAState(qnaBoardNo, state);
+	public Map<String, Object> changeQnABoardState(@PathVariable("boardNo") int qnaBoardNo, String state, String modifyComment) {
+		if(state != null && !state.equals("")) {
+			return qnaBoardService.changeQnAState(qnaBoardNo, state);
+		}
+		else {
+			return qnaBoardService.modifyQnAQuestion(qnaBoardNo, modifyComment);
+		}
+		
 	}
 }

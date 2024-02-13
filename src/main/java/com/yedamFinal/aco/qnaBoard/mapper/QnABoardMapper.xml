@@ -158,4 +158,7 @@
 	<update id="updateQnAState">
 		UPDATE QNA_BOARD SET ANSWER_STATE = #{state} WHERE QNA_BOARD_NO = #{qnaBoardNo}
 	</update>
+	<update id="updateQnAQuestion">
+		UPDATE QNA_BOARD SET CONTENT = #{question} WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
 </mapper>

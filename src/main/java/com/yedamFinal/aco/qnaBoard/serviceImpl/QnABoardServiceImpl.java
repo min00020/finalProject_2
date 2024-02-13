@@ -152,4 +152,19 @@ public class QnABoardServiceImpl implements QnABoardService {
 		
 		return ret;
 	}
+
+	@Override
+	public Map<String, Object> modifyQnAQuestion(int qnaBoardNo, String comment) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = qnaMapper.updateQnAQuestion(qnaBoardNo, comment);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		return ret;
+	}
 }

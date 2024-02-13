@@ -104,7 +104,6 @@
 				<hr>
 				
 				<!--/* 댓글영역 */-->
-				<th:block th:if="${replyList} != null and ${replyList.size > 0}">
 					<div id="comment_box" class="w-100 mb-3 clearfix">
 						<div>
 							<div class="d-flex justify-content-center">
@@ -180,11 +179,9 @@
 					</div>
 					<!--/*댓글 반복구간 끗 */-->
 				<!--/* 댓글영역 끗 */-->
-				</th:block>
-				
 				<div class="mt-2 clearfix">		
 					<button class="btn btn-outline-secondary ms-2" style="float:right;" data-url="/homeBoard/hpBoardList" onclick="location.href='/qnaBoard?pg=1'">목록</button>
-					<button th:if="${qnaInfo[0].memberNo} == ${session.member.memberNo}" class="btn" style="float:right; color:white; background-color:#3e6ce3">질문수정</button>
+					<button th:if="${qnaInfo[0].memberNo} == ${session.member.memberNo}" class="btn" style="float:right; color:white; background-color:#3e6ce3" data-bs-toggle="modal" data-bs-target="#modifyQnA">질문수정</button>
 					<button th:if="${qnaInfo[0].qnaAnswerContent} == null" class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')" data-bs-toggle="modal" data-bs-target="#adminAnswerModal">답변 작성</button>
 					<button th:unless="${qnaInfo[0].qnaAnswerContent} == null" class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')" data-bs-toggle="modal" data-bs-target="#adminAnswerModal">답변 수정</button>
 				</div>
@@ -239,6 +236,29 @@
   				</div>
 			</div>
 			<!--/* 이모티콘 모달 끝 */-->
+			
+			<!--/* 질문수정 모달 시작 */-->
+			<div class="modal fade" id="modifyQnA" tabindex="-1" aria-labelledby="qna" aria-hidden="true">
+  				<div class="modal-dialog">
+    				<div class="modal-content">
+      					<div class="modal-header">
+        					<h1 class="modal-title fs-5" id="qna">질문 수정</h1>
+        					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      					</div>
+      					<div class="modal-body">
+      						<!-- 나중에 에디터로 변경되어야함. -->
+        					<div>
+        						<textarea id="userQnA" class="form-control" style="height:300px;" th:value="${qnaInfo[0].content}">[[${qnaInfo[0].content}]]</textarea>
+        					</div>
+      					</div>
+      					<div class="modal-footer">
+        					<button type="button" class="btn" data-bs-dismiss="modal" style="background-color:#989daa; color:white;">취소</button>
+        					<button id="modifyQnaBtn" type="button" class="btn" style="background-color:#3e6ce3; color:white;" onclick="modifyQnA()">등록</button>
+      					</div>
+    				</div>
+  				</div>
+			</div>
+			<!--/* 질문수정 모달 끝 */-->
 		</div>	
 	</div>
 </div>
@@ -265,6 +285,38 @@
 	$('#postBtn').on('click', function(e) {
 		$('#adminAnswerModal').modal('hide');
 	})
+	
+	function modifyQnA() {
+		const userInput = $('#userQnA').val();
+		if(userInput == null || userInput == '') {
+			showWarningAlert('수정할 내용을 작성해주세요.');
+			return;
+		}
+		
+		const object = {
+			boardNo : qnaBoardNo,
+			modifyComment : userInput
+		}
+			
+		$.ajax('/qnaBoard/' + qnaBoardNo, {
+			type: "PUT",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			if(res.result == "200")
+				document.location.href = document.location.href;
+			else {
+				showFailAlert('실패.');
+			}
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
 	
 	function openNestedTextarea(btnId,commentId) {
 		if($('#' + btnId).text() == "답글달기") {
