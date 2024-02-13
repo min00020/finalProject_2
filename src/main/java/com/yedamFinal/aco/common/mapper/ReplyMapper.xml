@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.yedamFinal.aco.common.mapper.ReplyMapper">
+	<insert id="insertReply" parameterType="ReplyVO">
+		INSERT INTO REPLY (       
+			REPLY_NO,
+			BOARD_TYPE,        
+			BOARD_NO,         
+			MEMBER_NO,         
+			NICKNAME,  
+			CONTENTS, 
+			WRITE_DATE,           
+			EMOTICON,  
+			RECOMMEND_CNT,         
+			PROFILE_IMAGE,  
+			REPLY_PNO  	
+		)
+		VALUES(
+			REPLY_SEQ.NEXTVAL,
+			#{boardType},
+			#{boardNo},
+			#{memberNo},
+			#{nickName},
+			#{contents},
+			SYSDATE,
+			#{emoticon},
+			#{recommendCnt},
+			#{profileImage},
+			#{replyPno}	
+		)
+	</insert>
+	<select id="selectReply" resultType="ReplyJoinVO">
+		SELECT 
+        		A.reply_no as parent_reply_no,
+        		A.contents as parent_comment, 
+        		A.write_date as parent_write_date, 
+        		A.member_no AS parent_member_no, 
+        		A.NICKNAME AS parent_nickname,
+        		A.profile_image AS parent_image,
+        		B.reply_pno as child_reply_pno,
+        		B.reply_no as child_reply_no, 
+        		B.contents as child_comment, 
+        		B.WRITE_DATE as child_WRITE_date, 
+        		B.member_no AS child_member_no, 
+        		B.nickname as child_nickname,
+        		B.profile_image AS child_image
+    		FROM REPLY A
+    		LEFT JOIN REPLY B ON A.reply_no = B.reply_pno AND A.board_type = #{type}
+    		WHERE A.board_no = #{bno} AND A.reply_pno IS NULL
+    		ORDER BY A.WRITE_DATE asc, child_WRITE_date asc
+	</select>
+</mapper>

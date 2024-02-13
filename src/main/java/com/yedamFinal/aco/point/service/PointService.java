@@ -11,7 +11,7 @@ import com.yedamFinal.aco.point.PointDetailVO;
 
 public interface PointService {
 
-	public void getPointMainData(Model model, int memberNo);
+	public void getPointMainData(int pageNo, Model model, int memberNo);
 
 	public List<BankVO> getBankAll();
 
@@ -29,5 +29,8 @@ public interface PointService {
 
 	// 애코포인트 조회
 	public void getAcoPointAcquireAndUse(Model model, int memberNo);
+	
+//	// 계좌중복조회
+//	public void getAccDuplicate(Model model, String accountNo, int memberNo);
 
 }

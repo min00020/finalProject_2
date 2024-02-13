@@ -10,7 +10,8 @@ import com.yedamFinal.aco.point.BankVO;
 import com.yedamFinal.aco.point.PointDetailVO;
 @Mapper
 public interface PointMapper {
-	public List<AccountVO> getAccountNumber();
+	public List<AccountVO> getAccountNumber(int memberNo, int pageNo);
+	public int getAccountNumberCount(int memberNo);
 	public List<BankVO> getBank();
 	public int registAccountInfo(AccountVO accountVO);
 	public int getAcoMoney(int memberNo);
@@ -21,4 +22,5 @@ public interface PointMapper {
 	public List<PointDetailVO> acoMoneyUseInquiry(int memberNo);
 	public List<PointDetailVO> acoPointAcquireInquiry(int memberNo);
 	public List<PointDetailVO> acoPointUseInquiry(int memberNo);
+	public String accInquiry(String accountNo, int memberNo);
 }

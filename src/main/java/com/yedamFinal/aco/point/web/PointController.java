@@ -41,7 +41,7 @@ public class PointController {
 
 	// 포인트 충전
 	@GetMapping("/point")
-	public String getPointMainForm(Model model) {
+	public String getPointMainForm(@RequestParam String pg, Model model) {
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
@@ -50,7 +50,7 @@ public class PointController {
 			
 			
 			
-			pointService.getPointMainData(model, username.getMemberNo());
+			pointService.getPointMainData(Integer.valueOf(pg), model, username.getMemberNo());
 			
 		}
 		//model.addAttribute("getAccountList", pointService.getAccountAll());
@@ -134,6 +134,7 @@ public class PointController {
 			return "common/acoPointInquiry";
 			
 		}
+	
 	
 	
 

@@ -4,7 +4,43 @@
 <mapper namespace="com.yedamFinal.aco.point.mapper.PointMapper">
 	<!-- 계좌 조회 -->
 	<select id="getAccountNumber" resultType="AccountVO">
-		SELECT * FROM ACCOUNT
+	SELECT 
+    ACCOUNT_NO,
+    MEMBER_NO,
+    ACCOUNT_HOLDER,
+    BANK_CODE,
+    BANK_NAME
+FROM (
+    SELECT 
+        ROWNUM AS RN,
+        A.ACCOUNT_NO,
+        A.MEMBER_NO,
+        A.ACCOUNT_HOLDER,
+        A.BANK_CODE,
+        A.BANK_NAME
+    FROM (
+        SELECT 
+            ACCOUNT_NO,
+            MEMBER_NO,
+            ACCOUNT_HOLDER,
+            BANK_CODE,
+            BANK_NAME
+        FROM ACCOUNT
+        WHERE MEMBER_NO = 46
+        ORDER BY ACCOUNT_NO
+    ) A
+   )
+   <![CDATA[
+   WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo} * 5);
+	]]>	
+
+	</select>
+	
+	<select id="getAccountNumberCount" resultType="int">
+		SELECT COUNT(*) AS CNT 
+		FROM ACCOUNT
+		WHERE MEMBER_NO = #{memberNo}
+
 	</select>
 
 
@@ -24,7 +60,8 @@
 		MEMBER_NO,
 		ACCOUNT_HOLDER,
 		BANK_CODE,
-		BANK_NAME
+		BANK_NAME,
+		ACCOUNT_SEQ_NO
 		)
 
 		VALUES
@@ -33,7 +70,8 @@
 		#{memberNo},
 		#{accountHolder},
 		#{bankCode},
-		#{bankName}
+		#{bankName},
+		ACCOUNT_SEQ_NO.NEXTVAL
 		)
 
 	</insert>
@@ -104,6 +142,7 @@
 		WHERE B.MEMBER_NO = #{memberNo}
 		 AND POINT_TYPE = 'G001'
 		 AND INC_DEC_POINT <![CDATA[>]]> 0
+		 ORDER BY A.HISTORY_DATE DESC
 	</select>
 
 	<!-- AcoMoneyUseInquiry -->
@@ -137,6 +176,14 @@
 		WHERE MEMBER_NO = #{memberNo}
 		AND POINT_TYPE = 'G002' 
 		AND INC_DEC_POINT <![CDATA[<]]> 0
+			 
+	</select>
+	
+	<!-- 계좌 중복여부 조회 -->
+	<select id="accInquiry" resultType = "String">
+		select * from account
+		where account_no = #{accountNo} 
+		and member_no = #{memberNo}
 			 
 	</select>
 
