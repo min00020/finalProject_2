@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.BankVO;
 import com.yedamFinal.aco.point.PointDetailVO;
@@ -21,9 +22,17 @@ public class PointServiceImpl implements PointService {
 	private PointMapper pointMapper;
 
 	@Override
-	public void getPointMainData(int pageNo, Model model, int memberNo) {
+	public void getPointMainData(Model model, int memberNo,int pageNo) {
+		var accountList = pointMapper.getAccountNumber(memberNo,pageNo);
+		PaginationDTO dto = null;
+		if(accountList.size() > 0) {
+			dto = new PaginationDTO(pointMapper.getAccountNumberCount(memberNo), pageNo, 5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+	    model.addAttribute("getAccountList", accountList);
 
-		model.addAttribute("getAccountList", pointMapper.getAccountNumber(memberNo,pageNo));
+//		model.addAttribute("getAccountList", pointMapper.getAccountNumber(memberNo,pageNo));
 		model.addAttribute("getAcoMoney", pointMapper.getAcoMoney(memberNo));
 		model.addAttribute("getAcoPoint", pointMapper.getAcoPoint(memberNo));
 		return;

@@ -26,12 +26,12 @@ FROM (
             BANK_CODE,
             BANK_NAME
         FROM ACCOUNT
-        WHERE MEMBER_NO = 46
+        WHERE MEMBER_NO = #{memberNo}
         ORDER BY ACCOUNT_NO
     ) A
    )
    <![CDATA[
-   WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo} * 5);
+   WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo} * 5)
 	]]>	
 
 	</select>

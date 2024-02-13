@@ -1,6 +1,5 @@
 package com.yedamFinal.aco.point.web;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.service.MemberService;
-import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailVO;
-import com.yedamFinal.aco.point.UpdateAcoMoneyDTO;
 import com.yedamFinal.aco.point.service.PointService;
 
 @Controller
@@ -41,7 +38,7 @@ public class PointController {
 
 	// 포인트 충전
 	@GetMapping("/point")
-	public String getPointMainForm(@RequestParam String pg, Model model) {
+	public String getPointMainForm(@RequestParam(value = "pg", required = false, defaultValue = "1") String pg, Model model) {
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
@@ -50,7 +47,7 @@ public class PointController {
 			
 			
 			
-			pointService.getPointMainData(Integer.valueOf(pg), model, username.getMemberNo());
+			pointService.getPointMainData(model,  username.getMemberNo(),Integer.valueOf(pg));
 			
 		}
 		//model.addAttribute("getAccountList", pointService.getAccountAll());
