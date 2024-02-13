@@ -6,12 +6,13 @@
 		<aside style="width: 100%;">
 			<div class="park_pointAside">
 				<ul class = "park_aside">
-					<li><h2>포인트 센터</h2></li>
+					<li><h2 >포인트 센터</h2></li>
 					<hr>
-					<li>에코머니 조회</li><br>
-					<li>에코머니 충전</li><br>
-					<li>에코머니 환불</li><br>
-					<li>에코포인트 조회</li>
+					<li th:classappend="${#httpServletRequest.getRequestURI() == '/acoPointInquiry' ? 'park_active' : ''}" onclick="location.href='/acoPointInquiry'">에코포인트 조회</li><br>
+					<li style = "font-weight : bold;" th:classappend="${#httpServletRequest.getRequestURI() == '/acoMoneyInquiry' ? 'park_active' : ''}" onclick="location.href='/acoMoneyInquiry'">에코머니 조회</li><br>
+					<li style = "font-weight : bold;">에코머니 충전</li><br>
+					<li style = "font-weight : bold;">에코머니 환불</li><br>
+					
 				</ul>
 			</div>
 		</aside>
@@ -19,5 +20,14 @@
 	
 </div>
 <style>
+.park_active {
+  color: #3e6ce3; /* 이 색상은 예시입니다. 원하는 푸른색 코드로 변경하십시오. */
+}
+.park_aside li{
+font-weight : bold; 
+cursor : pointer
+}
+
+
 
 </style>

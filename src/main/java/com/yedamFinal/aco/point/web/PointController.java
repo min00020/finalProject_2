@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.point.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
+import com.yedamFinal.aco.member.service.MemberService;
+import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.point.AccountVO;
+import com.yedamFinal.aco.point.PointDetailVO;
+import com.yedamFinal.aco.point.UpdateAcoMoneyDTO;
 import com.yedamFinal.aco.point.service.PointService;
 
 @Controller
@@ -24,6 +29,9 @@ public class PointController {
 
 	@Autowired
 	private PointService pointService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	@Value("${nh.bank.Iscd}")
 	private String nhIscd;
@@ -48,25 +56,16 @@ public class PointController {
 		//model.addAttribute("getAccountList", pointService.getAccountAll());
 		model.addAttribute("Iscd", nhIscd);
 		model.addAttribute("nhAccessToken", nhAccessToken);
-		return "common/pointCharging";
-	}
-	
-	@PostMapping("/point")
-	@ResponseBody
-	public String charginAcoMoney(int memberNo,int acoMoney,Model model) {
-		// MemberVO 꺼내오기.
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
-			MemberVO username = userDetails.getMemberVO();
-			
-			pointService.getPointMainData(model, username.getMemberNo());
-			
-		}
-
-		//model.addAttribute("getAccountList", pointService.getAccountAll());
 		
 		return "common/pointCharging";
+	}
+	//애코머니,포인트내역
+	@PostMapping("/updateAmAndInsertPointDetail")
+	@ResponseBody
+	public Map<String, Object> updateAmAndInsertPointDetail(int acoMoney, PointDetailVO pointDetailVO) {
+		
+		return pointService.updateAcoMoneyAndInsertPointDetail(acoMoney, pointDetailVO);
+
 	}
 
 	// 계좌 연결 은행 선택
@@ -98,7 +97,46 @@ public class PointController {
 
 	}
 	
-
+	//AcoMoney조회
+	@GetMapping("/acoMoneyInquiry")
+	public String getAcoMoneyChargeAndUseForm(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			MemberVO username = userDetails.getMemberVO();
+			
+			username = memberService.getMemberInfo(username);
+			
+			model.addAttribute("latestAcoMoney", username.getAcoMoney());
+			pointService.getAcoMoneyChargeAndUse(model, username.getMemberNo());
+			
+		}
+		
+		return "common/acoMoneyInquiry";
+		
+	}
+	
+	//AcoPoint조회
+		@GetMapping("/acoPointInquiry")
+		public String getAcoPointAcquireAndUseForm(Model model) {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+				UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+				MemberVO username = userDetails.getMemberVO();
+				
+				username = memberService.getMemberInfo(username);
+				
+				model.addAttribute("latestAcoPoint", username.getAcoPoint());
+				pointService.getAcoPointAcquireAndUse(model, username.getMemberNo());
+				
+			}
+			
+			return "common/acoPointInquiry";
+			
+		}
+	
+	
+	
 
 
 

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.AttachedFileVO;
+import com.yedamFinal.aco.common.TextEditorImageVO;
 import com.yedamFinal.aco.common.mapper.FileMapper;
 import com.yedamFinal.aco.common.service.FileService;
 
@@ -32,6 +35,9 @@ public class FileServiceImpl implements FileService {
 	
 	@Value("${file.upload.attachFile.path}")
 	private String attachFileUploadPath;
+	
+	@Value("${file.upload.texteditorimage.path}")
+	private String textEditorImagePath;
 	
 	@Autowired
 	private FileMapper fileMapper;
@@ -118,6 +124,55 @@ public class FileServiceImpl implements FileService {
 	public AttachedFileVO getFile(int fileNo) {
 		// TODO Auto-generated method stub
 		return fileMapper.selectFile(fileNo);
+	}
+
+	@Override
+	public Map<String,String> textEditorImage(MultipartFile image) {
+		Map<String,String> ret = new HashMap<String, String>();
+		
+		String uploadDir = Paths.get("C:", "upload", "texteditorimage").toString();
+
+		if (image.isEmpty()) {
+	        return null;
+	    }
+
+	    String orgFilename = image.getOriginalFilename();   // 원본 파일명
+	    String uuid = UUID.randomUUID().toString().replaceAll("-", ""); // 32자리 랜덤 문자열
+	    String extension = orgFilename.substring(orgFilename.lastIndexOf(".") + 1);  // 확장자
+	    String saveFilename = uuid + "." + extension;                       // 디스크에 저장할 파일명
+	    String fileFullPath = Paths.get(uploadDir, saveFilename).toString();// 디스크에 저장할 파일의 전체 경로
+
+	    // uploadDir에 해당되는 디렉터리가 없으면, uploadDir에 포함되는 전체 디렉터리 생성
+	    File dir = new File(uploadDir);
+	    if (dir.exists() == false) {
+	        dir.mkdirs();
+	    }
+
+	  
+	    try {
+	        // 파일 저장 (write to disk)
+	        File uploadFile = new File(fileFullPath);
+	        image.transferTo(uploadFile);
+	    } catch (IOException e) {
+	        throw new RuntimeException(e);
+	    }
+	    String dbInsertImagePath = File.separator + "upload" + File.separator + "texteditorimage" + File.separator + saveFilename;
+	    TextEditorImageVO vo = new TextEditorImageVO();
+	    vo.setBoardNo(0);
+	    vo.setBoardType("Z000");
+	    vo.setFileExtension(extension);
+	    vo.setFilePath(dbInsertImagePath);
+	    vo.setOriginFileName(orgFilename);
+	    vo.setServerFileName(saveFilename);
+	    
+	    fileMapper.insertImage(vo);
+	    
+	   
+	    int imageNo = vo.getPk();
+	    ret.put("imageNo", String.valueOf(imageNo));
+	    ret.put("imageUrl", dbInsertImagePath);
+	    
+		return ret;
 	}
 	
 }
