@@ -95,4 +95,70 @@
             FROM QNA_BOARD
             WHERE MEMBER_NO = #{memberNo} AND UPPER(TITLE) LIKE '%' || UPPER(#{search}) || '%' 
 	</select>
+	
+	<insert id="insertQnaBoard" parameterType="QnABoardVO" useGeneratedKeys="false"> 
+		INSERT INTO QNA_BOARD(
+			QNA_BOARD_NO,                
+			MEMBER_NO,               
+			TITLE,                         
+			CONTENT,                      
+			QNA_ANSWER_CONTENT,           
+			WRITE_DATE,            
+			CHANGE_DATE,                    
+			ANSWER_STATE,                        
+			VIEW_CNT                                       
+		)
+		VALUES(
+			QNA_BOARD_SEQ.NEXTVAL,
+			#{memberNo},
+			#{title},
+			#{content},
+			null,
+			SYSTIMESTAMP,
+			null,
+			#{answerState},
+			0
+		)
+		<selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT QNA_BOARD_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
+	</insert>
+	
+	<delete id="deleteQnaBoard">
+		DELETE FROM QNA_BOARD WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</delete>
+	
+	<select id="selectQnaBoardDetail" parameterType="int" resultType="QnABoardJoinVO">
+		SELECT 
+    		A.QNA_BOARD_NO,
+    		A.MEMBER_NO,
+    		A.TITLE,
+    		A.CONTENT,
+    		A.QNA_ANSWER_CONTENT,
+    		A.WRITE_DATE,
+    		A.CHANGE_DATE,
+    		SUBCODE_TO_NAME(A.ANSWER_STATE) AS ANSWER_STATE,
+    		ANSWER_STATE AS STATE,
+    		A.VIEW_CNT,
+    		B.ATTACHED_FILE_NO,
+    		B.SERVER_FILE_NAME,
+    		B.ORIGIN_FILE_NAME,
+    		B.FILE_PATH,
+    		B.REGISTER_DATE
+    	FROM QNA_BOARD A
+    	LEFT JOIN ATTACHED_FILE B ON A.QNA_BOARD_NO = B.BOARD_NO AND B.BOARD_TYPE = 'N005'
+    	WHERE A.QNA_BOARD_NO = #{qnaBoardNo}
+	</select>
+	<update id="updateQnABoardViewCnt" parameterType="int">
+		UPDATE QNA_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
+	<update id="updateQnAAnswer">
+		UPDATE QNA_BOARD SET QNA_ANSWER_CONTENT = #{answer}, ANSWER_STATE = 'P002', CHANGE_DATE = SYSDATE WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
+	<update id="updateQnAState">
+		UPDATE QNA_BOARD SET ANSWER_STATE = #{state} WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
+	<update id="updateQnAQuestion">
+		UPDATE QNA_BOARD SET CONTENT = #{question} WHERE QNA_BOARD_NO = #{qnaBoardNo}
+	</update>
 </mapper>

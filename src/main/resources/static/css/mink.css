@@ -1,6 +1,40 @@
 @charset "UTF-8";
 
 
+#comment_box {
+	display: none;
+}
+
+#comment_togglebutton {
+	cursor: pointer;
+}
+
+#attached_content {
+	display: none;
+}
+
+#attached_toggleButton {
+	cursor: pointer;
+}
+.mink_li_highlight {
+	font-size: 1.5rem; 
+	text-decoration: none;
+	color:black;
+}
+
+.mink_li_highlight:hover {
+    color: #3e6ce3;
+    cursor: pointer;
+}
+
+.mink_scroll_ul {
+	border : 1px solid black;
+	overflow-y:scroll;
+	list-style: none;
+	height : 100px;
+	padding:10px;
+}
+
 /* 프로필 이미지 원형 */
 .mink_box {
     width: 40px;

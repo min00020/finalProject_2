@@ -13,7 +13,13 @@
 
 
 <script>
+let html = null;
 const editor = CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+   simpleUpload:
+    {
+        uploadUrl: "/upload/texteditorimage",
+        withCredentials: true,
+    },
   toolbar: {
     items: [
       //'exportPDF', 'exportWord', '|',
@@ -127,6 +133,11 @@ const editor = CKEDITOR.ClassicEditor.create(document.getElementById("editor"), 
     'WProofreader',
     'MathType'
   ]
+}).then( newEditor => {
+    html = newEditor;
+})
+.catch( error => {
+  console.error( error );
 });
 </script>
 

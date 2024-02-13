@@ -1,0 +1,463 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+>
+	<div class="container" style="width:1400px;">
+		<div style="margin:0 auto;" class="my-3">
+			<h3 style="font-weight:bold; color:#3e6ce3;">문의답변</h3>
+		</div>
+		<div id="mybody">
+			<!--/* 질문자 영역 */-->
+			<div class="p-3" style="background-color:#aebfec">
+				<div class="clearfix">
+					<span style="float:left; padding-top:0.25rem;">
+						<span class="font-weight-bold m-0">[[${qnaInfo[0].title}]]</span>
+						<small>
+							<span class="bi bi-clock px-1" th:text="${#dates.format(qnaInfo[0].writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+							<span class="px-2"> | </span> 
+							[[${qnaInfo[0].viewCnt}]]
+						</small>
+					</span> 
+					<span style="float:right;">
+						<button th:if="${session.member.memberNo == qnaInfo[0].memberNo} and ${qnaInfo[0].state != 'P003'}" class="btn" style="border:0; border-radius:20px; background-color:white;" id="qnaDropDown" data-bs-toggle="dropdown" aria-expanded="false">[[${qnaInfo[0].answerState}]]</button>
+						<button th:unless="${session.member.memberNo == qnaInfo[0].memberNo} and ${qnaInfo[0].state != 'P003'}" class="btn" style="border:0; border-radius:20px; background-color:white;">[[${qnaInfo[0].answerState}]]</button>
+						<!--/* 자기자신일 때 + 해결완료상태가 아닐때만 해당 드랍다운 메뉴 동작가능 */-->
+						<th:block th:if="${session.member.memberNo == qnaInfo[0].memberNo} and ${qnaInfo[0].state != 'P003'}">
+							<ul class="dropdown-menu" aria-labelledby="qnaDropDown">
+							<th:block th:if="${qnaInfo[0].state == 'P001'}">
+    							<li><button class="dropdown-item" onclick="changeQnaState('P003')">해결 완료</button></li>
+    						</th:block>
+    						<th:block th:if="${qnaInfo[0].state == 'P002'}">
+    							<li><button class="dropdown-item" onclick="changeQnaState('P001')">답변 대기중</button></li>
+    							<li><button class="dropdown-item" onclick="changeQnaState('P003')">해결 완료</button></li>
+    						</th:block>
+  							</ul>
+  						</th:block>
+					</span>
+				</div>
+			</div>
+			
+			<!--/* 내용부분 나중에 텍스트에디터로 교체되어야함. */-->
+			<div class="p-3" style="min-height: 300px;">
+				<span>[[${qnaInfo[0].content}]]</span>
+			</div>
+			
+			<div class="p-3" style="background-color:#aebfec">
+				<div class="clearfix">
+					<span style="float:left">첨부파일 리스트</span>
+					<span th:if="${qnaInfo[0].originFileName == null}" style="float:right; font-size:1rem;" id="attached_toggleButton" class="mink_li_highlight">목록확인</span>
+					<span th:unless="${qnaInfo[0].originFileName == null}" style="float:right; font-size:1rem;" id="attached_toggleButton" class="mink_li_highlight">목록확인([[${qnaInfo.size}]])</span>
+				</div>
+				<div id="attached_content" class="mt-1">
+					<ul class="list-unstyled" style="margin:0;">
+						<li th:each="file : ${qnaInfo}">
+							<button class="btn" th:text="${file.originFileName}" style="color:#007BFF;" th:onclick="|location.href='/attachFile/${file.attachedFileNo}'|"></button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!--/* 질문자 영역 끗 */-->
+		
+		
+			<!--/* 관리자 영역 시작 */-->
+			<th:block th:if="${qnaInfo[0].qnaAnswerContent} == null">
+				<div class="p-3 mt-3" style="background-color:#aebfec">
+					<div class="clearfix">
+						<span style="float:left; padding-top:0.25rem;">
+							<span class="font-weight-bold m-0">관리자</span>
+						</span> 
+						<span style="float:right;">
+							<small>
+								<span class="bi bi-clock px-1" th:text="${#dates.format(qnaInfo[0].changeDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+							</small> 
+						</span>
+					</div>
+				</div>
+			
+				<!-- 내용부분 나중에 텍스트에디터로 교체되어야함. -->
+				<div class="p-3" style="min-height: 300px;">
+					<span style="color:red;">아직 등록된 답변이 없습니다.</span>
+				</div>
+				<hr>
+			</th:block>
+			
+			<th:block th:unless="${qnaInfo[0].qnaAnswerContent} == null">
+				<div class="p-3 mt-3" style="background-color:#aebfec">
+					<div class="clearfix">
+						<span style="float:left; padding-top:0.25rem;">
+							<span class="font-weight-bold m-0">관리자 답변</span>
+							|
+							<span class="bi bi-clock px-1" th:text="${#dates.format(qnaInfo[0].changeDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+						</span> 
+						<span style="float:right;">
+							<span style="font-size:1rem;" id="comment_togglebutton" class="mink_li_highlight">댓글확인</span>
+						</span>
+					</div>
+				</div>
+			
+				<!--/* 내용부분 나중에 텍스트에디터로 교체되어야함. */-->
+				<div class="p-3" style="min-height: 300px;">
+					<span>[[${qnaInfo[0].qnaAnswerContent}]]</span>
+				</div>
+				<hr>
+				
+				<!--/* 댓글영역 */-->
+				<div id="comment_box" class="w-100 mb-3 clearfix">
+					<div>
+						<div class="d-flex justify-content-center">
+							<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+						</div>
+						<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+							<button class="btn" type="button" style="color:white; background-color:#3e6ce3" onclick="registReply()">댓글등록</button>
+							<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
+						</div>
+					</div>
+					<br>
+					<!--/*댓글 반복구간  */-->
+					<div class="mt-1 w-100 mb-5" th:each="reply : ${replyList}">
+						<div>
+							<!--/*댓글(부모) 헤더구간  */-->
+							<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+								<div>
+									<!--/* 프로필이미지가 null이라면 */-->
+									<img th:if="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+									<img th:unless="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|upload/profile/${reply.value[0].parentImage}|" alt="profile" />
+									<span>[[${reply.value[0].parentNickname}]]</span>
+									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+								</div>
+								<div>
+									<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
+									[[${reply.value[0].parentRecCnt}]]
+									<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+								</div>
+							</div>
+							<!--/*댓글 내용구간  */-->
+							<div style="width:90%; margin-left:93px;">
+								<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+							</div>
+								
+							<div style="width:90%; margin-left:80px;">
+								<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
+							</div>
+							<!--/* 답글영역 */-->
+							<div style="display:none;" th:id="|nestedComment${reply.key}|">
+								<div class="d-flex justify-content-center">
+									<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+								</div>
+								<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+									<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
+									<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
+								</div>
+							</div>
+						</div>
+						<!-- /* 대댓글(자식) */-->
+						<th:block th:if="${reply.value[0].childReplyNo} != null">
+							<div class="ms-4" th:each="innerReply : ${replyList[reply.key]}">
+								<!--/*댓글 헤더구간  */-->
+								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+									<div>
+										└<img th:if="${innerReply.childImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+										<img th:unless="${innerReply.childImage} == null" style="width:5%;" th:src="|upload/profile/${innerReply.childImage}|" alt="profile" />
+										<span>[[${innerReply.childNickname}]]</span>
+										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+									</div>
+									<div>
+										<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
+										[[${innerReply.childRecCnt}]]
+										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									</div>
+								</div>
+								<!--/*댓글 내용구간  */-->
+								<div style="width:90%; margin-left:108px;">
+									<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
+								</div>
+							</div>
+						</th:block>
+					</div>
+					<!--/*댓글 반복구간 끗 */-->
+				</div>
+				<!--/* 댓글영역 끗 */-->
+				<div class="mt-2 clearfix">		
+					<button class="btn btn-outline-secondary ms-2" style="float:right;" data-url="/homeBoard/hpBoardList" onclick="location.href='/qnaBoard?pg=1'">목록</button>
+					<button th:if="${qnaInfo[0].memberNo} == ${session.member.memberNo}" class="btn" style="float:right; color:white; background-color:#3e6ce3" data-bs-toggle="modal" data-bs-target="#modifyQnA">질문수정</button>
+					<button th:if="${qnaInfo[0].qnaAnswerContent} == null" class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')" data-bs-toggle="modal" data-bs-target="#adminAnswerModal">답변 작성</button>
+					<button th:unless="${qnaInfo[0].qnaAnswerContent} == null" class="btn" style="float:right; color:white; background-color:#3e6ce3" sec:authorize="hasRole('ROLE_ADMIN')" data-bs-toggle="modal" data-bs-target="#adminAnswerModal">답변 수정</button>
+				</div>
+				<br>
+				
+				
+
+
+			<!--/* 관리자 답변 작성 모달 시작 */-->
+			<!--/* Modal */-->
+			<div class="modal fade" id="adminAnswerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  				<div class="modal-dialog">
+    				<div class="modal-content">
+      					<div class="modal-header">
+        					<h1 class="modal-title fs-5" id="exampleModalLabel">답변 작성</h1>
+        					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      					</div>
+      					<div class="modal-body">
+      						<!-- 나중에 에디터로 변경되어야함. -->
+        					<div>
+        						<textarea name="adminAnswer" class="form-control" style="height:300px;"></textarea>
+        					</div>
+      					</div>
+      					<div class="modal-footer">
+        					<button type="button" class="btn" data-bs-dismiss="modal" style="background-color:#989daa; color:white;">취소</button>
+        					<button id="postBtn" type="button" class="btn" style="background-color:#3e6ce3; color:white;" onclick="postAnswer()">등록</button>
+      					</div>
+    				</div>
+  				</div>
+			</div>
+			<!--/* 관리자 답변 작성 모달 끝 */-->
+			
+			<!--/* 이모티콘 모달 시작 */-->
+			<div class="modal fade" id="emoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  				<div class="modal-dialog">
+    				<div class="modal-content">
+      					<div class="modal-header">
+        					<h1 class="modal-title fs-5" id="exampleModalLabel">답변 작성</h1>
+        					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      					</div>
+      					<div class="modal-body">
+      						<!-- 나중에 에디터로 변경되어야함. -->
+        					<div>
+        						<textarea name="adminAnswer" class="form-control" style="height:300px;"></textarea>
+        					</div>
+      					</div>
+      					<div class="modal-footer">
+        					<button type="button" class="btn" data-bs-dismiss="modal" style="background-color:#989daa; color:white;">취소</button>
+        					<button id="postBtn" type="button" class="btn" style="background-color:#3e6ce3; color:white;" onclick="postAnswer()">등록</button>
+      					</div>
+    				</div>
+  				</div>
+			</div>
+			<!--/* 이모티콘 모달 끝 */-->
+			
+			<!--/* 질문수정 모달 시작 */-->
+			<div class="modal fade" id="modifyQnA" tabindex="-1" aria-labelledby="qna" aria-hidden="true">
+  				<div class="modal-dialog">
+    				<div class="modal-content">
+      					<div class="modal-header">
+        					<h1 class="modal-title fs-5" id="qna">질문 수정</h1>
+        					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      					</div>
+      					<div class="modal-body">
+      						<!-- 나중에 에디터로 변경되어야함. -->
+        					<div>
+        						<textarea id="userQnA" class="form-control" style="height:300px;" th:value="${qnaInfo[0].content}">[[${qnaInfo[0].content}]]</textarea>
+        					</div>
+      					</div>
+      					<div class="modal-footer">
+        					<button type="button" class="btn" data-bs-dismiss="modal" style="background-color:#989daa; color:white;">취소</button>
+        					<button id="modifyQnaBtn" type="button" class="btn" style="background-color:#3e6ce3; color:white;" onclick="modifyQnA()">등록</button>
+      					</div>
+    				</div>
+  				</div>
+			</div>
+			<!--/* 질문수정 모달 끝 */-->
+		</div>	
+	</div>
+</div>
+<script th:inline="javascript">
+
+	const qnaBoardNo = [[${qnaInfo[0].qnaBoardNo}]]
+	const memberNo = [[${session.member.memberNo}]]
+	const csrfPara = $('meta[name="csrfPara"]').attr("content");
+	const csrfToken = $('meta[name="csrf"]').attr("content");
+
+	$("#attached_toggleButton").click(function(e){
+    	$("#attached_content").slideToggle();
+	});
+	
+	$("#comment_togglebutton").click(function(e) {
+		
+		
+		//$.ajax()
+		
+		$("#comment_box").slideToggle();	
+	})
+	
+
+	$('#postBtn').on('click', function(e) {
+		$('#adminAnswerModal').modal('hide');
+	})
+	
+	function modifyQnA() {
+		const userInput = $('#userQnA').val();
+		if(userInput == null || userInput == '') {
+			showWarningAlert('수정할 내용을 작성해주세요.');
+			return;
+		}
+		
+		const object = {
+			boardNo : qnaBoardNo,
+			modifyComment : userInput
+		}
+			
+		$.ajax('/qnaBoard/' + qnaBoardNo, {
+			type: "PUT",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			if(res.result == "200")
+				document.location.href = document.location.href;
+			else {
+				showFailAlert('실패.');
+			}
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	function openNestedTextarea(btnId,commentId) {
+		if($('#' + btnId).text() == "답글달기") {
+			$('#' + btnId).text('답글닫기');
+			$('#' + commentId).css('display','block');
+		}
+		else {
+			$('#' + btnId).text('답글달기');
+			$('#' + commentId).css('display','none');
+		}
+		
+	}
+	
+	
+	function registReply() {
+		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
+		
+		const comment = $('#commentInput').val();
+		if(comment == null || comment == '') {
+			showWarningAlert('댓글을 입력해주세요.');
+			return;
+		}
+		
+		// 이모티콘인지 체크?
+		const boardType = 'N005';
+		const object = {
+			boardType : boardType,
+			boardNo : qnaBoardNo,
+			replyBody : comment,
+			isEmoticon : "0",
+			replyPno : null
+		};
+		
+		$.ajax('/reply', {
+			type: "POST",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	function registNestedReply(replyPno) {
+		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
+		
+		const textareaId = '#nestedTextarea' + replyPno;
+		const text = $(textareaId).val();
+		if(text == null || text == '') {
+			showWarningAlert('댓글을 입력해주세요.');
+			return;
+		}
+		
+		// 이모티콘인지 체크?
+		const boardType = 'N005';
+		const object = {
+			boardType : boardType,
+			boardNo : qnaBoardNo,
+			replyBody : text,
+			isEmoticon : "0",
+			replyPno : replyPno
+		};
+		
+		$.ajax('/reply', {
+			type: "POST",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+
+	function postAnswer() {
+		const answerString = $('textarea[name="adminAnswer"]').val();
+		if(answerString.length <= 0) {
+			showWarningAlert('답변을 작성해주세요.');
+			return;
+		}
+	
+		const object = {
+			answer : answerString,
+			csrfPara : csrfToken
+		}
+		
+		$.ajax('/qnaBoard/' + qnaBoardNo, {
+			type: "POST",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	function changeQnaState(changeState) {
+		const object = {
+			state : changeState 
+		};
+		
+		$.ajax('/qnaBoard/' + qnaBoardNo, {
+			type: "PUT",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	
+</script>

@@ -1,0 +1,110 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+>
+	<div class="d-flex justify-content-between">
+		<h6 style="font-weight : bold; margin-top:15px;">첨부 파일</h6>
+		<label for="attachFile" class="btn text-white" style="background-color:#3e6ce3; margin-bottom:8px;">파일 선택</label>
+		<input id="attachFile" type="file" class="px-3 py-2 w-25 rounded" name="attachFile" style="display:none;" multiple>
+	</div>
+	<ul class="mink_scroll_ul" id="fileScroll">
+						
+	</ul>
+	<script th:inline="javascript">
+		// 실제 input의 fileList는 게시판 등록시점에 fileDataTransfer에 있는 내용을 복사해 보낸다.
+		let fileArray = [];
+		let fileID = 0; // index로만 하기에는 자주 배열이 지워지기때문에 불가능. 배열안에 Object를 넣어 id로 구분
+		const maxFileUploadSize = 10485760; // 10MB
+		let curEnableFileUploadSize = 10485760; // 10MB
+		function deleteAttachFile(deleteli, fileID) {
+			$("li").remove('#' + deleteli);
+			for(let i = 0; i < fileArray.length; ++i) {
+				if(fileArray[i].id == fileID) {
+					fileArray.splice(i,1);
+					break;
+				} 
+			}
+		}
+		
+		function deleteAllAttachFile() {
+						
+		}
+		
+		let fileScroll = $('#fileScroll');
+		$("#attachFile").on('change', (e) => {
+			const files = e.target.files;
+			let requestFileSize = 0;
+			for(let i = 0; i < files.length; ++i) {
+				if(files[i].size >= maxFileUploadSize) {
+					showWarningAlert('파일 첨부실패','최대 업로드(10MB) 크기를 넘어서는 파일을 첨부할 수 없습니다.');
+					return;
+				}
+				
+				requestFileSize += files[i].size;
+			}
+			
+			if(curEnableFileUploadSize - requestFileSize < 0) {
+				showWarningAlert('파일 첨부실패','더이상 첨부파일을 추가할 수 없습니다.(최대 업로드 : 10MB)');
+				return;	
+			}
+			
+			// 가능한 업로드 크기 감소
+			curEnableFileUploadSize -= requestFileSize;
+			for(let i = 0; i < files.length; ++i) {
+				const addedFileName = files[i].name;
+				const liID = 'file' + fileID;
+				const fileObject = {
+					id : fileID,
+					file : files[i]
+				}
+				
+				fileArray.push(fileObject);
+				const tagString = `
+					<li id="${liID}" class="my-1">
+						<div class="d-flex justify-content-between">
+							<p>${addedFileName}</p>
+							<button type="button" class="btn text-white" style="background-color:#3e6ce3; padding:5px;" onclick="deleteAttachFile('${liID}',${fileID})">삭제</button>		
+						</div>
+					</li>
+				`;
+				fileScroll.append(tagString);
+				++fileID;
+			}
+		})
+		
+		function registBoard() {
+			let csrfPara = $('meta[name="csrfPara"]').attr("content");
+			let csrfToken = $('meta[name="csrf"]').attr("content");
+
+			// 파일첨부한게 있다면.
+			if(fileArray.length > 0) {
+				const fileDataTransfer = new DataTransfer();
+				fileArray.forEach(fileObj => {
+					fileDataTransfer.items.add(fileObj.file);
+				})
+				$('#attachFile')[0].files = fileDataTransfer.files;
+			}	
+			
+			// name만 달려있으면 모두 가져옴!
+			const formData = new FormData(document.qnaWrite);
+			formData.append(csrfPara, csrfToken);
+			
+			$.ajax('/qnaBoard/write', {
+				type : "POST",
+				data : formData,
+				contentType : false,
+				processData : false 	
+			})
+			.done(res => {
+				window.location.href = "/qnaBoard?pg=1";	
+		    })
+		    .fail(err => {
+		    	console.log(err);
+		    	showWarningAlert('다시 시도해주세요.');
+		    })
+
+		}
+	</script>
+</div>
