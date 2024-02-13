@@ -1,6 +1,8 @@
 package com.yedamFinal.aco.qnaBoard.web;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,12 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
+import com.yedamFinal.aco.qnaBoard.QnABoardJoinVO;
 import com.yedamFinal.aco.qnaBoard.serviceImpl.QnABoardServiceImpl;
 
 @Controller
@@ -92,8 +96,7 @@ public class QnABoardController {
 	
 	@GetMapping("/qnaBoard/{boardNo}")
 	public String getQnaBoardInfoPage(@PathVariable("boardNo") int qnaBoardNo, Model model) {
-		var boardInfo = qnaBoardService.getQnaBoardDetailInfo(qnaBoardNo);
-		if(boardInfo == null) {
+		if(!qnaBoardService.getQnaBoardDetailInfo(model,qnaBoardNo)) {
 			return "redirect:/";
 		}
 		
@@ -105,12 +108,43 @@ public class QnABoardController {
         	vo = userDetails.getMemberVO();
         }
         
-        // 어드민은 무조건 통과
-    	if(vo.getPermission().equals("ROLE_USER") && vo.getMemberNo() != boardInfo.get(0).getMemberNo()) {
+        Object qnaInfoList = model.getAttribute("qnaInfo");
+        if(qnaInfoList == null) {
         	return "redirect:/";
         }
+        
+        try {
+        	@SuppressWarnings("unchecked")
+			ArrayList<QnABoardJoinVO> list = ((ArrayList<QnABoardJoinVO>)qnaInfoList);
+            // 어드민은 무조건 통과
+        	if(vo.getPermission().equals("ROLE_USER") && vo.getMemberNo() != list.get(0).getMemberNo()) {
+            	return "redirect:/";
+            }
+        }
+        catch(Exception e) {
+        	System.out.println(e);
+        	return "redirect:/";
+        }
+		
     	
-		model.addAttribute("qnaInfo",boardInfo);
 		return "qnaboard/qnaInfo";
+	}
+	
+	@PostMapping("/qnaBoard/{boardNo}")
+	@ResponseBody
+	public Map<String,Object> postQnABoardAnswer(@PathVariable("boardNo") int qnaBoardNo, String answer) {
+		return qnaBoardService.postQnAAnswer(qnaBoardNo, answer);
+	}
+	
+	@PutMapping("/qnaBoard/{boardNo}")
+	@ResponseBody
+	public Map<String, Object> changeQnABoardState(@PathVariable("boardNo") int qnaBoardNo, String state, String modifyComment) {
+		if(state != null && !state.equals("")) {
+			return qnaBoardService.changeQnAState(qnaBoardNo, state);
+		}
+		else {
+			return qnaBoardService.modifyQnAQuestion(qnaBoardNo, modifyComment);
+		}
+		
 	}
 }
