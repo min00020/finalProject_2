@@ -11,12 +11,12 @@
                 <li>사이드 프로젝트</li>
                 <li onclick="location.href='/questionList'">질문&답변</li>
                 <li>자유게시판</li>
-                <li id="qna_li_c">
-                	<div id="qnaDropdown" class="dropdown" style="all: unset;">
-                		<button type="button" style="font-weight:bold;" data-bs-toggle="dropdown" aria-expanded="false">고객센터</button>
-                		<ul id="qna_dropdown" class="dropdown-menu">
+                <li>
+                	<div class="dropdown" id="drmenu">
+						<a style="font-weight:bold; text-decoration:none; color:black;" id="headerDrop" data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
+						<ul id="headerDropDown" style="display:none;" class="dropdown-menu" aria-labelledby="headerDrop">
 					    	<li><a class="dropdown-item" href="#">공지사항</a></li>
-					    	<li><a class="dropdown-item" href="/qnaBoard?pg=1">1:1 문의게시판</a></li>
+					   		<li><a class="dropdown-item" href="/qnaBoard?pg=1">1:1 문의게시판</a></li>
 						</ul>
 					</div>
                 </li>
@@ -69,7 +69,14 @@
         
     </header>
     <script>
-
+    	$('#drmenu').on('show.bs.dropdown', function(e) {
+    		$('#headerDropDown').css('display', 'block');
+    	})
+    	
+    	$('#drmenu').on('hidden.bs.dropdown', function(e) {
+    		$('#headerDropDown').css('display', 'none');
+    	})
+    	
         // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
         function toggleDarkMode() {
             const body = document.body;
