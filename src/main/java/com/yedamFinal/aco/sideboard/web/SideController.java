@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
@@ -24,6 +25,8 @@ public class SideController {
 	SideServiceImpl sideService;
 	@Autowired
 	MemberServiceImpl memberService;
+	@Autowired
+	ReplyServiceImpl replyService;
 	
 	@GetMapping("/sideProjectList/{status}")
 	public String getsideProjectForm(@PathVariable("status") String status,@RequestParam("pageNo") int pageNo,  Model model) {
@@ -120,4 +123,24 @@ public class SideController {
 		 return "redirect:sideProjectList/Q001/?pageNo=1";
 	 }
 	 
+	 @PostMapping("/reply")
+	@ResponseBody
+	public Map<String,Object> postReplyControl(@RequestParam String boardType,
+			@RequestParam String boardNo, String replyBody, String isEmoticon, String replyPno) {
+		// replyBody는 댓글내용 혹은 이모티콘 파일이름이 올 수 있음.
+		MemberVO memberVO = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			memberVO = userDetails.getMemberVO();
+			
+			memberVO = memberService.getMemberInfo(memberVO);
+		}
+		else {
+			return null;
+		}
+		
+		return replyService.postReply(boardType, boardNo, replyBody, isEmoticon,replyPno, memberVO);
+	}
+		
 }

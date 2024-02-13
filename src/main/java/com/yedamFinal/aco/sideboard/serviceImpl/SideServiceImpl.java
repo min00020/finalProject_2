@@ -1,7 +1,6 @@
 package com.yedamFinal.aco.sideboard.serviceImpl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +85,10 @@ public class SideServiceImpl implements SideService{
 	public int deleteProject(int bno){
 		return sideMapper.deleteSide(bno);
 	}
-
+	
+	@Override
+	public int updateviewCnt(int viewNo) {
+		return sideMapper.updatereviewCnt(viewNo);
+	}
 	
 }

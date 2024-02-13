@@ -15,4 +15,7 @@ public interface SideService {
 	public int deleteProject(int bno);
 	
 	public Map<String, Object> updateBoardStatus(int bno, String status, SideVO sideVO);
+	
+	public int updateviewCnt(int viewNo);
+	
 }
