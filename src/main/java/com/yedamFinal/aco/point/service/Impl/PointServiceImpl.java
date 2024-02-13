@@ -23,7 +23,7 @@ public class PointServiceImpl implements PointService {
 	@Override
 	public void getPointMainData(Model model, int memberNo) {
 
-		model.addAttribute("getAccountList", pointMapper.getAccountNumber());
+		model.addAttribute("getAccountList", pointMapper.getAccountNumber(memberNo));
 		model.addAttribute("getAcoMoney", pointMapper.getAcoMoney(memberNo));
 		model.addAttribute("getAcoPoint", pointMapper.getAcoPoint(memberNo));
 		return;
@@ -38,6 +38,12 @@ public class PointServiceImpl implements PointService {
 	@Override
 	public Map<String, Object> insertAccountInfo(AccountVO accountVO) {
 		Map<String, Object> ret = new HashMap<String, Object>();
+		
+		String result = pointMapper.accInquiry(accountVO.getAccountNo(),accountVO.getMemberNo());
+		if(result != null && !result.equals("")) {
+			ret.put("result", "409");
+			return ret;
+		}
 
 		int insertId = pointMapper.registAccountInfo(accountVO);
 		if (insertId <= 0) {
@@ -87,6 +93,7 @@ public class PointServiceImpl implements PointService {
 		model.addAttribute("acoPointUseInquiry", pointMapper.acoPointUseInquiry(memberNo));
 		return;		
 	}
+
 
 }
 

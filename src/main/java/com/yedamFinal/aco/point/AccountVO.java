@@ -10,4 +10,5 @@ public class AccountVO {
 	private String accountHolder;
 	private String bankCode;
 	private String bankName;
+	private int accountSeqNo;
 }

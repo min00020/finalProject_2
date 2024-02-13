@@ -5,6 +5,17 @@
 	<!-- 계좌 조회 -->
 	<select id="getAccountNumber" resultType="AccountVO">
 		SELECT * FROM ACCOUNT
+		WHERE MEMBER_NO = #{memberNo}
+<!-- 		<![CDATA[ -->
+<!--         	AND ROWNUM > ((#{pageNo}-1) * 5) AND ROWNUM <= (#{pageNo}) * 5 -->
+<!-- 		]]> -->
+	</select>
+	
+	<select id="getAccountNumberCount" resultType="AccountVO">
+		SELECT COUNT(*) AS CNT 
+		FROM ACCOUNT
+		WHERE MEMBER_NO = #{memberNo}
+
 	</select>
 
 
@@ -24,7 +35,8 @@
 		MEMBER_NO,
 		ACCOUNT_HOLDER,
 		BANK_CODE,
-		BANK_NAME
+		BANK_NAME,
+		ACCOUNT_SEQ_NO
 		)
 
 		VALUES
@@ -33,7 +45,8 @@
 		#{memberNo},
 		#{accountHolder},
 		#{bankCode},
-		#{bankName}
+		#{bankName},
+		ACCOUNT_SEQ_NO.NEXTVAL
 		)
 
 	</insert>
@@ -137,6 +150,14 @@
 		WHERE MEMBER_NO = #{memberNo}
 		AND POINT_TYPE = 'G002' 
 		AND INC_DEC_POINT <![CDATA[<]]> 0
+			 
+	</select>
+	
+	<!-- 계좌 중복여부 조회 -->
+	<select id="accInquiry" resultType = "String">
+		select * from account
+		where account_no = #{accountNo} 
+		and member_no = #{memberNo}
 			 
 	</select>
 

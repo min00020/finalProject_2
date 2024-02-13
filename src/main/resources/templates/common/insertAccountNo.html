@@ -83,11 +83,16 @@ console.log(date);
 		const bankName = [[${bankName}]];
 		const bankCode = [[${bankCode}]];
 		
-
+		//농협디벨로퍼에서 계좌조회를 농협/다른은행 으로 구분해서 조회하게 만들어놔서 사용자가 이전화면에서 농협은행을 선택했을때와 그렇지 않을때의 요청경로 분리
+		 let ApiName = bankName === '농협은행' ? "InquireDepositorAccountNumber" : "InquireDepositorOtherBank";
+		 let UrlName = bankName === '농협은행' ?
+			        'https://developers.nonghyup.com/InquireDepositorAccountNumber.nh' :
+			        'https://developers.nonghyup.com/InquireDepositorOtherBank.nh';
+		
 		let obj = {};
 		obj = {
 			Header:{
-			ApiNm : "InquireDepositorOtherBank"	,
+			ApiNm : ApiName	,
 			Tsymd : today,
 			Trtm :"113300",
 			Iscd : Iscd,
@@ -105,25 +110,24 @@ console.log(date);
 		accountObj = {
 				accountNo : account,
 				memberNo : [[${session.member.memberNo}]], 
-				accountHolder : name,
+				//accountHolder : name,
+				accountHolder : '박경석', //다른 계정으로도 계좌 등록할수있게 이름 고정
 				bankCode : bankCode,
 				bankName : bankName
 		};
-		//accountObj[csrfPara]=csrfToken;
 		
-	
-
-		
-		$.ajax('https://developers.nonghyup.com/InquireDepositorOtherBank.nh', {
+		$.ajax(UrlName, {
 			type:'post',
 			contentType: 'application/json',
 			data : JSON.stringify(obj)
 		})
 		.done(res => {
 			console.log(res);
-			if(res.Dpnm == name ){
-				console.log('이름 일치')
-				//이름이 일치하면 계좌를 DB에 등록
+
+			if(name == [[${session.member.name}]] ){ //이름 일치 검증 후 -> 입력한 계좌번호와 응답 계좌번호 일치 검증
+				console.log('이름 일치') 
+				if(res.Acno == accountNo ){
+					console.log('계좌 일치')
 				$.ajax('/registAccount', {
 					type : 'post',
 					contentType : 'application/json',
@@ -133,6 +137,7 @@ console.log(date);
 					},
 				})
 				.done(res => {
+					console.log(res);
 					if(res.result == '200'){
 						Swal.fire({
 							  title: '계좌등록 성공',
@@ -146,8 +151,32 @@ console.log(date);
 							  }
 							});
 							
-					}else{
-						showFailAlert('에러가 발생했습니다.')
+					}
+					else if(res.result == "409") {
+						Swal.fire({
+							  title: '이미 등록된 계좌입니다.',
+							  text: '',
+							  icon: 'error',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+								  location.reload(); //새로고침
+							  }
+							});	
+					}
+					else{
+						Swal.fire({
+							  title: '에러가 발생했습니다.',
+							  text: '',
+							  icon: 'error',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+								  location.reload(); //새로고침
+							  }
+							});	
 					}
 				})
 				.fail(err => {
@@ -161,14 +190,82 @@ console.log(date);
 					console.log('accountNo : ',accountNo);
 					
 				});
+				}else{
+					if(res.Header.Rsms == '계좌번호 에 해당하는 입력값이 잘못되었습니다.'){
+						Swal.fire({
+							  title: '계좌번호를 입력해주세요.',
+							  text: '',
+							  icon: 'error',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+								  location.reload(); //새로고침
+							  }
+							});		
+					}
+					else if(res.Header.Rsms == '계좌번호의 은행코드가 상이합니다.'){
+						Swal.fire({
+						    title: '은행을 다시 선택해 주세요.',
+						    text: '',
+						    icon: 'error',
+						    showConfirmButton: false, // '확인' 버튼을 숨깁니다.
+						    showCancelButton: true, // '뒤로 가기' 버튼을 보여주기 위해 true로 설정합니다.
+						    cancelButtonText: "뒤로 가기", // '뒤로 가기' 버튼에 표시할 텍스트입니다.
+						    cancelButtonClass: "btn-default"
+						}).then((result) => {
+						    // '뒤로 가기' 버튼을 눌렀을 경우의 액션
+						    if (result.dismiss === Swal.DismissReason.cancel) {
+						        history.back(); // 이전 페이지로 이동
+						    }
+						});
+
 				
+					}else{
+						Swal.fire({
+							  title: res.Header.Rsms,
+							  text: '',
+							  icon: 'error',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+								  location.reload(); //새로고침
+							  }
+							});	
+						
+					}
+				}
 			}else{	
 				console.log('일치안함')
-				if(res.Header.Rsms == "정상처리 되었습니다."){
-					showFailAlert('이름이 일치하지 않습니다')	
-					
+				if(name != [[${session.member.name}]]){ //계좌 등록 화면에서 입력한 이름과 계정 이름이 다를 경우 오류 출력(실제 등록은 '박경석'으로 고정)
+					if(name == ''){
+						Swal.fire({
+							  title: '이름을 입력해주세요.',
+							  text: '',
+							  icon: 'error',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+							  location.reload(); //새로고침
+							  }
+							});	
+					}else{
+						Swal.fire({
+							  title: '이름이 일치하지 않습니다.',
+							  text: '',
+							  icon: 'error',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value) {
+								  location.reload(); //새로고침
+							  }
+							});		
+					}
 				}else{
-				showFailAlert(res.Header.Rsms)
+				showFailAlert(res.Header.Rsms)		
 				}
 			}
 		})
