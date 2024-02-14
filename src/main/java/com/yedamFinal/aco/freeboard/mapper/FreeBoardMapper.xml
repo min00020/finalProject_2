@@ -23,9 +23,9 @@
 <!-- 	</select> -->
 <!-- </mapper> -->
 
-
+<!-- 전체조회 -->
 <mapper namespace="com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper">
-	<select id="getFreeBoard" resultType="FreeBoardVO">
+	<select id="getFreeBoardAll" resultType="FreeBoardVO">
 	SELECT FBOARD_NO,
 			A.MEMBER_NO,
 			TITLE,
@@ -42,6 +42,23 @@
     ORDER BY WRITE_DATE DESC
 
 	</select>
+	
+	<!-- 단건조회 -->
+	<select id="getFreeBoard" parameterType="int" resultType="FreeBoardVO">
+	SELECT 
+		   FBOARD_NO, 
+	       MEMBER_NO, 
+	       TITLE, 
+	       CONTENT, 
+	       NICKNAME,
+	       WRITE_DATE, 
+	       VIEW_CNT, 
+	       RECOMMEND_CNT, 
+	       REPLY_CNT
+	       
+	FROM FREE_BOARD
+	WHERE FBOARD_NO= #{fbno}
+</select>
 
 </mapper>
 

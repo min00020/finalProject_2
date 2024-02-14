@@ -24,7 +24,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public List<FreeBoardVO> getFreeBoardAll() {
 
-		return freeBoardMapper.getFreeBoard();
+		return freeBoardMapper.getFreeBoardAll();
+	}
+
+	@Override
+	public FreeBoardVO getFreeBoard(int fbno) {
+	
+		return freeBoardMapper.getFreeBoard(fbno);
 	}
 
 

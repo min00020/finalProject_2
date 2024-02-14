@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
@@ -20,10 +21,19 @@ public class FreeBoardController {
 	private FreeBoardService freeBoardService;
 
 	
-//	@GetMapping("/freeBoard/freeBoardList")
-//	public String getFreeBoardList(Model model) {
-//		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
-//		return "board/freeBoardList";
-//	}
+	@GetMapping("/freeBoardList")
+	public String getFreeBoardList(Model model) {
+		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
+		return "freeBoard/freeBoardList";
+	}
+	
+	@GetMapping("/freeBoardInfo/{fbno}")
+	public String getFreeBoard(@PathVariable("fbno") int fbno, Model model) {
+		
+		model.addAttribute("freeBoardInfo",freeBoardService.getFreeBoard(fbno));
+		
+		return "freeBoard/freeBoardInfo";
+		
+	}
 	
 }

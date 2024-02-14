@@ -8,5 +8,7 @@ public interface FreeBoardService {
 	
 	public List<FreeBoardVO> getFreeBoardAll();
 	
+	public FreeBoardVO getFreeBoard(int fbno);
+	
 	
 }
