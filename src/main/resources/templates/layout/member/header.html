@@ -8,19 +8,19 @@
         </a>
         
             <ul class="list-unstyled d-flex gap-3 align-self-center ml-3">
-                <li>사이드 프로젝트</li>
+                <li onclick="location.href='/sideProjectList/Q001/?pageNo=1'">사이드 프로젝트</li>
                 <li onclick="location.href='/questionList'">질문&답변</li>
                 <li>자유게시판</li>
                 <li>
                 	<div class="dropdown" id="drmenu">
 						<a style="font-weight:bold; text-decoration:none; color:black;" id="headerDrop" data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
 						<ul id="headerDropDown" style="display:none;" class="dropdown-menu" aria-labelledby="headerDrop">
-					    	<li><a class="dropdown-item" href="#">공지사항</a></li>
+					    	<li><a class="dropdown-item" href="/noticeBoard?pageNo=1">공지사항</a></li>
 					   		<li><a class="dropdown-item" href="/qnaBoard?pg=1">1:1 문의게시판</a></li>
 						</ul>
 					</div>
                 </li>
-                <li>이모티콘 상점</li>
+                <li ><a href="/emoMain?pageNo=1" style="font-weight:bold; text-decoration:none; color:black;">이모티콘 상점</a></li>
                  <li onclick="location.href='/point'">포인트 충전</li>
             </ul>
             <div class="park_search-align-self-center">

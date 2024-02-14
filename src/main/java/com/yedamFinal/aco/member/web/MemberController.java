@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
@@ -156,6 +157,12 @@ public class MemberController {
 		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
 		List<MyquestionVO> myquestion = memberService.getMyqList(memberVO);
 		List<MybookmarkVO> bmarkList = memberService.getMyBookList(memberVO);
+		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
+		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
+		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
+		model.addAttribute("accountList", list3);
+		model.addAttribute("pointList", list);
+		model.addAttribute("activityList", list2);
 		model.addAttribute("memberInfo", findVO);
 		model.addAttribute("bmarkList", bmark);
 		model.addAttribute("mquestionList", myquestion);
