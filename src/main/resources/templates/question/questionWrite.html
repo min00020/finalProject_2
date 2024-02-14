@@ -4,7 +4,9 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content"	  
 >
-	<section>
+<section>
+	<!-- 질문글 작성폼 -->
+	<div th:if="${questionVO} == null">
 		<div class="container" style="width:1000px;">
 			<h3 style="font-weight:bold; color:#3e6ce3;margin-left:20px;">질문 작성하기</h3>
 			<hr>
@@ -44,17 +46,10 @@
 						<label for="tags" style="font-weight:bold; margin-bottom:8px;">태그</label>
 						<input id="tag" name="tag" type="text" class="form-control" placeholder="태그를 입력해주세요">
 						<br>
-						
-						<!-- <label for="contents" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
-						<textarea id="contents" name="contents" class="form-control" style="height:300px;"></textarea>
-						<br> -->
-						
 						<label for="editor" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
 						<div id="editor" name="editor"></div>
 						<br>
 					</div>
-					
-					
 					<div style="float: right;margin-bottom:10px;">
 						<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
 						<button type="button" class="btn text-white" style="background-color:#3e6ce3;" onclick="sendQuestion()">등록</button>
@@ -64,7 +59,65 @@
 			</form>
 		</div>
 		<!-- end of container -->
-	</section>
+	</div>
+	<!-- 질문글 작성폼 끝-->
+	<!-- 질문글 수정폼 -->
+	<div th:unless="${questionVO} == null">
+		<div class="container" style="width:1000px;">
+			<h3 style="font-weight:bold; color:#3e6ce3;margin-left:20px;">질문 작성하기</h3>
+			<hr>
+			<!-- 질문 작성폼 시작 -->
+			<form name="questionWrite">
+				<div style="width:900px; margin:0 auto; ">
+					<div class="d-flex justify-content-between">	
+						<div style="width:48%;">
+							<label for="topic" style="font-weight : bold;">토픽</label>
+							<p style="font-size:14px; margin-bottom:8px;">질문과 관련된 토픽을 선택해주세요. </p>
+		                    <select id="topic" name="topic" th:value="${questionVO.topic}" class="form-select" style="border:1px solid #ccc;">
+		                    	<option th:selected="${questionVO.topic}=='H001'" value="H001">기술</option>
+		                    	<option th:selected="${questionVO.topic}=='H002'" value="H002">사이드 프로젝트</option>
+		                    </select>
+						</div>
+						<div style="width:48%;">
+							<label for="point" style="font-weight:bold;">포인트</label>
+							<span style="margin-left:5px; font-size:12px;">보유 </span>
+							<span style="font-size:12px;color:#3e6ce3; font-weight:bold;">1000원</span>
+							<p style="font-size:14px; margin-bottom:8px;">답변자에게 지급할 포인트 금액을 입력해주세요. </p>
+		                   <!-- 	<input type="text" class="form-control" value="0"> -->
+		                   	<div class="chae_input-container" style="width:100%;">
+							    <input id="point" name="point" type="text" th:value="${questionVO.point}" class="chae_form-control" style="color:#3e6ce3;">
+							    <button class="chae_pointBtn">전액사용</button>
+							</div>
+						</div>
+					</div>
+					<!-- 토픽, 포인트 끝 -->
+					<br>
+					<div>
+						<div>
+							<label for="title"  style="font-weight:bold; margin-bottom:8px;">제목</label>
+							<input id="title" name="title" type="text" th:value="${questionVO.title}" class="form-control" >
+							<br>
+						</div>
+						<label for="tags" style="font-weight:bold; margin-bottom:8px;">태그</label>
+						<input id="tag" name="tag" type="text" th:value="${questionVO.tag}" class="form-control">
+						<br>
+						<label for="editor" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
+						<div id="editor" name="editor" th:utext="${questionVO.contents}" ></div>
+						<br>
+					</div>
+					
+					<div style="float: right;margin-bottom:10px;">
+						<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+						<button type="button" class="btn text-white" style="background-color:#3e6ce3;" onclick="sendQuestionModify()">수정</button>
+					</div>
+				</div>
+				<!-- 질문 작성폼 끝 -->
+			</form>
+		</div>
+		<!-- end of container -->
+	</div>
+	<!-- 질문글 수정폼 끝 -->
+</section>
 </div>
 
 <!-- text editor -->
@@ -115,7 +168,7 @@
 </script>
 
 <script th:inline="javascript">
-
+//질문 게시글 작성
 function sendQuestion(){
 	console.log('test',[[${session.member.memberNo}]]);
 	const formData = new FormData(document.questionWrite);
@@ -123,7 +176,32 @@ function sendQuestion(){
 	formData.append(csrfPara, csrfToken);
 	formData.append("memberNo", [[${session.member.memberNo}]]);
 	formData.append("contents", editor.getHTML());
+	
+	$.ajax('/questionWrite', {
+		type : "POST",
+		data : formData,
+		contentType : false,
+		processData : false 	
+	})
+	.done(res => {
+		showSuccessAlert('등록성공');
+    	window.location.href = "/questionList";
+		console.log(res);
+    })
+    .fail(err => {
+    	console.log(err);
+    	showWarningAlert('등록실패');
+    })
+	
+}
 
+//질문 게시글 수정
+function sendQuestionModify(){
+	const formData = new FormData(document.questionWrite);
+	
+	formData.append(csrfPara, csrfToken);
+	formData.append("memberNo", [[${session.member.memberNo}]]);
+	formData.append("contents", editor.getHTML());
 	
 	$.ajax('/questionWrite', {
 		type : "POST",

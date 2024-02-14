@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.question.service.QuestionService;
@@ -20,8 +21,17 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	//리스트 조회
 	@Override
-	public List<QuestionVO> getQuestionList() {
-		return questionMapper.getQuestionList();
+	public List<QuestionVO> getQuestionList(Model model, int pageNo) {
+		var questionList = questionMapper.getQuestionList(pageNo);
+		PaginationDTO dto = null;
+		if(questionList.size() > 0) {
+			dto = new PaginationDTO(questionMapper.getQuestionCount(),pageNo,5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+		model.addAttribute("questionList", questionList);
+		
+		return null;
 	}
 	
 	@Override
@@ -31,11 +41,9 @@ public class QuestionServiceImpl implements QuestionService{
 
 	//단건조회
 	@Override
-	/*
-	 * public List<QuestionVO> getQuestionInfo(int qno) { return
-	 * questionMapper.getQuestionInfo(qno); }
-	 */
 	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model, int memberNo) {
+		//조회수 +1
+		questionMapper.updateQuestionViewCnt(qno);
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
@@ -95,11 +103,21 @@ public class QuestionServiceImpl implements QuestionService{
 		
 		return ret;
 	}
-
+	
+	//질문글 수정
 	@Override
-	public Map<String, Object> updateQuestion(QuestionVO vo) {
+	public Map<String, Object> modifyQuestion(QuestionVO vo) {
 		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = questionMapper.updateQuestion(vo);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		return ret;
 	}
 
 	@Override
