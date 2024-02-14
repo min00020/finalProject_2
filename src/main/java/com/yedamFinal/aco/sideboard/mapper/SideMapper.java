@@ -18,5 +18,5 @@ public interface SideMapper {
 	
 	public int updateStatus(@Param(value="bno") int bno, @Param(value="status") String status, SideVO sideVO);
 	
-	public int updatereviewCnt(@Param(value="viewNo") int viewNo);
+	public int updatereviewCnt(@Param(value="bno") int bno);
 }

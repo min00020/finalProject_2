@@ -47,12 +47,10 @@
 				<h5 style="font-weight:bold;">프로그램 소개</h5>
 				<p style="font-weight:bold;">[[${sideInfo.content}]]</p>
 				</div>	
-	</div>
-	<div class="tae-reply mb-3">
 		<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}" th:text="${sideInfo.gitAddress}"></a></p>
 	</div>
 	<!--/* 댓글영역 */-->
-	<div id="comment_box" class="w-100 mb-3 clearfix">
+	<div class="w-100 mb-3 clearfix">
 		<div>
 			<div class="d-flex justify-content-center">
 				<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
@@ -138,8 +136,102 @@
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 
+const memberNo = [[${session.member.memberNo}]]
 const status = 'Q002';
 const bno = [[${sideInfo.sideBoardNo}]];
+
+function openNestedTextarea(btnId,commentId) {
+	if($('#' + btnId).text() == "답글달기") {
+		$('#' + btnId).text('답글닫기');
+		$('#' + commentId).css('display','block');
+	}
+	else {
+		$('#' + btnId).text('답글달기');
+		$('#' + commentId).css('display','none');
+	}
+	
+}
+
+function registReply() {
+	// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+	if(typeof memberNo == "undefined" || memberNo == null) {
+		showFailAlert("로그인 후 진행해주세요.");
+		return;
+	}
+	
+	const comment = $('#commentInput').val();
+	if(comment == null || comment == '') {
+		showWarningAlert('댓글을 입력해주세요.');
+		return;
+	}
+	
+	// 이모티콘인지 체크?
+	const boardType = 'N006';
+	const object = {
+		boardType : boardType,
+		boardNo : bno,
+		replyBody : comment,
+		isEmoticon : "0",
+		replyPno : null
+	};
+	
+	$.ajax('/reply', {
+		type: "POST",
+		data: object,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res => {
+		document.location.href = document.location.href;
+	})
+	.fail(err => {
+		showFailAlert("실패. 다시시도해주세요.");
+		console.log(err);
+	})
+}
+
+function registNestedReply(replyPno) {
+	// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+	if(typeof memberNo == "undefined" || memberNo == null) {
+		showFailAlert("로그인 후 진행해주세요.");
+		return;
+	}
+	
+	const textareaId = '#nestedTextarea' + replyPno;
+	const text = $(textareaId).val();
+	if(text == null || text == '') {
+		showWarningAlert('댓글을 입력해주세요.');
+		return;
+	}
+	
+	// 이모티콘인지 체크?
+	const boardType = 'N006';
+	const object = {
+		boardType : boardType,
+		boardNo : bno,
+		replyBody : text,
+		isEmoticon : "0",
+		replyPno : replyPno
+	};
+	
+	$.ajax('/reply', {
+		type: "POST",
+		data: object,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res => {
+		document.location.href = document.location.href;
+	})
+	.fail(err => {
+		showFailAlert("실패. 다시시도해주세요.");
+		console.log(err);
+	})
+}
+
+
 
  $(document).ready(function() {
 	$('#changeStatusButton').click(function() {

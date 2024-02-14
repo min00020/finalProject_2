@@ -1,12 +1,17 @@
 package com.yedamFinal.aco.sideboard.serviceImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.yedamFinal.aco.common.PaginationDTO;
+import com.yedamFinal.aco.common.ReplyJoinVO;
+import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.sideboard.SideVO;
 import com.yedamFinal.aco.sideboard.mapper.SideMapper;
@@ -19,6 +24,9 @@ public class SideServiceImpl implements SideService{
 	SideMapper sideMapper;
 	@Autowired
 	MemberMapper memberMapper;
+	@Autowired
+	ReplyMapper replyMapper;
+	
 	
 	@Override
 	public Map<String, Object> getRecruitingList(int pageNo, String status) {
@@ -37,6 +45,14 @@ public class SideServiceImpl implements SideService{
     public SideVO getSideInfo(int bno) {
         return sideMapper.selectSideInfo(bno);
     }
+	@Override
+	public void getSideInfoAndReplyList(int bno, Model model) {
+		var list = replyMapper.selectReply("N006", bno);
+		Map<Integer, List<ReplyJoinVO>> groupByData = list.stream().collect(Collectors.groupingBy(ReplyJoinVO::getParentReplyNo));
+		model.addAttribute("replyList", groupByData);
+		sideMapper.updatereviewCnt(bno);
+		model.addAttribute("sideInfo", sideMapper.selectSideInfo(bno));
+	}
 	//상태변경
 	@Override
 	public Map<String, Object> updateBoardStatus(int bno, String status, SideVO vo){
@@ -86,9 +102,8 @@ public class SideServiceImpl implements SideService{
 		return sideMapper.deleteSide(bno);
 	}
 	
-	@Override
-	public int updateviewCnt(int viewNo) {
-		return sideMapper.updatereviewCnt(viewNo);
-	}
+	
+	
+	
 	
 }
