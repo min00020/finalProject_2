@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import com.yedamFinal.aco.common.AttachedFileVO;
@@ -119,5 +120,11 @@ public class CommonController {
 		
 		return null;
 	}
-	
+
+	//chae toast ui
+	@PostMapping("/texteditorimage")
+	@ResponseBody
+	public Map<String, String> uploadEditorImage(@RequestParam final MultipartFile image) {
+		return fileService.textEditorImage(image);
+	}
 }

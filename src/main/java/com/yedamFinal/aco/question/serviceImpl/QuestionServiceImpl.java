@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.mapper.QuestionMapper;
@@ -22,6 +23,11 @@ public class QuestionServiceImpl implements QuestionService{
 	public List<QuestionVO> getQuestionList() {
 		return questionMapper.getQuestionList();
 	}
+	
+	@Override
+	public List<QuestionVO> getQuestionListSelect(String topic) {
+		return questionMapper.getQuestionListSelect(topic);
+	}
 
 	//단건조회
 	@Override
@@ -29,17 +35,46 @@ public class QuestionServiceImpl implements QuestionService{
 	 * public List<QuestionVO> getQuestionInfo(int qno) { return
 	 * questionMapper.getQuestionInfo(qno); }
 	 */
-	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno) {
+	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model, int memberNo) {
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
 		
+		//번호 boardNo 기준 > 0부터 시작하게 변경
 		Map<Integer, List<QuestionVO>> ret = new HashMap<Integer, List<QuestionVO>>();
 		Integer idx = 0;
 		for ( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
 		    ret.put(idx++, entry.getValue());
 		}
-			
+		
+		//답변 채택상태 확인
+		model.addAttribute("isAdopt",false);
+		for ( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
+			System.out.println("value : " + entry.getValue());
+			List<QuestionVO> adoptStatus = entry.getValue();
+			for(QuestionVO vo : adoptStatus) {
+				if(vo.getAnswerAdoptStatus() == null) {
+					continue;
+				}
+				if(vo.getAnswerAdoptStatus().equals("I002")) {
+					model.addAttribute("isAdopt",true);
+					break;
+				}
+			}
+		}	
+		System.out.print(memberNo);
+		//로그인 유저의 답변글 작성 여부 체크
+		model.addAttribute("writePost",false);
+		for( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
+			List<QuestionVO> writeStatus = entry.getValue();
+			for(QuestionVO vo : writeStatus) {
+				if(vo.getAnswerMemberNo() == memberNo) {
+					model.addAttribute("writePost", true);
+					System.out.print("test22");
+					break;
+				}
+			}
+		}
 		return ret;
 	}
 	
@@ -48,13 +83,16 @@ public class QuestionServiceImpl implements QuestionService{
 	public Map<String, Object> writeQuestion(QuestionVO vo) {
 		Map<String,Object> ret = new HashMap<String,Object>();
 		int insertId = questionMapper.insertQuestion(vo);
+		int bno = vo.getPk();
 		if(insertId <= 0) {
 			ret.put("result", "500");
 		}
 		else {
 			ret.put("result", "200");
 			ret.put("vo", vo);
+			ret.put("bno", bno);
 		}
+		
 		return ret;
 	}
 
@@ -69,6 +107,7 @@ public class QuestionServiceImpl implements QuestionService{
 		return questionMapper.deleteQuestion(qno);
 	}
 
+	
 
 
 	

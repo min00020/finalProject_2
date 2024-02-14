@@ -84,9 +84,9 @@
 	             <li>기술</li>
 	             <li>사이드 프로젝트</li>
 	             <li id="search" style="margin-left: auto;">
-	             	<div class="search-align-self-center" >
-			  			<input type="text" placeholder="검색어 입력" class="park_searchInput">
-			  			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="park_searchImg">
+	             	<div class="min_search-align-self-center" >
+			  			<input type="text" placeholder="검색어 입력" class="min_searchInput">
+			  			<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="min_searchImg">
 					</div>
 	             </li>
 	        </ul>
@@ -105,7 +105,12 @@
 					  </ul>
 				</div>
 				<div style="float: right;">
-					<button type="button" class="btn text-white" style="background-color:#3e6ce3">질문하기</button>
+					<button type="button" onclick="location.href='/loginForm'" 
+						th:if="${loginId == '-1'}"
+					  class="btn text-white" style="background-color:#3e6ce3">질문하기</button>
+					<button type="button" onclick="location.href='/questionWrite'" 
+						th:unless="${loginId == '-1'}"
+					 class="btn text-white" style="background-color:#3e6ce3">질문하기</button> 
 				</div>
 			</div>
 
@@ -140,7 +145,7 @@
 			</div>
 			<!-- end of postList -->
 			<!-- 페이지 시작 -->
-			<div>
+			<div style="margin-left:250px;">
 			    <ul class="pagination justify-content-center">
 			        <li class="page-item">
 			            <a class="page-link" href="#" aria-label="Previous">
@@ -166,13 +171,14 @@
 			    </ul>
 			</div>
 			<!-- 페이지 끝-->
+			
 		</div>
 		<!-- end of questionBoard -->
 	</div>
 </section>
 </div>
 <script th:inline="javascript">
-
+	const test2 = [[${loginId}]]
 	//const test = [[ ${questionInfo} ]];
 	function test(a) {
 		console.log(a);

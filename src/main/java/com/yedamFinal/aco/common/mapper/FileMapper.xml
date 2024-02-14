@@ -45,4 +45,34 @@
 		FROM ATTACHED_FILE
 		WHERE ATTACHED_FILE_NO = #{fileNo}
 	</select>
+	
+	<insert id="insertImage" parameterType="TextEditorImageVO">
+		INSERT INTO TEXT_EDITOR_IMAGE
+	    (
+	        IMAGE_NO,
+	        BOARD_TYPE,
+	        BOARD_NO,
+	        ORIGIN_FILE_NAME,
+	        SERVER_FILE_NAME,
+	        FILE_EXTENSION,
+	        REGISTER_DATE,
+	        FILE_PATH
+	    )
+	    VALUES
+	    (
+	        text_editor_image_seq.NEXTVAL,
+	        #{boardType},
+	        #{boardNo},
+	        #{originFileName},
+	        #{serverFileName},
+	        #{fileExtension},
+	        SYSDATE,
+	        #{filePath}
+	    )
+	 	<selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT text_editor_image_seq.CURRVAL FROM DUAL
+    	</selectKey>
+	</insert>
+	
+
 </mapper>
