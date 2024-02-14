@@ -25,12 +25,12 @@ public interface PointService {
 	public Map<String, Object> updateAcoMoneyAndInsertPointDetail(int acoMoney, PointDetailVO pointDetailVO);
 
 	// 애코머니 조회
-	public void getAcoMoneyChargeAndUse(Model model, int memberNo);
+	public void getAcoMoneyChargeAndUse(Model model, int memberNo,int cp, int up);
 
 	// 애코포인트 조회
-	public void getAcoPointAcquireAndUse(Model model, int memberNo);
+	public void getAcoPointAcquireAndUse(Model model, int memberNo,int ap, int up);
 	
-//	// 계좌중복조회
+	// 계좌중복조회
 //	public void getAccDuplicate(Model model, String accountNo, int memberNo);
 
 }

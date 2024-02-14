@@ -59,7 +59,7 @@
 						<!-- th:each end -->
 					</div>
 					
-<!-- 					page -->
+					<!--page -->
 					<th:block th:if="${pageDTO != null}">
 						<div class="mt-5">
 							<ul class="pagination justify-content-center">
@@ -362,15 +362,21 @@ function submitPayment(){
 	})
 	.done(res =>{
 		console.log(res);
+		console.log(res.Rpcd);
+		
+		//res.Header에서 Rpcd가 00000이 아닌경우는 모두 오류
+		 if(res.Header.Rpcd == '00000'){
+		
 		console.log(JSON.stringify(pointUpdateObj));
 		$.ajax('/updateAmAndInsertPointDetail', {
 			type : 'post',
 			data : pointUpdateObj,
 			beforeSend : function(xhr){
 				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
-			},
+			}
 		})
 		.done(res => {
+
 			if(res.result == '200'){
 				Swal.fire({
 					  title: '충전이 완료되었습니다.',
@@ -382,7 +388,7 @@ function submitPayment(){
 					  if (result.value) {
 					    location.href = '/point';
 					  }
-					});
+					}); 
 					
 			}else{
 				showFailAlert('에러가 발생했습니다.')
@@ -391,6 +397,20 @@ function submitPayment(){
 			console.log(err);
 			showFailAlert('충전 실패')
 		});
+		
+		 }else{
+			 Swal.fire({
+				  title: res.Header.Rsms,
+				  text: '',
+				  icon: 'error',
+				  confirmButtonClass: "btn-danger",
+				  confirmButtonText: "확인",
+				}).then((result) => {
+				  if (result.value) {
+					  location.reload(); //새로고침
+				  }
+				});	
+		 }
 })
 	
 

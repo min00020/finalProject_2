@@ -96,7 +96,7 @@ public class PointController {
 	
 	//AcoMoney조회
 	@GetMapping("/acoMoneyInquiry")
-	public String getAcoMoneyChargeAndUseForm(Model model) {
+	public String getAcoMoneyChargeAndUseForm(@RequestParam int cp, @RequestParam int up, Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
 			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
@@ -105,7 +105,7 @@ public class PointController {
 			username = memberService.getMemberInfo(username);
 			
 			model.addAttribute("latestAcoMoney", username.getAcoMoney());
-			pointService.getAcoMoneyChargeAndUse(model, username.getMemberNo());
+			pointService.getAcoMoneyChargeAndUse(model, username.getMemberNo(),cp,up);
 			
 		}
 		
@@ -115,7 +115,7 @@ public class PointController {
 	
 	//AcoPoint조회
 		@GetMapping("/acoPointInquiry")
-		public String getAcoPointAcquireAndUseForm(Model model) {
+		public String getAcoPointAcquireAndUseForm(@RequestParam int ap, @RequestParam int up, Model model) {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
 				UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
@@ -124,7 +124,7 @@ public class PointController {
 				username = memberService.getMemberInfo(username);
 				
 				model.addAttribute("latestAcoPoint", username.getAcoPoint());
-				pointService.getAcoPointAcquireAndUse(model, username.getMemberNo());
+				pointService.getAcoPointAcquireAndUse(model, username.getMemberNo(),ap,up);
 				
 			}
 			
