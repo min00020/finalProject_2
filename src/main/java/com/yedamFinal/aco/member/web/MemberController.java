@@ -92,6 +92,8 @@ public class MemberController {
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
 		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
+		var tagList = memberService.getTagList();
+		model.addAttribute("tagList", tagList);
 		model.addAttribute("accountList", list3);
 		model.addAttribute("pointList", list);
 		model.addAttribute("activityList", list2);
@@ -160,6 +162,8 @@ public class MemberController {
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
 		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
+		var tagList = memberService.getTagList();
+		model.addAttribute("tagList", tagList);
 		model.addAttribute("accountList", list3);
 		model.addAttribute("pointList", list);
 		model.addAttribute("activityList", list2);

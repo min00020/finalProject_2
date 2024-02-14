@@ -322,7 +322,7 @@
 								<div class="col-1" id="tae-col-1">
 									<!-- 모달버튼 -->
 									<button type="button" class="btn btn-modal"  id="tae-modal-btn"
-										data-bs-toggle="modal" data-bs-target="#point">
+										data-bs-toggle="modal" data-bs-target="#modify">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
@@ -332,7 +332,7 @@
 									<!-- 모달시작 -->
 									<div class="modal fade" id="modify" tabindex="-1" role="dialog"
 										aria-labelledby="modifyModalLabel" aria-hidden="true">
-										<div class="modal-dialog modal-xl" role="document">
+										<div class="modal-dialog" role="document">
 											<div class="modal-content">
 												<div class="modal-header">
 													<h3 class="modal-title" id="modifyModalLabel"
@@ -344,23 +344,102 @@
 												<!--/* 회원정보수정모달영역 전민교가 연동하기로함 -> 완료 */-->
 												<div class="modal-body">
 													<!--/*  */-->
-													<div class="d-flex justify-content-center gap-5">
-														<button type="button" class="btn" style="width:35%; border:1px solid #979da9; box-shadow:2px 2px 0px 0px #e0e0e7">회원정보 수정</button>
-														<button type="button" class="btn" style="width:35%; border:1px solid #979da9;">비밀번호 수정</button>
+													<div class="d-flex justify-content-center">
+														<button type="button" id="modAcc0" class="btn" style="width:49%; border:1px solid #979da9; background-color:#3e6ce3; color:white;" onclick="changeModifyAccountView('0')">회원정보 수정</button>
+														<button type="button" id="modAcc1" class="btn" style="width:49%; border:1px solid #979da9;" onclick="changeModifyAccountView('1')">비밀번호 수정</button>
 													</div>
 													<!--/* 회원정보수정 */-->
-													<div id="">
-														
+													<div id="modAccDiv0">
+														<div class="my-3">
+															<label for="email" class="px-3">이메일</label>
+															<div class="px-3 mt-2">
+																<input id="email" type="text"
+																	class="px-3 py-2 w-75 min-rounded"
+																	placeholder="ask@help.com" name="email" th:value="${memberInfo.email}">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem;" type="button"
+																	onclick="checkDuplicateEmail()">중복체크</button>
+															</div>
+														</div>
+
+														<div class="my-3">
+															<label for="phone" class="px-3">휴대폰</label>
+															<div class="px-3 mt-2">
+																<input id="phone" type="text"
+																	class="px-3 py-2 w-75 min-rounded"
+																	placeholder="010-1234-4567" name="phone" th:value="${memberInfo.phoneNum}">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem;"
+																	onclick="sendAuthNumberRequest()" type="button">번호인증</button>
+															</div>
+															<div class="px-3">
+																<input id="phoneCheck" type="text"
+																	class="px-3 py-2 w-75 min-rounded" placeholder="인증번호 입력"
+																	name="phoneCheck">
+																<button class="mt-2 min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem;" type="button"
+																	onclick="verifyAuthNumberRequest()">인증확인</button>
+															</div>
+														</div>
+
+														<div class="my-3">
+															<label for="name" class="px-3">실명</label>
+															<div class="px-3 mt-2">
+																<input id="name" type="text"
+																	class="px-3 py-2 w-75 min-rounded" placeholder="홍길동"
+																	name="name" th:value="${memberInfo.name}">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem; visibility: hidden;">인증하기</button>
+															</div>
+														</div>
+
+														<div class="my-3">
+															<label for="nickname" class="px-3">닉네임</label>
+															<div class="px-3 mt-2">
+																<input id="nickname" type="text"
+																	class="px-3 py-2 w-75 min-rounded"
+																	placeholder="알파벳,한글,숫자 20자 이하입력" name="nickname" th:value="${memberInfo.nickname}">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem; visibility: hidden;">인증하기</button>
+															</div>
+														</div>
+
+														<div class="my-3">
+															<p class="px-3 mt-2" style="margin-bottom: 0;">프로필
+																사진 등록</p>
+															<div class="px-3 mt-2">
+																<input class="upload-name px-3 py-2 w-75 min-rounded"
+																	value="" placeholder="첨부파일" id="customFileInput"
+																	disabled> <label for="profileImg"
+																	class="min-small-rounded min-default-color" id="clickFile">파일추가</label>
+																<input id="profileImg" type="file"
+																	class="px-3 py-2 w-25 min-rounded" name="profileImg"
+																	style="display: none;">
+															</div>
+														</div>
+
+														<div class="my-3">
+															<label for="tags" class="px-3">관심
+																주제</label>
+															<div class="mt-1 px-3">
+																<input name='tags' class=min-tagify placeholder='태그추가' data-blacklist='.NET,PHP' id="tags">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem; visibility: hidden;">인증하기</button>
+															</div>
+															<p
+																style="color: hsla(220, 30%, 1%, .4); margin-right: 16.5rem;"
+																class="px-3 mt-2">최대 5개까지 등록가능</p>
+														</div>
 													</div>
 													<!--/* 비밀번호 수정 */-->
-													<div id="">
+													<div id="modAccDiv1" style="display:none;">
+														<h1>하이2</h1>
 													</div>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
 														data-bs-dismiss="modal">닫기</button>
-													<button type="button" class="btn btn-primary">Save
-														changes</button>
+													<button type="button" class="btn btn-primary">변경하기</button>
 												</div>
 											</div>
 										</div>
@@ -455,6 +534,165 @@
 		</div>
 	</div>
 </div>
+
+
+<script th:inline="javascript">
+	let dbTagList = [[${tagList}]];
+	//tagify
+	var inputElm = document.querySelector('input[name=tags]');
+	
+	let insertTagList = [];
+	// 나중에 바꿔치기해야함.
+	const data = dbTagList;
+	const insertData = []
+	for(let object in data) {
+		insertData.push(data[object].tagName);
+	}
+	whitelist = insertData;//["A# .NET", "A# (Axiom)", "A-0 System", "A+", "A++", "ABAP", "ABC", "ABC ALGOL", "ABSET", "ABSYS", "ACC", "Accent", "Ace DASL", "ACL2", "Avicsoft", "ACT-III", "Action!", "ActionScript", "Ada", "Adenine", "Agda", "Agilent VEE", "Agora", "AIMMS", "Alef", "ALF", "ALGOL 58", "ALGOL 60", "ALGOL 68", "ALGOL W", "Alice", "Alma-0", "AmbientTalk", "Amiga E", "AMOS", "AMPL", "Apex (Salesforce.com)", "APL", "AppleScript", "Arc", "ARexx", "Argus", "AspectJ", "Assembly language", "ATS", "Ateji PX", "AutoHotkey", "Autocoder", "AutoIt", "AutoLISP / Visual LISP", "Averest", "AWK", "Axum", "Active Server Pages", "ASP.NET", "B", "Babbage", "Bash", "BASIC", "bc", "BCPL", "BeanShell", "Batch (Windows/Dos)", "Bertrand", "BETA", "Bigwig", "Bistro", "BitC", "BLISS", "Blockly", "BlooP", "Blue", "Boo", "Boomerang", "Bourne shell (including bash and ksh)", "BREW", "BPEL", "B", "C--", "C++ – ISO/IEC 14882", "C# – ISO/IEC 23270", "C/AL", "Caché ObjectScript", "C Shell", "Caml", "Cayenne", "CDuce", "Cecil", "Cesil", "Céu", "Ceylon", "CFEngine", "CFML", "Cg", "Ch", "Chapel", "Charity", "Charm", "Chef", "CHILL", "CHIP-8", "chomski", "ChucK", "CICS", "Cilk", "Citrine (programming language)", "CL (IBM)", "Claire", "Clarion", "Clean", "Clipper", "CLIPS", "CLIST", "Clojure", "CLU", "CMS-2", "COBOL – ISO/IEC 1989", "CobolScript – COBOL Scripting language", "Cobra", "CODE", "CoffeeScript", "ColdFusion", "COMAL", "Combined Programming Language (CPL)", "COMIT", "Common Intermediate Language (CIL)", "Common Lisp (also known as CL)", "COMPASS", "Component Pascal", "Constraint Handling Rules (CHR)", "COMTRAN", "Converge", "Cool", "Coq", "Coral 66", "Corn", "CorVision", "COWSEL", "CPL", "CPL", "Cryptol", "csh", "Csound", "CSP", "CUDA", "Curl", "Curry", "Cybil", "Cyclone", "Cython", "Java", "Javascript", "M2001", "M4", "M#", "Machine code", "MAD (Michigan Algorithm Decoder)", "MAD/I", "Magik", "Magma", "make", "Maple", "MAPPER now part of BIS", "MARK-IV now VISION:BUILDER", "Mary", "MASM Microsoft Assembly x86", "MATH-MATIC", "Mathematica", "MATLAB", "Maxima (see also Macsyma)", "Max (Max Msp – Graphical Programming Environment)", "Maya (MEL)", "MDL", "Mercury", "Mesa", "Metafont", "Microcode", "MicroScript", "MIIS", "Milk (programming language)", "MIMIC", "Mirah", "Miranda", "MIVA Script", "ML", "Model 204", "Modelica", "Modula", "Modula-2", "Modula-3", "Mohol", "MOO", "Mortran", "Mouse", "MPD", "Mathcad", "MSIL – deprecated name for CIL", "MSL", "MUMPS", "Mystic Programming L"];
+	
+
+	//initialize Tagify on the above input node reference
+	var tagify = new Tagify(inputElm, {
+		enforceWhitelist: true,
+		maxTags: 5, // 최대 태그 갯수 설정가능.
+		// make an array from the initial input value
+		whitelist: whitelist 
+	})
+
+	//Chainable event listeners
+	tagify.on('add', onAddTag)
+  	.on('remove', onRemoveTag)
+  	.on('input', onInput)
+  	.on('edit', onTagEdit)
+  	.on('invalid', onInvalidTag)
+  	.on('click', onTagClick)
+  	.on('focus', onTagifyFocusBlur)
+  	.on('blur', onTagifyFocusBlur)
+  	.on('dropdown:hide dropdown:show', e => e.type)
+  	.on('dropdown:select', onDropdownSelect)
+	
+	var mockAjax = (function mockAjax(){
+		var timeout;
+		return function(duration){
+    		clearTimeout(timeout); // abort last request
+    		return new Promise(function(resolve, reject){
+        	timeout = setTimeout(resolve, duration || 100, whitelist)
+    	})}
+	})()
+	
+	//tag added callback
+	function onAddTag(e){
+		// 이미 추가되었다면 무시.
+		if(insertTagList.indexOf(e.detail.data.value) >= 0) 
+			return;
+		
+		if(insertTagList.length >= 5) {
+			showWarningAlert('최대 5개까지만 등록가능합니다.');
+			for(let i = 0; i < tagify.value.length; i++) {
+	    		if (tagify.value[i].value == e.detail.data.value) {
+	    			tagify.value.splice(i, 1);
+	        		break;
+	    		}
+			}
+		}
+		insertTagList.push(e.detail.data.value); // 데이터 추가하기.
+		//tagify.off('add', onAddTag) // exmaple of removing a custom Tagify event
+	}
+
+	//tag remvoed callback
+	function onRemoveTag(e){
+		//요소 제거
+		for(let i = 0; i < insertTagList.length; i++) {
+    		if (insertTagList[i] == e.detail.data.value) {
+    			insertTagList.splice(i, 1);
+        		break;
+    		}
+		}
+	}
+
+	//on character(s) added/removed (user is typing/deleting)
+	function onInput(e){
+		tagify.settings.whitelist.length = 0; // reset current whitelist
+		tagify.loading(true).dropdown.hide.call(tagify) // show the loader animation
+
+		// get new whitelist from a delayed mocked request (Promise)
+		mockAjax()
+    	.then(function(result){
+        	// replace tagify "whitelist" array values with new values
+        	// and add back the ones already choses as Tags
+        	tagify.settings.whitelist.push(...result, ...tagify.value)
+
+        	// render the suggestions dropdown.
+        	tagify.loading(false).dropdown.show.call(tagify, e.detail.value);
+    	})
+	}
+
+	function onTagEdit(e){
+	}
+
+	//invalid tag added callback
+	function onInvalidTag(e){
+	}
+
+	//invalid tag added callback
+	function onTagClick(e){
+	}
+
+	function onTagifyFocusBlur(e){
+	}
+
+	function onDropdownSelect(e){
+		// 이미 추가되었다면 무시.
+		if(insertTagList.indexOf(e.detail.data.value) >= 0) 
+			return;
+		
+		if(insertTagList.length >= 5) {
+			showWarningAlert('최대 5개까지만 등록가능합니다.');
+			return;
+		}
+		insertTagList.push(e.detail.data.value); // 데이터 추가하기.
+	}
+	
+
+	// tagify 객체생성후 추가.(객체생성후 일정시간 지나야 동작되는듯..)
+	// 기존에 있던거 추가하는법(수정폼이라면 밑의 코드 수행을 if문으로 체크해야함.)
+	setTimeout(function() {
+		const myTagStr = [[${memberInfo.topicHashtag}]];
+		if(typeof myTagStr != 'undefined' && myTagStr != null) {
+			const myTagList = myTagStr.split(',');
+			myTagList.forEach(obj => {
+				tagify.addTags(obj);
+			});
+		}
+	}, 500);
+</script>
+
+<!--/* 개인정보수정 */-->
+<script>
+	const allowImgExtension = ['jpg','jpeg','png'];
+	$("#profileImg").on('change', (e) => {
+		const fileName = $("#profileImg")[0].files[0].name;
+		const extensionName = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase();
+	
+		if(allowImgExtension.indexOf(extensionName) < 0) {
+			showWarningAlert('이미지파일만 삽입해주세요');
+			return;
+		}
+	
+		$('#customFileInput').val($("#profileImg")[0].files[0].name);
+	})
+
+	function changeModifyAccountView(curView) {
+		let notHighlitView = curView == '0' ? "1" : "0"; 
+		$('#modAcc' + curView).css('background-color','#3e6ce3');
+		$('#modAcc' + curView).css('color','white');
+		$('#modAcc' + notHighlitView).css('background-color','');
+		$('#modAcc' + notHighlitView).css('color','black');
+		$('#modAccDiv' + curView).css('display', 'block');
+		$('#modAccDiv' + notHighlitView).css('display', 'none');
+	}
+</script>
+
 <script type="text/javascript" th:inline="javascript">
 let choiceAccountObj = null;
 function choiceAccount(accountObj){
