@@ -60,5 +60,31 @@
 	WHERE FBOARD_NO= #{fbno}
 </select>
 
+<update id="updateviewCnt">
+	UPDATE FREE_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE FBOARD_NO = #{fbno}
+</update>
+
+<insert id="insertFreeBoard" parameterType="FreeBoardVO">
+	INSERT INTO FREE_BOARD(
+                        FBOARD_NO,
+                        MEMBER_NO,
+                        TITLE,
+                        CONTENT,
+                        NICKNAME,
+                        WRITE_DATE,
+                        VIEW_CNT,
+                        RECOMMEND_CNT,
+                        REPLY_CNT)
+	VALUES(FREE_BOARD_SEQ.NEXTVAL,
+        #{memberNo}',
+        #{title},
+        #{content},
+        #{nickname}
+        SYSDATE,
+        #{viewCnt},
+        #{recommendCnt},
+        #{replyCnt});
+</insert>
+
 </mapper>
 

@@ -15,4 +15,7 @@ public interface FreeBoardMapper {
 
 	//게시글 단건조회
 	public FreeBoardVO getFreeBoard(@Param("fbno") int fbno);
+	
+	//게시글 등록
+	public int insertFreeBoard(FreeBoardVO freeBoardVO);
 }

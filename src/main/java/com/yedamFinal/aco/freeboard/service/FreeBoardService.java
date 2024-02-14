@@ -11,4 +11,6 @@ public interface FreeBoardService {
 	public FreeBoardVO getFreeBoard(int fbno);
 	
 	
+	
+	
 }
