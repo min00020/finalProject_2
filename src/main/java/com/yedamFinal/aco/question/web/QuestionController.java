@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
+import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.service.QuestionService;
 
@@ -33,7 +34,9 @@ public class QuestionController {
 
 	@Autowired
 	private QuestionService questionService;
-
+	
+	@Autowired
+	private MemberServiceImpl memberService;
 	
 	//전체조회
 	@GetMapping("/questionList")
@@ -101,6 +104,7 @@ public class QuestionController {
 	//질문글 작성
 	@GetMapping("/questionWrite")
 	public String questionWrite(Integer bno, Model model) {
+		
 		if(bno != null) {
 			var map = questionService.getQuestionInfo(bno, model, -1);
 			var entry = map.entrySet().iterator().next();
@@ -109,6 +113,9 @@ public class QuestionController {
 			QuestionVO questionVO = value.get(0);
 			model.addAttribute("questionVO",questionVO);
 		}
+		var tagList = memberService.getTagList();
+		model.addAttribute("tagList", tagList);
+		
 		return "question/questionWrite";
 	}
 	
