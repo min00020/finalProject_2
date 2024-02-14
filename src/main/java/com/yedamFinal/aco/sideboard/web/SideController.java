@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
+import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
@@ -25,6 +25,9 @@ public class SideController {
 	SideServiceImpl sideService;
 	@Autowired
 	MemberServiceImpl memberService;
+	
+	@Autowired
+	GitHubServiceImpl gitService;
 	
 	
 	@GetMapping("/sideProjectList/{status}")
@@ -43,12 +46,22 @@ public class SideController {
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
 			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
 			memberVO = userDetails.getMemberVO();
+			
+			memberVO = memberService.getMemberInfo(memberVO);
 		}
         sideService.getSideInfoAndReplyList(bno,model);
         SideVO vo = (SideVO)model.getAttribute("sideInfo");
         if(memberVO != null && memberVO.getMemberNo() == vo.getMemberNo()) {
         	model.addAttribute("isCheckMember", "1");
         }
+        
+        if(vo.getPublishingStatus().equals("Q002")) {
+        	Map<String, Object> list = gitService.getGitHubRepositoryInfo(memberVO.getGitToken(),vo.getGitAddress());
+        	model.addAttribute("issueDTO", list.get("issueList"));
+        	model.addAttribute("commitDTO", list.get("commitList"));
+        }
+        
+        
         return "sideboard/sideInfo";
     }
 	

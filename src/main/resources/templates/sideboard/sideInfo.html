@@ -15,7 +15,8 @@
 			</th:block>
 		<hr id="tae-hr">	
 	</div>
-	<!-- contents -->
+	<th:block th:if="${sideInfo.publishingStatus} == 'Q001'">
+		<!-- contents -->
 	<div class="conetents">
 				<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
 				<h6 class="tae-side-h6-1">모집중</h6>
@@ -125,12 +126,127 @@
 		<!--/*댓글 반복구간 끗 */-->
 	</div>
 	<!--/* 댓글영역 끗 */-->
-	
-	
-	
-	
-	
+	</th:block>
+	<!-- 협업중일때 깃 -->
+	<th:block  th:unless="${sideInfo.publishingStatus} == 'Q001'">
+		<!-- contents -->
+	<div class="conetents">
+		<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
+			<h6 class="tae-side-h6-1">모집중</h6>
+		</th:block>
+		<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'" >
+			<h6 class="tae-side-h6-2">협업중</h6>
+		</th:block>
+			<h5 style="font-weight:bolder;">[[ ${sideInfo.title }]]</h5>
+			<br>
+			<p style="font-weight:bold;">[[${sideInfo.projectOutline}]]</p>
+			<br>
+			<p style="color:#979da9;float:left;">기간 | [[${sideInfo.devPeriod}]]일  모집인원 [[${sideInfo.recruitPersonnel}]]명</p>
+		    <span>
+			<p style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</p></span> 
+			<br>
+				<th:block th:if="${isCheckMember} == 1">
+					<div class="tae-side-btn1" style="margin-top:20px;">
+						<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+						  	<button class="btn text-white" id="modifyContent" type="button" style="background-color:#aebfec;">글수정</button>
+						  	<button class="btn text-white" id="deleteProject" type="button" style="background-color:#80a9e8;">글삭제</button>
+						</div>
+					</div>
+				</th:block>
+					<div class="gitCommit">
+						<h3>COMMIT</h3>
+						<div th:each="commit : ${commitDTO}">
+							<p style="font-weight:bold;">[[${commit.commitMessage}]]</p>
+							<p>[[${commit.commitDate}]]</p>
+						</div>
+					</div>
+					<div class="gitIssue">
+						<h3>ISSUE</h3>
+							<div th:each="issue : ${issueDTO}">
+								<p style="font-weight:bold;">[[${issue.issueTitle}]]</p>
+								<p>[[${issue.issueDate}]]</p>
+								<p>[[${issue.commentCnt}]]</p>
+							</div>		
+					</div>
+		</div>	
+		<!--/* 댓글영역 */-->
+		<div class="w-100 mb-3 clearfix">
+			<div>
+				<div class="d-flex justify-content-center">
+					<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+				</div>
+				<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+					<button class="btn" type="button" style="color:white; background-color:#3e6ce3" onclick="registReply()">댓글등록</button>
+					<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
+				</div>
+			</div>
+			<br>
+			<!--/*댓글 반복구간  */-->
+			<div class="mt-1 w-100 mb-5" th:each="reply : ${replyList}">
+				<div>
+					<!--/*댓글(부모) 헤더구간  */-->
+					<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+						<div>
+							<!--/* 프로필이미지가 null이라면 */-->
+							<img th:if="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+							<img th:unless="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|upload/profile/${reply.value[0].parentImage}|" alt="profile" />
+							<span>[[${reply.value[0].parentNickname}]]</span>
+							<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+						</div>
+						<div>
+							<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
+							[[${reply.value[0].parentRecCnt}]]
+							<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+						</div>
+					</div>
+					<!--/*댓글 내용구간  */-->
+					<div style="width:90%; margin-left:93px;">
+						<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+					</div>
+									
+					<div style="width:90%; margin-left:80px;">
+						<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
+					</div>
+					<!--/* 답글영역 */-->
+					<div style="display:none;" th:id="|nestedComment${reply.key}|">
+						<div class="d-flex justify-content-center">
+							<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+						</div>
+						<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+							<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
+							<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
+						</div>
+					</div>
+				</div>
+				<!-- /* 대댓글(자식) */-->
+				<th:block th:if="${reply.value[0].childReplyNo} != null">
+					<div class="ms-4" th:each="innerReply : ${replyList[reply.key]}">
+						<!--/*댓글 헤더구간  */-->
+						<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+							<div>
+								└<img th:if="${innerReply.childImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+								<img th:unless="${innerReply.childImage} == null" style="width:5%;" th:src="|upload/profile/${innerReply.childImage}|" alt="profile" />
+								<span>[[${innerReply.childNickname}]]</span>
+								<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+							</div>
+							<div>
+								<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
+								[[${innerReply.childRecCnt}]]
+								<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+							</div>
+						</div>
+						<!--/*댓글 내용구간  */-->
+						<div style="width:90%; margin-left:108px;">
+							<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
+						</div>
+					</div>
+				</th:block>
+			</div>
+			<!--/*댓글 반복구간 끗 */-->
+		</div>
+		<!--/* 댓글영역 끗 */-->
 </div>
+	
 <script type="text/javascript" th:inline="javascript">
 
 let csrfPara = $('meta[name="csrfPara"]').attr("content");

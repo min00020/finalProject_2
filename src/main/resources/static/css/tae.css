@@ -478,5 +478,12 @@ input::placeholder
 .sidetextarea{
 	overflow: scroll;
 }
-
+.gitCommit{
+	border-radius:20px;
+	border:1px solid black;
+}
+.gitIssue{
+	border-radius:20px;
+	border:1px solid black;
+}
 
