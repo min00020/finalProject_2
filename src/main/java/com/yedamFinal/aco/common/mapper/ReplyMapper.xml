@@ -40,13 +40,15 @@
         		A.member_no AS parent_member_no, 
         		A.NICKNAME AS parent_nickname,
         		A.profile_image AS parent_image,
+                A.EMOTICON AS parent_emoticon,
         		B.reply_pno as child_reply_pno,
         		B.reply_no as child_reply_no, 
         		B.contents as child_comment, 
         		B.WRITE_DATE as child_WRITE_date, 
         		B.member_no AS child_member_no, 
         		B.nickname as child_nickname,
-        		B.profile_image AS child_image
+        		B.profile_image AS child_image,
+                B.EMOTICON AS child_emoticon
     		FROM REPLY A
     		LEFT JOIN REPLY B ON A.reply_no = B.reply_pno AND A.board_type = #{type}
     		WHERE A.board_no = #{bno} AND A.reply_pno IS NULL

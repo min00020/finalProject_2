@@ -1,0 +1,65 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"
+>
+<section>
+	<div id="qna_banner">
+		<h3>공지사항</h3>
+		<p style="color:#76767e">사이트의 공지사항을 확인하세요.</p>
+	</div>
+	<!-- start of question -->
+	<div class="container">
+		<div class="questionBoard" style="width:1100px;">
+
+			<!-- start of postList -->
+			<hr style="margin-bottom:30px">
+			<div id="noticeList"  class="row" th:each="notice : ${noticeList}">
+				<div id="title" class="col-8">
+					<div id="member" style="height:40px;">
+						<p>관리자</p>
+					</div>
+				  	<div id="titleTag" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|">
+					    <h4 th:text="${notice.title}" style="text-align: center;"></h4>
+					    <p style="color:blue" th:text="${notice.writeDate}"></p>
+				 	</div>
+			 	</div>
+				<div class="col-1" style="text-align:center; margin:auto;">
+				 	<h6 th:text="${notice.viewCnt}"></h6>
+				 	<h6>조회</h6>
+				</div>
+				<div class="col-1" style="text-align:center; margin:auto;">
+				 	<h6 th:text="${notice.recommendCnt}"></h6>
+				 	<h6>추천</h6>
+				</div>
+				<hr style="margin-top:30px; margin-bottom:30px;">
+			</div>
+			<!-- end of postList -->
+			  <!-- Pagination -->
+ <th:block th:if="${pageDTO != null}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:if="${pageDTO.prev}">
+            <a class="page-link" th:href="|/noticeBoard?pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        <li th:class="${pageNo == pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(pageDTO.startPage, pageDTO.endPage)}">
+        		<a class="page-link" th:href="|/noticeBoard?pageNo=${pageNo}|">[[${pageNo}]]</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="|/noticeBoard?pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+		</div>
+		<!-- end of questionBoard -->
+	</div>
+</section>
+</div>
+<script th:inline="javascript">
+	
+</script>

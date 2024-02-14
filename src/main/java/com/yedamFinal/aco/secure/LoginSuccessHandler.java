@@ -19,6 +19,7 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
@@ -31,6 +32,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     
     @Autowired
     private GitHubServiceImpl gitService;
+    
+
+	@Autowired
+	private AdminMapper adminMapper;
     
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -48,6 +53,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             MemberVO vo = userDetails.getMemberVO();
             
             request.getSession().setAttribute("member", vo);
+            request.getSession().setAttribute("myEmoList",adminMapper.getMyEmoList(vo.getMemberNo()));
         }
 
         Map<String, Object> ret = new HashMap<>();
