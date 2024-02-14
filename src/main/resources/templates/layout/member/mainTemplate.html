@@ -16,8 +16,9 @@
       <link rel="stylesheet" href="https://unpkg.com/@yaireo/dragsort/dist/dragsort.css" media="print" onload="this.media='all'">
       <link rel="stylesheet" th:href="@{/css/tagify.css}">
 
-        <script th:src="@{/js/jQuery.tagify.min.js}"></script>
-        <script src="https://unpkg.com/@yaireo/dragsort"></script>
+      <script th:src="@{/js/jQuery.tagify.min.js}"></script>
+      <script src="https://unpkg.com/@yaireo/dragsort"></script>
+      
       <!-- tagify -->
       <!-- sweetAlert2 -->
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
@@ -33,16 +34,15 @@
       <meta name="csrf" th:content="${_csrf.token}" />
       <meta name="csrfPara" th:content="${_csrf.parameterName}" />
       
-      <!-- ckeditor -->
-      <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/super-build/ckeditor.js"></script>
-      
-   
-   
    
    
    <!-- 김채민 -->
       <link rel="stylesheet" th:href="@{/css/chae.css}" />
-   
+      
+      <!-- toast UI -->
+      <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+      <!-- Editor's Style -->
+  	  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />	
    
    
    

@@ -14,44 +14,85 @@
 				<span>질문게시판, 이모티콘 상점에서 사용되는 애코머니를 간편하게 충전할 수 있습니다.</span>
 			</div>
 			<div class="park_pointCharegingMain">
-				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+				<div
+					style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
 					<div class="park_chargePointSelect">
 						<div class="park_input-container">
-							<label for="park_amountInput"></label> <input type="text" name ="park_amountInput"
-								id="park_amountInput" placeholder="충전할 금액을 입력해 주세요"
-								oninput="formatNumber(this)" />
+							<label for="park_amountInput"></label> <input type="text"
+								name="park_amountInput" id="park_amountInput"
+								placeholder="충전할 금액을 입력해 주세요" oninput="formatNumber(this)" />
 						</div>
+
 						<hr style="margin-top: 0;">
-						<p style="text-align : right; color : #808080; font-size:small; margin-top : -10px;">일일 최대 충전 한도 : 1,000,000 원<br>최소 충전금액 : 1,000 원</p>
+						<p
+							style="text-align: right; color: #808080; font-size: small; margin-top: -10px;">
+							일일 최대 충전 한도 : 1,000,000 원<br>최소 충전금액 : 1,000 원
+						</p>
 						<div class="park_points">
-							<button>+1,000</button>
-							<button>+3,000</button>
-							<button>+5,000</button>
-							<button>+10,000</button>
-							<button>+30,000</button>
-							<button>+50,000</button>
+							<button data-amount="1000">+1,000</button>
+							<button data-amount="3000">+3,000</button>
+							<button data-amount="5000">+5,000</button>
+							<button data-amount="10000">+10,000</button>
+							<button data-amount="30000">+30,000</button>
+							<button data-amount="50000">+50,000</button>
 						</div>
-						<div class="park_accountSelect">		
+						<div class="park_accountSelect">
 							<br> <br>
 							<h3>내 출금 계좌</h3>
 							<hr>
 						</div>
-					  <div th:each="account : ${getAccountList}">
-						<div class="park_account d-flex align-items-center" th:data-accountname="${account.bankName}">
-						<img th:src="|/commonResource/bankImage/${account.bankName}.png|" th:alt="${account.bankName}"
-										style="height: 40px; width : 40px; content-align : center; margin-left : 15px;">
-							<div style="margin-top:10px; margin-left:10px;">
-								<p style="color : #808080; display:block; margin-bottom : 0px; font-weight : bold;">[[${account.bankName}]]</p>
-								<p style = "color : #808080; ">[[${account.bankName}]] [[${account.accountNo}]]</p>
+						<div th:each="account : ${getAccountList}">
+							<div class="park_account d-flex align-items-center"
+								th:data-accountname="${account.bankName}">
+								<img
+									th:src="|/commonResource/bankImage/${account.bankName}.png|"
+									th:alt="${account.bankName}"
+									style="height: 40px; width: 40px; content-align: center; margin-left: 15px;">
+								<div style="margin-top: 10px; margin-left: 10px;">
+									<p
+										style="color: #808080; display: block; margin-bottom: 0px; font-weight: bold;">[[${account.bankName}]]</p>
+									<p style="color: #808080;">[[${account.bankName}]]
+										[[${account.accountNo}]]</p>
+								</div>
 							</div>
 						</div>
-					  </div><!-- th:each end -->
+						<!-- th:each end -->
 					</div>
-					<p class="selectMyAccount" style="color: #808080">선택 : </p>
+					
+<!-- 					page -->
+					<th:block th:if="${pageDTO != null}">
+						<div class="mt-5">
+							<ul class="pagination justify-content-center">
+								<li class="page-item" th:if="${pageDTO.prev}">
+									<a class="page-link"
+									th:href="|/point?pg=${pageDTO.curPage - 1}|"
+									aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+										<span class="sr-only">Previous</span>
+								</a></li>
+								<li
+									th:class="${pageNo == pageDTO.curPage} ? 'page-item active' : 'page-item'"
+									th:each="pageNo : ${#numbers.sequence(pageDTO.startPage, pageDTO.endPage)}">
+									<a class="page-link" th:href="|/point?pg=${pageNo}|">[[${pageNo}]]</a>
+								</li>
+
+								<li class="page-item" th:if="${pageDTO.next}">
+								<a class="page-link" th:href="|/point?pg=${pageDTO.curPage + 1}|" aria-label="Next">
+                 						   <span aria-hidden="true">&raquo;</span>
+                						    <span class="sr-only">Next</span>
+              						  </a>
+								</li>
+							</ul>
+						</div>
+					</th:block>
+					
+					<p class="selectMyAccount" style="color: #808080">선택 :</p>
 					<span class="park_addAcount">
-						<p><a href="/accountConnect" style="text-decoration-line: none; color : #3e6ce3;">
-							<img id="plus" src="commonResource/plus.png" alt="logo"
-								style="width: 2%; margin-bottom:3px;"> 계좌 등록하기</a>
+						<p>
+							<a href="/accountConnect"
+								style="text-decoration-line: none; color: #3e6ce3;"> <img
+								id="plus" src="commonResource/plus.png" alt="logo"
+								style="width: 2%; margin-bottom: 3px;"> 계좌 등록하기
+							</a>
 						</p>
 					</span>
 					<hr>
@@ -61,15 +102,16 @@
 								<p>제 1장 총칙</p>
 								<p>제 1조 (목적)</p>
 								<!-- 약관의 내용을 여기에 넣으세요. -->
-								<p>이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여
-									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br>
-									이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여
-									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br>
-									이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여
-									회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+								<p>
+									이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여 회사와 회원의
+									권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br> 이 약관은 회사명(이하 "회사")와 이용
+									고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여 회사와 회원의 권리, 의무 및 책임사항을 규정함을
+									목적으로 합니다.<br> 이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의
+									서비스 이용과 관련하여 회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+								</p>
 								<!-- ... -->
 							</div>
-							<div class="park_agree-chkbox">
+							<div class="park_agree-chkbox" style="padding-right: 10px;">
 								<input type="checkbox" id="termsAgree"> <label
 									for="termsAgree">위 내용에 동의합니다.</label>
 							</div>
@@ -81,14 +123,15 @@
 								<span>현재 보유 애코머니 :</span> <span th:text='|${getAcoMoney} P|'></span>
 							</div>
 							<div class="park_summary-item">
-								<span>충전할 애코머니 :</span> <span  class= "park_am_input"></span>
+								<span>충전할 애코머니 :</span> <span class="park_am_input"></span>
 							</div>
 							<div class="park_summary-item park_summary-total">
-								<span>결제할 금액 :</span> <span class= "park_money_input"></span>
+								<span>결제할 금액 :</span> <span class="park_money_input"></span>
 							</div>
 							<hr>
 							<div class="park_summary-item park_summary-total">
-								<span>충전후 애코머니 :</span> <span class ="park_summary" th:text=${getAcoMoney}></span>
+								<span>충전후 애코머니 :</span> <span class="park_summary"
+									th:text='|${getAcoMoney} P|'></span>
 							</div>
 						</div>
 					</div>
@@ -105,13 +148,41 @@
 
 </div>
 <style>
+.highlight-border {
+	border: 2px solid red; /* 빨간색 테두리로 하이라이트 */
+	animation: blink 1s linear 3; /* 필요한 경우 깜빡이는 효과 추가 */
+}
 
+.park_agree-chkbox {
+	box-sizing: border-box;
+}
+
+@
+keyframes blink { 0%, 100% {
+	border-color: red;
+}
+
+50
+%
+{
+border-color
+:
+transparent;
+}
+}
+.blink-border {
+	animation: blink 1s linear 2; /* 1초 동안 진행되는 애니메이션을 3번 반복 */
+	border: 2px solid red; /* 초기 테두리 색상 설정 */
+	margin-left: 250px;
+	padding-right: 10px; /* 체크박스 주위의 여백 */
+}
 </style>
 
 <script th:inline="javascript">
 // function cancelPayment(){
 // 	alert('asd')
 // };
+
 const csrfPara = [[${_csrf.parameterName}]];
 const csrfToken = [[${_csrf.token}]];
 const date = new Date();
@@ -120,12 +191,119 @@ let today = getFormatDate(date);
 const accessToken = [[${nhAccessToken}]];
 const Iscd = [[${Iscd}]];
 const memberNo= [[${session.member.memberNo}]];
-const acoMoney= [[${acoMoney}]];
+const acoMoney= [[${getAcoMoney}]];
 
+const latestTotalPoints = [[${getAcoMoney}]] + [[${getAcoPoint}]];
+const latestAcoMoney = [[${getAcoMoney}]] ;
+const latestAcoPoint = [[${getAcoPoint}]] ;
+const historyType = 'F001';
+const historyDate = new Date();
+//const incDecPoint =;
+const pointType = 'G001';
+const accountNo = '3020000010135';
+
+$(document).ready(function() {
+    $('button[data-amount]').click(function() {
+        // 버튼에서 금액 데이터를 가져옴
+        var amountToAdd = $(this).data('amount');
+        
+        // 콤마 없애고 정수로 변환
+        var currentAmount = parseInt($('#park_amountInput').val().replace(/,/g, '')) || 0;
+        
+     
+        var newAmount = currentAmount + amountToAdd;
+        if (newAmount > 1000000) {
+        	showFailAlert("일일 최대 충전 금액은 1,000,000 원을 초과할 수 없습니다.");
+        	newAmount = 1000000;
+          
+        }
+        
+		$('#park_amountInput').val(newAmount.toLocaleString());
+        
+        // 결제할 금액을 업데이트
+        $('.park_money_input').text(newAmount.toLocaleString() + ' 원');
+       
+        $('.park_am_input').text(newAmount.toLocaleString() + ' P');
+        
+        
+        var currentAcomoney = parseInt($('.current_acomoney').text().replace(/,/g, '')) || 0;
+
+  		var totalAcomoneyAfterCharge = currentAcomoney + newAmount;
+        
+        // "충전 후 애코머니" 업데이트
+        $('.park_summary').text(totalAcomoneyAfterCharge.toLocaleString() + ' P');
+        
+    });
+    $('#park_amountInput').on('input', function() {
+        formatNumber(this);
+    });
+});
 
 function submitPayment(){
-	let chargingMoney = $('#park_amountInput').val().replaceAll(',', '');
+	
+	const park_amountInput = $('#park_amountInput').val();
+	if(park_amountInput == ''){
+		Swal.fire({
+            title: '금액을 입력해 주세요',
+            text: '',
+            icon: 'warning',
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "확인",
+        }).then(()=>{
+        	   // 금액 입력 검사
+     	   const parkAmountInput = $('#park_amountInput').val();
 
+         // 금액 입력 검사
+         if (parkAmountInput == '') {
+             // 입력 필드에 하이라이트 테두리 추가
+            
+
+             // 화면 위로 이동
+             $('html, body').animate({ scrollTop: 0 }, 'fast');
+             $('#park_amountInput').focus();
+             $('#park_amountInput').addClass('highlight-border');
+
+             return; // 함수 실행 중지
+         }
+
+        })
+		
+        return; 
+	}
+		
+	const isAgree = $('#termsAgree').prop('checked');
+	if(isAgree != true){
+		Swal.fire({
+            title: '약관 동의 필요',
+            text: '서비스 이용을 위해서는 약관에 동의해야 합니다.',
+            icon: 'warning',
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "확인",
+		   }).then(() => {
+			   const $agreeChkBox = $('#termsAgree').closest('.park_agree-chkbox');
+	            $agreeChkBox.addClass('blink-border');
+
+	            
+	            $agreeChkBox.one('animationend', function() {
+	                $(this).removeClass('blink-border');
+	            });
+	            
+	            // 사용자가 주의를 기울인 후, 애니메이션 제거를 위한 이벤트 리스너 추가
+	            $('#termsAgree').on('change', function() {
+	                if ($(this).prop('checked')) {
+	                    $(this).closest('.park_agree-chkbox').removeClass('blink-border');
+	                }
+	                
+	            });
+	        });
+        return; 
+	}
+
+	
+	
+	let chargingMoney = $('#park_amountInput').val().replaceAll(',', '');
+	const incDecPoint = parseInt(chargingMoney, 10);
+	
 	let obj={};
 	obj={	
 		 Header:{
@@ -135,7 +313,7 @@ function submitPayment(){
 	        Iscd:Iscd,
 	        FintechApsno : "001",
 	        ApiSvcCd:"DrawingTransferA",
-	        IsTuno:"memberNo+time", 
+	        IsTuno:memberNo+time, 
 	        AccessToken: accessToken
 	    },
 	FinAcno:"00820100023050000000000017722",
@@ -150,6 +328,32 @@ function submitPayment(){
 			acoMoney : chargingMoney
 	};
 	
+	let pointObj = {};
+	pointObj = {
+			memberNo : memberNo,
+			latestTotalPoints : latestTotalPoints,
+			latestAcoMoney : latestAcoMoney,
+			latestAcoPoint : latestAcoPoint,
+			historyType : historyType,
+			historyDate : historyDate,
+			incDecPoint : incDecPoint,
+			pointType : pointType,
+			accountNo : accountNo
+	}
+	
+	const pointUpdateObj = {
+		acoMoney : chargingMoney,
+		memberNo : memberNo,
+		latestTotalPoints : latestTotalPoints,
+		latestAcoMoney : latestAcoMoney,
+		latestAcoPoint : latestAcoPoint,
+		historyType : historyType,
+		historyDate : historyDate,
+		incDecPoint : incDecPoint,
+		pointType : pointType,
+		accountNo : accountNo
+	};
+	
 
 	$.ajax('https://developers.nonghyup.com/DrawingTransfer.nh', {
 		type:'post',
@@ -158,25 +362,34 @@ function submitPayment(){
 	})
 	.done(res =>{
 		console.log(res);
-		$.ajax('/point', {
+		console.log(JSON.stringify(pointUpdateObj));
+		$.ajax('/updateAmAndInsertPointDetail', {
 			type : 'post',
-			contentType : 'application/json',
-			data : JSON.stringify(memObj),
+			data : pointUpdateObj,
 			beforeSend : function(xhr){
 				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
 			},
 		})
 		.done(res => {
-			showSuccessAlert('충전 성공')
-		
-				
-				
-				
+			if(res.result == '200'){
+				Swal.fire({
+					  title: '충전이 완료되었습니다.',
+					  text: '',
+					  icon: 'success',
+					  confirmButtonClass: "btn-danger",
+					  confirmButtonText: "확인",
+					}).then((result) => {
+					  if (result.value) {
+					    location.href = '/point';
+					  }
+					});
+					
+			}else{
+				showFailAlert('에러가 발생했습니다.')
+			}
 		}).fail(err=>{
-			console.log(memberNo,acoMoney,Iscd,chargingMoney)
-			console.log(memObj);
-			console.log(obj);
-		showFailAlert('충전 실패')
+			console.log(err);
+			showFailAlert('충전 실패')
 		});
 })
 	

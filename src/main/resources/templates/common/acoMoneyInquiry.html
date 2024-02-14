@@ -1,0 +1,108 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content">
+
+
+	<div class="d-flex">
+
+		<aside th:replace="@{/layout/member/pointAsideMain.html}"></aside>
+
+		<section class="main">
+			<div class="park_pointHeader">
+				<p>애코머니 조회</p>
+				<span>애코머니 충전, 사용내역을 조회할 수 있습니다.</span>
+			</div>
+			<div class="park_pointCharegingMain" style = "">
+				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+					<div class="park_chargePointSelect">
+						<div class="park_input-container">
+						<h3 style = "text-align : left">애코 머니</h3>
+						</div>
+						<hr style="margin-top: 0;">
+						
+						<p style="text-align : left; color : #808080; font-size:small; margin-top : -10px;"> 보유한 애코머니</p>
+						<div class="park_points">
+							<h2>
+  								<span style="color: red; font-weight : bold" th:text="${latestAcoMoney}"></span>
+  								<span style="font-weight : bold">P</span>
+							</h2>
+						</div>
+						<div class="park_accountSelect">		
+							<br> <br>
+							<h3>애코머니 충전내역</h3>
+							<hr  style ="border-width: 2px;">
+						</div>
+					  <div th:each="acoMoney : ${acoMoneyChargeInquiry}">
+						<div class="park_acoMoney d-flex align-items-center" >
+							<p th:text="${#dates.format(acoMoney.historyDate, 'yy.MM.dd')}"></p>
+							<p>[[${acoMoney.bankName}]]([[${acoMoney.accountNo}]])</p>
+							<p style = "color : red">+ [[${acoMoney.incDecPoint}]] P</p>
+							
+							
+						</div>
+						 <hr>
+					  </div><!-- th:each end -->
+					  
+					  <div class="park_accountSelect">		
+							<br> <br>
+							<h3>애코머니 사용내역</h3>
+							<hr  style ="border-width: 2px;">
+						</div>
+					  <div th:each="acoMoney : ${acoMoneyUseInquiry}">
+						<div class="park_acoMoney d-flex align-items-center" >
+							<p th:text="${#dates.format(acoMoney.historyDate, 'yy.MM.dd')}"></p>
+							<p>[[${acoMoney.historyType}]]</p>
+							<p style = "color : blue" th:text="${acoMoney.incDecPoint < 0 ? '- ' + (-acoMoney.incDecPoint) : acoMoney.incDecPoint} + ' P'"></p>
+						</div>
+						 <hr>
+					  </div><!-- th:each end -->
+					 
+					</div>
+				
+				
+				
+				</div>
+			</div>
+		</section>
+	</div>
+
+</div>
+<style>
+.park_acoMoney {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0; /* 상하 여백을 줍니다. */
+}
+
+.park_acoMoney > p {
+  margin: 0; /* 기본 마진을 제거합니다. */
+  white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 합니다. */
+}
+
+.park_acoMoney > p:nth-child(1) {
+  flex-basis: 30%; /* 첫 번째 p 요소의 기본 너비를 설정합니다. */
+  margin-left : -70px;
+}
+
+.park_acoMoney > p:nth-child(2) {
+  flex-grow: 1; /* 두 번째 p 요소가 남은 공간을 모두 차지하도록 합니다. */
+  text-align: left; /* 텍스트를 왼쪽 정렬합니다. */
+   margin-left : -50px;
+}
+
+.park_acoMoney > p:nth-child(3) {
+  flex-basis: 20%; /* 세 번째 p 요소의 기본 너비를 설정합니다. */
+  text-align: right; /* 텍스트를 오른쪽 정렬합니다. */
+  color: red; /* 텍스트 색상을 빨간색으로 설정합니다. */
+   margin-right : 15px;
+}
+</style>
+
+<script th:inline="javascript">
+// function cancelPayment(){
+// 	alert('asd')
+// };
+
+</script>

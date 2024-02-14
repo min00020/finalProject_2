@@ -419,6 +419,7 @@ justify-content: center;
 	margin-top: 10px;
 	text-align: right;
 	margin-right: 0px;
+	
 }
 
 .park_addAcount {
@@ -474,7 +475,7 @@ justify-content: center;
 	margin-left: 50px;
 	margin-top: 20px;
 	width: 1000px;
-	height: 1200px;
+/* 	height: 1200px; */
 }
 
 .park_chargePointSelect {

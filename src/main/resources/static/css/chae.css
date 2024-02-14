@@ -119,6 +119,28 @@
 	    justify-content: center;
 	}
 	
+	.min_search-align-self-center {
+		width: 200px;
+		position: relative;
+	}
+	.min_searchInput {
+		padding-right: 30px;
+		transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+			border-color 0.3s ease-in-out;
+		width: 100%;
+		border: 1px solid #bbb;
+		border-radius: 38px;
+		padding: 10px 12px;
+		font-size: 14px;
+		 position: relative;
+	}
+	.min_searchImg{
+		position: absolute;
+		top:14px;
+	    right: 12px;
+	    width: 17px; 
+    }
+	
 	
 /*question info page*/
 .questionInfo{
@@ -156,16 +178,6 @@
 }
 
 /*버튼색상*/
-/* .qna_grayBtn{ 
-	font-size: 13px;
-	background-color: #e0e0e7;
-    display: inline-block;
-    border-radius: 15%;
-    max-width: 100%; 최대 가로 길이를 부모 요소에 맞게 설정
-    box-sizing: border-box; padding과 border를 포함한 크기 계산
-	margin: 10px 0;
-    padding:3px 10px;
-} */
 .qna_blueBtn{ 
 	font-size: 13px;
 	color:white;
@@ -176,7 +188,6 @@
     border-radius: 15%;
     max-width: 100%; /* 최대 가로 길이를 부모 요소에 맞게 설정 */
     box-sizing: border-box; /* padding과 border를 포함한 크기 계산 */
-/* 	margin: 5px; */
 }
 
 .qna_second_line{
@@ -303,8 +314,10 @@
 		display: inline-block;
 	}
 
-	.form-control {
+	.chae_form-control {
 		width: 100%;
+		height:38px;
+		padding-left:10px;
 		padding-right: 40px; /* 버튼을 위한 우측 여백 */
 		border: 1px solid #ccc; /* 입력란 테두리 추가 (선택사항) */
 		border-radius: 4px; /* 입력란 테두리를 둥글게 만듦 (선택사항) */
