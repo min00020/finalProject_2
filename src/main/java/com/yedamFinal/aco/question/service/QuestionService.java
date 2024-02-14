@@ -18,5 +18,5 @@ public interface QuestionService {
 	public Map<String, Object> modifyQuestion(QuestionVO vo);
 	public QuestionVO deleteQuestion(int qno);
 	
-	
+	public Map<String, Object> writeAnswer(QuestionVO vo);
 } 

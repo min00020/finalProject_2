@@ -12,7 +12,7 @@ public interface QuestionMapper {
 	public int getQuestionCount();
 	public List<QuestionVO> getQuestionListSelect(String topic);
 	
-	//CRUD
+	//질문글 CRUD
 	public List<QuestionVO> getQuestionInfo(int qno);
 	public int insertQuestion(QuestionVO questionVO);
 	public QuestionVO deleteQuestion(int qno);
@@ -21,4 +21,6 @@ public interface QuestionMapper {
 	//etc
 	public int updateQuestionViewCnt(int qno);
 	
+	//답변글 작성
+	public int insertAnswer(QuestionVO questionVO);
 }

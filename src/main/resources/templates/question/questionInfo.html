@@ -90,33 +90,35 @@
 		 
 		<!-- 답변 작성폼 / 작성자 != 로그인유저 and 답변 단 적 없을 때-->
 	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id and writePost == false}" >
-		 	<div style="width:900px;margin: 0 auto;">
-				<div class="answer-top" style="height:80px;">
-					<div class="min_answerbox" >
-					   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
+		 	<form name="answerWrite">
+			 	<div style="width:900px;margin: 0 auto;">
+					<div class="answer-top" style="height:80px;">
+						<div class="min_answerbox" >
+						   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
+						</div>
+						<div class="min_align_bottom">
+							<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님 답변해주세요!</h6>
+							<p class="m-0" style="font-size:13px;color:#989daa;"> 답변하시면 활동점수 50점을 드립니다.</p>
+						</div>
 					</div>
-					<div class="min_align_bottom">
-						<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님 답변해주세요!</h6>
-						<p class="m-0" style="font-size:13px;color:#989daa;"> 답변하시면 활동점수 50점을 드립니다.</p>
+					<div>
+						<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
+						<input id="answerTitle" name="answerTitle" type="text" class="form-control" placeholder="제목을 입력해주세요">
+						<br>
+					
+						<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
+						<div id="editor" name="editor" style="height:300px;"></div>
+						<br>
+						<!-- <h6 style="font-weight : bold;">답변 내용</h6>
+						<textarea class="form-control" style="height:300px;"></textarea> -->
 					</div>
-				</div>
-				<div>
-					<h6 style="font-weight : bold;">제목</h6>
-					<input type="text" class="form-control" placeholder="제목을 입력해주세요">
-					<br>
-				
-					<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
-					<div id="editor" name="editor" style="height:300px;"></div>
-					<br>
-					<!-- <h6 style="font-weight : bold;">답변 내용</h6>
-					<textarea class="form-control" style="height:300px;"></textarea> -->
-				</div>
-				<div style="float: right;margin-bottom:10px;">
-					<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
-					<button type="button" class="btn text-white" style="background-color:#3e6ce3;">등록</button>
-				</div>
-				<br><br><br><hr>
-		 	</div>
+					<div style="float: right;margin-bottom:10px;">
+						<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+						<button type="button" class="btn text-white" style="background-color:#3e6ce3;" onclick="sendAnswer()">등록</button>
+					</div>
+					<br><br><br><hr>
+			 	</div>
+		 	</form>
 		</th:block>
 		<!-- 답변 작성폼 끝 -->
 		
@@ -292,6 +294,36 @@
 	 		window.location.href= "/questionWrite?bno=" + bno ;
 	 	})
 	 });
+	 
+	 //답변글 작성	 
+	let csrfPara = $('meta[name="csrfPara"]').attr("content");
+	let csrfToken = $('meta[name="csrf"]').attr("content");
+	
+	function sendAnswer(){
+		console.log('test',[[${session.member.memberNo}]]);
+		const formData = new FormData(document.answerWrite);
+		
+		formData.append(csrfPara, csrfToken);
+		formData.append("answerMemberNo", [[${session.member.memberNo}]]);
+		formData.append("answerContents", editor.getHTML());
+		
+		$.ajax('/answerWrite', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+			showSuccessAlert('등록성공');
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('등록실패');
+	    })
+		
+	}
 	 
 </script>
 

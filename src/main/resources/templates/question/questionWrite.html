@@ -48,16 +48,6 @@
 							<p style="font-size:14px; margin-bottom:8px;">최대 5개까지 등록가능</p>
 							<input name='tags' type="text" class="form-control" placeholder="태그를 입력해주세요" data-blacklist='.NET,PHP' id="tags">
 						</div>
-						<!-- <div class="my-3">
-							<label for="tags" style="margin-left:27rem;">관심 주제</label>
-							<div class="mt-1 d-flex justify-content-center">
-								<input name='tags' class='some_class_name' placeholder='태그추가' data-blacklist='.NET,PHP' id="tags">    
-								<button class="small-rounded default-color" style="margin-left:0.3rem; visibility: hidden;">인증하기</button>
-							</div>
-							<p style="color:hsla(220,30%,1%,.4); margin-right:16.5rem;" class="d-flex justify-content-center">최대 5개까지 등록가능</p>
-						</div> -->
-					<!-- 	<label for="tags" style="font-weight:bold; margin-bottom:8px;">태그</label>
-						<input id="tag" name="tag" type="text" class="form-control" placeholder="태그를 입력해주세요"> -->
 						<br>
 						<label for="editor" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
 						<div id="editor" name="editor"></div>
@@ -80,7 +70,7 @@
 			<h3 style="font-weight:bold; color:#3e6ce3;margin-left:20px;">질문 작성하기</h3>
 			<hr>
 			<!-- 질문 작성폼 시작 -->
-			<form name="questionWrite">
+			<form name="questionWriteModify">
 				<div style="width:900px; margin:0 auto; ">
 					<div class="d-flex justify-content-between">	
 						<div style="width:48%;">
@@ -111,8 +101,11 @@
 							<input id="title" name="title" type="text" th:value="${questionVO.title}" class="form-control" >
 							<br>
 						</div>
-						<label for="tags" style="font-weight:bold; margin-bottom:8px;">태그</label>
-						<input id="tag" name="tag" type="text" th:value="${questionVO.tag}" class="form-control">
+						<div>
+							<label for="tags" style="font-weight:bold; ">태그</label>
+							<p style="font-size:14px; margin-bottom:8px;">최대 5개까지 등록가능</p>
+							<input name='tags' type="text" th:value="${questionVO.tag}" class="form-control" placeholder="태그를 입력해주세요" data-blacklist='.NET,PHP' id="tags">
+						</div>
 						<br>
 						<label for="editor" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
 						<div id="editor" name="editor" th:utext="${questionVO.contents}" ></div>
@@ -211,14 +204,15 @@ function sendQuestion(){
 
 //질문 게시글 수정
 function sendQuestionModify(){
-	const formData = new FormData(document.questionWrite);
+	const formData = new FormData(document.questionWriteModify);
 	
 	formData.append(csrfPara, csrfToken);
 	formData.append("memberNo", [[${session.member.memberNo}]]);
 	formData.append("contents", editor.getHTML());
+	formData.append("tag", insertTagList.join(","));
 	
 	
-	$.ajax('/questionWrite', {
+	$.ajax('/questionModify', {
 		type : "POST",
 		data : formData,
 		contentType : false,
@@ -226,14 +220,14 @@ function sendQuestionModify(){
 	})
 	.done(res => {
 		showSuccessAlert('등록성공');
-    	window.location.href = "/questionList";
+    	window.location.href = "/questionList?pageNo=1";
 		console.log(res);
     })
     .fail(err => {
     	console.log(err);
     	showWarningAlert('등록실패');
     })
-	
+
 }
 
 </script>

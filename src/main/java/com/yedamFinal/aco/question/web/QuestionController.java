@@ -101,7 +101,7 @@ public class QuestionController {
 		return "question/questionInfo";
 	}
 	
-	//질문글 작성
+	//질문글 작성폼
 	@GetMapping("/questionWrite")
 	public String questionWrite(Integer bno, Model model) {
 		
@@ -119,6 +119,7 @@ public class QuestionController {
 		return "question/questionWrite";
 	}
 	
+	//질문글 작성
 	@PostMapping("/questionWrite")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
@@ -128,7 +129,7 @@ public class QuestionController {
 		
 		return ret;
 	}
-	
+
 	//질문글 수정
 	@PostMapping("/questionModify")
 	@ResponseBody
@@ -140,8 +141,16 @@ public class QuestionController {
 		return ret;
 	}
 	
-	//질문글 삭제
-	
+	//답변글 작성
+	@PostMapping("/answerWrite")
+	@ResponseBody
+	public Map<String, Object> writeAnswer(QuestionVO question){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		questionService.writeAnswer(question);
+		ret.put("result", "400");
+		
+		return ret;
+	}
 	
 	
 	

@@ -79,7 +79,7 @@
 	</select>
 
 
-	<!-- 질문글 단건조회 -->
+	<!-- 질문글,답변글 단건조회 -->
 	<select id="getQuestionInfo" resultType="QuestionVO">	
 		SELECT m.ID, m.PROFILE_IMAGE,SUBCODE_TO_NAME(m.MEMBER_LEVEL) as member_level,
 		 		m2.ID as answer_id , m2.PROFILE_IMAGE as answer_profile_image,SUBCODE_TO_NAME(m2.MEMBER_LEVEL) as answer_member_level,
@@ -141,4 +141,16 @@
 	<update id="updateQuestionViewCnt" parameterType="int">
 		UPDATE QUESTION_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</update>
+	
+	
+	<!-- 답변글 작성, 수정 -->
+	<insert id="insertAnswer" parameterType="QuestionVO">
+		INSERT INTO ANSWER_BOARD (
+		    ANSWER_BOARD_NO, QUESTION_BOARD_NO, MEMBER_NO, TITLE, CONTENTS, WRITE_DATE, ADOPT_STATUS, ADD_STATUS
+		)
+		VALUES(
+			answer_board_seq.NEXTVAL, #{questionBoardNo}, #{answerMemberNo}, #{answerTitle}, #{answerContents}, SYSDATE, 'I001','R001'
+		)
+	</insert>
+	
 </mapper>

@@ -125,6 +125,21 @@ public class QuestionServiceImpl implements QuestionService{
 		return questionMapper.deleteQuestion(qno);
 	}
 
+	@Override
+	public Map<String, Object> writeAnswer(QuestionVO vo) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		int insertId = questionMapper.insertAnswer(vo);
+		if(insertId <= 0) {
+			ret.put("result", "500");
+		}
+		else {
+			ret.put("result", "200");
+			ret.put("vo", vo);
+		}
+		
+		return ret;
+	}
+
 	
 
 
