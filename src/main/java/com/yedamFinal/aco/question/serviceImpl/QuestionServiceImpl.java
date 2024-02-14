@@ -41,11 +41,9 @@ public class QuestionServiceImpl implements QuestionService{
 
 	//단건조회
 	@Override
-	/*
-	 * public List<QuestionVO> getQuestionInfo(int qno) { return
-	 * questionMapper.getQuestionInfo(qno); }
-	 */
 	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model, int memberNo) {
+		//조회수 +1
+		questionMapper.updateQuestionViewCnt(qno);
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
@@ -105,11 +103,21 @@ public class QuestionServiceImpl implements QuestionService{
 		
 		return ret;
 	}
-
+	
+	//질문글 수정
 	@Override
-	public Map<String, Object> updateQuestion(QuestionVO vo) {
+	public Map<String, Object> modifyQuestion(QuestionVO vo) {
 		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = questionMapper.updateQuestion(vo);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		return ret;
 	}
 
 	@Override

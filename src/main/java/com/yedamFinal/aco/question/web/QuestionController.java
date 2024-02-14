@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.question.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,14 +90,25 @@ public class QuestionController {
 		}
 		
 		int memberNo = username != null ? username.getMemberNo():-1;
-		model.addAttribute("questionInfo", questionService.getQuestionInfo(qno,model,memberNo));
+		
+		var result = questionService.getQuestionInfo(qno,model,memberNo);
+		model.addAttribute("questionInfo", result);
+		
 		
 		return "question/questionInfo";
 	}
 	
 	//질문글 작성
 	@GetMapping("/questionWrite")
-	public String questionWrite() {
+	public String questionWrite(Integer bno, Model model) {
+		if(bno != null) {
+			var map = questionService.getQuestionInfo(bno, model, -1);
+			var entry = map.entrySet().iterator().next();
+			List<QuestionVO> value = entry.getValue();
+			
+			QuestionVO questionVO = value.get(0);
+			model.addAttribute("questionVO",questionVO);
+		}
 		return "question/questionWrite";
 	}
 	
@@ -106,11 +118,24 @@ public class QuestionController {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		questionService.writeQuestion(question);
 		ret.put("result", "400");
+		
 		return ret;
 	}
 	
 	//질문글 수정
+	@PostMapping("/questionModify")
+	@ResponseBody
+	public Map<String, Object> modifyQuestion(QuestionVO question){
+		Map<String, Object> ret = new HashMap<String, Object>();
+		questionService.modifyQuestion(question);
+		ret.put("result", "400");
+		
+		return ret;
+	}
 	
 	//질문글 삭제
+	
+	
+	
 	
 }

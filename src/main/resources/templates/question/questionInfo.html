@@ -30,15 +30,14 @@
 								type="button" class="btn" 
 								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
 									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-								사이드프로젝트
+								기술
 							</button>
-							<button th:unless="${questionInfo[0][0].topic == 'H001'}"
+							<button th:if="${questionInfo[0][0].topic == 'H002'}"
 								type="button" class="btn" 
 								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
 									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-								기술
+								사이드프로젝트
 							</button>
-							<!-- <p class="qna_grayBtn">사이드프로젝트</p> -->
 							<h4 th:text="${questionInfo[0][0].title}" style="font-weight:bold">Node.js에 관련된 질문이 있습니다.</h4>
 						</div>
 					</div>
@@ -48,7 +47,7 @@
 				</div>
 				<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
 						<div th:if="${loginId == questionInfo[0][0].id}">
-							<span>수정</span><span>삭제</span>
+							<span id="questionModify">수정</span><span>삭제</span>
 						</div>
 						<span th:unless="${loginId == questionInfo[0][0].id}">신고</span>
 						<p  th:text="${questionInfo[0][0].writeDate}">2023.01.28</p>
@@ -285,6 +284,15 @@
 	 let test = [[${questionInfo}]];
 	 let test2 = Object.values(test)[0][1];
 	 let test3 = [[${writePost}]]
+	 
+	//질문글 수정폼 이동
+	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
+	 $(document).ready(function(){
+	 	$('#questionModify').click(function(){
+	 		window.location.href= "/questionWrite?bno=" + bno ;
+	 	})
+	 });
+	 
 </script>
 
 <!-- text editor -->

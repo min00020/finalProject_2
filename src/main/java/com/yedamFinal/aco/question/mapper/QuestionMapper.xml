@@ -127,11 +127,7 @@
 	<!-- 질문글 수정 -->
 	<update id="updateQuestion" parameterType="QuestionVO">
 		UPDATE QUESTION_BOARD
-	    SET TOPIC = #{topic},
-	        POINT = #{point},
-	        TITLE = #{title},
-	        TAG = #{tag},
-	        CONTENTS = #{contents}
+	    SET TOPIC = #{topic}, POINT = #{point}, TITLE = #{title}, TAG = #{tag}, CONTENTS = #{contents}
 	    WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</update>
 	
@@ -140,4 +136,9 @@
 		DELETE QUESTION_BOARD
 		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</delete>
+	
+	<!-- 조회수 -->
+	<update id="updateQuestionViewCnt" parameterType="int">
+		UPDATE QUESTION_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
 </mapper>
