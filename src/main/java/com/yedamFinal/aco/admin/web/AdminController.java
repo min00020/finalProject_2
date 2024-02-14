@@ -1,10 +1,12 @@
 package com.yedamFinal.aco.admin.web;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,11 @@ public class AdminController {
 	@Autowired
 	AdminService adminService;
 	
+	@Value("${nh.bank.Iscd}")
+	private String nhIscd;
+
+	@Value("${nh.bank.accessToken}")
+	private String nhAccessToken;
 	
 	@GetMapping("/admin")
 	public String getAdminPageForm(Model model, int pageNo) {
@@ -91,6 +98,8 @@ public class AdminController {
 		model.addAttribute("adminSettle", ret.get("settleList"));
 		model.addAttribute("pageDTO",ret.get("pageDTO"));
 		model.addAttribute("processStatus",processStatus);
+		model.addAttribute("Iscd", nhIscd);
+		model.addAttribute("nhAccessToken", nhAccessToken);
 		return "layout/admin/adminSettle";
 	}
 	@GetMapping("/adminEmo")
@@ -153,5 +162,17 @@ public class AdminController {
 	public String insertNoticeProcess(AdminMainVO adminMainVO) {
 		adminService.insertNotice(adminMainVO);
 		return "redirect:admin?pageNo=1";
+	}
+	@ResponseBody
+	@PostMapping("/updateSettlementStatus")
+	public Map<String,Object> updateSettlementStatusProcess(int settlementNo) {
+		Map<String,Object> result = new HashMap<String, Object>(); 
+		if(adminService.updateSettlementStatus(settlementNo) > 0) {
+			result.put("result", "200");
+		}
+		else {
+			result.put("result", "500");
+		}
+		return result;
 	}
 }

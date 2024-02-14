@@ -92,6 +92,8 @@ SELECT *
         		SELECT  
             		ROWNUM AS RN, 			 
 					 S.SETTLEMENT_NO,
+					 S.MEMBER_NO,
+					 S.PROCESS_STATUS,
 					 M.NAME as settle_name, 
 					 S.SETTLEMENT_REQ_POINT, 
 					 S.REQ_ACCOUNT, 
@@ -387,6 +389,8 @@ SELECT *
         		SELECT  
             		ROWNUM AS RN, 			 
 					 S.SETTLEMENT_NO,
+					 S.MEMBER_NO,
+					 S.PROCESS_STATUS,
 					 M.NAME as settle_name, 
 					 S.SETTLEMENT_REQ_POINT, 
 					 S.REQ_ACCOUNT, 
@@ -406,6 +410,11 @@ SELECT *
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
     ]]> 
 </select>
+<update id="updateStatus">
+	UPDATE SETTLEMENT
+    SET PROCESS_STATUS = 'O002' 
+    WHERE SETTLEMENT_NO =#{settlementNo}
+</update>
 <select id="selectAdSettleCount" resultType="int">
 	SELECT 
         	COUNT(*) AS CNT

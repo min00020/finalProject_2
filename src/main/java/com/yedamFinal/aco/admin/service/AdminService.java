@@ -53,4 +53,6 @@ public interface AdminService {
 	public int insertNotice(AdminMainVO adminMainVO);
 
 	public List<AdminEmoVO> getMyEmoList(int memberNo);
+
+	public int updateSettlementStatus(int settlementNo);
 }

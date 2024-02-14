@@ -323,4 +323,8 @@ public class AdminServiceImpl implements AdminService {
 	public int deleteEmo(AdminEmoVO adminEmoVO) {
 		return  adminMapper.deleteEmo(adminEmoVO);
 	}
+	@Override
+	public int updateSettlementStatus(int settlementNo) {
+		return adminMapper.updateStatus(settlementNo);
+	}
 }

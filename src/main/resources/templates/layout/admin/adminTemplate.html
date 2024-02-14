@@ -371,7 +371,7 @@
                                     </thead>
                                    
                                     <tbody>
-                                        <tr th:each="notice : ${adminNotice}">
+                                        <tr th:each="notice : ${adminNotice}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|">
                                             <td th:text="${notice.title}"></td>
                                             <td th:text="${notice.content}"></td>
                                             <td th:text="${#dates.format(notice.writeDate, 'yyyy/MM/dd')}"></td>

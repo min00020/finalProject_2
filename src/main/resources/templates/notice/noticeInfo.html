@@ -11,10 +11,10 @@
 	</div>
 	<div class="container">
 		<!--/* 질문글 */-->
-		<div class="questionInfo">
+		<div class="questionInfo" style="width: 1344px">
 			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
-				<div id="questionTitle" class="col-9">  <!-- 사이드 태그 / 질문제목, 포인트 -->
-					<h5 class="qna_logo" style="font-size: 50px">제목 : </h5>
+				<div id="questionTitle" class="col-9" style="margin-bottom: 50px">  <!-- 사이드 태그 / 질문제목, 포인트 -->
+					<h5 class="qna_logo" style="font-size: 40px">제목 : </h5>
 					<div class="qna_title">
 						<div>
 							<h4  style="font-weight:bold" th:text="${noticeInfo.title}"></h4>
@@ -26,7 +26,7 @@
 				</div>
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
 			<div class="qna_contents"> <!-- 질문 내용 -->
-				<p th:text="${noticeInfo.content}"></p>
+				<h6 th:text="${noticeInfo.content}"></h6>
 				
 			</div>
 			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->

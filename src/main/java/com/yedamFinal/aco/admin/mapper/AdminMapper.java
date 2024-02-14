@@ -25,6 +25,7 @@ public interface AdminMapper {
 	public List<AdminReportVO> getAdReportList(int pageNo);
 	public int selectAdReportCount();
 	public int selectAdStateReportCount(String reportStatus);
+	public int updateStatus(int settlementNo);
 	
 	public List<AdminQnaVO>    getAdQnaList(int pageNo);
 	public int selectAdQnaCount();
