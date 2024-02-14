@@ -1,13 +1,13 @@
 package com.yedamFinal.aco.common.serviceImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -79,7 +79,20 @@ public class GitHubServiceImpl implements GitHubService {
 
 	@Override
 	public void getGitHubUserInfo(String userAccessToken) {
-		// TODO Auto-generated method stub
+//		gitHub = new GitHubBuilder().withOAuthToken(userAccessToken).build();
+//        repository = github.getRepository("repository name");
+//        
+//        // Issue를 가져올 수도 있다.
+//        GHIssue issue = repository.getIssue(i);
+//        
+//        // Issue에 있는 comments도 가져올 수도 있다.
+//        List<GHIssueComment> comments = issue.getComments();
+//        
+//        // comments에 보면 User의 대한 정보를 가져올 수도 있다.
+//		for (GHIssueComment comment : comments) {
+//        	comment.getUser();
+//            comment.getUser().getName();
+//		}
 
 	}
 
