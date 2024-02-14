@@ -8,11 +8,11 @@ import org.springframework.ui.Model;
 import com.yedamFinal.aco.question.QuestionVO;
 
 public interface QuestionService {
-	public List<QuestionVO> getQuestionList();
+	public List<QuestionVO> getQuestionList(Model model, int pageNo);
 	public List<QuestionVO> getQuestionListSelect(String topic);
 	
 	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno,  Model model, int memberNo);
 	public Map<String, Object> writeQuestion(QuestionVO vo);
 	public Map<String, Object> updateQuestion(QuestionVO vo);
 	public QuestionVO deleteQuestion(int qno);
-}
+} 

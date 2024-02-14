@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.question.service.QuestionService;
@@ -20,8 +21,17 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	//리스트 조회
 	@Override
-	public List<QuestionVO> getQuestionList() {
-		return questionMapper.getQuestionList();
+	public List<QuestionVO> getQuestionList(Model model, int pageNo) {
+		var questionList = questionMapper.getQuestionList(pageNo);
+		PaginationDTO dto = null;
+		if(questionList.size() > 0) {
+			dto = new PaginationDTO(questionMapper.getQuestionCount(),pageNo,5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+		model.addAttribute("questionList", questionList);
+		
+		return null;
 	}
 	
 	@Override

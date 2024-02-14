@@ -117,7 +117,6 @@ public class CommonController {
 		else {
 			return null;
 		}
-		
 		return null;
 	}
 

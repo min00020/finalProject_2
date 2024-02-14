@@ -60,6 +60,12 @@
         	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
 	]]>
 	</select>
+	<select id="getQuestionCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+	</select>
+	
 	<!-- 질문글 분류 조회 -->
 	<select id="getQuestionListSelect" resultType="QuestionVO">
 		SELECT m.id, m.profile_image,

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedamFinal.aco.member.MemberVO;
@@ -35,8 +36,8 @@ public class QuestionController {
 	
 	//전체조회
 	@GetMapping("/questionList")
-	public String getquestionBoard(Model model) {
-		model.addAttribute("questionList", questionService.getQuestionList());
+	public String getquestionBoard(@RequestParam int pageNo, Model model) {
+		questionService.getQuestionList(model, Integer.valueOf(pageNo));
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
