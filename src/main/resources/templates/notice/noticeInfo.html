@@ -1,0 +1,55 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:fragment="content"
+>
+<section>
+	<div id="qna_banner">
+		<h3>공지사항</h3>
+		<p style="color:#76767e">사이트의 공지사항을 확인하세요.</p>
+	</div>
+	<div class="container">
+		<!--/* 질문글 */-->
+		<div class="questionInfo">
+			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
+				<div id="questionTitle" class="col-9">  <!-- 사이드 태그 / 질문제목, 포인트 -->
+					<h5 class="qna_logo" style="font-size: 50px">제목 : </h5>
+					<div class="qna_title">
+						<div>
+							<h4  style="font-weight:bold" th:text="${noticeInfo.title}"></h4>
+						</div>
+					</div>
+				</div>
+				<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+						<p style="color:blue" th:text="${noticeInfo.writeDate}"></p>
+				</div>
+			</div><!-- 질문글 제목 / 신고삭제 끝-->
+			<div class="qna_contents"> <!-- 질문 내용 -->
+				<p th:text="${noticeInfo.content}"></p>
+				
+			</div>
+			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
+				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
+				<div id="qna_iconAll"> 
+					<span>					
+						<img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye">
+					</span>
+					<span th:text="${noticeInfo.viewCnt}"></span>
+					<span>					
+						<img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
+					</span>
+					<span th:text="${noticeInfo.recommendCnt}"></span>
+				</div>
+			</div>
+			<hr>	
+		</div>
+		<!-- questionInfo 질문글 끝-->
+		
+	</div>
+	<!-- end of container -->
+</section>
+</div>
+
+<script th:inline="javascript">
+</script>

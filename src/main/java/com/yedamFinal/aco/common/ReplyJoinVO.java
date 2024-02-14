@@ -14,6 +14,7 @@ public class ReplyJoinVO {
 	private int parentMemberNo;
 	private String parentNickname;
 	private String parentImage;
+	private String parentEmoticon;
 	private int parentRecCnt;
 	private String parentEmoticon;
 	private int childReplyPno;
