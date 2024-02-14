@@ -130,53 +130,186 @@ FROM (
 
 	<!-- AcoMoneyChargeInquiry -->
 	<select id="acoMoneyChargeInquiry" resultType="PointDetailVO">
+<!-- 		SELECT -->
+<!-- 		A.ACCOUNT_NO, -->
+<!-- 		A.POINT_TYPE, -->
+<!-- 		A.HISTORY_DATE, -->
+<!-- 		A.INC_DEC_POINT, -->
+<!-- 		B.BANK_NAME, -->
+<!-- 		A.latest_ACO_MONEY -->
+<!-- 		FROM POINT_DETAIL A JOIN -->
+<!-- 		ACCOUNT B ON A.account_no = B.account_no -->
+<!-- 		WHERE B.MEMBER_NO = #{memberNo} -->
+<!-- 		 AND POINT_TYPE = 'G001' -->
+<!-- 		 AND INC_DEC_POINT <![CDATA[>]]> 0 -->
+<!-- 		 ORDER BY A.HISTORY_DATE DESC -->
+
 		SELECT
 		A.ACCOUNT_NO,
 		A.POINT_TYPE,
 		A.HISTORY_DATE,
 		A.INC_DEC_POINT,
-		B.BANK_NAME,
+		A.BANK_NAME,
 		A.latest_ACO_MONEY
-		FROM POINT_DETAIL A JOIN
-		ACCOUNT B ON A.account_no = B.account_no
-		WHERE B.MEMBER_NO = #{memberNo}
+		FROM (
+		SELECT 
+			ROWNUM AS RN,
+			C.ACCOUNT_NO,
+			C.POINT_TYPE,
+			C.HISTORY_DATE,
+			C.INC_DEC_POINT,
+			C.BANK_NAME,
+			C.LATEST_ACO_MONEY
+			FROM (
+				SELECT
+					A.ACCOUNT_NO,
+					A.POINT_TYPE,
+					A.HISTORY_DATE,
+					A.INC_DEC_POINT,
+					B.BANK_NAME,
+					A.latest_ACO_MONEY
+				FROM POINT_DETAIL A JOIN
+				ACCOUNT B ON A.account_no = B.account_no
+				WHERE A.MEMBER_NO = #{memberNo}
+		 		AND POINT_TYPE = 'G001'
+		 		AND INC_DEC_POINT <![CDATA[>]]> 0
+		 		ORDER BY A.HISTORY_DATE DESC
+			) C
+		) A
+   <![CDATA[
+   WHERE RN > ((#{cp}-1) * 5) AND RN <= (#{cp} * 5)
+	]]>	
+		 
+	</select>
+	
+	<select id="acoMoneyChargeInquiryCnt" resultType="int">
+		SELECT COUNT(*) AS CNT 
+		FROM POINT_DETAIL
+		WHERE MEMBER_NO = #{memberNo}
 		 AND POINT_TYPE = 'G001'
 		 AND INC_DEC_POINT <![CDATA[>]]> 0
-		 ORDER BY A.HISTORY_DATE DESC
+		 ORDER BY HISTORY_DATE DESC
+
 	</select>
 
 	<!-- AcoMoneyUseInquiry -->
 	<select id="acoMoneyUseInquiry" resultType="PointDetailVO">
 		SELECT
-		HISTORY_DATE,
-		SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE,
-		INC_DEC_POINT
-		FROM point_detail
-		WHERE member_no = #{memberNo}
-		AND POINT_TYPE = 'G001' 
-		AND( history_type = 'F004' OR history_type ='F006')
-		AND INC_DEC_POINT <![CDATA[<]]> 0
+			HISTORY_DATE,
+			HISTORY_TYPE,
+			INC_DEC_POINT
+		FROM (
+			SELECT
+				ROWNUM AS RN,
+				A.HISTORY_DATE,
+				A.HISTORY_TYPE,
+				A.INC_DEC_POINT
+			FROM(
+				SELECT
+					HISTORY_DATE,
+					SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE,
+					INC_DEC_POINT
+				FROM
+					point_detail
+					WHERE member_no = #{memberNo}
+					AND POINT_TYPE = 'G001' 
+					AND( history_type = 'F004' OR history_type ='F006')
+					AND INC_DEC_POINT <![CDATA[<]]>	 0
+				)A
+			)
+		
+		<![CDATA[
+ 		  WHERE RN > ((#{up}-1) * 5) AND RN <= (#{up} * 5)
+		]]>	
+		ORDER BY HISTORY_DATE DESC
+		
 			 
+	</select>
+	
+	<select id="acoMoneyUseInquiryCnt" resultType="int">
+		SELECT COUNT(*) AS CNT 
+			FROM point_detail
+					WHERE member_no = #{memberNo}
+					AND POINT_TYPE = 'G001' 
+					AND( history_type = 'F004' OR history_type ='F006')
+					AND INC_DEC_POINT <![CDATA[<]]>	 0
+
 	</select>
 	
 	<!-- 애코포인트 획득 내역 -->
 	<select id="acoPointAcquireInquiry" resultType="PointDetailVO">
-		SELECT  HISTORY_DATE,INC_DEC_POINT,SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
-		FROM POINT_DETAIL
-		WHERE MEMBER_NO = #{memberNo}
-		AND POINT_TYPE = 'G002' 
-		AND INC_DEC_POINT <![CDATA[>]]> 0
+		SELECT  HISTORY_DATE,
+				INC_DEC_POINT,
+				HISTORY_TYPE
+		FROM (SELECT
+				ROWNUM AS RN,
+				A.HISTORY_DATE,
+				A.INC_DEC_POINT,
+				A.HISTORY_TYPE
+			FROM(
+				SELECT  HISTORY_DATE,
+					INC_DEC_POINT,
+					SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
+				FROM 
+					POINT_DETAIL
+				WHERE MEMBER_NO = #{memberNo}
+				AND POINT_TYPE = 'G002' 
+				AND INC_DEC_POINT <![CDATA[>]]> 0
+			)A
+		)
+		<![CDATA[
+ 		  WHERE RN > ((#{ap}-1) * 5) AND RN <= (#{ap} * 5)
+		]]>	
+		ORDER BY HISTORY_DATE DESC
+		
 			 
+	</select>
+	
+	<select id="acoPointAcquireInquiryCnt" resultType="int">
+		SELECT COUNT(*) AS CNT 
+			FROM point_detail
+					WHERE member_no = #{memberNo}
+					AND POINT_TYPE = 'G002' 
+					AND INC_DEC_POINT <![CDATA[>]]> 0
+
 	</select>
 	
 	<!-- 애코포인트 사용 내역 -->
 	<select id="acoPointUseInquiry" resultType="PointDetailVO">
-		SELECT  HISTORY_DATE,INC_DEC_POINT,SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
-		FROM POINT_DETAIL 
-		WHERE MEMBER_NO = #{memberNo}
-		AND POINT_TYPE = 'G002' 
-		AND INC_DEC_POINT <![CDATA[<]]> 0
+		SELECT  HISTORY_DATE,
+				INC_DEC_POINT,
+				HISTORY_TYPE
+		FROM (SELECT
+				ROWNUM AS RN,
+				A.HISTORY_DATE,
+				A.INC_DEC_POINT,
+				A.HISTORY_TYPE
+			FROM(
+				SELECT 
+					HISTORY_DATE,
+					INC_DEC_POINT,
+					SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
+				FROM POINT_DETAIL 
+					WHERE MEMBER_NO = #{memberNo}
+					AND POINT_TYPE = 'G002' 
+					AND INC_DEC_POINT <![CDATA[<]]> 0
+			)A	
+		)
+		<![CDATA[
+ 		  WHERE RN > ((#{up}-1) * 5) AND RN <= (#{up} * 5)
+		]]>	
+		ORDER BY HISTORY_DATE DESC
+		
 			 
+	</select>
+	
+	<select id="acoPointUseInquiryCnt" resultType="int">
+		SELECT COUNT(*) AS CNT 
+			FROM point_detail
+					WHERE member_no = #{memberNo}
+					AND POINT_TYPE = 'G002' 
+					AND INC_DEC_POINT <![CDATA[<]]> 0
+
 	</select>
 	
 	<!-- 계좌 중복여부 조회 -->
