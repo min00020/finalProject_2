@@ -4,7 +4,43 @@
 <mapper namespace="com.yedamFinal.aco.point.mapper.PointMapper">
 	<!-- 계좌 조회 -->
 	<select id="getAccountNumber" resultType="AccountVO">
-		SELECT * FROM ACCOUNT
+	SELECT 
+    ACCOUNT_NO,
+    MEMBER_NO,
+    ACCOUNT_HOLDER,
+    BANK_CODE,
+    BANK_NAME
+FROM (
+    SELECT 
+        ROWNUM AS RN,
+        A.ACCOUNT_NO,
+        A.MEMBER_NO,
+        A.ACCOUNT_HOLDER,
+        A.BANK_CODE,
+        A.BANK_NAME
+    FROM (
+        SELECT 
+            ACCOUNT_NO,
+            MEMBER_NO,
+            ACCOUNT_HOLDER,
+            BANK_CODE,
+            BANK_NAME
+        FROM ACCOUNT
+        WHERE MEMBER_NO = #{memberNo}
+        ORDER BY ACCOUNT_NO
+    ) A
+   )
+   <![CDATA[
+   WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo} * 5)
+	]]>	
+
+	</select>
+	
+	<select id="getAccountNumberCount" resultType="int">
+		SELECT COUNT(*) AS CNT 
+		FROM ACCOUNT
+		WHERE MEMBER_NO = #{memberNo}
+
 	</select>
 
 
@@ -12,7 +48,8 @@
 	<select id="getBank" resultType="BankVO">
 		SELECT *
 		FROM BANK_CODE
-		ORDER BY BANK_CODE
+		ORDER BY
+		BANK_CODE
 	</select>
 
 	<!-- 계좌 등록 -->
@@ -23,7 +60,8 @@
 		MEMBER_NO,
 		ACCOUNT_HOLDER,
 		BANK_CODE,
-		BANK_NAME
+		BANK_NAME,
+		ACCOUNT_SEQ_NO
 		)
 
 		VALUES
@@ -32,7 +70,8 @@
 		#{memberNo},
 		#{accountHolder},
 		#{bankCode},
-		#{bankName}
+		#{bankName},
+		ACCOUNT_SEQ_NO.NEXTVAL
 		)
 
 	</insert>
@@ -40,46 +79,112 @@
 	<!-- AcoMoneyUpdate -->
 	<update id="updateAcoMoney">
 		UPDATE MEMBER
-			SET ACO_MONEY = ACO_MONEY + #{acoMoney}
-			WHERE MEMBER_NO = #{memberNo}
+		SET ACO_MONEY = ACO_MONEY + #{acoMoney}
+		WHERE MEMBER_NO = #{memberNo}
 
 	</update>
-	
+
 	<!-- getAcoMoney -->
 	<select id="getAcoMoney" resultType="int">
-		select aco_money 
-		from member 
+		select aco_money
+		from member
 		where member_no = #{memberNo}
 	</select>
-	
-	<insert id="insertAcoMoneyHistory" parameterType="PointDetailVO">
-								INSERT INTO POINT_DETAIL(
-								
-								  POINT_DETAIL_NO,
-                                   MEMBER_NO,
-                                  LATEST_TOTAL_POINTS,
-                                 LASTEST_ACO_MONEY,
-                                 LASTEST_ACO_POINT,
-                                  HISTORY_TYPE,
-                                   HISTORY_DATE,
-                                   INC_DEC_POINT,
-                                   POINT_TYPE,
-                                 ACCOUNT_NO)
-                                 
-                           		 VALUES(
-                           		 
-                           		 POINT_DETAIL_seq.nextval,
-                           		 #{memberNo},
-                           		 #{latestTotalPoints},
-                           		 #{latestAcoMoney},
-                           		 #{latestAcoPoint},
-                           		 #{historyType},
-                           		 #{historyDate},
-                           		 #{incDecPoint},
-                           		 #{pointType},
-                           		 #{accountNo}
-                           		 )
- 	</insert>
 
+	<!-- getAcoPoint -->
+	<select id="getAcoPoint" resultType="int">
+		select aco_point
+		from member
+		where member_no = #{memberNo}
+	</select>
+
+	<insert id="insertAcoMoneyHistory" parameterType="PointDetailVO">
+		INSERT INTO
+		POINT_DETAIL(
+
+		POINT_DETAIL_NO,
+		MEMBER_NO,
+		LATEST_TOTAL_POINTS,
+		latest_ACO_MONEY,
+		latest_ACO_POINT,
+		HISTORY_TYPE,
+		HISTORY_DATE,
+		INC_DEC_POINT,
+		POINT_TYPE,
+		ACCOUNT_NO)
+
+		VALUES(
+
+		POINT_DETAIL_seq.nextval,
+		#{memberNo},
+		#{latestTotalPoints},
+		#{latestAcoMoney},
+		#{latestAcoPoint},
+		#{historyType},
+		#{historyDate},
+		#{incDecPoint},
+		#{pointType},
+		#{accountNo}
+		)
+	</insert>
+
+	<!-- AcoMoneyChargeInquiry -->
+	<select id="acoMoneyChargeInquiry" resultType="PointDetailVO">
+		SELECT
+		A.ACCOUNT_NO,
+		A.POINT_TYPE,
+		A.HISTORY_DATE,
+		A.INC_DEC_POINT,
+		B.BANK_NAME,
+		A.latest_ACO_MONEY
+		FROM POINT_DETAIL A JOIN
+		ACCOUNT B ON A.account_no = B.account_no
+		WHERE B.MEMBER_NO = #{memberNo}
+		 AND POINT_TYPE = 'G001'
+		 AND INC_DEC_POINT <![CDATA[>]]> 0
+		 ORDER BY A.HISTORY_DATE DESC
+	</select>
+
+	<!-- AcoMoneyUseInquiry -->
+	<select id="acoMoneyUseInquiry" resultType="PointDetailVO">
+		SELECT
+		HISTORY_DATE,
+		SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE,
+		INC_DEC_POINT
+		FROM point_detail
+		WHERE member_no = #{memberNo}
+		AND POINT_TYPE = 'G001' 
+		AND( history_type = 'F004' OR history_type ='F006')
+		AND INC_DEC_POINT <![CDATA[<]]> 0
+			 
+	</select>
+	
+	<!-- 애코포인트 획득 내역 -->
+	<select id="acoPointAcquireInquiry" resultType="PointDetailVO">
+		SELECT  HISTORY_DATE,INC_DEC_POINT,SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
+		FROM POINT_DETAIL
+		WHERE MEMBER_NO = #{memberNo}
+		AND POINT_TYPE = 'G002' 
+		AND INC_DEC_POINT <![CDATA[>]]> 0
+			 
+	</select>
+	
+	<!-- 애코포인트 사용 내역 -->
+	<select id="acoPointUseInquiry" resultType="PointDetailVO">
+		SELECT  HISTORY_DATE,INC_DEC_POINT,SUBCODE_TO_NAME(HISTORY_TYPE) AS HISTORY_TYPE
+		FROM POINT_DETAIL 
+		WHERE MEMBER_NO = #{memberNo}
+		AND POINT_TYPE = 'G002' 
+		AND INC_DEC_POINT <![CDATA[<]]> 0
+			 
+	</select>
+	
+	<!-- 계좌 중복여부 조회 -->
+	<select id="accInquiry" resultType = "String">
+		select * from account
+		where account_no = #{accountNo} 
+		and member_no = #{memberNo}
+			 
+	</select>
 
 </mapper>

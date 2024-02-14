@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedamFinal.aco.sideboard.mapper.SideMapper">
+
+<!-- 모집중list 가져오기 -->
+<select id="selectRecruitingList" resultType="SideVO">
+	SELECT *
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            side_board_no, 
+	        publishing_status, 
+	        title, 
+	        content, 
+	        project_outline,
+	        writer, 
+	        write_date, 
+	        recruit_personnel, 
+	        dev_period, 
+	        git_address, 
+	        view_cnt,
+	        reply_cnt,
+	        tech_of_use,
+	        member_no	
+	FROM side_project_board
+	WHERE publishing_status = #{status}
+    ORDER BY write_date desc
+    )
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
+</select>
+
+<select id="selectProjectListCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM side_project_board
+    WHERE publishing_status = #{status}
+</select>
+
+<update id="updatereviewCnt">
+	UPDATE side_project_board SET view_cnt = view_cnt + 1 where side_board_no = #{bno}
+</update>
+
+<!-- 게시글 단건조회 가져오기 -->
+<select id="selectSideInfo" parameterType="int" resultType="SideVO">
+	SELECT side_board_no, 
+	       publishing_status, 
+	       title, 
+	       content, 
+	       project_outline,
+	       writer, 
+	       write_date, 
+	       recruit_personnel, 
+	       dev_period, 
+	       git_address, 
+	       view_cnt,
+	       reply_cnt,
+	       tech_of_use,
+	       member_no
+	FROM side_project_board
+	WHERE side_board_no= #{bno}
+</select>
+
+<update id="updateStatus" parameterType="SideVO">
+	UPDATE 	side_project_board
+	SET publishing_status = #{status}
+	WHERE side_board_no= #{bno}
+</update>
+
+<insert id="insertSideProject" parameterType="SideVO">
+	INSERT INTO side_project_board(side_board_no, 
+	                              publishing_status, 
+	                              title, 
+	                              content, 
+	                              project_outline,
+	                              writer, 
+	                              write_date, 
+	                              recruit_personnel, 
+	                              dev_period, 
+	                              git_address, 
+	                              view_cnt,
+	                              reply_cnt,
+	                              tech_of_use,
+	                              member_no
+	                              )
+	VALUES (side_project_board_seq.NEXTVAL,
+	         'Q001',
+			 #{title},
+			 #{content},
+			 #{projectOutline},
+			 #{writer},
+			 sysdate,
+			 #{recruitPersonnel},
+			 #{devPeriod},
+			 #{gitAddress},
+			 0,
+			 0,
+			 #{techOfUse}, 
+			 #{memberNo}
+			 )
+	<selectKey keyProperty="pk" resultType="int" order="AFTER">
+		SELECT side_project_board_seq.currval 
+		FROM dual
+	</selectKey>
+</insert>
+
+<update id="updateSide" parameterType="SideVO">
+	UPDATE side_project_board
+	SET publishing_status = #{status}, 
+	    title = #{title}, 
+	    content = #{content}, 
+	    project_outline = #{projectOutline}, 
+	    recruit_personnel = #{recruitPersonnel},  
+	    dev_period = #{devPeriod}, 
+	    git_address = #{gitAddress}, 
+	    tech_of_use = #{techOfUse}
+	WHERE side_board_no = #{bno}
+</update>
+
+<delete id="deleteSide" parameterType="SideVO">
+	DELETE FROM side_project_board
+	WHERE side_board_no = #{bno}
+</delete>
+
+</mapper>

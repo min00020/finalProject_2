@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class PointDetailVO {
+public class UpdateAcoMoneyDTO {
 	private int pointDetailNo;
     private int memberNo;
     private int latestTotalPoints;
@@ -16,6 +16,6 @@ public class PointDetailVO {
     private int incDecPoint;
     private String pointType;
     private String accountNo;
-    private String bankName;
     
+    private int acoMoney;
 }

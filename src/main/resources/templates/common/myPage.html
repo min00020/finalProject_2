@@ -3,32 +3,30 @@
 	layout:decorate="@{/layout/member/mainTemplate.html}"
 	layout:fragment="content">
 	<div class="d-flex">
-		<section class="d-flex" style="float: left;">
-			<aside style="width: 100%; background-color: #aebfec;">
+		<section class="d-flex" id="tae-section">
+			<aside class="tae-aside">
 				<div class="flex-shrink-0">
 					<!-- 프로필-->
-					<div class="card justify-content-center align-items-center"
-						style="text-align: center; width: 270px; margin: 15px;">
+					<div class="card justify-content-center align-items-center" id="tae-card">
 						<!-- 프사 -->
 						<div class="box-1">
 							<th:block th:if="${memberInfo.profileImage} == null">
-								<img class="profile-1" src="commonResource/default_profile.jpg"
-									style="width: 100%; height: 100%;" alt="profile">
+								<img class="tae-profile-1" th:src="commonResource/default_profile.jpg"
+									 alt="profile">
 							</th:block>
 							<th:block th:unless="${memberInfo.profileImage} == null">
-								<img class="profile-1 mx-auto d-block"
-									style="width: 100%; height: 100%;"
+								<img class="tae-profile-1 mx-auto d-block"
 									th:src="|upload/profile/${memberInfo.profileImage}|" alt="...">
 							</th:block>
 						</div>
 						<!-- grade image -->
 						<div class="card-body">
-							<h6 class="card-text" style="font-weight: bold;"
+							<h6 class="tae-card-text"
 								th:text="${memberInfo.nickname}">\</h6>
 							<h6 class="card-text" th:text="${memberInfo.email}">\</h6>
-							<img
+							<img class="tae-gradeImage"
 								th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|"
-								logo="" style="width: 30px;"> <span class="card-text"
+								logo=""> <span class="card-text"
 								th:text="${memberInfo.gradeName}">\</span>
 							<h6 class="card-text" th:text="|${#numbers.formatInteger(memberInfo.accumActivityPoint, 0, 'COMMA')} P|">\</h6>
 
@@ -37,30 +35,23 @@
 
 					<!-- summary -->
 
-					<div class="card container"
-						style="width: 270px; height: 400px; margin-top: 30px; margin-left: 15px;">
-						<h5
-							style="padding-top: 30px; padding-bottom: 30px; font-weight: bold; text-align: center;">SUMMARY</h5>
+					<div class="card container" id="tae-container3">
+						<h5 id="tae-sum-h5">SUMMARY</h5>
 						<!-- 정산요청 div -->
-						<div class="container2"
-							style="background-color: #aebfec; border-radius: 20px; padding: 10px 10px 10px 5px;">
-							<div class="row"
-								style="width: auto; height: auto; overflow: visible;">
-								<div class="tae-box1 col-1" style="width: 50px;">
-									<img class="img1" src="commonResource/icon/point.png"
-										style="width: 50px; height: auto;">
+						<div class="tae-container4">
+							<div class="row" id="tae-row">
+								<div class="tae-box1 col-1">
+									<img class="img1" src="commonResource/icon/point.png">
 								</div>
-								<div class="tae-box2 col-2" style="width: 140px;">
-									<h6 style="font-weight: bold;">POINT</h6>
-									<h6 id="pointMypage" class="card-text" style="color:#3e6ce3;font-weight:bold;"
+								<div class="tae-box2 col-2" id="tae-box2">
+									<h6 class="tae-h6">POINT</h6>
+									<h6 id="pointMypage" class="card-text"
 										th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h6>
 								</div>
-								<div class="col-1" style="width: 55px;">
+								<div class="col-1" id="tae-col-1">
 									<!-- 모달버튼 -->
-									<button type="button" class="btn btn-modal"
-										data-bs-toggle="modal" data-bs-target="#point"
-										style="text-decoration: none;color: #979da9;">
-
+									<button type="button" class="btn btn-modal"  id="tae-modal-btn"
+										data-bs-toggle="modal" data-bs-target="#point">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
@@ -72,7 +63,7 @@
 										aria-labelledby="pointModalLabel" aria-hidden="true">
 										<div class="modal-dialog modal-xl" role="document">
 											<div class="modal-content">
-												<div class="modal-header">
+												<div class="modal-header" styp>
 
 													<h3 class="modal-title" id="pointModalLabel"
 														style="font-weight: bold;">
@@ -87,28 +78,28 @@
 														<div class="d-flex">
 															<div class="point-image" style="width:350px;">
 																<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
-																<h4 style="font-weight:bold;padding-left:60px;">누적 애코포인트 현황</h4>
-																<h3 id="totalPointMypage" style="font-weight:bold;padding-left:120px;color:#2e54b7;" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
+																<h4 class="tae-h4-1">누적 애코포인트 현황</h4>
+																<h3 id="totalPointMypage" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
 															</div>
 																<div class="point-acc" style="hegiht:700px;">
-																	<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
-																		<h4 style="font-weight:bold;">애코포인트 정산</h4>
+																	<div class="point-acc-1">
+																		<h4 class="tae-h4-2">애코포인트 정산</h4>
 																		<br>
-																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
+																		<p class="tae-p-1">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
 																		<br>
-																		<div class="input-group mb-3" style="width:600px;height:50px;">
-																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
-																			<button class="btn btn-outline-secondary" id="accountApprove" type="button" data-bs-toggle="modal" data-bs-target="#accountList" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">정산요청</button>
+																		<div class="input-group mb-3" style="height:50px;">
+																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2">
+																			<button class="btn btn-outline-secondary" id="accountApprove" type="button" data-bs-toggle="modal" data-bs-target="#accountList">정산요청</button>
 																		</div>
 																	</div>
-																	<div class="point-acc-1" style="width:750px;hegiht:450px;">
-																		<h4 style="font-weight:bold;">활동점수 포인트 전환</h4>
+																	<div class="point-acc-1">
+																		<h4 class="tae-h4-2">활동점수 포인트 전환</h4>
 																		<br>
-																		<p style="margin-bottom:-8px;color:#3e6ce3;margin-top:-30px;">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
+																		<p class="tae-p-1">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
 																		<br>
-																		<div class="input-group mb-3" style="width:600px;height:50px;">
-																			<input type="text" class="tae-form-control" id="activityMypage" name="resPoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2" style="text-align:right;font-weight:bold;border:#ced9ea;background-color: beige;">
-																			<button class="btn btn-outline-secondary" type="button" id="changepoint" style="font-weight:bold;background-color:#80a9e8;color:#fff;border:none;">환전요청</button>
+																		<div class="input-group mb-3" style="height:50px;">
+																			<input type="text" class="tae-form-control" id="activityMypage" name="resPoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2">
+																			<button class="btn btn-outline-secondary" type="button" id="changepoint">환전요청</button>
 																		</div>
 																	</div>
 																</div>
@@ -117,7 +108,7 @@
 														<div id="activityList">
 															<div>
 																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4><hr>
-																	<ul class="scroll type3" id="accumList" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																	<ul class="scroll type3" id="accumList">
 																		<li class="activity1" th:each="pol:${pointList}">
 																		<span style="font-weight:bold;font-size:large;" th:text="${pol.historyType}"></span>
 																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
@@ -144,23 +135,19 @@
 							</div>
 						</div>
 						<!-- 활동점수 -->
-						<div class="container2"
-							style="background-color: #aebfec; border-radius: 20px; padding: 10px 10px 10px 5px;">
-							<div class="row"
-								style="width: auto; height: auto; overflow: visible;">
-								<div class="tae-box1 col-1" style="width: 50px;">
-									<img class="img2" src="commonResource/icon/activity.png"
-										style="width: 50px; height: auto;">
+						<div class="tae-container4">
+							<div class="row" id="tae-row">
+								<div class="tae-box1 col-1">
+									<img class="img1" src="commonResource/icon/activity.png">
 								</div>
-								<div class="tae-box2 col-2" style="width: 140px;">
-									<h6 style="font-weight: bold;">내 활동 관리</h6>
+								<div class="tae-box2 col-2" id="tae-box2">
+									<h6 class="tae-h6">내 활동 관리</h6>
 									<h6 class="card-text">활동/등급 관리</h6>
 								</div>
-								<div class="col-1" style="width: 55px;">
+								<div class="col-1" id="tae-col-1">
 									<!-- 모달버튼 -->
-									<button type="button" class="btn btn-modal"
-										data-bs-toggle="modal" data-bs-target="#activity"
-										style="text-decoration: none; color: #979da9;">
+									<button type="button" class="btn btn-modal" id="tae-modal-btn"
+										data-bs-toggle="modal" data-bs-target="#activity">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
@@ -244,13 +231,13 @@
 													</div>
 													<div id="activityList">
 															<div>
-																<h4 style="padding-left:30px;font-weight:bold;">내 활동 내역</h4><hr>
+																<h4 class="tae-h4-3">내 활동 내역</h4><hr>
 																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
 																		<li class="activity1" th:each="acp:${activityList}">
-																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
-																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
-																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${acp.incDecActivityPoint}점 |"></span>
-																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${acp.incDecActivityPoint}점 |"></span>
+																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
+																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
+																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
+																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점  |"></span>
 																		<br>
 																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
 																		<hr>
@@ -305,7 +292,7 @@
 											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
 												       <div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
 												       		<button type="button" style="border:0;" th:onclick="choiceAccount([[${acc.accountNo}]])">
-												       			<img th:src="|commonResource/bankImage/${acc.bankName}.png|" style="width:80px;height:auto;text-align:center;">
+												       			<img class="tae-bank-1" th:src="|commonResource/bankImage/${acc.bankName}.png|">
 															</button>											       		
 												       		<p th:text="${acc.bankName}" style="float:left;">/</p>
 												       </div>
@@ -323,23 +310,19 @@
 						</div>
 
 						<!-- 회원정보수정 -->
-						<div class="container2"
-							style="background-color: #aebfec; border-radius: 20px; padding: 10px 10px 10px 5px;">
-							<div class="row"
-								style="width: auto; height: auto; overflow: visible;">
-								<div class="tae-box1 col-1" style="width: 50px;">
-									<img class="profile" src="commonResource/icon/modifyinfo.png"
-										style="width: 50px; height: auto;">
+						<div class="tae-container4">
+							<div class="row" id="tae-row">
+								<div class="tae-box1 col-1">
+									<img class="img1" src="commonResource/icon/modifyinfo.png">
 								</div>
-								<div class="tae-box2 col-2" style="width: 140px;">
-									<h6 style="font-weight: bold;">회원정보수정</h6>
+								<div class="tae-box2 col-2" id="tae-box2">
+									<h6 class="tae-h6">회원정보수정</h6>
 									<h6 class="card-text">정보,비밀번호</h6>
 								</div>
-								<div class="col-1" style="width: 55px;">
+								<div class="col-1" id="tae-col-1">
 									<!-- 모달버튼 -->
-									<button type="button" class="btn btn-modal"
-										data-bs-toggle="modal" data-bs-target="#modify"
-										style="text-decoration: none;color: #979da9;">
+									<button type="button" class="btn btn-modal"  id="tae-modal-btn"
+										data-bs-toggle="modal" data-bs-target="#point">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
 											stroke-width="2" stroke-linecap="round"
@@ -394,24 +377,29 @@
 		</section>
 		<!-- 메인바디영역 -->
 		<!-- mypage1 -->
-		<div class="container" style="background-color: #aebfec;">
-			<div class="container">
-				<div class="card" id="myTabContent" style="height: 850px;">
+		<div class="container" id="tae-container-3">
+			<div class="container" id="tae-container-1">
+				<div class="card" id="myTabContent">
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
 						<li class="nav-item" role="presentation">
-							<button class="nav-link active" id="home-tab"
-								data-bs-toggle="tab" data-bs-target="#home-tab-pane"
-								type="button" role="tab" aria-controls="home-tab-pane"
-								aria-selected="true" style="width: 380px;">내가 참여한 프로젝트</button>
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+							data-bs-target="#profile-tab-pane" type="button" role="tab"
+							aria-controls="profile-tab-pane" aria-selected="true"
+							style="width: 380px;">내가 참여한 프로젝트</button>
 						</li>
 						<li class="nav-item" role="presentation">
-							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-								data-bs-target="#profile-tab-pane" type="button" role="tab"
-								aria-controls="profile-tab-pane" aria-selected="false"
-								style="width: 380px;" onclick="location.href='/myPage2'">내
-								질답통계</button>
+							<button class="nav-link active" id="tae-profile-tab-2"
+							data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+							type="button" role="tab" aria-controls="home-tab-pane"
+							aria-selected="false" style="width: 380px;" onclick="location.href='/myPage2'">내 질답 통계</button>
 						</li>
+
 					</ul>
+					
+					
+					
+					
+					
 					<div class="card d-flex">
 						<div class="card">
 							<div class="card-body" id="card-1">
@@ -427,26 +415,22 @@
 					</div>
 					<div>
 
-						<div class="card d-flex"
-							style="width: 437px; height: 277px; float: left; margin-top: 30px; margin-left: 20px; overflow: visible;">
-							<div class="card-body" id="card-1"
-								style="width: 437px; height: 277px;">
+						<div class="card d-flex" id="tae-card-2">
+							<div class="card-body" id="tae-card-1">
 								<h5 style="text-align: center; font-weight: bold;">내 관심주제</h5>
 								<ul class="tab-ul">
 									<li th:text="${memberInfo.topicHashtag}"></li>
 								</ul>
 							</div>
 						</div>
-						<div class="card d-flex"
-							style="width: 437px; height: 277px; float: left; margin-top: 30px; margin-left: 20px; overflow: visible;">
-							<div class="card-body" id="card-1"
-								style="width: 437px; height: 277px;">
+						<div class="card d-flex" id="tae-card-2">
+							<div class="card-body" id="tae-card-1">
 								<h5 style="margin-bottom: -8px; font-weight: bold;">
 									😉 이모티콘 구매내역
-									<button type="button" class="btn btn-modal"
+									<button type="button" class="btn btn-modal" id="tae-modal-btn"
 										onclick="goEmoShop()" data-bs-toggle="modal"
 										data-bs-target="#bookmark"
-										style="text-decoration: none; color: #979da9;">
+										>
 										더보기
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -456,12 +440,10 @@
 									</button>
 								</h5>
 									<hr>
-								<ul class="emoticon-list" style="list-style: none;float:left;display:inline-block;padding: 10px;margin: 0px;">
+								<ul class="tab-ul">
 									<li th:each="emo:${emoInfo}">[[ ${emo.emoName} ]] 
-									<span th:text="|구매날짜 ${#dates.format(emo.emoBuydate, 'yyyy-MM-dd')}|"
-										style="padding-left: 133px; float: right;">
-											[[${emo.emoBuydate}]] </span>
-
+										<span class="tae-ul-list" th:text="|구매날짜 ${#dates.format(emo.emoBuydate, 'yyyy-MM-dd')}|">
+										[[${emo.emoBuydate}]] </span>
 										<hr>
 									</li>
 								</ul>

@@ -6,39 +6,90 @@
 <mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
 	<!-- 질문글 전체조회 -->
 	<select id="getQuestionList" resultType="QuestionVO">
+	  SELECT
+            a.id, a.profile_image,
+            a.QUESTION_BOARD_NO,
+            a.MEMBER_NO,
+            a.TOPIC,
+            a.POINT,
+            a.TITLE,
+            a.TAG,
+            a.CONTENTS,
+            a.WRITE_DATE,
+            a.VIEW_CNT,
+            a.RECOMMEND_CNT,
+            a.BOOKMARK_CNT,
+            a.ANSWER_CNT
+	    FROM (
+	        SELECT 
+	            ROWNUM AS RN,
+	            b.id, b.profile_image,
+	            b.QUESTION_BOARD_NO,
+	            b.MEMBER_NO,
+	            b.TOPIC,
+	            b.POINT,
+	            b.TITLE,
+	            b.TAG,
+	            b.CONTENTS,
+	            b.WRITE_DATE,
+	            b.VIEW_CNT,
+	            b.RECOMMEND_CNT,
+	            b.BOOKMARK_CNT,
+	            b.ANSWER_CNT
+	            FROM(
+	                SELECT m.id, m.profile_image,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+	                    q.POINT,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
+	                    q.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.BOOKMARK_CNT,
+	                    q.ANSWER_CNT
+	            FROM QUESTION_BOARD q
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            ORDER BY WRITE_DATE DESC
+	            )B
+	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	<!-- 질문글 분류 조회 -->
+	<select id="getQuestionListSelect" resultType="QuestionVO">
 		SELECT m.id, m.profile_image,
-		        q.QUESTION_BOARD_NO,
-		        q.MEMBER_NO,
-		        SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
-		        q.POINT,
-		        q.TITLE,
-		        q.TAG,
-		        q.CONTENTS,
-		        TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
-		        q.VIEW_CNT,
-		        q.RECOMMEND_CNT,
-		        q.BOOKMARK_CNT,
-		        q.ANSWER_CNT
+		    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
+		    q.WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT
 		FROM QUESTION_BOARD q
 		JOIN MEMBER m
 		ON q.MEMBER_NO = m.MEMBER_NO
+		WHERE q.TOPIC = #{topic}
 		ORDER BY WRITE_DATE DESC
 	</select>
-	
+
+
 	<!-- 질문글 단건조회 -->
 	<select id="getQuestionInfo" resultType="QuestionVO">	
-		SELECT m.id, m.profile_image,SUBCODE_TO_NAME(m.member_level) as member_level,
+		SELECT m.ID, m.PROFILE_IMAGE,SUBCODE_TO_NAME(m.MEMBER_LEVEL) as member_level,
+		 		m2.ID as answer_id , m2.PROFILE_IMAGE as answer_profile_image,SUBCODE_TO_NAME(m2.MEMBER_LEVEL) as answer_member_level,
 			    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
 			    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT,q.REPLY_CNT,
-	            a.ANSWER_BOARD_NO,a.QUESTION_BOARD_NO,a.MEMBER_NO,a.TITLE as answer_title,a.CONTENTS as answer_contents, 
-	            TO_CHAR(a.WRITE_DATE, 'YYYY.MM.DD') as ANSWER_WRITE_DATE,a.RECOMMEND_CNT,a.ADOPT_STATUS as answer_adopt_status,a.REPLY_CNT,
-	            d.QUESTION_ADD_NO,d.ANSWER_BOARD_NO,d.CONTENTS as add_contents,d.WRITER_TYPE as add_writer_type,TO_CHAR(d.WRITE_DATE, 'YYYY.MM.DD') as ADD_WRITE_DATE
+	            a.ANSWER_BOARD_NO,a.QUESTION_BOARD_NO,a.MEMBER_NO as answer_member_no,a.TITLE as answer_title,a.CONTENTS as answer_contents, 
+	            TO_CHAR(a.WRITE_DATE, 'YYYY.MM.DD') as ANSWER_WRITE_DATE,a.RECOMMEND_CNT,a.ADOPT_STATUS as answer_adopt_status,a.REPLY_CNT as answer_reply_cnt,
+	            d.QUESTION_ADD_NO,d.ANSWER_BOARD_NO,d.CONTENTS as add_contents,d.WRITER_TYPE as add_writer_type,TO_CHAR(d.WRITE_DATE, 'YYYY.MM.DD') as add_write_date, d.ADD_STATUS
 			FROM QUESTION_BOARD q LEFT JOIN MEMBER m
 	                              ON q.MEMBER_NO = m.MEMBER_NO
 	                              LEFT JOIN ANSWER_BOARD a
 	                              ON q.QUESTION_BOARD_NO = a.QUESTION_BOARD_NO
 	                              LEFT JOIN QUESTION_ADD d
 	                              ON a.ANSWER_BOARD_NO = d.ANSWER_BOARD_NO
+	                              LEFT JOIN MEMBER m2
+	                              ON a.MEMBER_NO = m2.MEMBER_NO
 	        WHERE q.QUESTION_BOARD_NO = #{questionBoardNo}
 	        ORDER BY a.ADOPT_STATUS DESC, a.WRITE_DATE DESC
 	</select>
@@ -62,6 +113,9 @@
 		    question_board_seq.NEXTVAL, #{memberNo}, #{topic}, #{point}, 
 		    #{title}, #{tag},#{contents},SYSDATE,0,0,0,0
 	    )
+	    <selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT question_board_seq.CURRVAL FROM DUAL
+    	</selectKey>
 	</insert>
 	
 	<!-- 질문글 수정 -->
