@@ -5,7 +5,7 @@
 	layout:fragment="content"	  
 >
 
-
+[[${replyList}]]
 	<!--/* 댓글영역 */-->
 				<div class="w-100 mb-3 clearfix">
 					<div>
@@ -40,9 +40,10 @@
 							<div style="width:90%; margin-left:93px;">
 								<th:block th:if="${reply.value[0].parentComment} != null">
 									<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+									<p th:text="${#strings.substring(reply.value[0].parentComment, 0,1)}"></p>
 								</th:block>
 								<th:block th:unless="${reply.value[0].parentComment} != null">
-									<p th:text="${#strings.substring(reply.value[0].parentComment, 0,1)}"></p> 
+									<img th:src="|/upload/emoticon/${#strings.substring(reply.value[0].parentEmoticon, 0,#strings.indexOf(reply.value[0].parentEmoticon,'_'))}/${reply.value[0].parentEmoticon}|" />
 									<!--/*  -<img th:src="|/upload/${#strings.}|" */-->
 								</th:block>
 							</div>

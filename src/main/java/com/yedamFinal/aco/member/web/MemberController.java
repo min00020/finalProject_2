@@ -248,8 +248,8 @@ public class MemberController {
 		
 		List<ReplyJoinVO> list2 = new ArrayList<ReplyJoinVO>();
 		ReplyJoinVO vo2 = new ReplyJoinVO();
-		vo.setParentReplyNo(2);
-		vo.setParentEmoticon("조로_1.png");
+		vo2.setParentReplyNo(2);
+		vo2.setParentEmoticon("조로_1.png");
 		list2.add(vo2);
 		
 		map.put(2, list2);
