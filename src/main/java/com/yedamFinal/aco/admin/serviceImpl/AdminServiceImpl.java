@@ -320,8 +320,7 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.getMyEmoList(memberNo);
 	}
 	@Override
-	public boolean deleteEmo(AdminEmoVO adminEmoVO) {
-		int result = adminMapper.deleteEmo(adminEmoVO);
-		return result == 1? true : false;
+	public int deleteEmo(AdminEmoVO adminEmoVO) {
+		return  adminMapper.deleteEmo(adminEmoVO);
 	}
 }

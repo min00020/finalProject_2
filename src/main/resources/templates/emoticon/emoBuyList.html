@@ -21,6 +21,7 @@
 								<th>이모티콘 이름</th>
 								<th>가격</th>
 								<th>구매일자</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -33,26 +34,27 @@
                                 </td>                   
 								<td style="vertical-align : middle" th:text="${buyList.emoPrice}"><p><span></span></p></td>
 								<td style="vertical-align : middle" th:text="${buyList.emoBuydate}"><p><span></span></p></td>
-								 <td><div style="text-align: center">
+								 <td style="text-align: center; vertical-align: middle;"><div>
                                                                                        <!-- Button trigger modal -->
-												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal1|">
+												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal${buyList.emoNo}|">
 												  삭제
 												</button>
+												        <form action="deleteEmo" method="post" name="delForm" th:id="${buyList.emoNo}">
+												        	<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+															<input type="hidden" name="memberNo" th:value="${buyList.memberNo}">
+													        <input type="hidden" name="emoNo" th:value="${buyList.emoNo}">
+														</form>
 												
 												<!-- Modal -->
-												<div class="modal fade" th:id="|exampleModal1|" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+												<div class="modal fade" th:id="|exampleModal${buyList.emoNo}|" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
 												  <div class="modal-dialog">
 												    <div class="modal-content">
 												      <div class="modal-header" style="margin: auto;">
 												        <h1 class="modal-title fs-5" id="exampleModalLabel">해당 이모티콘을 삭제 하시겠습니까?</h1>
 												      </div>
 												      <div class="modal-footer" style="margin: auto;">
-												        <button type="button" class="btn btn-danger" onclick="delEmo()">삭제</button>
+												        <button type="button" class="btn btn-danger" th:onclick="delEmo([[${buyList.emoNo}]])">삭제</button>
 												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-												        <form action="deleteEmo" method="get" name="delForm">
-															<input type="hidden" name="memberNo" th:value="${buyList.memberNo}">
-													        <input type="hidden" name="emoNo" th:value="${buyList.emoNo}">
-														</form>
 												      </div>
 												    </div>
 												  </div>
@@ -68,8 +70,8 @@
 </section>
 </div>
 <script th:inline="javascript">
- 	function delEmo(){
+ 	function delEmo(emoNo){
+ 		$("#" + emoNo).submit();
  		showSuccessAlert('삭제 완료');
-		document.buyForm.submit();
 	} 
 </script>

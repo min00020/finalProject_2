@@ -17,16 +17,19 @@
                                 <h1 class="display-5 fw-bolder text-black mb-2" th:text="${emoDetail.emoName}"></h1>
                                 <p class="lead fw-normal text-black-50 mb-4" th:text="${emoDetail.emoDesc}"></p>
                                 <p class="lead fw-normal" style="color: red" th:text="${emoDetail.emoPrice}+포인트"></p>
-                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" th:if = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0">
                                     <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#AddNotice"  style="text-decoration: none; color: white;"
-                                    th:if = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0">
+                                    >
 		                        		구매가능
 		                     		</button>
+                                </div>
+                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" th:unless = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0" >
                                     <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#AddNotice"  style="text-decoration: none; color: white;"
-                                    th:unless = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0" disabled="disabled">
+                                    disabled="disabled">
 		                        		구매불가
 		                     		</button>
-                                </div>
+		                     		<p style="color: red">현재 보유 포인트(+머니) = [[${user.acoPoint}]](+[[${user.acoMoney}]])</p>
+		                     		</div>
                                 <!-- Modal -->
 			                  <div class="modal fade" id=AddNotice tabindex="-1" role="dialog"
 			                     aria-labelledby="AddNoticeLabel" aria-hidden="true">
@@ -100,8 +103,8 @@
 //var user = [[${user}]]
 //var emoDetail = [[${emoDetail}]]
  	function buyEmo(){
- 		showSuccessAlert('구매 완료');
 		document.buyForm.submit();
+ 		showSuccessAlert('구매 완료');
 		//location.href=`/buyEmo?memberNo=${user.memberNo}&acoPoint=${user.acoPoint}&acoMoney=${user.acoMoney}&emoPrice=${emoDetail.emoPrice}&emoNo=${emoDetail.emoNo}&emoName=${emoDetail.emoName}`
 	} 
 </script>

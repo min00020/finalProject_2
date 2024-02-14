@@ -138,7 +138,7 @@ public class AdminController {
 		request.getSession().setAttribute("myEmoList", adminService.getMyEmoList(vo.getMemberNo()));
 		return "redirect:emoBuyList";
 	}
-	@GetMapping("/deleteEmo")
+	@PostMapping("/deleteEmo")
 	public String deleteEmoProcess(AdminEmoVO adminEmoVO) {
 		adminService.deleteEmo(adminEmoVO);
 		return "redirect:emoBuyList";
@@ -152,6 +152,6 @@ public class AdminController {
 	@PostMapping("/insertNotice")
 	public String insertNoticeProcess(AdminMainVO adminMainVO) {
 		adminService.insertNotice(adminMainVO);
-		return "redirect:insertNotice";
+		return "redirect:admin?pageNo=1";
 	}
 }

@@ -16,6 +16,7 @@ import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
 import com.yedamFinal.aco.noticeboard.mapper.NoticeBoardMapper;
 import com.yedamFinal.aco.noticeboard.service.NoticeBoardService;
 import com.yedamFinal.aco.qnaBoard.QnABoardVO;
@@ -39,5 +40,10 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		mp.put("noticeList", AdNoticeList);
 		mp.put("pageDTO", dto);
 		return mp;
+	}
+
+	@Override
+	public NoticeBoardVO getNoticeInfo(NoticeBoardVO noticeBoardVO) {
+		return noticeBoardMapper.getNoticeInfo(noticeBoardVO);
 	}
 }

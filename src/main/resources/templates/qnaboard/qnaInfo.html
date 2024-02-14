@@ -135,7 +135,12 @@
 							</div>
 							<!--/*댓글 내용구간  */-->
 							<div style="width:90%; margin-left:93px;">
-								<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+								<th:block th:if="${reply.value[0].parentComment} != null">
+									<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+								</th:block>
+								<th:block th:unless="${reply.value[0].parentComment} != null">
+									<img th:src="|/upload/emoticon/${#strings.substring(reply.value[0].parentEmoticon, 0,#strings.indexOf(reply.value[0].parentEmoticon,'_'))}/${reply.value[0].parentEmoticon}|" />
+								</th:block>
 							</div>
 								
 							<div style="width:90%; margin-left:80px;">
@@ -171,7 +176,12 @@
 								</div>
 								<!--/*댓글 내용구간  */-->
 								<div style="width:90%; margin-left:108px;">
-									<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
+									<th:block th:if="${innerReply.childComment} != null">
+										<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
+									</th:block>
+									<th:block th:unless="${innerReply.childComment} != null">
+										<img th:src="|/upload/emoticon/${#strings.substring(innerReply.childEmoticon, 0,#strings.indexOf(innerReply.childEmoticon,'_'))}/${innerReply.childEmoticon}|" />
+									</th:block>
 								</div>
 							</div>
 						</th:block>
@@ -225,7 +235,7 @@
       					<div class="modal-body">
         					 <div class="row">
 					        <div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            <div class="card h-100" th:onclick="registReply(tttt)">
+					            <div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
 					                <img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            </div>
 					        </div>
@@ -332,7 +342,7 @@
 	}
 	
 	
-	function registReply(ttttt) {
+	function registReply(emoticonImgName) {
 		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
 		if(typeof memberNo == "undefined" || memberNo == null) {
 			showFailAlert("로그인 후 진행해주세요.");
@@ -340,32 +350,34 @@
 		}
 		
 		let object = {
-				
+			
 		}
 		
-		if(typeof ttttt == "not defined") {
+		// 이모티콘 등록이란 의미.
+		if(typeof emoticonImgName != "undefined") {
+			// 이모티콘인지 체크?
+			const boardType = 'N005';
+			object = {
+				boardType : boardType,
+				boardNo : qnaBoardNo,
+				replyBody : emoticonImgName,
+				isEmoticon : "1",
+				replyPno : null
+			};	
+		}
+		else {
 			const comment = $('#commentInput').val();
 			if(comment == null || comment == '') {
 				showWarningAlert('댓글을 입력해주세요.');
 				return;
 			}
-			// 이모티콘인지 체크?
+			
 			const boardType = 'N005';
-			const object = {
+			object = {
 				boardType : boardType,
 				boardNo : qnaBoardNo,
 				replyBody : comment,
 				isEmoticon : "0",
-				replyPno : null
-			};	
-		}
-		else {
-			const boardType = 'N005';
-			const object = {
-				boardType : boardType,
-				boardNo : qnaBoardNo,
-				replyBody : ttttt,
-				isEmoticon : "1",
 				replyPno : null
 			};	
 		}

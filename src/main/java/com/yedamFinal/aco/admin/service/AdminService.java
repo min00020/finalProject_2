@@ -48,7 +48,7 @@ public interface AdminService {
 	//이모티콘 구매하기
 	public int buyEmo(AdminEmoVO adminEmoVO);
 	//이모티콘 구매목록 삭제
-	public boolean deleteEmo(AdminEmoVO adminEmoVO);
+	public int deleteEmo(AdminEmoVO adminEmoVO);
 	//	공지등록
 	public int insertNotice(AdminMainVO adminMainVO);
 
