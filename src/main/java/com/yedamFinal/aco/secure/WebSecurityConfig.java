@@ -102,6 +102,18 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByHa() {
+		permitAllUrl.add("/admin");
+		permitAllUrl.add("/adminMember");
+		permitAllUrl.add("/adminStat");
+		permitAllUrl.add("/adminReport");
+		permitAllUrl.add("/adminQna");
+		permitAllUrl.add("/adminSettle");
+		permitAllUrl.add("/adminEmo");
+		permitAllUrl.add("/emoMain");
+		permitAllUrl.add("/emoDetail");
+		//permitAllUrl.add("/emoBuyList");
+		permitAllUrl.add("/adminStatAjax");
+		permitAllUrl.add("/adminStatAjax2");
 		
 	}
 	
