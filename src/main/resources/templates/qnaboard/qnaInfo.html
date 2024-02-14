@@ -128,8 +128,6 @@
 									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
 								</div>
 								<div>
-									<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-									[[${reply.value[0].parentRecCnt}]]
 									<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
 								</div>
 							</div>
@@ -169,8 +167,6 @@
 										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
 									</div>
 									<div>
-										<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-										[[${innerReply.childRecCnt}]]
 										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
 									</div>
 								</div>
