@@ -53,5 +53,6 @@
     		LEFT JOIN REPLY B ON A.reply_no = B.reply_pno AND A.board_type = #{type}
     		WHERE A.board_no = #{bno} AND A.reply_pno IS NULL
     		ORDER BY A.WRITE_DATE asc, child_WRITE_date asc
+    		
 	</select>
 </mapper>
