@@ -1,6 +1,5 @@
 package com.yedamFinal.aco.qnaBoard.web;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 
@@ -30,7 +29,15 @@ public class QnABoardController {
 	@Autowired
 	private QnABoardServiceImpl qnaBoardService;
 	
-	// min 문의게시판 리스트 불러오기(페이징, 검색, 정렬등)
+	/**
+     * 문의게시판 목록 불러오기(페이징,검색,정렬등)
+     * @param pg
+     * @param search
+     * @param ob
+     * @param req
+     * @param model
+     * @return "qnaboard/qnaList"
+     */
 	@GetMapping("/qnaBoard")
 	public String getQnaBoardListForm(@RequestParam String pg, String search, String ob, HttpServletRequest req, Model model) {// MemberVO 꺼내오기.
 		MemberVO vo = null;
@@ -71,12 +78,25 @@ public class QnABoardController {
 		return "qnaboard/qnaList";
 	}
 	
-	// min 문의게시판 작성 폼 불러오기(페이징, 검색, 정렬등)
+	/**
+     * 문의게시판 작성 폼 불러오기
+     * @param model
+     * @return "qnaboard/qnaWrite"
+     */
 	@GetMapping("/qnaBoard/write")
 	public String getQnaBoardWriteForm(Model model) {
 		return "qnaboard/qnaWrite";
 	}
 	
+	/**
+     * 문의게시판 작성 요청(다중 첨부파일처리 추가)
+     * @param title
+     * @param content
+     * @param attachFile
+     * @param model
+     * @param req
+     * @return Map<String,Object>
+     */
 	@PostMapping("/qnaBoard/write")
 	@ResponseBody
 	public Map<String,Object> insertQnaBoard(@RequestParam String title, @RequestParam String content, MultipartFile[] attachFile, HttpServletRequest req) {
@@ -94,6 +114,12 @@ public class QnABoardController {
 		return ret;
 	}
 	
+	/**
+     * 문의게시판 상세페이지 화면 요청
+     * @param qnaBoardNo
+     * @param model
+     * @return qnaboard/qnaInfo
+     */
 	@GetMapping("/qnaBoard/{boardNo}")
 	public String getQnaBoardInfoPage(@PathVariable("boardNo") int qnaBoardNo, Model model) {
 		if(!qnaBoardService.getQnaBoardDetailInfo(model,qnaBoardNo)) {
@@ -130,12 +156,24 @@ public class QnABoardController {
 		return "qnaboard/qnaInfo";
 	}
 	
+	/**
+     * 문의게시판 답변 작성/수정
+     * @param qnaBoardNo
+     * @param answer
+     * @return Map<String,Object>
+     */
 	@PostMapping("/qnaBoard/{boardNo}")
 	@ResponseBody
 	public Map<String,Object> postQnABoardAnswer(@PathVariable("boardNo") int qnaBoardNo, String answer) {
 		return qnaBoardService.postQnAAnswer(qnaBoardNo, answer);
 	}
 	
+	/**
+     * 문의게시판 질문 수정/상태변경
+     * @param qnaBoardNo
+     * @param answer
+     * @return Map<String,Object>
+     */
 	@PutMapping("/qnaBoard/{boardNo}")
 	@ResponseBody
 	public Map<String, Object> changeQnABoardState(@PathVariable("boardNo") int qnaBoardNo, String state, String modifyComment) {
