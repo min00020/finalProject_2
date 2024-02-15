@@ -173,16 +173,15 @@
 							
 								
 							</div>
-								
-							<div style="width:90%; margin-left:80px; margin-top:10px;">
+							<div style="width:90%; margin-left:80px; margin-top:10px;"> 
 								<!--/* 댓글 수정/삭제 */-->
 								<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
-								<button th:if="${session.member} != null and ${session.member.memberNo} == ${qnaInfo[0].memberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:onclick="delReply([[${reply.key}]])">삭제</button>
-								<button th:if="${session.member} != null and ${session.member.memberNo} == ${qnaInfo[0].memberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:id="|modifyBtn${reply.key}|" th:onclick="|openModifyTextarea('modifyCommentDiv${reply.key}','modifyBtn${reply.key}')|">수정</button>
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:onclick="delReply([[${reply.key}]])">삭제</button>
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:id="|modifyBtn${reply.key}|" th:onclick="|openModifyTextarea('modifyCommentDiv${reply.key}','modifyBtn${reply.key}')|">수정</button>
 							</div>
 							
 							<!--/* 댓글 수정 영역 */-->
-							<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${qnaInfo[0].memberNo} and ${reply.value[0].parentDelete} == null" 
+							<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" 
 								th:id="|modifyCommentDiv${reply.key}|">
 								<div class="d-flex justify-content-center">
 									<textarea th:id="|modifyTextarea${reply.key}|" rows="5" class="mt-4" placeholder="댓글 수정" style="width:90%;">[[${reply.value[0].parentComment}]]</textarea>
@@ -290,12 +289,12 @@
 								
 								<div style="width:90%; margin-left:95px; margin-top:10px;">
 									<!--/* 답글 수정/삭제 */-->
-									<button th:if="${session.member} != null and ${session.member.memberNo} == ${qnaInfo[0].memberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:onclick="delReply([[${innerReply.childReplyNo}]])">삭제</button>
-									<button th:if="${session.member} != null and ${session.member.memberNo} == ${qnaInfo[0].memberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:id="|modifyBtn${innerReply.childReplyNo}|" th:onclick="|openModifyTextarea('modifyCommentDiv${innerReply.childReplyNo}','modifyBtn${innerReply.childReplyNo}')|">수정</button>
+									<button th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:onclick="delReply([[${innerReply.childReplyNo}]])">삭제</button>
+									<button th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:id="|modifyBtn${innerReply.childReplyNo}|" th:onclick="|openModifyTextarea('modifyCommentDiv${innerReply.childReplyNo}','modifyBtn${innerReply.childReplyNo}')|">수정</button>
 								</div>
 								
 								<!--/* 대댓글 수정 영역 */-->
-								<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${qnaInfo[0].memberNo} and ${innerReply.childDelete} == null" 
+								<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" 
 									th:id="|modifyCommentDiv${innerReply.childReplyNo}|">
 									<div class="d-flex justify-content-center">
 										<textarea th:id="|modifyTextarea${innerReply.childReplyNo}|" rows="5" class="mt-4" placeholder="댓글 수정" style="width:90%;">[[${innerReply.childComment}]]</textarea>
@@ -469,9 +468,9 @@
 			return;
 		}
 		
+		const boardType = 'N005';
 		// 이모티콘 등록이란 의미.
 		if(typeof emoticonImgName != "undefined") {
-			const boardType = 'N005';
 			object = {
 				replyNo : replyNo,
 				replyBody : emoticonImgName,
@@ -486,7 +485,6 @@
 				return;
 			}
 		
-			const boardType = 'N005';
 			object = {
 				replyNo : replyNo,
 				replyBody : comment,
@@ -526,10 +524,10 @@
 			
 		}
 	
+		const boardType = 'N005';
 		// 이모티콘 등록이란 의미.
 		if(typeof emoticonImgName != "undefined") {
 			// 이모티콘인지 체크?
-			const boardType = 'N005';
 			object = {
 				boardType : boardType,
 				boardNo : qnaBoardNo,
@@ -544,8 +542,7 @@
 				showWarningAlert('댓글을 입력해주세요.');
 				return;
 			}
-		
-			const boardType = 'N005';
+			
 			object = {
 				boardType : boardType,
 				boardNo : qnaBoardNo,
@@ -582,10 +579,10 @@
 		let object = {
 				
 		}
-	
+		
+		const boardType = 'N005';
 		// 이모티콘 등록이란 의미.
 		if(typeof emoticonImgName != "undefined") {
-			const boardType = 'N005';
 			object = {
 				boardType : boardType,
 				boardNo : qnaBoardNo,
@@ -603,8 +600,7 @@
 			}
 		
 			// 이모티콘인지 체크?
-			const boardType = 'N005';
-			const object = {
+			object = {
 				boardType : boardType,
 				boardNo : qnaBoardNo,
 				replyBody : text,

@@ -400,7 +400,7 @@
 																	class="px-3 py-2 w-75 min-rounded"
 																	placeholder="알파벳,한글,숫자 20자 이하입력" name="nickname" th:value="${memberInfo.nickname}">
 																<button class="min-small-rounded min-default-color"
-																	style="margin-left: 0.3rem; visibility: hidden;">인증하기</button>
+																	style="margin-left: 0.3rem;" onclick="checkDuplicateNickname()">중복체크</button>
 															</div>
 														</div>
 
@@ -690,6 +690,151 @@
 		$('#modAcc' + notHighlitView).css('color','black');
 		$('#modAccDiv' + curView).css('display', 'block');
 		$('#modAccDiv' + notHighlitView).css('display', 'none');
+	}
+	
+	// 닉네임 중복체크
+	function checkDuplicateNickname() {
+		const reqNickname = $('input[name="nickname"]').val();
+		if(reqNickname == '' || reqNickname.length > 20) {
+			showWarningAlert('닉네임 길이제한 확인해주세요.');
+			return;
+		}
+		
+		const url = "/checkNickname?nickName="+reqNickname;
+		$.ajax(url,{
+	        type : "GET",
+	    })
+	    .done(res => {
+	    	if(!res.result) {
+	    		showSuccessAlert('사용가능한 닉네임 입니다.');
+	    		$("input[name='nickname']").prop("disabled", true);
+	    	}
+	    	else {
+	    		showFailAlert('이미 사용중인 닉네임 입니다.');
+	    	}
+	    })
+	    .fail(err => {
+	    	showWarningAlert('다시 시도해주세요.');
+	    })
+	}
+	
+	// 아이디 중복체크
+	function checkDuplicateId() {
+		const reqId = $('input[name="userid"]').val();
+		
+		const regId = /^(?=.*[a-z0-9])[a-z0-9]{4,15}$/;
+		if(!regId.test(reqId)) {
+			showWarningAlert('아이디 양식에 맞추어 작성해주세요.');
+			return;
+		}
+		
+		const url = "/checkId?id="+reqId;
+		$.ajax(url,{
+	        type : "GET",
+	    })
+	    .done(res => {
+	    	if(!res.result) {
+	    		showSuccessAlert('사용가능한 아이디 입니다.');
+	    		$("input[name='userid']").prop("disabled", true);
+	    		joinCheckObj.checkId = true;
+	    	}
+	    	else {
+	    		showFailAlert('사용불가능한 아이디 입니다.');
+	    	}
+	    })
+	    .fail(err => {
+	    	showWarningAlert('다시 시도해주세요.');
+	    })
+	}
+
+	function checkDuplicateEmail() {
+		const reqEmail = $('input[name="email"]').val();
+		const regEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+		
+		if(!regEmail.test(reqEmail)) {
+			showWarningAlert("이메일 양식에 맞춰 작성해주세요.");
+			return;
+		}
+		
+		const url = "/checkEmail?email="+reqEmail;
+		
+		$.ajax(url,{
+	        type : "GET",
+	    })
+	    .done(res => {
+	    	if(!res.result) {
+	    		showSuccessAlert('사용가능한 이메일 입니다.');
+	    		$('input[name="email"]').prop('disabled',true);
+	    		joinCheckObj.checkEmail = true;
+	    	}
+	    	else {
+	    		showFailAlert('사용불가능한 이메일 입니다.');
+	    	}
+	    })
+	    .fail(err => {
+	    	showWarningAlert('다시 시도해주세요.');
+	    })
+	}
+
+	function sendAuthNumberRequest() {
+		const reqPhoneNum = $('input[name="phone"]').val();
+		
+		//휴대폰 정규식
+		const regPhone = /^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$/;
+		if(!regPhone.test(reqPhoneNum)) {
+			showWarningAlert("휴대폰 양식에 맞추어 작성해주세요");
+			return;
+		}
+		
+		
+		const url = "/authPhoneNum?phoneNum="+reqPhoneNum;
+		
+		$.ajax(url,{
+	        type : "GET",
+	    })
+	    .done(res => {
+	    	if(res.result.statusCode == 2000) {
+	    		showSuccessAlert('인증번호 발송 완료');
+	    		$("input[name='phone']").prop("disabled", true);
+	    	}
+	    	else if(res.result.statusCode == 9876) {
+	    		alert('테스트용(시연시 변경) : ' + res.result.authCode);
+	    		$("input[name='phone']").prop("disabled", true);
+	    	}
+	    	else if(res.result.statusCode == 9999) {
+	    		showWarningAlert("이미 인증이 진행중인 번호입니다.");
+	    	}
+	    	else {
+	    		showFailAlert('인증번호 발송 실패. 다시 시도해주세요');
+	    	}
+	    })
+	    .fail(err => {
+	    	showWarningAlert('다시 시도해주세요.');
+	    })
+	}
+
+	function verifyAuthNumberRequest() {
+		const reqPhoneNum = $('input[name="phone"]').val();
+		const reqPhoneCheckNum = $('input[name="phoneCheck"]').val();
+		
+		const url = "/verifyAuthPhoneNum?authNum="+reqPhoneCheckNum +"&phoneNum=" + reqPhoneNum;
+		
+		$.ajax(url,{
+	        type : "GET",
+	    })
+	    .done(res => {
+	    	if(res.result == 200) {
+	    		showSuccessAlert('인증 완료');
+	    		$("input[name='phoneCheck']").prop("disabled", true);
+	    		joinCheckObj.checkPhone = true;
+	    	}
+	    	else {
+	    		showFailAlert('인증 실패');
+	    	}
+	    })
+	    .fail(err => {
+	    	showWarningAlert('다시 시도해주세요.');
+	    })
 	}
 </script>
 

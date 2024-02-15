@@ -58,4 +58,6 @@ public interface MemberMapper {
 	public int deleteFindAccountEmailLink(String accessKey);
 	
 	public List<TagVO> selectTagList();
+	
+	public MemberVO selectDuplicateNickname(String nickname);
 }

@@ -288,4 +288,10 @@ VALUES (activity_point_detail_seq.NEXTVAL,
 	DELETE FROM FINDACCOUNT_EMAIL_LINK WHERE ACCESS_KEY = #{accessKey} 
 </delete>
 
+<select id="selectDuplicateNickname" parameterType="String" resultType="MemberVO">
+	SELECT NICKNAME
+		FROM MEMBER
+		WHERE NICKNAME = #{nickname}
+</select>
+
 </mapper>
