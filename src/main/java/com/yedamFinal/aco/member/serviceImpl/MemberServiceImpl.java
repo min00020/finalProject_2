@@ -429,8 +429,8 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		ret.put("result", "200");
 		
 		MemberVO selectVO = memberMapper.selectDuplicateNickname(nickname);
-		if(selectVO == null || selectVO.getNickname() == null) {
-			ret.put("result", "500");
+		if(selectVO != null && selectVO.getNickname() != null) {
+			ret.put("result", "409");
 		}
 
 		return ret;

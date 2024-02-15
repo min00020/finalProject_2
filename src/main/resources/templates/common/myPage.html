@@ -363,26 +363,6 @@
 														</div>
 
 														<div class="my-3">
-															<label for="phone" class="px-3">휴대폰</label>
-															<div class="px-3 mt-2">
-																<input id="phone" type="text"
-																	class="px-3 py-2 w-75 min-rounded"
-																	placeholder="010-1234-4567" name="phone" th:value="${memberInfo.phoneNum}">
-																<button class="min-small-rounded min-default-color"
-																	style="margin-left: 0.3rem;"
-																	onclick="sendAuthNumberRequest()" type="button">번호인증</button>
-															</div>
-															<div class="px-3">
-																<input id="phoneCheck" type="text"
-																	class="px-3 py-2 w-75 min-rounded" placeholder="인증번호 입력"
-																	name="phoneCheck">
-																<button class="mt-2 min-small-rounded min-default-color"
-																	style="margin-left: 0.3rem;" type="button"
-																	onclick="verifyAuthNumberRequest()">인증확인</button>
-															</div>
-														</div>
-
-														<div class="my-3">
 															<label for="name" class="px-3">실명</label>
 															<div class="px-3 mt-2">
 																<input id="name" type="text"
@@ -705,7 +685,7 @@
 	        type : "GET",
 	    })
 	    .done(res => {
-	    	if(!res.result) {
+	    	if(res.result == "200") {
 	    		showSuccessAlert('사용가능한 닉네임 입니다.');
 	    		$("input[name='nickname']").prop("disabled", true);
 	    	}
