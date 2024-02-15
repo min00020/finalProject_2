@@ -56,4 +56,6 @@ public interface MemberService {
 	public MemberQuestionChartVO getMemberChart(MemberVO memberVO);
 	
 	public Map<String, Object> checkDuplicateNickname(String nickname);
+	
+	public int updateResetBan(int memberNo);
 }

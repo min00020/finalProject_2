@@ -26,7 +26,7 @@ public class MemberVO {
 	private String gradeName;
 	private String snsType;
 	private String banType;
-	private String banDate;
+	private Date banDate;
 	private String gitToken;
 	private int acoTotal;
 	private int availableAccumPoint;

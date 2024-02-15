@@ -177,7 +177,7 @@
 				<label for="nickname" style="margin-left:27rem;">닉네임</label>
 				<div class="mt-1 d-flex justify-content-center">
 					<input id="nickname" type="text" class="px-3 py-2 w-25 rounded" placeholder="알파벳,한글,숫자 20자 이하입력" name="nickname">
-					<button class="small-rounded default-color" style="margin-left:0.3rem; visibility: hidden;">인증하기</button>
+					<button class="small-rounded default-color" style="margin-left:0.3rem;" onclick="checkDuplicateNickname()">중복체크</button>
 				</div>
 			</div>
 			
@@ -323,6 +323,32 @@ function sendAuthNumberRequest() {
     	}
     	else {
     		showFailAlert('인증번호 발송 실패. 다시 시도해주세요');
+    	}
+    })
+    .fail(err => {
+    	showWarningAlert('다시 시도해주세요.');
+    })
+}
+
+//닉네임 중복체크
+function checkDuplicateNickname() {
+	const reqNickname = $('input[name="nickname"]').val();
+	if(reqNickname == '' || reqNickname.length > 20) {
+		showWarningAlert('닉네임 길이제한 확인해주세요.');
+		return;
+	}
+	
+	const url = "/checkNickname?nickName="+reqNickname;
+	$.ajax(url,{
+        type : "GET",
+    })
+    .done(res => {
+    	if(res.result == "200") {
+    		showSuccessAlert('사용가능한 닉네임 입니다.');
+    		$("input[name='nickname']").prop("disabled", true);
+    	}
+    	else {
+    		showFailAlert('이미 사용중인 닉네임 입니다.');
     	}
     })
     .fail(err => {
