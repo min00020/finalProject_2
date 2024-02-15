@@ -37,11 +37,11 @@ SELECT *
 			ACO_MONEY,
 			ACO_POINT,
 			LEAVE_DATE
-				FROM MEMBER
-				ORDER BY MEMBER_NO)
-				<![CDATA[
+		FROM MEMBER
+		ORDER BY MEMBER_NO)
+  <![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
-    ]]>
+  ]]>
 </select>
 <select id="getAdReportList" resultType="AdminReportVO">
 SELECT *
@@ -56,10 +56,10 @@ SELECT *
 			r.BOARD_TYPE,
 			r.BOARD_NO,
 			o.NAME as reportee_name
-				FROM REPORT r
-				JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
-				JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
-				ORDER BY r.REPORT_NO DESC)
+		FROM REPORT r
+		JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
+		JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
+		ORDER BY r.REPORT_NO DESC)
 				<![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
     ]]>
@@ -109,6 +109,13 @@ SELECT *
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
     ]]> 
 </select>
+<select id="getAdAllSettleList" >
+			SELECT *
+    		FROM			 
+			SETTLEMENT		
+			WHERE PROCESS_STATUS = 'O001'			
+</select>
+
 <select id="getAdEmoList" resultType="AdminEmoVO">
 	SELECT *
     	FROM (
@@ -150,12 +157,14 @@ SELECT *
     WHERE RN > ((#{pageNo}-1) * 9) AND RN <= (#{pageNo}) * 9    
     ]]>
 </select>
+
 <select id="MainEmoListCount" resultType="int">
 	SELECT 
         	COUNT(*) AS CNT
             FROM EMOTICON
             WHERE EMO_STATE = 'D001'
 </select>
+
 <!-- 이모티콘 등록 -->
 <insert id="insertEmo" parameterType="AdminEmoVO" useGeneratedKeys="false">
 	 	INSERT INTO EMOTICON (
@@ -213,13 +222,16 @@ SELECT *
 	FROM EMOTICON
 	WHERE EMO_NO=#{emoNo}
 </select>
+
 <!-- 이모티콘 구매내역 -->
 <select id="getEmoBuyList" resultType="AdminEmoVO">
 	SELECT E.EMO_FIRSTIMG, E.EMO_NAME, E.EMO_PRICE, M.EMO_BUYDATE, E.EMO_PATH, E.EMO_NO, M.MEMBER_NO
-	FROM MY_EMOTICON M JOIN EMOTICON E ON M.EMO_NO = E.EMO_NO
+	FROM MY_EMOTICON M 
+	JOIN EMOTICON E ON M.EMO_NO = E.EMO_NO
 	WHERE M.MEMBER_NO=#{memberNo}
 	ORDER BY M.EMO_BUYDATE DESC
 </select>
+
 <!-- //내이모티콘 (댓글) -->
 <select id="getMyEmoList">
 	SELECT * 
@@ -227,6 +239,7 @@ SELECT *
     LEFT JOIN MY_EMOTICON M ON E.EMO_NO = M.EMO_NO
     WHERE M.MEMBER_NO = #{membeNo}
 </select>
+
 <select id="getAdCntList" resultType="AdminMainVO">
 	SELECT COUNT(CASE WHEN REPORT_STATE = 'B001' THEN 1 END)AS SCOUNT FROM REPORT UNION ALL
     SELECT COUNT(CASE WHEN ANSWER_STATE = 'P001' THEN 1 END) FROM QNA_BOARD UNION ALL
@@ -238,8 +251,7 @@ SELECT *
 
 <!-- 공지등록 --> 
 <insert id="insertNotice">
-		<selectKey keyProperty="noticeBoardNo" order="BEFORE"
-			resultType="int">
+		<selectKey keyProperty="noticeBoardNo" order="BEFORE"	resultType="int">
 			select nvl(max(NOTICE_BOARD_NO),0)+1 from NOTICE_BOARD
 		</selectKey>
 		INSERT INTO
@@ -314,11 +326,7 @@ SELECT *
 				FROM REPORT r
 				JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
 				JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
-				<choose>
-					<when test="reportStatus.equals('wait')">WHERE REPORT_STATE = 'B001'</when>
-					<when test="reportStatus.equals('impose')">WHERE REPORT_STATE = 'B002'</when>
-					<when test="reportStatus.equals('back')">WHERE REPORT_STATE = 'B003'</when>
-				</choose>
+				WHERE REPORT_STATE = #{reportStatus}
 				ORDER BY r.REPORT_NO DESC)
 				<![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
@@ -333,12 +341,9 @@ SELECT *
 	SELECT 
         	COUNT(*) AS CNT
             FROM REPORT
-           		<choose>
-					<when test="reportStatus.equals('wait')">WHERE REPORT_STATE = 'B001'</when>
-					<when test="reportStatus.equals('impose')">WHERE REPORT_STATE = 'B002'</when>
-					<when test="reportStatus.equals('back')">WHERE REPORT_STATE = 'B003'</when>
-				</choose>
+            WHERE REPORT_STATE = #{reportStatus}
 </select>
+
 <!-- 문의 드롭박스 -->
 <select id="getAdDropQnaList" resultType="AdminQnaVO">
 		SELECT *
@@ -410,10 +415,15 @@ SELECT *
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
     ]]> 
 </select>
-<update id="updateStatus">
+<update id="updateSettlementStatus">
 	UPDATE SETTLEMENT
     SET PROCESS_STATUS = 'O002' 
     WHERE SETTLEMENT_NO =#{settlementNo}
+</update>
+<update id="updateAllSettlementStatus">
+	UPDATE SETTLEMENT
+    SET PROCESS_STATUS = 'O002' 
+    WHERE PROCESS_STATUS = 'O001'
 </update>
 <select id="selectAdSettleCount" resultType="int">
 	SELECT 
@@ -563,7 +573,8 @@ ORDER BY SPLIT_VALUE
 			SET ACO_POINT = #{acoPoint} - #{emoPrice}
 		</when>
 		<otherwise>
-			SET ACO_POINT = 0, ACO_MONEY = #{acoMoney} + #{acoPoint} - #{emoPrice} 
+			SET ACO_POINT = 0, 
+			ACO_MONEY = #{acoMoney} + #{acoPoint} - #{emoPrice} 
 		</otherwise>
 	</choose>
 		WHERE MEMBER_NO = #{memberNo}

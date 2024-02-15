@@ -5,14 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.yedamFinal.aco.admin.AdminEmoUseImgVO;
 import com.yedamFinal.aco.admin.AdminEmoVO;
 import com.yedamFinal.aco.admin.AdminMainVO;
+import com.yedamFinal.aco.admin.AdminSettleVO;
 import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.admin.service.AdminService;
 import com.yedamFinal.aco.common.PaginationDTO;
@@ -51,6 +55,8 @@ public class AdminServiceImpl implements AdminService {
 		selectDate.put("3", "3month");
 		selectDate.put("4", "6month");
 		
+
+		webClient = WebClient.create();
 	}
 	
 	
@@ -59,6 +65,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	private FileServiceImpl fileService;
+	
+	private WebClient webClient;
+	
 	
 	@Override
 	public  Map<String,Object> getAdNoticeList(int pageNo) {
@@ -122,10 +131,10 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public  Map<String,Object> getAdReportList(int pageNo, String reportStatus) {
-		String data = dropdownReport.get(reportStatus);
+		//String data = dropdownReport.get(reportStatus);
 		
 		Map<String,Object> mp = new HashMap<String, Object>();
-		if(data == null) {
+		if(reportStatus == null) {
 			var AdReportList = adminMapper.getAdReportList(pageNo);
 			PaginationDTO dto = null;
 			if(AdReportList.size() > 0) {
@@ -136,10 +145,10 @@ public class AdminServiceImpl implements AdminService {
 			mp.put("pageDTO", dto);
 		}
 		else {
-			var AdReportList = adminMapper.getAdDropReportList(pageNo, data);
+			var AdReportList = adminMapper.getAdDropReportList(pageNo, reportStatus);
 			PaginationDTO dto = null;
 			if(AdReportList.size() > 0) {
-				dto = new PaginationDTO(adminMapper.selectAdStateReportCount(data), pageNo , 10);
+				dto = new PaginationDTO(adminMapper.selectAdStateReportCount(reportStatus), pageNo , 10);
 			}
 			
 			mp.put("reportList", AdReportList);
@@ -325,6 +334,18 @@ public class AdminServiceImpl implements AdminService {
 	}
 	@Override
 	public int updateSettlementStatus(int settlementNo) {
-		return adminMapper.updateStatus(settlementNo);
+		return adminMapper.updateSettlementStatus(settlementNo);
+	}
+	
+	
+	@Override
+	@Transactional
+	public int updateAllSettlementStatus() {
+		return adminMapper.updateAllSettlementStatus();
+	}
+	
+	@Override
+	public List<AdminSettleVO> getAllSettleList() {
+		return adminMapper.getAdAllSettleList();
 	}
 }

@@ -217,9 +217,9 @@
 						  </button>
 						  <ul class="dropdown-menu">
 						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?pageNo=1'|">전체</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=0&pageNo=1'|">처리대기중</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=1&pageNo=1'|">제재</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=2&pageNo=1'|">반려</a></li>
+						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=B001&pageNo=1'|">처리대기중</a></li>
+						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=B002&pageNo=1'|">제재</a></li>
+						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=B003&pageNo=1'|">반려</a></li>
 						  </ul>
 						</div>
                     <!-- DataTales Example -->
@@ -270,20 +270,8 @@
                 <span class="sr-only">Previous</span>
             </a>
             </th:block>
-        	<th:block th:if="${reportStatus == '2'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=2&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '1'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=1&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '0'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=0&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+        	<th:block th:unless="${reportStatus == null}">
+            <a class="page-link" th:href="|/adminReport?reportStatus=${reportStatus}&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
@@ -293,14 +281,8 @@
         	<th:block th:if="${reportStatus == null}">
         		<a class="page-link" th:href="|/adminReport?pageNo=${pageNo}|">[[${pageNo}]]</a>
         	</th:block>
-        	<th:block th:if="${reportStatus == '2'}">
-        		<a class="page-link" th:href="|/adminReport?reportStatus=2&pageNo=${pageNo}|">[[${pageNo}]]</a>
-        	</th:block>
-        	<th:block th:if="${reportStatus == '1'}">
-        		<a class="page-link" th:href="|/adminReport?reportStatus=1&pageNo=${pageNo}|">[[${pageNo}]]</a>
-        	</th:block>
-        	<th:block th:if="${reportStatus == '0'}">
-        		<a class="page-link" th:href="|/adminReport?reportStatus=0&pageNo=${pageNo}|">[[${pageNo}]]</a>
+        	<th:block th:unless="${reportStatus == null}">
+        		<a class="page-link" th:href="|/adminReport?reportStatus=${reportStatus}&pageNo=${pageNo}|">[[${pageNo}]]</a>
         	</th:block>
         </li>
         <li class="page-item">
@@ -310,20 +292,8 @@
                 <span class="sr-only">Next</span>
             </a>
             </th:block>
-        	<th:block th:if="${reportStatus == '2'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=2&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '1'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=1&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '0'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=0&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+        	<th:block th:unless="${reportStatus == null}">
+            <a class="page-link" th:href="|/adminReport?reportStatus=${reportStatus}&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>

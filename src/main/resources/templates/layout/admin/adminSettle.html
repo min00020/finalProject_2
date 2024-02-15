@@ -214,7 +214,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+					[[${allSettle}]]
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">정산관리</h1>
       					<div class="dropdown" style="text-align: right">
@@ -242,7 +242,22 @@
                                             <th>정산 요청금액</th>
                                             <th>처리상태</th>
                                             <th>
-                                            <div style="text-align: center;"><button class="btn btn-primary">일괄정산</button></div>
+                                            <div style="text-align: center;"><button class="btn btn-primary" data-bs-toggle="modal" th:data-bs-target="|#exampleModalAll|">일괄정산</button>
+                                           <!-- Modal -->
+												<div class="modal fade" th:id="|exampleModalAll|" tabindex="-1" aria-labelledby="exampleModalLabel0" aria-hidden="true">
+												  <div class="modal-dialog">
+												    <div class="modal-content">
+												      <div class="modal-header" style="margin: auto;">
+												        <h1 class="modal-title fs-5" id="exampleModalLabel0">정산요청을 일괄처리 하시겠습니까?</h1>
+												      </div>
+												      <div class="modal-footer" style="margin: auto;">
+												        <button type="button" class="btn btn-primary" th:onclick="settleOnAll()">일괄정산</button>
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+                                            </div>
                                             </th>
                                         </tr>
                                     </thead>
@@ -255,7 +270,7 @@
                                             <td><div style="text-align: center" th:if="${settles.processStatus == 'O002'}"><button type="button" disabled="disabled" class="btn btn-secondary">정산완료</button></div>
                                             <div style="text-align: center" th:unless="${settles.processStatus == 'O002'}">
                                                                                    <!-- Button trigger modal -->
-												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal${settles.settlementNo}|"
+												<button type="button" class="btn btn-success" data-bs-toggle="modal" th:data-bs-target="|#exampleModal${settles.settlementNo}|"
 												>
 												  정산
 												</button>
@@ -267,7 +282,7 @@
 												        <h1 class="modal-title fs-5" id="exampleModalLabel">정산요청을 처리하시겠습니까?</h1>
 												      </div>
 												      <div class="modal-footer" style="margin: auto;">
-												        <button type="button" class="btn btn-danger" th:onclick="settleOn([[${settles.settlementNo}]], [[${settles.memberNo}]])">정산</button>
+												        <button type="button" class="btn btn-primary" th:onclick="settleOn([[${settles.settlementNo}]], [[${settles.memberNo}]])">정산</button>
 												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 												      </div>
 												    </div>
@@ -368,31 +383,26 @@ let today = getFormatDate(date);
 const accessToken = [[${nhAccessToken}]];
 const Iscd = [[${Iscd}]];
 const accountNo = '3020000010135';
+const settleAll = [[${allSettle}]]
 
-function settleOn(settlementNo, settlementReqPoint){
+function settleOn(settlementNo, settlementReqPoint, sendAll){
 	let obj={};
 	obj={	
-		 Header:{
-	        ApiNm:"DrawingTransfer",
-	        Tsymd:today,
-	        Trtm:"125237",
-	        Iscd:Iscd,
-	        FintechApsno : "001",
-	        ApiSvcCd:"DrawingTransferA",
-	        IsTuno:settlementNo+settlementReqPoint+time, 
-	        AccessToken: accessToken
-	    },
-	FinAcno:"00820100023050000000000017704",
-	Tram: settlementReqPoint,
-	DractOtlt:"정산",
-	MractOtlt:"정산"
-	}
-	
-	const settleUpdateObj = {
-		settlementNo : settlementNo
-	};
-	
-	settleUpdateObj[csrfPara] = csrfToken;
+			Header:{
+				ApiNm:"DrawingTransfer",
+				Tsymd:today,
+			    Trtm:"125237",
+			    Iscd:Iscd,
+			    FintechApsno : "001",
+			    ApiSvcCd:"DrawingTransferA",
+			    IsTuno:settlementNo+settlementReqPoint+time, 
+			    AccessToken: accessToken
+			},
+			FinAcno:"00820100023050000000000017704",
+			Tram: settlementReqPoint,
+			DractOtlt:"정산",
+			MractOtlt:"정산"
+	}	
 	
 
 	$.ajax('https://developers.nonghyup.com/DrawingTransfer.nh', {
@@ -402,7 +412,21 @@ function settleOn(settlementNo, settlementReqPoint){
 	})
 	.done(res =>{
 		console.log(res);
-		$.ajax('/updateSettlementStatus ', {
+		let url = '';
+		let settleUpdateObj = {};
+		if(typeof sendAll != 'undefined' && sendAll != null) {
+			url = '/updateAllSettlementStatus';
+		}
+		else {
+			settleUpdateObj = {
+				settlementNo : settlementNo
+			};
+				
+			url = '/updateSettlementStatus';
+		}
+		settleUpdateObj[csrfPara] = csrfToken;
+		
+		$.ajax(url, {
 			type : 'post',
 			data : settleUpdateObj,
 			beforeSend : function(xhr){
@@ -411,18 +435,19 @@ function settleOn(settlementNo, settlementReqPoint){
 		})
 		.done(res => {
 			if(res.result == '200'){
-				Swal.fire({
-					  title: '정산이 완료되었습니다.',
-					  text: '',
-					  icon: 'success',
-					  confirmButtonClass: "btn-danger",
-					  confirmButtonText: "확인",
-					}).then((result) => {
-					  if (result.value != null) {
-						  window.location.href = "/adminSettle?pageNo=1";
-					  }
-					});
-					
+				if(typeof sendAll == 'undefined') {
+					Swal.fire({
+						  title: '정산이 완료되었습니다.',
+						  text: '',
+						  icon: 'success',
+						  confirmButtonClass: "btn-danger",
+						  confirmButtonText: "확인",
+						}).then((result) => {
+						  if (result.value != null) {
+							  window.location.href = "/adminSettle?pageNo=1";
+						  }
+						});	
+				}
 			}else{
 				showFailAlert('에러가 발생했습니다.')
 			}
@@ -435,6 +460,24 @@ function settleOn(settlementNo, settlementReqPoint){
 	
 }//submit end
 
+
+function settleOnAll(){
+	for(var i = 0; i < settleAll.length; i++){
+		settleOn(settleAll[i].settlementNo, settleAll[i].settlementReqPoint, '1');
+	}
+	
+	Swal.fire({
+		  title: '일괄 정산이 완료되었습니다.',
+		  text: '',
+		  icon: 'success',
+		  confirmButtonClass: "btn-danger",
+		  confirmButtonText: "확인",
+		}).then((result) => {
+		  if (result.value != null) {
+			  window.location.href = "/adminSettle?pageNo=1";
+		  }
+	});	
+}
 function getFormatDate(date){
 	var year = date.getFullYear();              //yyyy
 	var month = (1 + date.getMonth());          //M
