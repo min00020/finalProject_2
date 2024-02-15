@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.member.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
+import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
@@ -92,6 +92,8 @@ public class MemberController {
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
 		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
+		var tagList = memberService.getTagList();
+		model.addAttribute("tagList", tagList);
 		model.addAttribute("accountList", list3);
 		model.addAttribute("pointList", list);
 		model.addAttribute("activityList", list2);
@@ -160,6 +162,8 @@ public class MemberController {
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
 		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
+		var tagList = memberService.getTagList();
+		model.addAttribute("tagList", tagList);
 		model.addAttribute("accountList", list3);
 		model.addAttribute("pointList", list);
 		model.addAttribute("activityList", list2);
@@ -233,7 +237,29 @@ public class MemberController {
 	}
 
 	@GetMapping("/test")
-	public String test() {
+	public String test(Model model) {
+		
+		Map<Integer, List<ReplyJoinVO>> map = new HashMap<Integer, List<ReplyJoinVO>>();
+		
+		
+		
+		List<ReplyJoinVO> list1 = new ArrayList<ReplyJoinVO>();
+		ReplyJoinVO vo = new ReplyJoinVO();
+		vo.setParentReplyNo(1);
+		vo.setParentComment("hihi");
+		list1.add(vo);
+		
+		map.put(1, list1);
+		
+		List<ReplyJoinVO> list2 = new ArrayList<ReplyJoinVO>();
+		ReplyJoinVO vo2 = new ReplyJoinVO();
+		vo2.setParentReplyNo(2);
+		vo2.setParentEmoticon("조로_1.png");
+		list2.add(vo2);
+		
+		map.put(2, list2);
+		
+		model.addAttribute("replyList",map);
 		return "common/test";
 	}
 	
@@ -266,6 +292,12 @@ public class MemberController {
 	@ResponseBody
 	public Map<String,Object> changePassword(@RequestParam String accessKey, @RequestParam String password, @RequestParam String passwordVerify) {
 		return memberService.changePassword(accessKey,password,passwordVerify);
+	}
+	
+	@GetMapping("/checkNickname")
+	@ResponseBody
+	public Map<String, Object> checkDuplicateNickname(@RequestParam String nickName) {
+		return memberService.checkDuplicateNickname(nickName);
 	}
 }
 

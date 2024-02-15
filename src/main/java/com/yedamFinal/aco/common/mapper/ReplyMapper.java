@@ -10,4 +10,6 @@ import com.yedamFinal.aco.common.ReplyVO;
 public interface ReplyMapper {
 	public int insertReply(ReplyVO vo);
 	public List<ReplyJoinVO> selectReply(@Param(value="type") String boardType, @Param(value="bno") int boardNo);
+	public int updateDeleteDateReply(int replyNo);
+	public int updateCommentReply(ReplyVO vo);
 }

@@ -60,11 +60,42 @@ public class ReplyServiceImpl implements ReplyService {
 		return replyMapper.selectReply(boardType, boardNo);
 	}
 
-	// 같은 회원이 중복 추천하는거 막아야하는데.. 시간상 넘김
 	@Override
-	public Map<String, Object> recommendReply(String replyNo) {
+	public Map<String, Object> deleteReply(String replyNo) {
 		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> ret = new HashMap<String,Object>();
+		ret.put("result", "200");
+		
+		if(replyMapper.updateDeleteDateReply(Integer.valueOf(replyNo)) <= 0) {
+			ret.put("result", "500");
+		}
+		
+		return ret;
+	}
+
+	@Override
+	public Map<String, Object> modifyReply(int replyNo, String replyBody, String isEmoticon) {
+		// TODO Auto-generated method stub
+		Map<String,Object> ret = new HashMap<String,Object>();
+		ret.put("result", "200");
+		
+		ReplyVO replyVO = new ReplyVO();
+		replyVO.setReplyNo(replyNo);
+		// 이모티콘 사용 시
+		if(isEmoticon.equals("1")) {
+			replyVO.setEmoticon(replyBody);
+			replyVO.setContents(null);
+		}
+		else {
+			replyVO.setContents(replyBody);
+			replyVO.setEmoticon(null);
+		}
+		
+		if(replyMapper.updateCommentReply(replyVO) <= 0) {
+			ret.put("result", "500");
+		}
+		
+		return ret;
 	}
 
 }

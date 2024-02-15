@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.common.web;
 
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
 
 import com.yedamFinal.aco.common.AttachedFileVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
@@ -29,6 +30,22 @@ import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
+
+
+/**
+ * 
+ * @author 전민교
+ * @since 2024.02.10
+ * @version 1.0
+ * @see <pre>
+ * 
+ *
+ *   수정일        수정자           수정내용
+ *  -------      --------    ---------------------------
+ *  2024.02.10   전민교        첨부파일 다운로드        
+ *  2024.02.12   전민교        댓글 둥록/수정/삭제        
+ * </pre>
+ */
 
 @Controller
 public class CommonController {
@@ -45,7 +62,13 @@ public class CommonController {
 	private String attachFilePath;
 	
 	
-	// min 첨부파일 다운로드
+	
+	/**
+     * 첨부파일 다운로드
+     * @param fileNo
+     * @param userAgent
+     * @return ResponseEntity<Resource>
+     */
 	@GetMapping("/attachFile/{fileNo}")
 	public ResponseEntity<?> downloadFile(@PathVariable("fileNo") int fileNo, @RequestHeader("User-Agent") String userAgent) {
 		AttachedFileVO fileVO = fileService.getFile(fileNo);
@@ -81,7 +104,15 @@ public class CommonController {
 		return new ResponseEntity<Resource>(resource,headers,HttpStatus.OK);
 	}
 	
-	// min 댓글 등록(댓글 등록 요청은 여기다가 하고, 댓글 select하는건 개별 controller에서 처리)
+	/**
+     * 댓글 등록
+     * @param boardType
+     * @param boardNo
+     * @param replyBody,
+     * @param isEmoticon
+     * @param replyPno
+     * @return ResponseEntity<Resource>
+     */
 	@PostMapping("/reply")
 	@ResponseBody
 	public Map<String,Object> postReplyControl(@RequestParam String boardType,
@@ -102,23 +133,45 @@ public class CommonController {
 		return replyService.postReply(boardType, boardNo, replyBody, isEmoticon,replyPno, memberVO);
 	}
 	
-	// min 댓글 추천
-	@PutMapping("/reply")
+	
+	/**
+     * 댓글 삭제
+     * @param replyNo
+     * @return Map<String, Object>
+     */
+	@DeleteMapping("/reply")
 	@ResponseBody
-	public Map<String, Object> recommendReplyControl(String replyNo) {
-		MemberVO memberVO = null;
+	public Map<String, Object> deleteReplyControl(@RequestParam String replyNo) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-			
-			memberVO = memberService.getMemberInfo(memberVO);
+			return replyService.deleteReply(replyNo);
 		}
 		else {
-			return null;
+			result.put("result", "500");
+			return result;
 		}
-		
-		return null;
+	}
+
+	/**
+     * 댓글 수정
+     * @param replyNo
+     * @param replyBody
+     * @param isEmoticon
+     * @return Map<String, Object>
+     */
+	@PutMapping("/reply")
+	@ResponseBody
+	public Map<String, Object> modifyReplyControl(@RequestParam Integer replyNo, @RequestParam String replyBody, @RequestParam String isEmoticon) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			return replyService.modifyReply(replyNo, replyBody, isEmoticon);
+		}
+		else {
+			result.put("result", "500");
+			return result;
+		}
 	}
 
 	//chae toast ui

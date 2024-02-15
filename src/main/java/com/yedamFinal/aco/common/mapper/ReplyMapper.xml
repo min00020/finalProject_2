@@ -41,6 +41,7 @@
         		A.NICKNAME AS parent_nickname,
         		A.profile_image AS parent_image,
                 A.EMOTICON AS parent_emoticon,
+                A.DELETE_DATE AS parent_delete,
         		B.reply_pno as child_reply_pno,
         		B.reply_no as child_reply_no, 
         		B.contents as child_comment, 
@@ -48,11 +49,20 @@
         		B.member_no AS child_member_no, 
         		B.nickname as child_nickname,
         		B.profile_image AS child_image,
-                B.EMOTICON AS child_emoticon
+                B.EMOTICON AS child_emoticon,
+                B.DELETE_DATE AS child_delete
     		FROM REPLY A
     		LEFT JOIN REPLY B ON A.reply_no = B.reply_pno AND A.board_type = #{type}
     		WHERE A.board_no = #{bno} AND A.reply_pno IS NULL
     		ORDER BY A.WRITE_DATE asc, child_WRITE_date asc
-    		
+    		ORDER BY parent_write_date asc, child_WRITE_date asc
 	</select>
+	
+	<update id="updateDeleteDateReply">
+		UPDATE REPLY SET DELETE_DATE = SYSDATE WHERE REPLY_NO = #{replyNo}
+	</update>
+	
+	<update id="updateCommentReply">
+		UPDATE REPLY SET EMOTICON = #{emoticon}, contents = #{contents} WHERE REPLY_NO = #{replyNo}
+	</update>
 </mapper>
