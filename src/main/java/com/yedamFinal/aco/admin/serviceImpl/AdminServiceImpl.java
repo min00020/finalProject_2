@@ -56,7 +56,6 @@ public class AdminServiceImpl implements AdminService {
 		selectDate.put("4", "6month");
 		
 
-		webClient = WebClient.create();
 	}
 	
 	
@@ -66,7 +65,6 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private FileServiceImpl fileService;
 	
-	private WebClient webClient;
 	
 	
 	@Override
@@ -347,5 +345,14 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<AdminSettleVO> getAllSettleList() {
 		return adminMapper.getAdAllSettleList();
+	}
+	
+	@Override
+	public int updateAdminReport(int reportNo) {
+		return adminMapper.updateAdminReport(reportNo);
+	}
+	@Override
+	public int updateBanMember(int memberNo) {
+		return adminMapper.updateBanMember(memberNo);
 	}
 }

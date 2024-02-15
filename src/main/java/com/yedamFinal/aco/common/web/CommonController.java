@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.AttachedFileVO;
+import com.yedamFinal.aco.common.ReportVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
@@ -179,5 +180,19 @@ public class CommonController {
 	@ResponseBody
 	public Map<String, String> uploadEditorImage(@RequestParam final MultipartFile image) {
 		return fileService.textEditorImage(image);
+	}
+	
+	@PostMapping("/insertReport")
+	@ResponseBody
+	public int insertReportProcess(ReportVO reportVO) {
+		MemberVO memberVO = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			memberVO = userDetails.getMemberVO();
+			
+			memberVO = memberService.getMemberInfo(memberVO);
+		}
+		 return replyService.insertReport(reportVO, memberVO.getMemberNo());
 	}
 }

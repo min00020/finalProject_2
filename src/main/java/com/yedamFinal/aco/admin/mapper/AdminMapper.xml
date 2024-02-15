@@ -44,25 +44,31 @@ SELECT *
   ]]>
 </select>
 <select id="getAdReportList" resultType="AdminReportVO">
-SELECT *
-    FROM (
+SELECT C.*
+        FROM (
         SELECT  
             ROWNUM AS RN,
-            r.REPORT_TYPE,
-			r.REPORT_CONTENT,
-			m.NAME as reporter_name,
-			r.REPORT_DATE,
-			r.REPORT_STATE,
-			r.BOARD_TYPE,
-			r.BOARD_NO,
-			o.NAME as reportee_name
-		FROM REPORT r
-		JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
-		JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
-		ORDER BY r.REPORT_NO DESC)
-				<![CDATA[
+            B.*
+            FROM (
+            SELECT 
+                r.REPORT_TYPE,
+                r.REPORT_NO,
+                r.REPORT_CONTENT,
+                m.NAME as reporter_name,
+                r.REPORT_DATE,
+                r.REPORT_STATE,
+                r.BOARD_TYPE,
+                r.BOARD_NO,
+                o.NAME as reportee_name
+            FROM REPORT r
+            JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
+            JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
+            ORDER BY r.REPORT_NO DESC
+            ) B
+        ) C
+    <![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
-    ]]>
+  ]]>
 </select>
 <select id="getAdQnaList" resultType="AdminQnaVO">
 		SELECT *
@@ -594,4 +600,20 @@ ORDER BY SPLIT_VALUE
 	WHERE MEMBER_NO=#{memberNo}
 	AND EMO_NO=#{emoNo}
 </delete>
+<update id="updateAdminReport">
+	UPDATE REPORT
+        SET
+        REPORT_STATE = #{reportState}
+    WHERE REPORT_NO = #{reportNo}
+</update>
+<update id="updateBanMember">
+	UPDATE MEMBER
+        SET 
+        <choose>
+        <when test="banType == 'M004'">BAN_TYPE = 'M005' , BAN_DATE = SYSDATE</when>
+        <when test="banType == 'M005'">BAN_TYPE = 'M006' , BAN_DATE = SYSDATE</when>
+        <otherwise>BAN_TYPE = 'M004' , BAN_DATE = SYSDATE</otherwise>    
+        </choose>
+    WHERE MEMBER_NO = #{memberNo}
+</update>
 </mapper>

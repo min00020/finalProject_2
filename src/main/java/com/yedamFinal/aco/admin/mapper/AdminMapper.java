@@ -86,4 +86,7 @@ public interface AdminMapper {
 	public int deleteEmo(AdminEmoVO adminEmoVO);
 	//내이모티콘 (댓글)
 	public List<AdminEmoVO> getMyEmoList(int memberNo);
+	
+	public int updateAdminReport(int reportNo);
+	public int updateBanMember(int memberNo);
 }

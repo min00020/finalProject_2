@@ -54,7 +54,6 @@
     		FROM REPLY A
     		LEFT JOIN REPLY B ON A.reply_no = B.reply_pno AND A.board_type = #{type}
     		WHERE A.board_no = #{bno} AND A.reply_pno IS NULL
-    		ORDER BY A.WRITE_DATE asc, child_WRITE_date asc
     		ORDER BY parent_write_date asc, child_WRITE_date asc
 	</select>
 	
@@ -65,4 +64,19 @@
 	<update id="updateCommentReply">
 		UPDATE REPLY SET EMOTICON = #{emoticon}, contents = #{contents} WHERE REPLY_NO = #{replyNo}
 	</update>
+	
+	<insert id="insertReport">
+		 INSERT INTO REPORT 
+		 VALUES(
+   			 REPORT_SEQ.NEXTVAL, 
+   			 #{reportType}, 
+   			 #{reportContent}, 
+   			 #{reporter}, 
+   			 SYSDATE, 
+   			 'B001', 
+   			 #{boardType}, 
+   			 #{boardNo}, 
+   			 #{reportee}
+   			 )
+	</insert>
 </mapper>

@@ -153,7 +153,57 @@
 								</div>
 								<div>
 									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-									<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<button type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<!-- Modal -->
+			                  		<div class="modal fade" th:id="|reportModal${reply.key}|" tabindex="-1" role="dialog"
+			                     		aria-labelledby="AddReportLabel" aria-hidden="true">
+			                     		<div class="modal-dialog modal-s" role="document">
+			                        		<div class="modal-content">
+			                           			<div class="modal-header">
+			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
+			                              			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+			                                 			<span aria-hidden="true">&times;</span>
+			                              			</button>
+			                           			</div>
+			                           			<div class="modal-body">
+			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
+			                           				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+			                           				<input type="hidden" name="reportee" th:value="${reply.value[0].parentMemberNo}">
+			                           				<input type="hidden" name="boardNo" th:value="${qnaInfo[0].qnaBoardNo}">
+			                           				<input type="hidden" name="boardType" th:value="N005">
+													<div>
+														<table>
+															<tr>
+																<th>신고종류</th>
+																<td>
+																	<select name="reportType" id="reportType">
+													  					<option th:value="null">--신고종류를 선택해주세요--</option>
+													  					<option th:value="A001">홍보</option>
+													  					<option th:value="A002">도배</option>
+													  					<option th:value="A003">불법정보</option>
+													  					<option th:value="A004">욕설</option>
+													  					<option th:value="A005">개인정보노출</option>
+													  					<option th:value="A006">기타</option>
+																	</select>
+																</td>
+															</tr>
+															<tr>
+																<th>신고사유</th>
+																<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+															</tr>
+														</table>
+													</div>
+												</form>
+			                           			</div>
+			                           		<div class="modal-footer">
+			                              		<button type="button" class="btn btn-primary" th:onclick="insertReport([[${reply.key}]])">등록</button>
+			                              		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                           		</div>
+			                        	</div>
+			                     	</div>
+			                     <hr>
+			                  </div>
+                  				<!-- 모달 끝 -->
 								</div>
 							</div>
 							<!--/*댓글 내용구간  */-->
@@ -266,7 +316,57 @@
 									</div>
 									<div>
 										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+										<button type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${innerReply.childReplyNo}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+										<!-- Modal -->
+			                  			<div class="modal fade" th:id="|reportModal${innerReply.childReplyNo}|" tabindex="-1" role="dialog"
+			                    			aria-labelledby="AddReportLabel" aria-hidden="true">
+			                    			<div class="modal-dialog modal-s" role="document">
+			                    				<div class="modal-content">
+			                    		   			<div class="modal-header">
+			                    		      			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
+			                    		      			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+			                    		         			<span aria-hidden="true">&times;</span>
+			                    		      			</button>
+			                    		   			</div>
+			                    		   			<div class="modal-body">
+			                    		   				<form name="reportForm" action="/insertReport" method="post" th:id="${innerReply.childReplyNo}"> 	
+			                    		   				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+			                    		   				<input type="hidden" name="reportee" th:value="${innerReply.childMemberNo}">
+			                    		   				<input type="hidden" name="boardNo" th:value="${qnaInfo[0].qnaBoardNo}">
+			                    		   				<input type="hidden" name="boardType" th:value="N005">
+														<div>
+															<table>
+																<tr>
+																	<th>신고종류</th>
+																	<td>
+																		<select name="reportType" id="reportType">
+														  					<option th:value="null">--신고종류를 선택해주세요--</option>
+														  					<option th:value="A001">홍보</option>
+														  					<option th:value="A002">도배</option>
+														  					<option th:value="A003">불법정보</option>
+														  					<option th:value="A004">욕설</option>
+														  					<option th:value="A005">개인정보노출</option>
+														  					<option th:value="A006">기타</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr>
+																	<th>신고사유</th>
+																	<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+																</tr>
+															</table>
+														</div>
+													</form>
+			                    		   			</div>
+			                    		   		<div class="modal-footer">
+			                    		      		<button type="button" class="btn btn-primary" th:onclick="insertReport([[${innerReply.childReplyNo}]])">등록</button>
+			                    		      		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                    		   		</div>
+			                    			</div>
+			                    		</div>
+			                     	<hr>
+			                  	</div>
+                  				<!-- 모달 끝 -->
 									</div>
 								</div>
 								<!--/*댓글 내용구간  */-->
@@ -732,6 +832,27 @@
 			console.log(err);
 		})
 	}
-	
+	//harang
+	function insertReport(replyNo){
+		const formData = new FormData($('#' + replyNo)[0]);
+		
+		$.ajax('/insertReport', {
+			type: "POST",
+			data: formData,
+			contentType : false,
+			processData : false,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			showSuccessAlert("해당 댓글이 신고되었습니다.");
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
 	
 </script>

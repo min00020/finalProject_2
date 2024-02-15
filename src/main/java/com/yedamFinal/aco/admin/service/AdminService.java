@@ -57,4 +57,6 @@ public interface AdminService {
 	public List<AdminSettleVO> getAllSettleList();
 	public int updateSettlementStatus(int settlementNo);
 	public int updateAllSettlementStatus();
+	public int updateAdminReport(int reportNo);
+	public int updateBanMember(int memberNo);
 }

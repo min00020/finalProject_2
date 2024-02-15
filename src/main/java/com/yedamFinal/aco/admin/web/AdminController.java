@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -299,4 +300,29 @@ public class AdminController {
 		}
 		return result;
 	}	
+	
+	@ResponseBody
+	@PutMapping("/updateAdminReport")
+	public Map<String, Object> updateAdminReport(int reportNo){
+		Map<String,Object> result = new HashMap<String, Object>(); 
+		if(adminService.updateAdminReport(reportNo) > 0)	{
+			result.put("result", "200");
+		}
+		else {
+			result.put("result", "500");
+		}
+		return result;
+	}
+	@ResponseBody
+	@PutMapping("/updateBanMember")
+	public Map<String, Object> updateBanMember(int memberNo){
+		Map<String,Object> result = new HashMap<String, Object>(); 
+		if(adminService.updateBanMember(memberNo) > 0)	{
+			result.put("result", "200");
+		}
+		else {
+			result.put("result", "500");
+		}
+		return result;
+	}
 }
