@@ -436,5 +436,11 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return ret;
 	}
 
+	@Override
+	public int updateResetBan(int memberNo) {
+		// TODO Auto-generated method stub
+		return memberMapper.updateResetBan(memberNo);
+	}
+
 
 }

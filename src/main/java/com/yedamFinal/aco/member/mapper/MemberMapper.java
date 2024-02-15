@@ -60,4 +60,6 @@ public interface MemberMapper {
 	public List<TagVO> selectTagList();
 	
 	public MemberVO selectDuplicateNickname(String nickname);
+	
+	public int updateResetBan(int memberNo);
 }

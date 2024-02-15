@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -28,10 +29,16 @@ public class LoginFailHandler implements AuthenticationFailureHandler {
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json;charset=UTF-8");
+        System.out.println(exception);
         
         Map<String, Object> ret = new HashMap<>();
-        ret.put("error", "로그인실패");
-
+        // 제재된 계정인 경우.
+        if(exception instanceof LockedException) {
+        	ret.put("error", exception.getMessage());
+        }
+        else 
+        	ret.put("error", "아이디 및 비밀번호를 확인해주세요.");
+        
         response.getWriter().write(objectMapper.writeValueAsString(ret));
     }
 }

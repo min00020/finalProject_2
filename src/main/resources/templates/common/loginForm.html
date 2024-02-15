@@ -149,8 +149,8 @@
 			        200: function (data) {
 			        	window.location.href = data.result;
 			        },
-			        401: function () {
-			            showFailAlert("아이디 및 비밀번호 확인해주세요.");
+			        401: function (data) {
+			            showFailAlert(data.responseJSON.error);
 			        }
 			    }
 			})
