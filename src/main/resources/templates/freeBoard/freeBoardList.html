@@ -39,8 +39,9 @@
 						<div id="member" style="height: 40px;"></div>
 						<div id="titleTag"
 							th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|">
-							<h4 th:text="${free.title}" style="text-align: center;"></h4>
-							<p style="color: #3e6ce3" th:text="${free.writeDate}"></p>
+							<h4 th:text="${free.title}" style="text-align: left;"></h4>
+								<p style="color:#3e6ce3" th:text="${#dates.format(free.writeDate, 'yyyy-MM-dd HH:mm')}"></p>
+
 						</div>
 					</div>
 					<div class="col-1" style="text-align: center; margin: auto;">

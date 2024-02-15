@@ -95,5 +95,14 @@
     	</selectKey>
 </insert>
 
+	<update id="updateFreeBoardViewCnt" parameterType="int">
+	
+	     UPDATE FREE_BOARD
+   		    SET VIEW_CNT = VIEW_CNT+1
+     	  WHERE FBOARD_NO = #{fbno}
+     	  
+	</update>
+	
+
 </mapper>
 

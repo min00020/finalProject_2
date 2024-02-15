@@ -66,7 +66,7 @@ public class FreeBoardController {
 	@GetMapping("/freeBoardInfo/{fbno}")
 	public String getFreeBoard(@PathVariable("fbno") int fbno, Model model) {
 		
-		model.addAttribute("freeBoardInfo",freeBoardService.getFreeBoard(fbno));
+		model.addAttribute("freeBoardInfo",freeBoardService.getFreeBoard(fbno,model));
 		
 		return "freeBoard/freeBoardInfo";
 		

@@ -18,4 +18,7 @@ public interface FreeBoardMapper {
 	
 	//게시글 등록
 	public int insertFreeBoard(FreeBoardVO freeBoardVO);
+	
+	//게시글 조회수
+	public int updateFreeBoardViewCnt(int fBoardNo);
 }
