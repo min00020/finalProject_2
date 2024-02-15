@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.sideboard.serviceImpl;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +49,14 @@ public class SideServiceImpl implements SideService{
 	public void getSideInfoAndReplyList(int bno, Model model) {
 		var list = replyMapper.selectReply("N006", bno);
 		Map<Integer, List<ReplyJoinVO>> groupByData = list.stream().collect(Collectors.groupingBy(ReplyJoinVO::getParentReplyNo));
+		groupByData = groupByData.entrySet().stream()
+		        .sorted(Map.Entry.comparingByKey())
+		        .collect(Collectors.toMap(
+		                Map.Entry::getKey,
+		                Map.Entry::getValue,
+		                (a, b) -> { throw new AssertionError(); },
+		                LinkedHashMap::new
+		        ));
 		model.addAttribute("replyList", groupByData);
 		sideMapper.updatereviewCnt(bno);
 		model.addAttribute("sideInfo", sideMapper.selectSideInfo(bno));

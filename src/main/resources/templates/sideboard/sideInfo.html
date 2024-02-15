@@ -48,84 +48,249 @@
 				<h5 style="font-weight:bold;">프로그램 소개</h5>
 				<p style="font-weight:bold;" th:utext="${sideInfo.content}"></p>
 				</div>	
-		<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}" th:text="${sideInfo.gitAddress}"></a></p>
+				<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}" th:text="${sideInfo.gitAddress}"></a></p>
 	</div>
 	<!--/* 댓글영역 */-->
-	<div class="w-100 mb-3 clearfix">
-		<div>
-			<div class="d-flex justify-content-center">
-				<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
-			</div>
-			<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
-				<button class="btn" type="button" style="color:white; background-color:#3e6ce3" onclick="registReply()">댓글등록</button>
-				<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
-			</div>
-		</div>
-		<br>
-		<!--/*댓글 반복구간  */-->
-		<div class="mt-1 w-100 mb-5" th:each="reply : ${replyList}">
-			<div>
-				<!--/*댓글(부모) 헤더구간  */-->
-				<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+				<div class="w-100 mb-3 clearfix">
 					<div>
-						<!--/* 프로필이미지가 null이라면 */-->
-						<img th:if="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-						<img th:unless="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|upload/profile/${reply.value[0].parentImage}|" alt="profile" />
-						<span>[[${reply.value[0].parentNickname}]]</span>
-						<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+						<div class="d-flex justify-content-center">
+							<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+						</div>
+						<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+							<button class="btn" type="button" style="color:white; background-color:#3e6ce3" onclick="registReply()">댓글등록</button>
+							<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
+						</div>
+						<!--/* 댓글등록 이모티콘 모달 시작 */-->
+						<th:block th:if="${session.myEmoList} != null">
+							<div class="modal fade" id="emoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  								<div class="modal-dialog">
+    								<div class="modal-content">
+      									<div class="modal-header">
+        									<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      									</div>
+      									<div class="modal-body">
+        					 				<div class="row">
+					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
+					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            					</div>
+					        					</div>
+					    					</div>
+      									</div>
+      									<div class="modal-footer">
+      									</div>
+    								</div>
+  								</div>
+							</div>
+							<!--/* 댓글등록 이모티콘 모달 끝 */-->
+						</th:block>
 					</div>
-					<div>
-						<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-						[[${reply.value[0].parentRecCnt}]]
-						<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
-					</div>
-				</div>
-				<!--/*댓글 내용구간  */-->
-				<div style="width:90%; margin-left:93px;">
-					<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
-				</div>
+					<br>
+					<!--/*댓글 반복구간  */-->
+					<div class="mt-1 w-100 mb-3" th:each="reply : ${replyList}">
+						<div>
+							<!--/*댓글(부모) 헤더구간  */-->
+							<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+								<div>
+									<!--/* 프로필이미지가 null이라면 */-->
+									<div class="qna_box">
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+									</div>
+									<div class="qna_box">
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" />
+									</div>
+									<span>[[${reply.value[0].parentNickname}]]</span>
+								</div>
+								<div>
+									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+									<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+								</div>
+							</div>
+							<!--/*댓글 내용구간  */-->
+							<div style="width:90%; margin-left:93px;">
+								<!-- /* 삭제된 댓글인 경우 */ -->
+								<th:block th:if="${reply.value[0].parentDelete} != null">
+									<p style="margin-bottom:0px; color:red;"><b>삭제된 댓글 입니다.</b></p>
+								</th:block>
+								<th:block th:unless="${reply.value[0].parentDelete} != null">
+									<th:block th:if="${reply.value[0].parentComment} != null">
+										<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+									</th:block>
+									<th:block th:unless="${reply.value[0].parentComment} != null">
+										<img style="width:100px;" th:src="|/upload/emoticon/${#strings.substring(reply.value[0].parentEmoticon, 0,#strings.indexOf(reply.value[0].parentEmoticon,'_'))}/${reply.value[0].parentEmoticon}|" />
+									</th:block>
+								</th:block>
+							
 								
-				<div style="width:90%; margin-left:80px;">
-					<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
-				</div>
-				<!--/* 답글영역 */-->
-				<div style="display:none;" th:id="|nestedComment${reply.key}|">
-					<div class="d-flex justify-content-center">
-						<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
-					</div>
-					<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
-						<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
-						<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
-					</div>
-				</div>
-			</div>
-			<!-- /* 대댓글(자식) */-->
-			<th:block th:if="${reply.value[0].childReplyNo} != null">
-				<div class="ms-4" th:each="innerReply : ${replyList[reply.key]}">
-					<!--/*댓글 헤더구간  */-->
-					<div class="mx-5 d-flex justify-content-between" style="width:90%;">
-						<div>
-							└<img th:if="${innerReply.childImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-							<img th:unless="${innerReply.childImage} == null" style="width:5%;" th:src="|upload/profile/${innerReply.childImage}|" alt="profile" />
-							<span>[[${innerReply.childNickname}]]</span>
-							<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+							</div>
+							<div style="width:90%; margin-left:80px; margin-top:10px;"> 
+								<!--/* 댓글 수정/삭제 */-->
+								<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:onclick="delReply([[${reply.key}]])">삭제</button>
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:id="|modifyBtn${reply.key}|" th:onclick="|openModifyTextarea('modifyCommentDiv${reply.key}','modifyBtn${reply.key}')|">수정</button>
+							</div>
+							
+							<!--/* 댓글 수정 영역 */-->
+							<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" 
+								th:id="|modifyCommentDiv${reply.key}|">
+								<div class="d-flex justify-content-center">
+									<textarea th:id="|modifyTextarea${reply.key}|" rows="5" class="mt-4" placeholder="댓글 수정" style="width:90%;">[[${reply.value[0].parentComment}]]</textarea>
+								</div>
+								<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+									<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|modifyReply(${reply.key})|">댓글 수정</button>
+									<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#modEmoModal${reply.key}|">이모티콘 등록</button>
+								</div>
+								<!--/* 댓글 수정 이모티콘 모달 시작 */-->
+								<th:block th:if="${session.myEmoList} != null">
+									<div class="modal fade" th:id="|modEmoModal${reply.key}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  										<div class="modal-dialog">
+    										<div class="modal-content">
+      											<div class="modal-header">
+        											<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      											</div>
+      											<div class="modal-body">
+        					 						<div class="row">
+					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            							</div>
+					        							</div>
+					    							</div>
+      											</div>
+      											<div class="modal-footer">
+      											</div>
+    										</div>
+  										</div>
+									</div>
+								</th:block>
+								<!--/* 댓글 수정 이모티콘 모달 끝 */-->	
+							</div>
+							<!--/* 댓글 수정 영역 끗 */-->
+							
+							<!--/* 답글영역 */-->
+							<div style="display:none;" th:id="|nestedComment${reply.key}|">
+								<div class="d-flex justify-content-center">
+									<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+								</div>
+								<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+									<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
+									<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#emoModal${reply.key}|">이모티콘 등록</button>
+								</div>
+								<!--/* 답글등록 이모티콘 모달 시작 */-->
+								<th:block th:if="${session.myEmoList} != null">
+									<div class="modal fade" th:id="|emoModal${reply.key}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  										<div class="modal-dialog">
+    										<div class="modal-content">
+      											<div class="modal-header">
+        											<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      											</div>
+      											<div class="modal-body">
+        					 						<div class="row">
+					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            							</div>
+					        							</div>
+					    							</div>
+      											</div>
+      											<div class="modal-footer">
+      											</div>
+    										</div>
+  										</div>
+									</div>
+									<!--/* 답글등록 이모티콘 모달 끝 */-->
+								</th:block>
+							</div>
 						</div>
-						<div>
-							<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-							[[${innerReply.childRecCnt}]]
-							<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
-						</div>
+						<!-- /* 대댓글(자식) */-->
+						<th:block th:if="${reply.value[0].childReplyNo} != null">
+							<div class="ms-4 mb-3" th:each="innerReply : ${replyList[reply.key]}">
+								<!--/*댓글 헤더구간  */-->
+								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+									<div>
+										<div class="qna_box">
+											└<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+										</div>
+										<div class="qna_box">
+											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" />
+										</div>
+										<span>[[${innerReply.childNickname}]]</span>
+									</div>
+									<div>
+										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									</div>
+								</div>
+								<!--/*댓글 내용구간  */-->
+								<div style="width:90%; margin-left:108px;">
+									<!-- /* 삭제된 답글인 경우 */ -->
+									<th:block th:if="${innerReply.childDelete} != null">
+										<p style="margin-bottom:0px; color:red;"><b>삭제된 댓글 입니다.</b></p>
+									</th:block>
+									
+									<th:block th:unless="${innerReply.childDelete} != null">
+										<th:block th:if="${innerReply.childComment} != null">
+											<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
+										</th:block>
+										<th:block th:unless="${innerReply.childComment} != null">
+											<img style="width:100px;" th:src="|/upload/emoticon/${#strings.substring(innerReply.childEmoticon, 0,#strings.indexOf(innerReply.childEmoticon,'_'))}/${innerReply.childEmoticon}|" />
+										</th:block>
+									</th:block>
+									
+								</div>
+								
+								<div style="width:90%; margin-left:95px; margin-top:10px;">
+									<!--/* 답글 수정/삭제 */-->
+									<button th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:onclick="delReply([[${innerReply.childReplyNo}]])">삭제</button>
+									<button th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:id="|modifyBtn${innerReply.childReplyNo}|" th:onclick="|openModifyTextarea('modifyCommentDiv${innerReply.childReplyNo}','modifyBtn${innerReply.childReplyNo}')|">수정</button>
+								</div>
+								
+								<!--/* 대댓글 수정 영역 */-->
+								<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" 
+									th:id="|modifyCommentDiv${innerReply.childReplyNo}|">
+									<div class="d-flex justify-content-center">
+										<textarea th:id="|modifyTextarea${innerReply.childReplyNo}|" rows="5" class="mt-4" placeholder="댓글 수정" style="width:90%;">[[${innerReply.childComment}]]</textarea>
+									</div>
+									<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+										<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|modifyReply(${innerReply.childReplyNo})|">답글 수정</button>
+										<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#modEmoModal${innerReply.childReplyNo}|">이모티콘 등록</button>
+									</div>
+									<!--/* 댓글 수정 이모티콘 모달 시작 */-->
+									<th:block th:if="${session.myEmoList} != null">
+										<div class="modal fade" th:id="|modEmoModal${innerReply.childReplyNo}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  											<div class="modal-dialog">
+    											<div class="modal-content">
+      												<div class="modal-header">
+        												<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      												</div>
+      												<div class="modal-body">
+        					 							<div class="row">
+						        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])">
+						                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            								</div>
+					        								</div>
+					    								</div>
+      												</div>
+      												<div class="modal-footer">
+      												</div>
+    											</div>
+  											</div>
+										</div>
+									</th:block>
+									<!--/* 댓글 수정 이모티콘 모달 끝 */-->	
+								</div>
+								<!--/* 대댓글 수정 영역 끗 */-->
+							</div>
+						</th:block>
 					</div>
-					<!--/*댓글 내용구간  */-->
-					<div style="width:90%; margin-left:108px;">
-						<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
-					</div>
+					<!--/*댓글 반복구간 끗 */-->
 				</div>
-			</th:block>
-		</div>
-		<!--/*댓글 반복구간 끗 */-->
-	</div>
-	<!--/* 댓글영역 끗 */-->
+				<!--/* 댓글영역 끗 */-->
 	</th:block>
 	<!-- 협업중일때 깃 -->
 	<th:block  th:unless="${sideInfo.publishingStatus} == 'Q001'">
@@ -154,8 +319,13 @@
 					</div>
 				</th:block>
 				<hr id="tae-hr">
+			<div style="height:600px;">
+				<!-- repository -->
+				<div>
+					<img style="width:80px;" alt="" th:src="|/commonResource/taefolder/githublogo.png|">
+				</div>
 				<!-- github 커밋 리스트 -->
-				<div class="d-flex" id="tae-container4" style="float: left;">
+				<div class="d-flex" style="float: left;">
 					<div class="card" id="tae-card-3">
 						<h5 style="padding-top:10px;padding-left:20px;margin-bottom:20px;text-decoration: underline;font-weight: bold;">COMMIT List
 						</h5>
@@ -168,101 +338,305 @@
 							</ul>
 					</div>
 				</div>
-				
 				<!-- github 이슈 리스트 -->
-				<div class="d-flex" id="tae-container4" style="float: left;">
+				<div class="d-flex" style="float: left;">
 					<div class="card" id="tae-card-3">
 						<h5 style="padding-top:10px;padding-left:20px;margin-bottom:20px;text-decoration: underline;font-weight: bold;">ISSUE List
 						</h5>
 							<ul class="tae-git-1">
 								<li class="tae-git-2" th:each="issue : ${issueDTO}">[[${issue.issueTitle}]]
 									<span class="tae-ul-list" th:text="${#dates.format(issue.issueDate, 'yyyy-MM-dd')}">[[${issue.issueDate}]]</span>
-									<br>
-									<p class="tae-ul-list" >[[${issue.commentCnt}]]</p>
+									<span class="tae-ul-list" >[[${issue.commentCnt}]]</span>
 									<hr>
 								</li>
 							</ul>
+						
+					</div>
+					<div class="addgitIssue">
+						<!-- Button trigger modal -->
+						<button type="button" class="btn text-white" style="background-color: darkseagreen;color:#fff;font-size:16px;
+						margin-left:15px;bs-btn-padding-y: .25rem;bs-btn-padding-x: .5rem;
+						bs-btn-font-size: .75rem;" data-bs-toggle="modal" data-bs-target="#IssueModal">
+						 새 이슈 등록
+						</button>
+						
+						<!-- Modal -->
+						<div class="modal fade" id="IssueModal" tabindex="-1" aria-labelledby="IssueModalLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h1 class="modal-title fs-5" id="IssueModalLabel" style="font-weight:bold;">이슈 등록</h1>
+						      </div>
+						      <div class="modal-body">
+						         <div class="mb-3" style="margin-top:16px;">
+							   		 <label for="tags" class="col-sm-2 col-form-label" >Add a title</label>
+							   		 <div class="col-sm-10">
+										<input name='title' style="width:380px;" class="tae-form-control2" th:placeholder='Title'>    
+							  		 </div>
+							   </div>
+							   
+							   <div class="mb-3">
+						  			<label for="exampleFormControlTextarea1" class="tae-form-label col-sm-2 col-form-label">Add description</label>
+	  								<textarea class="form-control" name="description" rows="8">Add your description...</textarea>
+							   </div>
+							   
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" onclick="sendIssue()" class="btn btn-primary">등록</button>
+						        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+						<!-- 모달끝 -->
 					</div>
 				</div>
+			</div>
+			<hr>
 		</div>	
 		<!--/* 댓글영역 */-->
-		<div class="w-100 mb-3 clearfix">
-			<div>
-				<div class="d-flex justify-content-center">
-					<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
-				</div>
-				<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
-					<button class="btn" type="button" style="color:white; background-color:#3e6ce3" onclick="registReply()">댓글등록</button>
-					<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
-				</div>
-			</div>
-			<br>
-			<!--/*댓글 반복구간  */-->
-			<div class="mt-1 w-100 mb-5" th:each="reply : ${replyList}">
-				<div>
-					<!--/*댓글(부모) 헤더구간  */-->
-					<div class="mx-5 d-flex justify-content-between" style="width:90%;">
-						<div>
-							<!--/* 프로필이미지가 null이라면 */-->
-							<img th:if="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-							<img th:unless="${reply.value[0].parentImage} == null" style="width:5%;" th:src="|upload/profile/${reply.value[0].parentImage}|" alt="profile" />
-							<span>[[${reply.value[0].parentNickname}]]</span>
-							<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-						</div>
-						<div>
-							<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-							[[${reply.value[0].parentRecCnt}]]
-							<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
-						</div>
-					</div>
-					<!--/*댓글 내용구간  */-->
-					<div style="width:90%; margin-left:93px;">
-						<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
-					</div>
-									
-					<div style="width:90%; margin-left:80px;">
-						<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
-					</div>
-					<!--/* 답글영역 */-->
-					<div style="display:none;" th:id="|nestedComment${reply.key}|">
-						<div class="d-flex justify-content-center">
-							<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+				<div class="w-100 mb-3 clearfix">
+					<div>
+						<div class="justify-content-center">
+							<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
 						</div>
 						<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
-							<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
+							<button class="btn" type="button" style="color:white; background-color:#3e6ce3" onclick="registReply()">댓글등록</button>
 							<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
 						</div>
+						<!--/* 댓글등록 이모티콘 모달 시작 */-->
+						<th:block th:if="${session.myEmoList} != null">
+							<div class="modal fade" id="emoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  								<div class="modal-dialog">
+    								<div class="modal-content">
+      									<div class="modal-header">
+        									<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      									</div>
+      									<div class="modal-body">
+        					 				<div class="row">
+					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
+					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            					</div>
+					        					</div>
+					    					</div>
+      									</div>
+      									<div class="modal-footer">
+      									</div>
+    								</div>
+  								</div>
+							</div>
+							<!--/* 댓글등록 이모티콘 모달 끝 */-->
+						</th:block>
 					</div>
+					<br>
+					<!--/*댓글 반복구간  */-->
+					<div class="mt-1 w-100 mb-3" th:each="reply : ${replyList}">
+						<div>
+							<!--/*댓글(부모) 헤더구간  */-->
+							<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+								<div>
+									<!--/* 프로필이미지가 null이라면 */-->
+									<div class="qna_box">
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+									</div>
+									<div class="qna_box">
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" />
+									</div>
+									<span>[[${reply.value[0].parentNickname}]]</span>
+								</div>
+								<div>
+									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+									<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+								</div>
+							</div>
+							<!--/*댓글 내용구간  */-->
+							<div style="width:90%; margin-left:93px;">
+								<!-- /* 삭제된 댓글인 경우 */ -->
+								<th:block th:if="${reply.value[0].parentDelete} != null">
+									<p style="margin-bottom:0px; color:red;"><b>삭제된 댓글 입니다.</b></p>
+								</th:block>
+								<th:block th:unless="${reply.value[0].parentDelete} != null">
+									<th:block th:if="${reply.value[0].parentComment} != null">
+										<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+									</th:block>
+									<th:block th:unless="${reply.value[0].parentComment} != null">
+										<img style="width:100px;" th:src="|/upload/emoticon/${#strings.substring(reply.value[0].parentEmoticon, 0,#strings.indexOf(reply.value[0].parentEmoticon,'_'))}/${reply.value[0].parentEmoticon}|" />
+									</th:block>
+								</th:block>
+							
+								
+							</div>
+							<div style="width:90%; margin-left:80px; margin-top:10px;"> 
+								<!--/* 댓글 수정/삭제 */-->
+								<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:onclick="delReply([[${reply.key}]])">삭제</button>
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:id="|modifyBtn${reply.key}|" th:onclick="|openModifyTextarea('modifyCommentDiv${reply.key}','modifyBtn${reply.key}')|">수정</button>
+							</div>
+							
+							<!--/* 댓글 수정 영역 */-->
+							<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" 
+								th:id="|modifyCommentDiv${reply.key}|">
+								<div class="d-flex justify-content-center">
+									<textarea th:id="|modifyTextarea${reply.key}|" rows="5" class="mt-4" placeholder="댓글 수정" style="width:90%;">[[${reply.value[0].parentComment}]]</textarea>
+								</div>
+								<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+									<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|modifyReply(${reply.key})|">댓글 수정</button>
+									<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#modEmoModal${reply.key}|">이모티콘 등록</button>
+								</div>
+								<!--/* 댓글 수정 이모티콘 모달 시작 */-->
+								<th:block th:if="${session.myEmoList} != null">
+									<div class="modal fade" th:id="|modEmoModal${reply.key}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  										<div class="modal-dialog">
+    										<div class="modal-content">
+      											<div class="modal-header">
+        											<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      											</div>
+      											<div class="modal-body">
+        					 						<div class="row">
+					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            							</div>
+					        							</div>
+					    							</div>
+      											</div>
+      											<div class="modal-footer">
+      											</div>
+    										</div>
+  										</div>
+									</div>
+								</th:block>
+								<!--/* 댓글 수정 이모티콘 모달 끝 */-->	
+							</div>
+							<!--/* 댓글 수정 영역 끗 */-->
+							
+							<!--/* 답글영역 */-->
+							<div style="display:none;" th:id="|nestedComment${reply.key}|">
+								<div class="d-flex justify-content-center">
+									<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+								</div>
+								<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+									<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
+									<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#emoModal${reply.key}|">이모티콘 등록</button>
+								</div>
+								<!--/* 답글등록 이모티콘 모달 시작 */-->
+								<th:block th:if="${session.myEmoList} != null">
+									<div class="modal fade" th:id="|emoModal${reply.key}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  										<div class="modal-dialog">
+    										<div class="modal-content">
+      											<div class="modal-header">
+        											<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      											</div>
+      											<div class="modal-body">
+        					 						<div class="row">
+					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            							</div>
+					        							</div>
+					    							</div>
+      											</div>
+      											<div class="modal-footer">
+      											</div>
+    										</div>
+  										</div>
+									</div>
+									<!--/* 답글등록 이모티콘 모달 끝 */-->
+								</th:block>
+							</div>
+						</div>
+						<!-- /* 대댓글(자식) */-->
+						<th:block th:if="${reply.value[0].childReplyNo} != null">
+							<div class="ms-4 mb-3" th:each="innerReply : ${replyList[reply.key]}">
+								<!--/*댓글 헤더구간  */-->
+								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+									<div>
+										<div class="qna_box">
+											└<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
+										</div>
+										<div class="qna_box">
+											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" />
+										</div>
+										<span>[[${innerReply.childNickname}]]</span>
+									</div>
+									<div>
+										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									</div>
+								</div>
+								<!--/*댓글 내용구간  */-->
+								<div style="width:90%; margin-left:108px;">
+									<!-- /* 삭제된 답글인 경우 */ -->
+									<th:block th:if="${innerReply.childDelete} != null">
+										<p style="margin-bottom:0px; color:red;"><b>삭제된 댓글 입니다.</b></p>
+									</th:block>
+									
+									<th:block th:unless="${innerReply.childDelete} != null">
+										<th:block th:if="${innerReply.childComment} != null">
+											<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
+										</th:block>
+										<th:block th:unless="${innerReply.childComment} != null">
+											<img style="width:100px;" th:src="|/upload/emoticon/${#strings.substring(innerReply.childEmoticon, 0,#strings.indexOf(innerReply.childEmoticon,'_'))}/${innerReply.childEmoticon}|" />
+										</th:block>
+									</th:block>
+									
+								</div>
+								
+								<div style="width:90%; margin-left:95px; margin-top:10px;">
+									<!--/* 답글 수정/삭제 */-->
+									<button th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:onclick="delReply([[${innerReply.childReplyNo}]])">삭제</button>
+									<button th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" type="button" class="btn" th:id="|modifyBtn${innerReply.childReplyNo}|" th:onclick="|openModifyTextarea('modifyCommentDiv${innerReply.childReplyNo}','modifyBtn${innerReply.childReplyNo}')|">수정</button>
+								</div>
+								
+								<!--/* 대댓글 수정 영역 */-->
+								<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${innerReply.childMemberNo} and ${innerReply.childDelete} == null" 
+									th:id="|modifyCommentDiv${innerReply.childReplyNo}|">
+									<div class="d-flex justify-content-center">
+										<textarea th:id="|modifyTextarea${innerReply.childReplyNo}|" rows="5" class="mt-4" placeholder="댓글 수정" style="width:90%;">[[${innerReply.childComment}]]</textarea>
+									</div>
+									<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+										<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|modifyReply(${innerReply.childReplyNo})|">답글 수정</button>
+										<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#modEmoModal${innerReply.childReplyNo}|">이모티콘 등록</button>
+									</div>
+									<!--/* 댓글 수정 이모티콘 모달 시작 */-->
+									<th:block th:if="${session.myEmoList} != null">
+										<div class="modal fade" th:id="|modEmoModal${innerReply.childReplyNo}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  											<div class="modal-dialog">
+    											<div class="modal-content">
+      												<div class="modal-header">
+        												<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      												</div>
+      												<div class="modal-body">
+        					 							<div class="row">
+						        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])">
+						                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            								</div>
+					        								</div>
+					    								</div>
+      												</div>
+      												<div class="modal-footer">
+      												</div>
+    											</div>
+  											</div>
+										</div>
+									</th:block>
+									<!--/* 댓글 수정 이모티콘 모달 끝 */-->	
+								</div>
+								<!--/* 대댓글 수정 영역 끗 */-->
+							</div>
+						</th:block>
+					</div>
+					<!--/*댓글 반복구간 끗 */-->
 				</div>
-				<!-- /* 대댓글(자식) */-->
-				<th:block th:if="${reply.value[0].childReplyNo} != null">
-					<div class="ms-4" th:each="innerReply : ${replyList[reply.key]}">
-						<!--/*댓글 헤더구간  */-->
-						<div class="mx-5 d-flex justify-content-between" style="width:90%;">
-							<div>
-								└<img th:if="${innerReply.childImage} == null" style="width:5%;" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-								<img th:unless="${innerReply.childImage} == null" style="width:5%;" th:src="|upload/profile/${innerReply.childImage}|" alt="profile" />
-								<span>[[${innerReply.childNickname}]]</span>
-								<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-							</div>
-							<div>
-								<button type="button" class="btn"><img style="width:25px;" th:src="|/commonResource/icon/best.png|" alt="recommend"/></button>
-								[[${innerReply.childRecCnt}]]
-								<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
-							</div>
-						</div>
-						<!--/*댓글 내용구간  */-->
-						<div style="width:90%; margin-left:108px;">
-							<p style="margin-bottom:0px;">[[${innerReply.childComment}]]</p>
-						</div>
-					</div>
-				</th:block>
-			</div>
-			<!--/*댓글 반복구간 끗 */-->
-		</div>
-		<!--/* 댓글영역 끗 */-->
+				<!--/* 댓글영역 끗 */-->
 </div>
-	
+
 <script type="text/javascript" th:inline="javascript">
 
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
@@ -271,6 +645,77 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 const memberNo = [[${session.member.memberNo}]]
 const status = 'Q002';
 const bno = [[${sideInfo.sideBoardNo}]];
+
+function sendIssue(){
+	const title = $('input[name="title"]').val();
+	const description = $('textarea[name="description"]').val();
+	let obj = {
+			title : title,
+			body : description,
+			bno : bno
+	}
+	$.ajax('/insertGitIssueAjax', {
+		type: "POST",
+		data: obj,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res => {
+		if(res.result == "200") {
+			document.location.href = document.location.href;	
+		}
+		else {
+			showFailAlert('이슈 등록에 실패하였습니다.');
+		}
+	})
+	.fail(err => {
+		showFailAlert("실패. 다시시도해주세요.");
+		console.log(err);
+	})
+}
+
+function openModifyTextarea(divId, btnId) {
+	if($('#' + btnId).text() == "수정") {
+		$('#' + btnId).text('수정닫기');
+		$('#' + divId).css('display','block');
+	}
+	else {
+		$('#' + btnId).text('수정');
+		$('#' + divId).css('display','none');
+	}
+}
+
+function delReply(replyNo) {
+	if(typeof memberNo == "undefined" || memberNo == null) {
+		showFailAlert("로그인 후 진행해주세요.");
+		return;
+	}
+	
+	const object = {
+		replyNo : replyNo
+	}
+	
+	$.ajax('/reply', {
+		type: "DELETE",
+		data: object,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res => {
+		if(res.result == "200") {
+			document.location.href = document.location.href;	
+		}
+		else {
+			showFailAlert('댓글 삭제에 실패했습니다.');
+		}
+	})
+	.fail(err => {
+		showFailAlert("실패. 다시시도해주세요.");
+		console.log(err);
+	})
+}
 
 function openNestedTextarea(btnId,commentId) {
 	if($('#' + btnId).text() == "답글달기") {
@@ -281,32 +726,104 @@ function openNestedTextarea(btnId,commentId) {
 		$('#' + btnId).text('답글달기');
 		$('#' + commentId).css('display','none');
 	}
-	
+
 }
 
-function registReply() {
-	// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+function modifyReply(replyNo, emoticonImgName) {
 	if(typeof memberNo == "undefined" || memberNo == null) {
 		showFailAlert("로그인 후 진행해주세요.");
 		return;
 	}
 	
-	const comment = $('#commentInput').val();
-	if(comment == null || comment == '') {
-		showWarningAlert('댓글을 입력해주세요.');
+	if(typeof replyNo == "undefined" || replyNo == null) {
 		return;
 	}
 	
-	// 이모티콘인지 체크?
 	const boardType = 'N006';
-	const object = {
-		boardType : boardType,
-		boardNo : bno,
-		replyBody : comment,
-		isEmoticon : "0",
-		replyPno : null
-	};
+	// 이모티콘 등록이란 의미.
+	if(typeof emoticonImgName != "undefined") {
+		object = {
+			replyNo : replyNo,
+			replyBody : emoticonImgName,
+			isEmoticon : "1",
+			replyPno : null
+		};	
+	}
+	else {
+		const comment = $('#modifyTextarea' + replyNo).val();
+		if(comment == null || comment == '') {
+			showWarningAlert('댓글을 입력해주세요.');
+			return;
+		}
 	
+		object = {
+			replyNo : replyNo,
+			replyBody : comment,
+			isEmoticon : "0",
+			replyPno : null
+		};	
+	}
+	
+	$.ajax('/reply', {
+		type: "PUT",
+		data: object,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res => {
+		if(res.result == "200")
+			document.location.href = document.location.href;
+		else
+			showFailAlert("댓글 수정에 실패했습니다.");
+	})
+	.fail(err => {
+		showFailAlert("실패. 다시시도해주세요.");
+		console.log(err);
+	})
+}
+
+
+function registReply(emoticonImgName) {
+	// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+	if(typeof memberNo == "undefined" || memberNo == null) {
+		showFailAlert("로그인 후 진행해주세요.");
+		return;
+	}
+
+	let object = {
+		
+	}
+
+	const boardType = 'N006';
+	// 이모티콘 등록이란 의미.
+	if(typeof emoticonImgName != "undefined") {
+		// 이모티콘인지 체크?
+		object = {
+			boardType : boardType,
+			boardNo : bno,
+			replyBody : emoticonImgName,
+			isEmoticon : "1",
+			replyPno : null
+		};	
+	}
+	else {
+		const comment = $('#commentInput').val();
+		if(comment == null || comment == '') {
+			showWarningAlert('댓글을 입력해주세요.');
+			return;
+		}
+		
+		object = {
+			boardType : boardType,
+			boardNo : bno,
+			replyBody : comment,
+			isEmoticon : "0",
+			replyPno : null
+		};	
+	}
+
+
 	$.ajax('/reply', {
 		type: "POST",
 		data: object,
@@ -315,7 +832,7 @@ function registReply() {
 		},
 	})
 	.done(res => {
-		document.location.href = document.location.href;
+		document.location.href = document.location.href;	
 	})
 	.fail(err => {
 		showFailAlert("실패. 다시시도해주세요.");
@@ -323,30 +840,46 @@ function registReply() {
 	})
 }
 
-function registNestedReply(replyPno) {
+function registNestedReply(replyPno,emoticonImgName) {
 	// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
 	if(typeof memberNo == "undefined" || memberNo == null) {
 		showFailAlert("로그인 후 진행해주세요.");
 		return;
 	}
-	
-	const textareaId = '#nestedTextarea' + replyPno;
-	const text = $(textareaId).val();
-	if(text == null || text == '') {
-		showWarningAlert('댓글을 입력해주세요.');
-		return;
+
+	let object = {
+			
 	}
 	
-	// 이모티콘인지 체크?
 	const boardType = 'N006';
-	const object = {
-		boardType : boardType,
-		boardNo : bno,
-		replyBody : text,
-		isEmoticon : "0",
-		replyPno : replyPno
-	};
+	// 이모티콘 등록이란 의미.
+	if(typeof emoticonImgName != "undefined") {
+		object = {
+			boardType : boardType,
+			boardNo : bno,
+			replyBody : emoticonImgName,
+			isEmoticon : "1",
+			replyPno : replyPno
+		};	
+	}
+	else {
+		const textareaId = '#nestedTextarea' + replyPno;
+		const text = $(textareaId).val();
+		if(text == null || text == '') {
+			showWarningAlert('댓글을 입력해주세요.');
+			return;
+		}
 	
+		// 이모티콘인지 체크?
+		object = {
+			boardType : boardType,
+			boardNo : bno,
+			replyBody : text,
+			isEmoticon : "0",
+			replyPno : replyPno
+		};
+	}
+
 	$.ajax('/reply', {
 		type: "POST",
 		data: object,

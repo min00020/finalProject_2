@@ -3,20 +3,20 @@ package com.yedamFinal.aco.sideboard.web;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedamFinal.aco.common.GitIssueDTO;
 import com.yedamFinal.aco.common.service.SessionUtil;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
-import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.sideboard.SideVO;
 import com.yedamFinal.aco.sideboard.serviceImpl.SideServiceImpl;
@@ -166,7 +166,21 @@ public class SideController {
 		 sideService.deleteProject(bno);
 		 return "redirect:sideProjectList/Q001/?pageNo=1";
 	 }
+	 /**
+	  * 깃이슈 작성
+	  */
+	 @PostMapping("/insertGitIssueAjax")
+	 @ResponseBody
+	 public Map<String, Object> insertGitIssue(@RequestParam String title,@RequestParam String body,@RequestParam int bno){
+		 MemberVO vo = SessionUtil.getSession();
+		 
+		 SideVO sideVO = sideService.getSideInfo(bno);
+		 
+		 Map<String, Object> success = gitService.insertGitIssue(vo.getGitToken(), sideVO.getGitAddress(),title, body);
+		 return success;
+	 }
 	 
+	
 	
 		
 }

@@ -42,6 +42,7 @@
 	UPDATE side_project_board SET view_cnt = view_cnt + 1 where side_board_no = #{bno}
 </update>
 
+
 <!-- 게시글 단건조회 가져오기 -->
 <select id="selectSideInfo" parameterType="int" resultType="SideVO">
 	SELECT side_board_no, 
