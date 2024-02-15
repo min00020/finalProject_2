@@ -205,10 +205,11 @@ public class QuestionController {
 		
 		return questionService.writeAnswer(question);
 	}
+	
 	/**
 	* 답변글 수정
 	* @param question 
-	* @return Map<String, Object>
+	* @return questionService.modifyAnswer(question)
 	*/
 	@PostMapping("/answerModify")
 	@ResponseBody
@@ -216,5 +217,15 @@ public class QuestionController {
 		return questionService.modifyAnswer(question);
 	}
 	
+	/**
+	* 답변글 채택
+	* @param question 
+	* @return Map<String, Object>
+	*/
+	@PostMapping("/answerAdopt")
+	@ResponseBody
+	public int adoptAnswer(int ano){
+		return questionService.adoptAnswer(ano);
+	}
 	
 }

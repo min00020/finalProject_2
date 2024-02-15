@@ -35,4 +35,7 @@ public interface QuestionMapper {
 	
 	//답변글 수정
 	public int updateAnswer(QuestionVO questionVO);
+	//답변글 채택
+	public int adoptAnswer(int ano);
+	
 }

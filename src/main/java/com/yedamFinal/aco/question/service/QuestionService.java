@@ -27,4 +27,6 @@ public interface QuestionService {
 	public Map<String, Object> writeAnswer(QuestionVO vo);
 	//답변글 수정
 	public Map<String, Object> modifyAnswer(QuestionVO vo);
+	//답변글 채택
+	public int adoptAnswer(int ano);
 } 

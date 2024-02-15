@@ -163,4 +163,9 @@ public class QuestionServiceImpl implements QuestionService{
 		return ret;
 	}
 	
+	//답변글 채택
+	@Override
+	public int adoptAnswer(int ano) {
+		return questionMapper.adoptAnswer(ano);
+	}
 }

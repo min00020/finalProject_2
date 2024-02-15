@@ -232,5 +232,11 @@
 	     WHERE ANSWER_BOARD_NO = #{answerBoardNo}
 	</update>
 
-
+	<!-- 답변글 채택 -->
+	<update id="adoptAnswer" parameterType="int">
+		UPDATE ANSWER_BOARD
+		   SET ADOPT_STATUS = 'I002'
+		 WHERE ANSWER_BOARD_NO = #{answerBoardNo}
+	</update>
+	
 </mapper>
