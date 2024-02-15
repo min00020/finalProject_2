@@ -52,9 +52,16 @@ public class MemberController {
 		return "common/loginForm";
 	}
 
+	
+	/**
+	 * 메인페이지 
+	 * @param model
+	 * @return common/mainPage
+	 */
 	@GetMapping("/")
 	public String getMainPageForm(Model model) {
 		model.addAttribute("main", "1");
+		//자유게시판 글 표시
 		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
 
 		// MemberVO 꺼내오기.

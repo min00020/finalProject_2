@@ -36,9 +36,11 @@
 			RECOMMEND_CNT,
 			REPLY_CNT,
             B.ACCUM_ACTIVITY_POINT,
-            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
-	FROM FREE_BOARD A LEFT JOIN MEMBER B
-    ON A.MEMBER_NO = B.MEMBER_NO
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+            B.PROFILE_IMAGE
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO
+	
     ORDER BY WRITE_DATE DESC
 
 	</select>
@@ -61,29 +63,36 @@
 </select>
 
 <update id="updateviewCnt">
-	UPDATE FREE_BOARD SET VIEW_CNT = VIEW_CNT + 1 WHERE FBOARD_NO = #{fbno}
+	UPDATE FREE_BOARD 
+	   SET VIEW_CNT = VIEW_CNT + 1 
+	 WHERE FBOARD_NO = #{fbno}
 </update>
 
-<insert id="insertFreeBoard" parameterType="FreeBoardVO">
+<insert id="insertFreeBoard" parameterType="FreeBoardVO" useGeneratedKeys="false">
 	INSERT INTO FREE_BOARD(
-                        FBOARD_NO,
-                        MEMBER_NO,
-                        TITLE,
-                        CONTENT,
-                        NICKNAME,
-                        WRITE_DATE,
-                        VIEW_CNT,
-                        RECOMMEND_CNT,
-                        REPLY_CNT)
-	VALUES(FREE_BOARD_SEQ.NEXTVAL,
-        #{memberNo}',
-        #{title},
-        #{content},
-        #{nickname}
-        SYSDATE,
-        #{viewCnt},
-        #{recommendCnt},
-        #{replyCnt});
+                       FBOARD_NO,
+                       MEMBER_NO,
+                       TITLE,
+                       CONTENT,
+                       NICKNAME,
+                       WRITE_DATE,
+                       VIEW_CNT,
+                       RECOMMEND_CNT,
+                       REPLY_CNT)
+		VALUES(
+					FREE_BOARD_SEQ.NEXTVAL,
+			        #{memberNo},
+			        #{title},
+			        #{content},
+			        #{nickname},
+			        SYSDATE,
+			        #{viewCnt},
+			        #{recommendCnt},
+			        #{replyCnt})
+        
+        <selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT FREE_BOARD_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
 </insert>
 
 </mapper>

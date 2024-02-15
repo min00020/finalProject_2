@@ -13,20 +13,26 @@
 		<!--/* 질문글 */-->
 		<div class="questionInfo">
 			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
+						<div>
+							<p th:text="${freeBoardInfo.nickname}"></p>
+						</div>
 				<div id="questionTitle" class="col-9">  <!-- 사이드 태그 / 질문제목, 포인트 -->
 					<h5 class="qna_logo" style="font-size: 30px"></h5>
+	
 					<div class="qna_title">
 						<div>
 							<h4  style="font-weight:bold" th:text="${freeBoardInfo.title}"></h4>
 						</div>
 					</div>
+
 				</div>
 				<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
 						<p style="color:#3e6ce3" th:text="${freeBoardInfo.writeDate}"></p>
 				</div>
+
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
 			<div class="qna_contents"> <!-- 질문 내용 -->
-				<p th:text="${freeBoardInfo.content}"></p>
+				<p th:utext="${freeBoardInfo.content}"></p>
 				
 			</div>
 			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
