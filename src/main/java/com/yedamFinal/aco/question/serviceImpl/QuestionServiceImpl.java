@@ -124,7 +124,8 @@ public class QuestionServiceImpl implements QuestionService{
 	public QuestionVO deleteQuestion(int qno) {
 		return questionMapper.deleteQuestion(qno);
 	}
-
+	
+	//답변글 작성
 	@Override
 	public Map<String, Object> writeAnswer(QuestionVO vo) {
 		Map<String,Object> ret = new HashMap<String,Object>();
@@ -134,7 +135,6 @@ public class QuestionServiceImpl implements QuestionService{
 		}
 		else {
 			ret.put("result", "200");
-			ret.put("vo", vo);
 		}
 		
 		return ret;

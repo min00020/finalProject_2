@@ -147,7 +147,7 @@
 						<p>2023.01.28</p>
 					</div>
 				</div><!-- 질문글 제목 / 신고삭제 끝 -->
-				<div class="qna_contents" th:text="${questionInfo[0][0].answerContents}">
+				<div class="qna_contents" th:utext="${questionInfo[0][0].answerContents}">
 					<p>답변 내용입니다</p>
 				</div>
 				<div id="question_bottom" class="row"> <!--작성자 프로필 -->
@@ -253,7 +253,7 @@
 							<p>2023.01.28</p>
 						</div>
 					</div><!-- 질문글 제목 / 신고삭제 끝 -->
-					<div class="qna_contents" th:text="${question.answerContents}">
+					<div class="qna_contents" th:utext="${question.answerContents}">
 						<p>답변 내용입니다</p>
 					</div>
 					<div id="question_bottom" class="row"> <!--작성자 프로필 -->
@@ -304,6 +304,7 @@
 		const formData = new FormData(document.answerWrite);
 		
 		formData.append(csrfPara, csrfToken);
+		formData.append("questionBoardNo", bno);
 		formData.append("answerMemberNo", [[${session.member.memberNo}]]);
 		formData.append("answerContents", editor.getHTML());
 		

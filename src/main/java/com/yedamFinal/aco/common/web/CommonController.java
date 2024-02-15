@@ -134,7 +134,11 @@ public class CommonController {
 		}
 	}
 
-	//chae toast ui
+	/**
+	* toast ui를 이용한 텍스트 에디터
+	* @param MultipartFile image 
+	* @return Map<String, String>
+	*/
 	@PostMapping("/texteditorimage")
 	@ResponseBody
 	public Map<String, String> uploadEditorImage(@RequestParam final MultipartFile image) {

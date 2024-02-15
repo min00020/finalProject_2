@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.question.web;
 
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,16 +22,27 @@ import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.service.QuestionService;
 
+
+ /**
+ * @author 김채민
+ * @since 2024.02.13
+ * @version 1.0
+ * @see
+ * 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *  
+ *  *   수정일     수정자          수정내용
+ *  -------    --------    ---------------------------
+ *  2024.02.01   김채민          최초 생성
+ *  </pre>
+ * 
+ * 
+ **/
+
+
 @Controller
-
 public class QuestionController {
-	/**
-	 * @author 김채민
-	 * @since 20240213
-	 * @version 1.0
-	 * @see
-	 */
-
 
 	@Autowired
 	private QuestionService questionService;
@@ -38,7 +50,11 @@ public class QuestionController {
 	@Autowired
 	private MemberServiceImpl memberService;
 	
-	//전체조회
+    /**
+    * 질문&답변 게시판의 질문글과 답변글 전체를 조회한다
+    * @param questionVO 
+	* @return String
+	*/
 	@GetMapping("/questionList")
 	public String getquestionBoard(@RequestParam int pageNo, Model model) {
 		questionService.getQuestionList(model, Integer.valueOf(pageNo));
@@ -55,6 +71,11 @@ public class QuestionController {
 		return "question/questionList";
 	}
 	
+	/**
+	* 질문&답변 게시판의 질문글과 답변글의 분류를 나누어 조회한다
+	* @param questionVO 
+	* @return String
+	*/
 	@GetMapping("/questionList/{topic}")
 	public String getquestionSelect(@PathVariable("topic") String topic, Model model) {
 		model.addAttribute("questionList", questionService.getQuestionListSelect(topic));
@@ -72,12 +93,11 @@ public class QuestionController {
 		return "question/questionList";
 	}
 	
-	//질문글 상세조회 페이지
-	/*
-	 * @GetMapping("/questionInfo") public String getquestionInfo() { return
-	 * "question/questionInfo"; }
-	 */
-
+	/**
+	* 질문&답변 게시판의 질문글과 질문글에 달린 답변을 상세 조회한다
+	* @param questionVO 
+	* @return String
+	*/
 	@GetMapping("/questionInfo/{qno}")
 	public String getQuestionInfo(@PathVariable("qno") int qno, Model model) {
 		// MemberVO 꺼내오기.
@@ -101,7 +121,11 @@ public class QuestionController {
 		return "question/questionInfo";
 	}
 	
-	//질문글 작성폼
+	/**
+	* 질문글 작성폼에서 새 글 작성폼 혹은 기존 글 수정폼을 띄워준다.
+	* @param bno 
+	* @return String
+	*/
 	@GetMapping("/questionWrite")
 	public String questionWrite(Integer bno, Model model) {
 		
@@ -119,37 +143,44 @@ public class QuestionController {
 		return "question/questionWrite";
 	}
 	
-	//질문글 작성
+	/**
+	* 질문&답변 게시판에 질문글을 작성한다
+	* @param QuestionVO 
+	* @return String
+	*/
 	@PostMapping("/questionWrite")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
-		Map<String, Object> ret = new HashMap<String, Object>();
-		questionService.writeQuestion(question);
-		ret.put("result", "400");
-		
-		return ret;
+		return questionService.writeQuestion(question);
+		/*
+		 * Map<String, Object> ret = new HashMap<String, Object>();
+		 * questionService.writeQuestion(question); 
+		 * ret.put("result", "400");
+		 * 
+		 * return ret;
+		 */
 	}
 
-	//질문글 수정
+	/**
+	* 질문&답변 게시판에 질문글을 수정한다
+	* @param QuestionVO 
+	* @return String
+	*/
 	@PostMapping("/questionModify")
 	@ResponseBody
 	public Map<String, Object> modifyQuestion(QuestionVO question){
-		Map<String, Object> ret = new HashMap<String, Object>();
-		questionService.modifyQuestion(question);
-		ret.put("result", "400");
-		
-		return ret;
+		return questionService.modifyQuestion(question);
 	}
 	
-	//답변글 작성
+	/**
+	* 질문&답변 게시판에 답변글을 작성한다
+	* @param QuestionVO 
+	* @return String
+	*/
 	@PostMapping("/answerWrite")
 	@ResponseBody
 	public Map<String, Object> writeAnswer(QuestionVO question){
-		Map<String, Object> ret = new HashMap<String, Object>();
-		questionService.writeAnswer(question);
-		ret.put("result", "400");
-		
-		return ret;
+		return questionService.writeAnswer(question);
 	}
 	
 	
