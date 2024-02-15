@@ -177,7 +177,7 @@
 				<label for="nickname" style="margin-left:27rem;">닉네임</label>
 				<div class="mt-1 d-flex justify-content-center">
 					<input id="nickname" type="text" class="px-3 py-2 w-25 rounded" placeholder="알파벳,한글,숫자 20자 이하입력" name="nickname">
-					<button class="small-rounded default-color" style="margin-left:0.3rem;" onclick="checkDuplicateNickname()">중복체크</button>
+					<button class="small-rounded default-color" style="margin-left:0.3rem;" onclick="checkDuplicateNickname()" type="button">중복체크</button>
 				</div>
 			</div>
 			
@@ -219,6 +219,7 @@ let joinCheckObj = {
 	checkId : false,
 	checkEmail : false,
 	checkPhone : false,
+	checkNickname : false,
 }
 
 
@@ -346,6 +347,7 @@ function checkDuplicateNickname() {
     	if(res.result == "200") {
     		showSuccessAlert('사용가능한 닉네임 입니다.');
     		$("input[name='nickname']").prop("disabled", true);
+    		joinCheckObj.checkNickname = true;
     	}
     	else {
     		showFailAlert('이미 사용중인 닉네임 입니다.');
