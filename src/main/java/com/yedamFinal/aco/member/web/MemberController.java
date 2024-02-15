@@ -293,5 +293,11 @@ public class MemberController {
 	public Map<String,Object> changePassword(@RequestParam String accessKey, @RequestParam String password, @RequestParam String passwordVerify) {
 		return memberService.changePassword(accessKey,password,passwordVerify);
 	}
+	
+	@GetMapping("/checkNickname")
+	@ResponseBody
+	public Map<String, Object> checkDuplicateNickname(@RequestParam String nickName) {
+		return memberService.checkDuplicateNickname(nickName);
+	}
 }
 
