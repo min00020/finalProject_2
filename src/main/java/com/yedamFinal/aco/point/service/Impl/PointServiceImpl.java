@@ -89,17 +89,58 @@ public class PointServiceImpl implements PointService {
 	}
 
 	@Override
-	public void getAcoMoneyChargeAndUse(Model model, int memberNo) {
-		model.addAttribute("acoMoneyChargeInquiry", pointMapper.acoMoneyChargeInquiry(memberNo));
-		model.addAttribute("acoMoneyUseInquiry", pointMapper.acoMoneyUseInquiry(memberNo));
+	public void getAcoMoneyChargeAndUse(Model model, int memberNo, int cp, int up) {
+		
+		var acoMoneyList = pointMapper.acoMoneyChargeInquiry(memberNo,cp);
+		PaginationDTO dto = null;
+		if(acoMoneyList.size() > 0) {
+			dto = new PaginationDTO(pointMapper.acoMoneyChargeInquiryCnt(memberNo), cp, 5);
+		}
+		
+		var acoMoneyUseList = pointMapper.acoMoneyUseInquiry(memberNo,up);
+		PaginationDTO dto2 = null;
+		if(acoMoneyUseList.size() > 0) {
+			dto2 = new PaginationDTO(pointMapper.acoMoneyUseInquiryCnt(memberNo), up, 5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+		model.addAttribute("pageDTO2", dto2);
+		
+		model.addAttribute("acoMoneyChargeInquiry", pointMapper.acoMoneyChargeInquiry(memberNo, cp));
+		model.addAttribute("acoMoneyUseInquiry", pointMapper.acoMoneyUseInquiry(memberNo, up));
+		
+		//페이지 cp가 바뀔때 up는 그대로 유지하기 위해
+		model.addAttribute("cp",cp);
+		model.addAttribute("up",up);
 		return;
 		
 	}
 
+
+
 	@Override
-	public void getAcoPointAcquireAndUse(Model model, int memberNo) {
-		model.addAttribute("acoPointAcquireInquiry", pointMapper.acoPointAcquireInquiry(memberNo));
-		model.addAttribute("acoPointUseInquiry", pointMapper.acoPointUseInquiry(memberNo));
+	public void getAcoPointAcquireAndUse(Model model, int memberNo, int ap, int up) {
+		
+		var acoPointList = pointMapper.acoPointAcquireInquiry(memberNo,ap);
+		PaginationDTO dto = null;
+		if(acoPointList.size() > 0) {
+			dto = new PaginationDTO(pointMapper.acoPointAcquireInquiryCnt(memberNo),ap,5);
+		}
+		
+		var acoPointUseList = pointMapper.acoPointUseInquiry(memberNo,up);
+		PaginationDTO dto2 = null;
+		if(acoPointUseList.size() > 0) {
+			dto2 = new PaginationDTO(pointMapper.acoPointUseInquiryCnt(memberNo),up,5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+		model.addAttribute("pageDTO2", dto2);
+		
+		model.addAttribute("acoPointAcquireInquiry", pointMapper.acoPointAcquireInquiry(memberNo,ap));
+		model.addAttribute("acoPointUseInquiry", pointMapper.acoPointUseInquiry(memberNo,up));
+		
+		model.addAttribute("ap",ap);
+		model.addAttribute("up",up);
 		return;		
 	}
 

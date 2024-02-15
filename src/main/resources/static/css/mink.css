@@ -1,5 +1,64 @@
 @charset "UTF-8";
 
+.min-rounded {
+	padding-left: 3rem;
+	padding-right: 3rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background-color: white;
+	border-radius: 0.5rem;
+	border: 0.5px solid black;
+	border-color: hsla(220, 9%, 46%, .3);
+}
+
+.min-small-rounded {
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background-color: white;
+	border-radius: 0.5rem;
+	border: 0.5px solid black;
+	border-color: hsla(220, 9%, 46%, .3);
+}
+
+.min-default-color {
+	background-color: #3e6ce3;
+	color: white;
+}
+
+.min-tagify {
+	width: 100%;
+	max-width: 20.5rem;
+	border-radius: 0.5rem;
+	border: 0.5px solid black;
+	border-color: hsla(220, 9%, 46%, .3);
+}
+
+input[name="profileImg"] {
+	position: absolute;
+	padding: 0;
+	width: 0;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 0;
+}
+
+#clickFile {
+	cursor: pointer;
+	margin-left: 0.3rem;
+}
+
+.min-upload-name {
+	display: inline-block;
+	height: 40px;
+	padding: 0 10px;
+	vertical-align: middle;
+	border: 1px solid #dddddd;
+	width: 78%;
+	color: #999999;
+}
 
 #comment_box {
 	display: none;
