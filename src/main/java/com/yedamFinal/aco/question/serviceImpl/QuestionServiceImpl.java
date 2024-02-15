@@ -69,7 +69,8 @@ public class QuestionServiceImpl implements QuestionService{
 					break;
 				}
 			}
-		}	
+		}
+		
 		System.out.print(memberNo);
 		//로그인 유저의 답변글 작성 여부 체크
 		model.addAttribute("writePost",false);
@@ -89,9 +90,13 @@ public class QuestionServiceImpl implements QuestionService{
 	//질문글작성
 	@Override
 	public Map<String, Object> writeQuestion(QuestionVO vo) {
+		
+		//질문글 작성
 		Map<String,Object> ret = new HashMap<String,Object>();
 		int insertId = questionMapper.insertQuestion(vo);
 		int bno = vo.getPk();
+		
+		
 		if(insertId <= 0) {
 			ret.put("result", "500");
 		}
@@ -135,13 +140,27 @@ public class QuestionServiceImpl implements QuestionService{
 		}
 		else {
 			ret.put("result", "200");
+			//답변수+1
+			questionMapper.plusAnswerCnt(vo.getQuestionBoardNo());
+			//활동점수 지급
+			
+		}
+		return ret;
+	}
+	
+	//답변글 수정
+	@Override
+	public Map<String, Object> modifyAnswer(QuestionVO vo) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = questionMapper.updateAnswer(vo);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
 		}
 		
 		return ret;
 	}
-
-	
-
-
 	
 }

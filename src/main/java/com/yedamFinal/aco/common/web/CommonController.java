@@ -176,7 +176,7 @@ public class CommonController {
 
 	/**
 	* toast ui를 이용한 텍스트 에디터
-	* @param MultipartFile image 
+	* @param image 
 	* @return Map<String, String>
 	*/
 	@PostMapping("/texteditorimage")

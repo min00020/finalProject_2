@@ -1,7 +1,5 @@
 package com.yedamFinal.aco.question.web;
 
-import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
-import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
+import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.service.QuestionService;
+
+import lombok.extern.log4j.Log4j2;
 
 
  /**
@@ -40,7 +40,7 @@ import com.yedamFinal.aco.question.service.QuestionService;
  * 
  **/
 
-
+@Log4j2
 @Controller
 public class QuestionController {
 
@@ -48,15 +48,17 @@ public class QuestionController {
 	private QuestionService questionService;
 	
 	@Autowired
-	private MemberServiceImpl memberService;
+	private MemberService memberService;
 	
     /**
-    * 질문&답변 게시판의 질문글과 답변글 전체를 조회한다
-    * @param questionVO 
-	* @return String
+    * 질문글과 답변글 전체조회
+    * @param pageNo 
+    * @param model 
+	* @return question/questionList
 	*/
 	@GetMapping("/questionList")
 	public String getquestionBoard(@RequestParam int pageNo, Model model) {
+		//log.info("uuuuuuuuuuuuuuuu");
 		questionService.getQuestionList(model, Integer.valueOf(pageNo));
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -72,13 +74,15 @@ public class QuestionController {
 	}
 	
 	/**
-	* 질문&답변 게시판의 질문글과 답변글의 분류를 나누어 조회한다
-	* @param questionVO 
+	* 질문글과 답변글 분류별 조회
+	* @param topic 
+	* @param model 
 	* @return String
 	*/
 	@GetMapping("/questionList/{topic}")
 	public String getquestionSelect(@PathVariable("topic") String topic, Model model) {
 		model.addAttribute("questionList", questionService.getQuestionListSelect(topic));
+		
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
@@ -94,8 +98,9 @@ public class QuestionController {
 	}
 	
 	/**
-	* 질문&답변 게시판의 질문글과 질문글에 달린 답변을 상세 조회한다
-	* @param questionVO 
+	* 질문글 상세조회 페이지
+	* @param qno 
+	* @param model
 	* @return String
 	*/
 	@GetMapping("/questionInfo/{qno}")
@@ -111,32 +116,45 @@ public class QuestionController {
 		else {
 			model.addAttribute("loginId", "-1");
 		}
-		
+		//로그인아이디 확인용
 		int memberNo = username != null ? username.getMemberNo():-1;
 		
-		var result = questionService.getQuestionInfo(qno,model,memberNo);
+		var result = questionService.getQuestionInfo(qno, model, memberNo);
 		model.addAttribute("questionInfo", result);
-		
 		
 		return "question/questionInfo";
 	}
 	
 	/**
-	* 질문글 작성폼에서 새 글 작성폼 혹은 기존 글 수정폼을 띄워준다.
+	* 질문글 작성폼 : 새 글 작성폼 혹은 기존 글 수정폼
 	* @param bno 
+	* @param model 
 	* @return String
 	*/
 	@GetMapping("/questionWrite")
 	public String questionWrite(Integer bno, Model model) {
+		//보유 포인트조회
+		MemberVO username = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			username = userDetails.getMemberVO();
+			username = memberService.getMemberInfo(username);
+			model.addAttribute("memberInfo", username);
+		}
 		
+		//작성폼인지 수정폼인지 판단하기
+		QuestionVO questionVO = new QuestionVO();
 		if(bno != null) {
 			var map = questionService.getQuestionInfo(bno, model, -1);
 			var entry = map.entrySet().iterator().next();
 			List<QuestionVO> value = entry.getValue();
 			
-			QuestionVO questionVO = value.get(0);
-			model.addAttribute("questionVO",questionVO);
+			questionVO = value.get(0);
 		}
+		model.addAttribute("questionVO",questionVO);
+		
+		//작성폼 태그
 		var tagList = memberService.getTagList();
 		model.addAttribute("tagList", tagList);
 		
@@ -144,27 +162,20 @@ public class QuestionController {
 	}
 	
 	/**
-	* 질문&답변 게시판에 질문글을 작성한다
+	* 질문글 작성
 	* @param QuestionVO 
-	* @return String
+	* @return Map<String, Object>
 	*/
 	@PostMapping("/questionWrite")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
 		return questionService.writeQuestion(question);
-		/*
-		 * Map<String, Object> ret = new HashMap<String, Object>();
-		 * questionService.writeQuestion(question); 
-		 * ret.put("result", "400");
-		 * 
-		 * return ret;
-		 */
 	}
 
 	/**
-	* 질문&답변 게시판에 질문글을 수정한다
-	* @param QuestionVO 
-	* @return String
+	* 질문글 수정
+	* @param question 
+	* @return Map<String, Object>
 	*/
 	@PostMapping("/questionModify")
 	@ResponseBody
@@ -173,16 +184,37 @@ public class QuestionController {
 	}
 	
 	/**
-	* 질문&답변 게시판에 답변글을 작성한다
-	* @param QuestionVO 
+	* 답변글 작성
+	* @param question 
 	* @return String
 	*/
 	@PostMapping("/answerWrite")
 	@ResponseBody
 	public Map<String, Object> writeAnswer(QuestionVO question){
+		MemberVO username = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			username = userDetails.getMemberVO();
+			username = memberService.getMemberInfo(username);
+			
+			//활동점수 계산
+			username.getAccumActivityPoint();
+			username.getAvailableActivityPoint();
+		}
+		
 		return questionService.writeAnswer(question);
 	}
-	
+	/**
+	* 답변글 수정
+	* @param question 
+	* @return Map<String, Object>
+	*/
+	@PostMapping("/answerModify")
+	@ResponseBody
+	public Map<String, Object> modifyAnswer(QuestionVO question){
+		return questionService.modifyAnswer(question);
+	}
 	
 	
 }

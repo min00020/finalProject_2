@@ -109,8 +109,6 @@
 						<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
 						<div id="editor" name="editor" style="height:300px;"></div>
 						<br>
-						<!-- <h6 style="font-weight : bold;">답변 내용</h6>
-						<textarea class="form-control" style="height:300px;"></textarea> -->
 					</div>
 					<div style="float: right;margin-bottom:10px;">
 						<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
@@ -139,10 +137,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
-						<div th:if="${loginId != questionInfo[0][0].id}">
-							<span>수정</span><span>삭제</span>
-						</div>
+					<div id="qna_deleteBtn" class="col-2"> <!-- 신고 / 작성날짜 -->
 						<span th:unless="${loginId != questionInfo[0][0].id}">신고</span>
 						<p>2023.01.28</p>
 					</div>
@@ -224,12 +219,12 @@
 				<!-- 추가질문,답변 끝 -->
 			</div>	
 			<!-- 채택답변 끝 -->
-
 		</th:block>
+		
 		<!-- 미채택답변 리스트 -->
 		<div class="questionInfo" th:each="questionIdx : ${questionInfo}">
+			
 			<th:block th:each="question: ${questionIdx.value}">				
-				<!-- 미채택답변 리스트 -->
 				<div th:if="${question.answerAdoptStatus == 'I001'}">
 					<div class="row" id="questionInfo2">
 						<div id="questionTitle" class="col-9">  <!--사이드 태그 / 질문제목, 포인트-->
@@ -246,13 +241,16 @@
 							</div>
 						</div>
 						<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
-							<div th:if="${loginId != questionInfo[0][0].id}">
-								<span>수정</span><span>삭제</span>
+							<div th:if="${loginId == question.answerId}">
+								<span id="answerModifyBtn" onclick="openModifyView()">수정</span>
+								<span>삭제</span>
 							</div>
-							<span th:unless="${loginId != questionInfo[0][0].id}">신고</span>
+							<span th:unless="${loginId == question.answerId}">신고</span>
 							<p>2023.01.28</p>
 						</div>
-					</div><!-- 질문글 제목 / 신고삭제 끝 -->
+					</div>
+					<!-- 질문글 제목 / 신고삭제 끝 -->
+					<!-- 답변글 본문 -->
 					<div class="qna_contents" th:utext="${question.answerContents}">
 						<p>답변 내용입니다</p>
 					</div>
@@ -271,24 +269,71 @@
 							<span><img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply"></span>
 							<span th:text="${questionInfo[0][0].answerReplyCnt}">7</span>
 						</div>
+						<!-- 조회, 북마크, 추천, 덧글수 버튼 끝-->
 					</div>
-					<hr>	
+					<!-- 답변글 본문 끝 -->
+					<hr>
+					<!-- 답변 수정 테스트 -->
+					<div style="display:none" th:if="${writePost} == true " id="answerModifyForm">	
+						<form name="answerModify">
+						 	<div style="width:900px;margin: 0 auto;">
+								<div class="answer-top" style="height:80px;">
+									<div class="min_answerbox" >
+									   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
+									</div>
+									<div class="min_align_bottom">
+										<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님의 답변 수정하기</h6>
+										<p class="m-0" style="font-size:13px;color:#989daa;"> 답변이 채택되면 활동점수 20점을 드립니다.</p>
+									</div>
+								</div>
+								<div>
+									<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
+									<input id="answerTitle" name="answerTitle" type="text" th:value="${question.answerTitle}" class="form-control" placeholder="제목을 입력해주세요">
+									<br>
+								
+									<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
+									<div id="editor" name="editor" style="height:300px;" th:utext="${question.answerContents}"></div>
+									<br>
+								</div>
+								<div style="float: right;margin-bottom:10px;">
+									<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+									<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:onclick="sendAnswerModify([[${question.answerBoardNo}]])">수정</button>
+								</div>
+								<br><br><br><hr>
+						 	</div>
+					 	</form>		
+					</div>
+					<!-- 답변 수정 테스트 끝 -->
+						
 				</div>
-			</th:block> <!-- 반복문 끗 -->
+			</th:block> 
 		</div>
 		<!-- 미채택답변 리스트 끝 -->
 	</div>
 	<!-- end of container -->
 </section>
 </div>
+<script th:inline="javascript">
+	function openModifyView(){
+		if($('#answerModifyBtn').text() == "수정") {
+			$('#answerModifyBtn').text('수정닫기');
+			$('#answerModifyForm').css('display','block');
+		}
+		else {
+			$('#answerModifyBtn').text('수정');
+			$('#answerModifyForm').css('display','none');
+		}
+	}
 
+</script>
 <script th:inline="javascript">
 	 let test = [[${questionInfo}]];
 	 let test2 = Object.values(test)[0][1];
 	 let test3 = [[${writePost}]]
 	 
-	//질문글 수정폼 이동
 	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
+
+	 //질문글 수정폼 이동
 	 $(document).ready(function(){
 	 	$('#questionModify').click(function(){
 	 		window.location.href= "/questionWrite?bno=" + bno ;
@@ -300,12 +345,13 @@
 	let csrfToken = $('meta[name="csrf"]').attr("content");
 	
 	function sendAnswer(){
-		console.log('test',[[${session.member.memberNo}]]);
-		const formData = new FormData(document.answerWrite);
+		const member = [[${session.member}]];
 		
+		const formData = new FormData(document.answerWrite);
+	
 		formData.append(csrfPara, csrfToken);
 		formData.append("questionBoardNo", bno);
-		formData.append("answerMemberNo", [[${session.member.memberNo}]]);
+		formData.append("answerMemberNo", member.memberNo);
 		formData.append("answerContents", editor.getHTML());
 		
 		$.ajax('/answerWrite', {
@@ -315,7 +361,7 @@
 			processData : false 	
 		})
 		.done(res => {
-			showSuccessAlert('등록성공');
+			/* showSuccessAlert('등록성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -325,17 +371,74 @@
 	    })
 		
 	}
-	 
+	//답변글 수정  
+	function sendAnswerModify(answerBoardNo){
+		const formData = new FormData();
+	
+		formData.append(csrfPara, csrfToken);
+		formData.append("answerTitle", $('input[name="answerTitle"]').val());
+		formData.append("answerBoardNo", answerBoardNo);
+		formData.append("answerContents", editor.getHTML());
+		
+		$.ajax('/answerModify', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+			/* showSuccessAlert('수정성공'); */
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('수정실패');
+	    })
+		
+	}
 </script>
 
 <!-- text editor -->
 <script>
+const imageNoArray = [];
+
 const editor = new toastui.Editor({
     el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
     height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
     initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
     initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
-    previewStyle: 'vertical'                // 마크다운 프리뷰 스타일 (tab || vertical)
+    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
+    /* start of hooks */
+    hooks: {
+        async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+            try {
+                //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+                const formData = new FormData();
+                formData.append(csrfPara, csrfToken);
+                formData.append('image', blob);
+
+                // 2. FileApiController - uploadEditorImage 메서드 호출
+                const response = await fetch('/texteditorimage', {
+                    method : 'POST',
+                    body : formData,
+                });
+
+                // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+                const res = await response.json();
+                console.log('서버에 저장된 파일명 : ', res);
+
+                // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+                const imageUrl = res.imageUrl;
+                imageNoArray.push(res.imageNo);
+                callback(imageUrl, 'image alt attribute');
+
+            } catch (error) {
+                console.error('업로드 실패 : ', error);
+            }
+        }
+    }
+    /* end of hooks */
 });
 
 </script>
