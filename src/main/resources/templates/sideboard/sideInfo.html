@@ -319,16 +319,19 @@
 					</div>
 				</th:block>
 				<hr id="tae-hr">
-			<div style="height:600px;">
+			<div style="height:900px;">
 				<!-- repository -->
 				<div>
-					<img style="width:80px;" alt="" th:src="|/commonResource/taefolder/githublogo.png|">
+					<img style="width:200px;" alt="" th:src="|/commonResource/taefolder/githublogo.png|">
+					<h1 style="font-weight:bold;">Repository</h1>
+					<div style="border:1px solid black;opacity:25%;width:900px;height:200px;border-radius:20px;margin-left:20px;margin-top:20px;">
+					</div>
 				</div>
 				<!-- github 커밋 리스트 -->
-				<div class="d-flex" style="float: left;">
+				<div class="" style="float: left;">
+				<h3 style="padding-top:10px;padding-left:20px;margin-bottom:20px;font-weight: bold;">COMMIT
+				</h3>
 					<div class="card" id="tae-card-3">
-						<h5 style="padding-top:10px;padding-left:20px;margin-bottom:20px;text-decoration: underline;font-weight: bold;">COMMIT List
-						</h5>
 							<ul class="tae-git-1">
 								<li class="tae-git-2" th:each="commit : ${commitDTO}"> 
 								    [[${commit.commitMessage}]]
@@ -339,14 +342,15 @@
 					</div>
 				</div>
 				<!-- github 이슈 리스트 -->
-				<div class="d-flex" style="float: left;">
+				<div style="float: left;margin-top:20px;">
+				<h3 style="padding-top:10px;padding-left:20px;margin-bottom:20px;font-weight: bold;">ISSUE
+				</h3>
 					<div class="card" id="tae-card-3">
-						<h5 style="padding-top:10px;padding-left:20px;margin-bottom:20px;text-decoration: underline;font-weight: bold;">ISSUE List
-						</h5>
 							<ul class="tae-git-1">
 								<li class="tae-git-2" th:each="issue : ${issueDTO}">[[${issue.issueTitle}]]
 									<span class="tae-ul-list" th:text="${#dates.format(issue.issueDate, 'yyyy-MM-dd')}">[[${issue.issueDate}]]</span>
-									<span class="tae-ul-list" >[[${issue.commentCnt}]]</span>
+									<br>
+									<p class="tae-ul-list" >[[${issue.commentCnt}]]</p>
 									<hr>
 								</li>
 							</ul>
@@ -354,9 +358,7 @@
 					</div>
 					<div class="addgitIssue">
 						<!-- Button trigger modal -->
-						<button type="button" class="btn text-white" style="background-color: darkseagreen;color:#fff;font-size:16px;
-						margin-left:15px;bs-btn-padding-y: .25rem;bs-btn-padding-x: .5rem;
-						bs-btn-font-size: .75rem;" data-bs-toggle="modal" data-bs-target="#IssueModal">
+						<button type="button" class="tae-btn-text-white" data-bs-toggle="modal" data-bs-target="#IssueModal">
 						 새 이슈 등록
 						</button>
 						
@@ -663,7 +665,7 @@ function sendIssue(){
 	})
 	.done(res => {
 		if(res.result == "200") {
-			document.location.href = document.location.href;	
+			showSuccessAlert("이슈 등록에 성공했습니다.");
 		}
 		else {
 			showFailAlert('이슈 등록에 실패하였습니다.');

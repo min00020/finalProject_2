@@ -134,14 +134,15 @@ public class GitHubServiceImpl implements GitHubService {
 			GitHub github = new GitHubBuilder().withOAuthToken(userAccessToken).build();
 			GHRepository repository = github.getRepository(userRepositoryName);
 			
-			repository.createIssue("새로운 이슈 타이틀")
-            .body("여기에 이슈에 대한 설명을 입력하세요.")
-            .label("bug") // 필요한 라벨을 설정하세요. 라벨은 사전에 GitHub 리포지토리에 생성되어 있어야 합니다.
+			repository.createIssue(title)
+            .body(body)
             .create();
-			System.out.println("이슈가 성공적으로 생성되었습니다.");
-			int a = 10;
+			
+			map.put("result", "200");
+			
 			} catch (IOException e) {
 				System.out.println(e);
+				map.put("result", "500");
 			}
 			return map;
 	}

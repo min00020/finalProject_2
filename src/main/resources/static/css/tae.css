@@ -494,6 +494,7 @@ input::placeholder
 .tae-git-2{
 	list-style-type:none;
 	width: 390px;
+	
 }
 
 .tae-git-1 {
@@ -517,4 +518,20 @@ input::placeholder
 /* 스크롤바 뒷 배경 설정*/
 .tae-git-1::-webkit-scrollbar-track {
 	background-color: rgba(255, 255, 255, 0.5);
+}
+.tae-btn-text-white{
+	background-color: darkseagreen;
+	color:#fff;
+	font-size:16px;
+	height:38px;
+	width:105px;
+	margin-top: 15px;
+	float: right;
+	margin-left:15px;
+	bs-btn-padding-y: .25rem;
+	bs-btn-padding-x: .5rem;
+	bs-btn-font-size: .75rem;
+	border: 0px solid #fff;
+	border-radius:5px;
+	
 }
