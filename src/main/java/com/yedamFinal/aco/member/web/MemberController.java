@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,27 +20,42 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
+import com.yedamFinal.aco.common.service.SessionUtil;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
-import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
+import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
+/**
+ * 회원로그인, 마이페이지
+ * @author 태경
+ * 수정일자    수정자       수정내용
+ * ------------------------------------
+ *            태경         마이페이지
+ *
+ */
 @Controller
 public class MemberController {
 
 	@Autowired
-	private MemberServiceImpl memberService;
+	private MemberService memberService;
 	@Autowired
 	private FreeBoardService freeBoardService;
 
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
 
+	/**
+	 * 
+	 * @param join
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/loginForm")
 	public String getLoginForm(String join, Model model) {
 		if (join != null && join.equals("1")) {
@@ -50,7 +63,11 @@ public class MemberController {
 		}
 		return "common/loginForm";
 	}
-
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/")
 	public String getMainPageForm(Model model) {
 		model.addAttribute("main", "1");
@@ -66,7 +83,12 @@ public class MemberController {
 		
 		return "common/mainPage";
 	}
-	
+	/**
+	 * 
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	// min 회원가입 form
 	@GetMapping("/createAccountForm")
 	public String getCreateAccountForm(HttpServletRequest request, Model model) {
@@ -74,17 +96,15 @@ public class MemberController {
 		model.addAttribute("tagList", tagList);
 		return "common/createAccount";
 	}
-
-	// 회원정보 단건조회
+	
+	/**
+	 * 마이페이지로 이동(회원정보, 이모티콘 구매내역, 활동 및 포인트 점수, 계좌정보)
+	 * @param model 
+	 * @return common/myPage 
+	 */
 	@GetMapping("/myPage")
 	public String getMyPageForm(Model model) {
-		// MemberVO 꺼내오기.
-		MemberVO memberVO = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-		}
+		MemberVO memberVO = SessionUtil.getSession();
 
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MyemoticonVO> emoinfo = memberService.getMyemoList(memberVO);
@@ -99,16 +119,15 @@ public class MemberController {
 		return "common/myPage";
 	}
 	
-	
+	/**
+	 * 회원 포인트 환전요청
+	 * @param resPoint
+	 * @return
+	 */
 	@PostMapping("/updateMemberPoint")
 	@ResponseBody
 	public Map<String,Object> updateResPoint(@RequestParam Integer resPoint) {
-		MemberVO memberVO = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-		}
+		MemberVO memberVO = SessionUtil.getSession();
 		
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		Map<String,Object> mp = memberService.updateMemberPoint(resPoint, findVO);
@@ -117,19 +136,19 @@ public class MemberController {
 		
 		return mp;
 	}
-
+	
+	/**
+	 * 마이페이지 북마크 삭제 
+	 * @param questionBoardNo
+	 * @return map (삭제결과)
+	 */
 	@GetMapping("/deleteBookmark")
 	@ResponseBody
 	public Map<String, Object>  delBookmarkList(@RequestParam Integer questionBoardNo) {
-		MemberVO memberVO = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-		}
+		MemberVO memberVO = SessionUtil.getSession();
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
-		Map<String, Object> map = new HashMap<>();
 		
+		Map<String, Object> map = new HashMap<>();
 		boolean result = memberService.delBookmarkList(questionBoardNo, memberVO.getMemberNo());
 		
 		if(result) {
@@ -141,16 +160,15 @@ public class MemberController {
 		return map;
 	}
 	
-
-	// 책갈피목록, 질문글 목록
+	/**
+	 * 마이페이지 책갈피목록, 질문글 목록
+	 * @param model
+	 * @return common/myPage2
+	 */
 	@GetMapping("/myPage2")
 	public String getMyPageForm2(Model model) {
-		MemberVO memberVO = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-		}
+		MemberVO memberVO = SessionUtil.getSession();
+		
 		MemberQuestionChartVO chartVO = memberService.getMemberChart(memberVO);
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
@@ -170,7 +188,11 @@ public class MemberController {
 
 		return "common/myPage2";
 	}
-	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	// min 아이디 중복체크 요청
 	@GetMapping("/checkId")
 	@ResponseBody
@@ -178,26 +200,46 @@ public class MemberController {
 		var retData = memberService.checkDuplicateId(id);
 		return retData;
 	}
+	/**
+	 * 
+	 * @param email
+	 * @return
+	 */
 	// min 이메일 인증요청
 	@GetMapping("/checkEmail")
 	@ResponseBody
 	public Map<String, Object> checkDuplicateEmail(@RequestParam String email) {
 		return memberService.checkDuplicateEmail(email);
 	}
-	
+	/**
+	 * 
+	 * @param phoneNum
+	 * @return
+	 */
 	// min 번호 인증요청
 	@GetMapping("/authPhoneNum")
 	@ResponseBody
 	public Map<String, Object> sendAuthNumber(@RequestParam String phoneNum) {
 		return memberService.sendAuthNumberToPhone(phoneNum);
 	}
+	/**
+	 * 
+	 * @param authNum
+	 * @param phoneNum
+	 * @return
+	 */
 	// min 번호 인증 확인(시연 시 실제 문자서비스 이용)
 	@GetMapping("/verifyAuthPhoneNum")
 	@ResponseBody
 	public Map<String, Object> verifyAuthNumber(@RequestParam String authNum, @RequestParam String phoneNum) {
 		return memberService.verifyAuthNumber(authNum, phoneNum);
 	}
-
+	/**
+	 * 
+	 * @param member
+	 * @param file
+	 * @return
+	 */
 	// min 회원가입
 	@PostMapping("/join")
 	@ResponseBody
@@ -210,12 +252,25 @@ public class MemberController {
 
 		return memberService.joinMember(member, file);
 	}
+	/**
+	 * 
+	 * @param userid
+	 * @param userpw
+	 * @return
+	 */
 	// min login처리(안씀)
 	@PostMapping("/login")
 	@ResponseBody
 	public Map<String, Object> login(@RequestParam("userid") String userid, @RequestParam("userid") String userpw) {
 		return memberService.loginMember(userid, userpw);
 	}
+	/**
+	 * 
+	 * @param req
+	 * @param id
+	 * @param model
+	 * @return
+	 */
 	// min 깃허브 연동 page
 	@GetMapping("/gitLinkPage")
 	public String gitLinkPageForm(HttpServletRequest req, String id, Model model) {
@@ -224,6 +279,13 @@ public class MemberController {
 		model.addAttribute("clientId", gitClientId);
 		return "common/gitLinkPage";
 	}
+	/**
+	 * 
+	 * @param req
+	 * @param gitCode
+	 * @param model
+	 * @return
+	 */
 	// min 깃허브 연동
 	@PostMapping("/gitLink")
 	@ResponseBody
@@ -231,24 +293,40 @@ public class MemberController {
 		return memberService.processGitLink((String) req.getSession().getAttribute("tempId"), gitCode);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	@GetMapping("/test")
 	public String test() {
 		return "common/test";
 	}
-	
+	/**
+	 * 
+	 * @return
+	 */
 	// min 계정찾기 폼
 	@GetMapping("/findAccount")
 	public String findAccountForm() {
 		return "common/findAccount";
 	}
-
+	/**
+	 * 
+	 * @param email
+	 * @return
+	 */
 	// min 계정찾기 (이메일 전송)
 	@PostMapping("/findAccount")
 	@ResponseBody
 	public Map<String,Object> findAccount(@RequestParam String email) {
 		return memberService.findAccount(email);
 	}
-	
+	/**
+	 * 
+	 * @param key
+	 * @param model
+	 * @return
+	 */
 	// min 계정찾기 (비밀번호 변경 화면 -> accessKey 검증)
 	@GetMapping("/changePassword")
 	public String changePasswordForm(@RequestParam String key, Model model) {
@@ -259,12 +337,19 @@ public class MemberController {
 		model.addAttribute("accessKey",key);
 		return "common/changePassword";
 	}
-
+	/**
+	 * 
+	 * @param accessKey
+	 * @param password
+	 * @param passwordVerify
+	 * @return
+	 */
 	// min 계정찾기 (비밀번호 변경 -> accessKey 검증)
 	@PostMapping("/changePassword")
 	@ResponseBody
 	public Map<String,Object> changePassword(@RequestParam String accessKey, @RequestParam String password, @RequestParam String passwordVerify) {
 		return memberService.changePassword(accessKey,password,passwordVerify);
 	}
+	
 }
 

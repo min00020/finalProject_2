@@ -70,7 +70,7 @@
 		   </div>
 		  
 		  <div class="col-12">
-		    <button type="submit" id="writeBoard" class="btn btn-primary" style="float:right;">글 등록</button>
+		    <button type="button" id="writeBoard" class="btn btn-primary" style="float:right;">글 등록</button>
 		  </div>
 	</form>
 </div>
@@ -87,7 +87,7 @@
 	<h3 class="tae-side-title">사이드 프로젝트 게시글수정</h3>
 	<br>
 	<!-- 입력 -->
-	<form class="row g-3" id="sideProjectForm">
+	<form class="row g-3" id="modifyForm">
 		  <div class="row mb-3">
 		   	<label for="inputEmail3" class="tae-form-label col-sm-2 col-form-label">프로젝트 제목</label>
 		   		<div class="col-sm-10">
@@ -137,7 +137,7 @@
 	  		<!-- <label for="exampleFormControlTextarea1" class="tae-form-label col-sm-2 col-form-label">프로젝트 소개</label>
 	  		<textarea class="form-control" id="content" rows="8" >[[${sideInfo.content}]]</textarea> -->
 	  		<label for="editor" style="font-weight:bold; margin-bottom:8px;">프로젝트 소개</label>
-			<div id="editor" name="editor">[[${sideInfo.content}]]</div>
+			<div id="editor" name="editor" th:utext="${sideInfo.content}"></div>
 			<br>
 		   </div>
 		  	<div class="col-12">
@@ -321,7 +321,7 @@
 	        let devPeriod = $('#devPeriod').val();
 	        let gitAddress = $('#gitAddress').val();
 	        let techOfUse = $('#tags').val();
-	        let content = $('#content').val();
+	        let content = editor.getHTML();
 
 	        let obj = {
 	        	memberNo : memberNo,
@@ -354,7 +354,7 @@
 	});
 	//게시글 수정
 	$(document).ready(function(){
-	$('#modifyBoard').submit(function(event) {
+	$('#modifyForm').submit(function(event) {
         event.preventDefault();
         let title = $('#title').val();
         let projectOutline = $('#projectOutline').val();
@@ -362,7 +362,8 @@
         let devPeriod = $('#devPeriod').val();
         let gitAddress = $('#gitAddress').val();
         let techOfUse = $('#tags').val();
-        let content = $('#content').val();
+        let content = editor.getHTML();
+        let bno = [[${bno}]]
 
         let obj = {
         	memberNo : memberNo,
@@ -374,18 +375,19 @@
             gitAddress: gitAddress,
             techOfUse: techOfUse,
             content: content,
-            writer : writer
+            writer : writer,
+            bno : bno
             
         };
         obj[csrfPara] = csrfToken;
         
-        $.ajax('/updateAjax', {
+        $.ajax(`/updateAjax/${bno}`, {
             type: "POST",
             data: obj
         }).done(result => {
     		console.log('등록 성공', result);
     		showSuccessAlert('정상적으로 수정되었습니다.');
-    		window.location.href = '/sideInfo/' + result.vo.pk;
+    		window.location.href = '/sideInfo/' + bno;
         })
         .fail(err => {
         	console.log(err);

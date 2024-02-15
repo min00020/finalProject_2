@@ -27,7 +27,6 @@ public class SideServiceImpl implements SideService{
 	@Autowired
 	ReplyMapper replyMapper;
 	
-	
 	@Override
 	public Map<String, Object> getRecruitingList(int pageNo, String status) {
 		Map<String, Object> map = new HashMap<>();
@@ -55,11 +54,11 @@ public class SideServiceImpl implements SideService{
 	}
 	//상태변경
 	@Override
-	public Map<String, Object> updateBoardStatus(int bno, String status, SideVO vo){
+	public Map<String, Object> updateBoardStatus(SideVO vo){
+		
 		Map<String, Object> map = new HashMap<>();
-		vo.setBno(bno);
-		vo.setStatus(status);
-		int result = sideMapper.updateStatus(bno, status, vo);
+		
+		int result = sideMapper.updateStatus(vo);
 		if (result <= 0) {
 			map.put("result", "500");
 		} else {
@@ -86,7 +85,8 @@ public class SideServiceImpl implements SideService{
 	@Override
 	public Map<String, Object> modifyProject(SideVO sideVO, int bno){
 		Map<String, Object> map = new HashMap<>();
-		int result = sideMapper.modifyProject(bno, sideVO);
+		sideVO.setBno(bno);
+		int result = sideMapper.updateSide(sideVO);
 		int pk = sideVO.getPk();
 		if( result <= 0) {
 			map.put("result", "500");

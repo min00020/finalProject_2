@@ -46,7 +46,7 @@
 				<hr id="tae-hr">
 				<div class="container" id="tae-container-5">
 				<h5 style="font-weight:bold;">프로그램 소개</h5>
-				<p style="font-weight:bold;">[[${sideInfo.content}]]</p>
+				<p style="font-weight:bold;" th:utext="${sideInfo.content}"></p>
 				</div>	
 		<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}" th:text="${sideInfo.gitAddress}"></a></p>
 	</div>
@@ -153,21 +153,37 @@
 						</div>
 					</div>
 				</th:block>
-					<div class="gitCommit">
-						<h3>COMMIT</h3>
-						<div th:each="commit : ${commitDTO}">
-							<p style="font-weight:bold;">[[${commit.commitMessage}]]</p>
-							<p>[[${commit.commitDate}]]</p>
-						</div>
+				<hr id="tae-hr">
+				<!-- github 커밋 리스트 -->
+				<div class="d-flex" id="tae-container4" style="float: left;">
+					<div class="card" id="tae-card-3">
+						<h5 style="padding-top:10px;padding-left:20px;margin-bottom:20px;text-decoration: underline;font-weight: bold;">COMMIT List
+						</h5>
+							<ul class="tae-git-1">
+								<li class="tae-git-2" th:each="commit : ${commitDTO}"> 
+								    [[${commit.commitMessage}]]
+									<span class="tae-ul-list" th:text="${#dates.format(commit.commitDate, 'yyyy-MM-dd')}">[[${commit.commitDate}]]</span>
+									<hr>
+								</li>
+							</ul>
 					</div>
-					<div class="gitIssue">
-						<h3>ISSUE</h3>
-							<div th:each="issue : ${issueDTO}">
-								<p style="font-weight:bold;">[[${issue.issueTitle}]]</p>
-								<p>[[${issue.issueDate}]]</p>
-								<p>[[${issue.commentCnt}]]</p>
-							</div>		
+				</div>
+				
+				<!-- github 이슈 리스트 -->
+				<div class="d-flex" id="tae-container4" style="float: left;">
+					<div class="card" id="tae-card-3">
+						<h5 style="padding-top:10px;padding-left:20px;margin-bottom:20px;text-decoration: underline;font-weight: bold;">ISSUE List
+						</h5>
+							<ul class="tae-git-1">
+								<li class="tae-git-2" th:each="issue : ${issueDTO}">[[${issue.issueTitle}]]
+									<span class="tae-ul-list" th:text="${#dates.format(issue.issueDate, 'yyyy-MM-dd')}">[[${issue.issueDate}]]</span>
+									<br>
+									<p class="tae-ul-list" >[[${issue.commentCnt}]]</p>
+									<hr>
+								</li>
+							</ul>
 					</div>
+				</div>
 		</div>	
 		<!--/* 댓글영역 */-->
 		<div class="w-100 mb-3 clearfix">
