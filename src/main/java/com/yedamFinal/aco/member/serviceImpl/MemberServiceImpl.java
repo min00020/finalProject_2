@@ -423,5 +423,24 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return ret;
 	}
 
+	@Override
+	public Map<String, Object> checkDuplicateNickname(String nickname) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		MemberVO selectVO = memberMapper.selectDuplicateNickname(nickname);
+		if(selectVO == null || selectVO.getNickname() == null) {
+			ret.put("result", "500");
+		}
+
+		return ret;
+	}
+
+	@Override
+	public int updateResetBan(int memberNo) {
+		// TODO Auto-generated method stub
+		return memberMapper.updateResetBan(memberNo);
+	}
+
 
 }

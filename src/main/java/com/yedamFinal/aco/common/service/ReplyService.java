@@ -9,5 +9,6 @@ import com.yedamFinal.aco.member.MemberVO;
 public interface ReplyService {
 	public Map<String,Object> postReply(String boardType, String boardNo, String replyBody, String isEmoticon, String replyPno, MemberVO vo);
 	public List<ReplyJoinVO> getReplyList(String boardType, int boardNo);
-	public Map<String, Object> recommendReply(String replyNo);
+	public Map<String, Object> deleteReply(String replyNo);
+	public Map<String, Object> modifyReply(int replyNo, String replyBody, String isEmoticon);
 }

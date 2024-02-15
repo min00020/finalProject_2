@@ -54,4 +54,8 @@ public interface MemberService {
 	public Map<String, Object> updateMemberPoint(int resPoint, MemberVO memberVO);
 	boolean delBookmarkList(int qnaboardNo, int memberNo);
 	public MemberQuestionChartVO getMemberChart(MemberVO memberVO);
+	
+	public Map<String, Object> checkDuplicateNickname(String nickname);
+	
+	public int updateResetBan(int memberNo);
 }
