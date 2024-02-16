@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +25,7 @@ import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
+import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
@@ -299,5 +301,43 @@ public class MemberController {
 	public Map<String, Object> checkDuplicateNickname(@RequestParam String nickName) {
 		return memberService.checkDuplicateNickname(nickName);
 	}
+	
+	@PostMapping("/changeAccountInfo")
+	@ResponseBody
+	public Map<String, Object> changeAccountInfo(AccountChangeDTO changeDTO,HttpServletRequest req) {
+		MemberVO memberVO = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			memberVO = userDetails.getMemberVO();
+		}
+		MemberVO findVO = memberService.getMemberInfo(memberVO);
+		var result = memberService.changeAccountInfo(changeDTO,findVO);
+		
+		// 업데이트한 개인정보를 다시 session에 담아준다.
+		findVO = memberService.getMemberInfo(findVO);
+		req.getSession().setAttribute("member", findVO);
+		return result;
+	}
+	
+	@PostMapping("/changePasswordMypage")
+	@ResponseBody
+	public Map<String, Object> changePasswordMypage(@RequestParam String password, @RequestParam String passwordVerify) {
+		MemberVO memberVO = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			memberVO = userDetails.getMemberVO();
+		}
+		
+		return memberService.changePasswordFromMyPage(password, passwordVerify, memberVO.getId());
+	}
+	
+	@GetMapping("/member/{mno}")
+	public String getMemberProfileInfo(@PathVariable("mno") int memberNo) {
+		
+		return "common/memberProfile";
+	}
+	
 }
 
