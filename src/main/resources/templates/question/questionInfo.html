@@ -201,8 +201,7 @@
 	                              </span>
 	                           </div>
 	                        </div>
-	                  </div>      
-	               </th:block>
+	                  </div>   
 	            </div>
 	            <!-- 추가질문답변 목록 끝 -->      
 	            <!-- 추가질문답변 등록칸 -->
@@ -210,17 +209,17 @@
 	               <div>
 	                  <div id="qna_add" th:if="${loginId == questionInfo[0][0].id}">            
 	                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
-	                  <textarea class="form-control" id="qna_add_form" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
+	                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
 	               </div>
 	               
 	               <div id="qna_add" th:if="${loginId == AdoptQuestionVO.answerId}">            
 	                  <img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
-	                  <textarea class="form-control" id="qna_add_form" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
+	                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
 	               </div>
 	               
 	               <div  th:if="${loginId == questionInfo[0][0].id} or ${loginId == AdoptQuestionVO.answerId}" style="float: right;margin-bottom:10px;">
-	                  <button type="button" class="btn text-white" style="background-color:#3e6ce3;margin-right:66px;">등록</button>
-	               </div>
+	                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
+	               </div> 
 	               <br><br><br><hr>
 	               </div>
 	            </div>   
@@ -230,42 +229,48 @@
 		<!-- 채택답변 끝 -->
 		
 		<!-- 미채택답변 리스트 -->
-			<!-- 답변 수정 -->
-					<div style="display:none" th:if="${writePost} == true and ${session.member.memberNo} == ${question.answerMemberNo}" id="answerModifyForm">	
-						<form name="answerModify">
-						 	<div style="width:900px;margin: 0 auto;">
-								<div class="answer-top" style="height:80px;">
-									<div class="min_answerbox" >
-									   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
-									</div>
-									<div class="min_align_bottom">
-										<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님의 답변 수정하기</h6>
-										<p class="m-0" style="font-size:13px;color:#989daa;"> 답변이 채택되면 활동점수 20점을 드립니다.</p>
-									</div>
+		<!-- 1)답변 수정 -->
+		 <div class="questionInfo" th:each="questionIdx : ${questionInfo}">
+	        <th:block th:each="question: ${questionIdx.value}">   
+				<div style="display:none" th:if="${writePost} == true and ${session.member.memberNo} == ${question.answerMemberNo}" id="answerModifyForm">	
+					<form name="answerModify">
+					 	<div style="width:900px;margin: 0 auto;">
+							<div class="answer-top" style="height:80px;">
+								<div class="min_answerbox" >
+								   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
 								</div>
-								<div>
-									<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
-									<input id="answerTitle" name="answerTitle" type="text" th:value="${question.answerTitle}" class="form-control" placeholder="제목을 입력해주세요">
-									<br>
-								
-									<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
-									<div id="editor" name="editor" style="height:300px;" th:utext="${question.answerContents}"></div>
-									<br>
+								<div class="min_align_bottom">
+									<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님의 답변 수정하기</h6>
+									<p class="m-0" style="font-size:13px;color:#989daa;"> 답변이 채택되면 활동점수 20점을 드립니다.</p>
 								</div>
-								<div style="float: right;margin-bottom:10px;">
-									<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
-									<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:onclick="sendAnswerModify([[${question.answerBoardNo}]])">수정</button>
-								</div>
-								<br><br><br><hr>
-						 	</div>
-					 	</form>		
-					</div>
-					<!-- 답변 수정 끝 -->
+							</div>
+							<div>
+								<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
+								<input id="answerTitle" name="answerTitle" type="text" th:value="${question.answerTitle}" class="form-control" placeholder="제목을 입력해주세요">
+								<br>
+							
+								<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
+								<div id="editor" name="editor" style="height:300px;" th:utext="${question.answerContents}"></div>
+								<br>
+							</div>
+							<div style="float: right;margin-bottom:10px;">
+								<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+								<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:onclick="sendAnswerModify([[${question.answerBoardNo}]], [[${question.answerMemberNo}]])">수정</button>
+							</div>
+							<br><br><br><hr>
+					 	</div>
+				 	</form>		
+				</div>
+			</th:block>
+		</div>
+		<!-- 답변 수정 끝 -->
+		<!-- 2)미채택 답변 -->
 		<div class="questionInfo" th:each="questionIdx : ${questionInfo}">
 			<th:block th:each="question: ${questionIdx.value}">				
 				<div th:if="${question.answerAdoptStatus == 'I001'}">
 					<div class="row" id="questionInfo2">
-						<div id="questionTitle" class="col-9">  <!--사이드 태그 / 질문제목, 포인트-->
+						<div id="questionTitle" class="col-9">  
+							<!--답변채택 / 질문제목, 포인트-->
 							<h1 class="qna_logo">A</h1>
 							<div class="qna_title">
 								<div>
@@ -312,10 +317,10 @@
 					</div>
 					<!-- 답변글 본문 끝 -->
 					<hr>
-				</div>
+				</div> <!-- th:if 끝 -->
 			</th:block> 
 		</div>
-		<!-- 미채택답변 리스트 끝 -->
+		<!-- 2)미채택답변, 리스트 끝 -->
 	</div>
 	<!-- end of container -->
 </section>
@@ -336,7 +341,8 @@
 <script th:inline="javascript">
 	 let test = [[${questionInfo}]];
 	 let test2 = Object.values(test)[0][1];
-	 let test3 = [[${writePost}]]
+	 let test3 = [[${writePost}]];
+	 let test4 = [[${AdoptQuestionVO}]];
 	 
 	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
 
@@ -426,6 +432,49 @@
 	    .fail(err => {
 	    	console.log(err);
 	    	showWarningAlert('채택실패');
+	    })
+		
+	}
+	
+	//추가질문답변 작성
+	function sendAddAnswer(ano, answerWriter){
+		//추가질문답변 작성자 타입
+		//세션멤버 = 질문작성자 => J001 / 세션멤버 = 채택답변작성자 => J002
+		const sessionMember = [[${session.member.memberNo}]];
+		const questionWriter = [[${questionInfo[0][0].memberNo}]];
+		
+		let addWriterType = null;
+		
+		if(sessionMember == questionWriter){
+			addWriterType = 'J001';
+		}
+		if(sessionMember == answerWriter){
+			addWriterType = 'J002';
+		}
+		
+		//글 작성
+		const formData = new FormData();
+		formData.append(csrfPara, csrfToken);
+		formData.append("answerBoardNo", ano);
+		formData.append("addContents", $('textarea[name="addForm"]').val());
+		formData.append("addWriterType", addWriterType);
+		
+		console.log(ano, $('textarea[name="addForm"]').val() , addWriterType);
+		
+		$.ajax('/questionAddWrite', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+			 /* showSuccessAlert('등록성공'); */
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('등록실패');
 	    })
 		
 	}
