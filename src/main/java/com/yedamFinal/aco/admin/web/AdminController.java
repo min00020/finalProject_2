@@ -303,21 +303,9 @@ public class AdminController {
 	
 	@ResponseBody
 	@PutMapping("/updateAdminReport")
-	public Map<String, Object> updateAdminReport(int reportNo){
+	public Map<String, Object> updateAdminReport(int reportNo, int memberNo){
 		Map<String,Object> result = new HashMap<String, Object>(); 
-		if(adminService.updateAdminReport(reportNo) > 0)	{
-			result.put("result", "200");
-		}
-		else {
-			result.put("result", "500");
-		}
-		return result;
-	}
-	@ResponseBody
-	@PutMapping("/updateBanMember")
-	public Map<String, Object> updateBanMember(int memberNo){
-		Map<String,Object> result = new HashMap<String, Object>(); 
-		if(adminService.updateBanMember(memberNo) > 0)	{
+		if(adminService.updateAdminReport(reportNo, memberNo) > 0)	{
 			result.put("result", "200");
 		}
 		else {

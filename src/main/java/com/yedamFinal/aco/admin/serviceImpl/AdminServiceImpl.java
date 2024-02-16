@@ -348,11 +348,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
-	public int updateAdminReport(int reportNo) {
-		return adminMapper.updateAdminReport(reportNo);
-	}
-	@Override
-	public int updateBanMember(int memberNo) {
-		return adminMapper.updateBanMember(memberNo);
+	public int updateAdminReport(int reportNo, int memberNo) {
+		int result  = adminMapper.updateAdminReport(reportNo);
+		if(result > 0) {
+			return adminMapper.updateBanMember(memberNo);
+		}
+		return 0;
 	}
 }
