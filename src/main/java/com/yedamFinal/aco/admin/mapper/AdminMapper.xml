@@ -59,6 +59,8 @@ SELECT C.*
                 r.REPORT_STATE,
                 r.BOARD_TYPE,
                 r.BOARD_NO,
+                r.REPLY_CONTENT,
+                r.REPORTEE,
                 o.NAME as reportee_name
             FROM REPORT r
             JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
@@ -600,20 +602,26 @@ ORDER BY SPLIT_VALUE
 	WHERE MEMBER_NO=#{memberNo}
 	AND EMO_NO=#{emoNo}
 </delete>
-<update id="updateAdminReport">
+<update id="updateAdminReportI">
 	UPDATE REPORT
         SET
-        REPORT_STATE = #{reportState}
+        REPORT_STATE = 'B002'
+    WHERE REPORT_NO = #{reportNo}
+</update>
+<update id="updateAdminReportB">
+	UPDATE REPORT
+        SET
+        REPORT_STATE = 'B003'
     WHERE REPORT_NO = #{reportNo}
 </update>
 <update id="updateBanMember">
 	UPDATE MEMBER
         SET 
         <choose>
-        <when test="banType == 'M004'">BAN_TYPE = 'M005' , BAN_DATE = SYSDATE</when>
-        <when test="banType == 'M005'">BAN_TYPE = 'M006' , BAN_DATE = SYSDATE</when>
-        <otherwise>BAN_TYPE = 'M004' , BAN_DATE = SYSDATE</otherwise>    
+        <when test="banType.equals('M004'.toString())">BAN_TYPE = 'M004' , BAN_DATE = SYSDATE</when>
+        <when test="banType.equals('M005'.toString())">BAN_TYPE = 'M005' , BAN_DATE = SYSDATE</when>
+        <when test="banType.equals('M006'.toString())">BAN_TYPE = 'M006' , BAN_DATE = SYSDATE</when>
         </choose>
-    WHERE MEMBER_NO = #{memberNo}
+    WHERE MEMBER_NO = #{reportee}
 </update>
 </mapper>

@@ -14,4 +14,5 @@ public class ReportVO {
 	private String boardType;
 	private int boardNo;
 	private int reportee;
+	private String replyContent;
 }

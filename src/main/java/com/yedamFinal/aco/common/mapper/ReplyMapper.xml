@@ -76,7 +76,8 @@
    			 'B001', 
    			 #{boardType}, 
    			 #{boardNo}, 
-   			 #{reportee}
+   			 #{reportee},
+   			 #{replyContent}
    			 )
 	</insert>
 </mapper>

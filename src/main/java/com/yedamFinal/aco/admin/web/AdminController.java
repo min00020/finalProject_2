@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,11 +25,14 @@ import com.yedamFinal.aco.admin.service.AdminService;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * 관리자 페이지 
  * @author 손하랑
  */
 @Controller
+@Log4j2
 public class AdminController {
 	@Autowired
 	AdminService adminService;
@@ -302,10 +306,23 @@ public class AdminController {
 	}	
 	
 	@ResponseBody
-	@PutMapping("/updateAdminReport")
-	public Map<String, Object> updateAdminReport(int reportNo, int memberNo){
+	@PutMapping("/updateAdminReportI")
+	public Map<String, Object> updateAdminReportI(int reportNo, int reportee, String banType){
 		Map<String,Object> result = new HashMap<String, Object>(); 
-		if(adminService.updateAdminReport(reportNo, memberNo) > 0)	{
+		if(adminService.updateAdminReportI(reportNo, reportee, banType) > 0)	{
+			result.put("result", "200");
+		}
+		else {
+			result.put("result", "500");
+		}
+		return result;
+	}
+	@ResponseBody
+	@PutMapping("/updateAdminReportB")
+	public Map<String, Object> updateAdminReportB(int reportNo){
+		Map<String, Object> result = new HashMap<String, Object>();
+		if(adminService.updateAdminReportB(reportNo) > 0) {
+			
 			result.put("result", "200");
 		}
 		else {

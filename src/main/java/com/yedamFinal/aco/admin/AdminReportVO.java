@@ -16,7 +16,7 @@ public class AdminReportVO {
 	private String boardType;
 	private int boardNo;
 	private int reportee;
-	
+	private String replyContent;
 	private String reporterName;
 	private String reporteeName;
 }

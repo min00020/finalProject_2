@@ -121,12 +121,14 @@
         									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       									</div>
       									<div class="modal-body">
+      									<div style="overflow: scroll; height: 250px; overflow-x: hidden;">
         					 				<div class="row">
 					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
 					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
 					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            					</div>
 					        					</div>
+					    					</div>
 					    					</div>
       									</div>
       									<div class="modal-footer">
@@ -168,6 +170,7 @@
 			                           				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
 			                           				<input type="hidden" name="reportee" th:value="${reply.value[0].parentMemberNo}">
 			                           				<input type="hidden" name="boardNo" th:value="${qnaInfo[0].qnaBoardNo}">
+			                           				<input type="hidden" name="replyContent" th:value="${reply.value[0].parentComment}">
 			                           				<input type="hidden" name="boardType" th:value="N005">
 													<div>
 														<table>
@@ -285,12 +288,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      												<div style="overflow: scroll; height: 250px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
 					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							 </div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -331,6 +336,7 @@
 			                    		   				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
 			                    		   				<input type="hidden" name="reportee" th:value="${innerReply.childMemberNo}">
 			                    		   				<input type="hidden" name="boardNo" th:value="${qnaInfo[0].qnaBoardNo}">
+			                    		   				<input type="hidden" name="replyContent" th:value="${innerReply.childComment}">
 			                    		   				<input type="hidden" name="boardType" th:value="N005">
 														<div>
 															<table>
