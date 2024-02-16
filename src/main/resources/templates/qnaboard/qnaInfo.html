@@ -1,7 +1,7 @@
 <div 
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
-	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:decorate="@{layout/member/mainTemplate.html}"
 	layout:fragment="content"	  
 >
 	<div class="container" style="width:1400px;">
@@ -40,8 +40,7 @@
 			</div>
 			
 			<!--/* 내용부분 나중에 텍스트에디터로 교체되어야함. */-->
-			<div class="p-3" style="min-height: 300px;">
-				<span>[[${qnaInfo[0].content}]]</span>
+			<div class="p-3" style="min-height: 300px;" th:utext="${qnaInfo[0].content}">
 			</div>
 			
 			<div class="p-3" style="background-color:#aebfec">
@@ -98,8 +97,7 @@
 				</div>
 			
 				<!--/* 내용부분 나중에 텍스트에디터로 교체되어야함. */-->
-				<div class="p-3" style="min-height: 300px;">
-					<span>[[${qnaInfo[0].qnaAnswerContent}]]</span>
+				<div class="p-3" style="min-height: 300px;" th:utext="${qnaInfo[0].qnaAnswerContent}">
 				</div>
 				<hr>
 				
@@ -368,7 +366,7 @@
       					<div class="modal-body">
       						<!-- 나중에 에디터로 변경되어야함. -->
         					<div>
-        						<textarea name="adminAnswer" class="form-control" style="height:300px;"></textarea>
+        						<div id="editor" name="editor"></div>
         					</div>
       					</div>
       					<div class="modal-footer">
@@ -393,7 +391,7 @@
       					<div class="modal-body">
       						<!-- 나중에 에디터로 변경되어야함. -->
         					<div>
-        						<textarea id="userQnA" class="form-control" style="height:300px;" th:value="${qnaInfo[0].content}">[[${qnaInfo[0].content}]]</textarea>
+        						<div id="editor2" name="editor2" th:utext="${qnaInfo[0].content}"></div>
         					</div>
       					</div>
       					<div class="modal-footer">
@@ -635,6 +633,87 @@
 </script>
 <!--/* 댓글 복사할 스크립트 태그 */-->
 
+<script th:inline="javascript">
+	const imageNoArray = [];
+	
+	const editor = new toastui.Editor({
+	    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
+	    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+	    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+	    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+	    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
+	    /* start of hooks */
+        hooks: {
+            async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+                try {
+                    //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+                    const formData = new FormData();
+                    formData.append(csrfPara, csrfToken);
+                    formData.append('image', blob);
+
+                    // 2. FileApiController - uploadEditorImage 메서드 호출
+                    const response = await fetch('/texteditorimage', {
+                        method : 'POST',
+                        body : formData,
+                    });
+
+                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+                    const res = await response.json();
+                    console.log('서버에 저장된 파일명 : ', res);
+
+                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+                    const imageUrl = res.imageUrl;
+                    imageNoArray.push(res.imageNo);
+                    callback(imageUrl, 'image alt attribute');
+
+                } catch (error) {
+                    console.error('업로드 실패 : ', error);
+                }
+            }
+        }
+        /* end of hooks */
+	});
+	
+	const imageNoArray2 = [];
+	
+	const editor2 = new toastui.Editor({
+	    el: document.querySelector('#editor2'), // 에디터를 적용할 요소 (컨테이너)
+	    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+	    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+	    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+	    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
+	    /* start of hooks */
+        hooks: {
+            async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+                try {
+                    //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+                    const formData = new FormData();
+                    formData.append(csrfPara, csrfToken);
+                    formData.append('image', blob);
+
+                    // 2. FileApiController - uploadEditorImage 메서드 호출
+                    const response = await fetch('/texteditorimage', {
+                        method : 'POST',
+                        body : formData,
+                    });
+
+                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+                    const res = await response.json();
+                    console.log('서버에 저장된 파일명 : ', res);
+
+                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+                    const imageUrl = res.imageUrl;
+                    imageNoArray2.push(res.imageNo);
+                    callback(imageUrl, 'image alt attribute');
+
+                } catch (error) {
+                    console.error('업로드 실패 : ', error);
+                }
+            }
+        }
+        /* end of hooks */
+	});
+</script>
 
 <script th:inline="javascript">
 
@@ -661,7 +740,7 @@
 	})
 	
 	function modifyQnA() {
-		const userInput = $('#userQnA').val();
+		const userInput = editor.getHTML();
 		if(userInput == null || userInput == '') {
 			showWarningAlert('수정할 내용을 작성해주세요.');
 			return;
@@ -693,7 +772,7 @@
 	}
 
 	function postAnswer() {
-		const answerString = $('textarea[name="adminAnswer"]').val();
+		const answerString = editor.getHTML();
 		if(answerString.length <= 0) {
 			showWarningAlert('답변을 작성해주세요.');
 			return;

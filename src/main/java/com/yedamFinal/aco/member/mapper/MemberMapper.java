@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
+import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
@@ -62,4 +63,6 @@ public interface MemberMapper {
 	public MemberVO selectDuplicateNickname(String nickname);
 	
 	public int updateResetBan(int memberNo);
+	
+	public int updateAccountInfo(AccountChangeDTO dto);
 }

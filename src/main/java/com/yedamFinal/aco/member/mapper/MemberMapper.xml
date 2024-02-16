@@ -298,4 +298,8 @@ VALUES (activity_point_detail_seq.NEXTVAL,
 	UPDATE MEMBER SET BAN_TYPE = NULL, BAN_DATE = NULL WHERE MEMBER_NO = #{memberNo}
 </update>
 
+<update id="updateAccountInfo">
+	UPDATE MEMBER SET EMAIL = #{email}, NAME = #{name}, NICKNAME = #{nickname}, PROFILE_IMAGE = #{profileImageName}, TOPIC_HASHTAG = #{tag} WHERE MEMBER_NO = #{memberNo}
+</update>
+
 </mapper>
