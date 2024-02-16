@@ -41,7 +41,7 @@
 	</select>
 	
 	<!-- 질문글 분류 조회 -->
-	<select id="getQuestionListSelect" resultType="QuestionVO">
+	<select id="getQuestionListTopic" resultType="QuestionVO">
 		SELECT m.id, 
 			   m.profile_image,
 		       q.QUESTION_BOARD_NO,
@@ -62,6 +62,12 @@
 		 
 		WHERE q.TOPIC = #{topic}
 		ORDER BY WRITE_DATE DESC
+	</select>
+	<select id="getQuestionTopicCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+            WHERE TOPIC = #{topic}
 	</select>
 
 	<!-- 질문글,답변글 단건조회 -->
@@ -238,4 +244,22 @@
 		 WHERE ANSWER_BOARD_NO = #{answerBoardNo}
 	</update>
 	
+	
+	<!-- 추가질문답변 등록 -->
+	<insert id="insertQuestionAdd" parameterType="QuestionVO">
+		INSERT INTO question_add(
+		    QUESTION_ADD_NO,
+		    ANSWER_BOARD_NO,
+		    CONTENTS,
+		    WRITER_TYPE,
+		    WRITE_DATE
+		) 
+		VALUES (
+		    question_add_seq.NEXTVAL,
+		    #{answerBoardNo},
+		    #{addContents},
+		    #{addWriterType},
+		    SYSDATE
+		)
+	</insert>
 </mapper>

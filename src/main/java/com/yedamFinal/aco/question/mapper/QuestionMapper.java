@@ -12,7 +12,8 @@ public interface QuestionMapper {
 	public List<QuestionVO> getQuestionList(@Param(value="pageNo") int pageNo);
 	public int getQuestionCount();
 	//질문 리스트 분류조회
-	public List<QuestionVO> getQuestionListSelect(String topic);
+	public List<QuestionVO> getQuestionListSelect(@Param(value="pageNo") int pageNo, String topic);
+	public int getQuestionTopicCount(String topic);
 	
 	/*질문글 + 답변글 + 추가답변 단건 조회*/
 	public List<QuestionVO> getQuestionInfo(int qno);
@@ -38,4 +39,8 @@ public interface QuestionMapper {
 	//답변글 채택
 	public int adoptAnswer(int ano);
 	
+	
+	/*추가질문답변*/
+	//추가질문답변 작성
+	public int insertQuestionAdd(QuestionVO questionVO);
 }

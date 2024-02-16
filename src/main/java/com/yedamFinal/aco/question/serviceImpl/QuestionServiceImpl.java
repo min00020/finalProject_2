@@ -19,7 +19,7 @@ public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	private QuestionMapper questionMapper;
 	
-	//리스트 조회
+	//질문글 리스트 조회
 	@Override
 	public List<QuestionVO> getQuestionList(Model model, int pageNo) {
 		var questionList = questionMapper.getQuestionList(pageNo);
@@ -34,10 +34,22 @@ public class QuestionServiceImpl implements QuestionService{
 		return null;
 	}
 	
+	//질문글 리스트 분류 조회
 	@Override
-	public List<QuestionVO> getQuestionListSelect(String topic) {
-		return questionMapper.getQuestionListSelect(topic);
+	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic) {
+		var questionListTopic = questionMapper.getQuestionListSelect(pageNo, topic);
+		PaginationDTO dto = null;
+		if(questionListTopic.size() > 0) {
+			dto = new PaginationDTO(questionMapper.getQuestionTopicCount(topic),pageNo,5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+		model.addAttribute("questionListTopic", questionListTopic);
+		
+		return null;
 	}
+	
+	
 
 	//단건조회
 	@Override
@@ -64,9 +76,18 @@ public class QuestionServiceImpl implements QuestionService{
 				if(vo.getAnswerAdoptStatus() == null) {
 					continue;
 				}
+				//채택답변 AdoptQuestionVO에 담아주기
 				if(vo.getAnswerAdoptStatus().equals("I002")) {
 					model.addAttribute("isAdopt",true);
-					break;
+					for(Map.Entry<Integer, List<QuestionVO>> myEntry : questionMap.entrySet()) {
+		                  List<QuestionVO> list = myEntry.getValue();
+		                  var findData = list.stream().filter(questionVO -> questionVO.getAnswerAdoptStatus().equals("I002")).findFirst();
+		                  if(findData.isPresent()) {
+		                     model.addAttribute("AdoptQuestionVO", findData.get());
+		                     break;
+		                  }
+		             }
+					 break;
 				}
 			}
 		}
@@ -167,5 +188,19 @@ public class QuestionServiceImpl implements QuestionService{
 	@Override
 	public int adoptAnswer(int ano) {
 		return questionMapper.adoptAnswer(ano);
+	}
+	
+	//추가질문답변 작성
+	@Override
+	public Map<String, Object> writeQuestionAdd(QuestionVO vo) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		int insertId = questionMapper.insertQuestionAdd(vo);
+		if(insertId <= 0) {
+			ret.put("result", "500");
+		}
+		else {
+			ret.put("result", "200");
+		}
+		return ret;
 	}
 }

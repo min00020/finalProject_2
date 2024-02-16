@@ -41,7 +41,7 @@
 							<h4 th:text="${questionInfo[0][0].title}" style="font-weight:bold">Node.js에 관련된 질문이 있습니다.</h4>
 						</div>
 					</div>
-					<div class="qna_second_line">
+					<div class="qna_second_line" th:if="${questionInfo[0][0].point} != 0">
 						<p class="qna_blueBtn" th:text="${questionInfo[0][0].point}">1000</p>
 					</div>
 				</div>
@@ -122,112 +122,145 @@
 		
 		<!-- 답변 리스트 시작 -->
 		<!-- 채택답변 -->
-		<th:block th:if="${isAdopt == true}">	
-			<div style="width:900px; margin:0 auto">
-				<div class="row" id="questionInfo2">
-					<!--사이드 태그 / 질문제목, 포인트-->
-					<div id="questionTitle" class="col-9">  
-						<h1 class="qna_logo">A</h1>
-						<div class="qna_title">
-							<div>
-								<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
-										  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-									질문자 채택
-								</button>
-								<h4 style="font-weight:bold" th:text="${questionInfo[0][0].answerTitle}">질문에 대한 답변입니다.</h4>
-							</div>
-						</div>
-					</div>
-					<div id="qna_deleteBtn" class="col-2"> <!-- 신고 / 작성날짜 -->
-						<span th:unless="${loginId != questionInfo[0][0].id}">신고</span>
-						<p>2023.01.28</p>
-					</div>
-				</div>
-				<!-- 질문글 제목 / 신고삭제 끝 -->
-				<div class="qna_contents" th:utext="${questionInfo[0][0].answerContents}">
-					<p>답변 내용입니다</p>
-				</div>
-				<div id="question_bottom" class="row"> <!--작성자 프로필 -->
-					<div id="member" class="col-7" style="height:40px;">
-						<div class="qna_box2">
-						   <img class="qna_profile" th:src="|/upload/profile/${questionInfo[0][0].answerProfileImage}|" alt="profile">
-						</div>
-						<p class="m-0" th:text="${questionInfo[0][0].answerId}">cookie123</p>
-						<p class="m-0" th:text="${questionInfo[0][0].answerMemberLevel}">silver</p>
-					</div>
-					<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
-					<div id="qna_iconAll" class="col-3">
-						<span>					
-							<img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
-						</span>
-						<span th:text="${questionInfo[0][0].answerViewCnt}">9</span>
-						<span>		
-							<img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply">
-						</span>
-						<span th:text="${questionInfo[0][0].answerReplyCnt}">7</span>
-						<button type="button" class="btn text-white" 
-							th:if="${questionInfo[0][0].answerAdoptStatus == 'I002'}"
-							style="background-color:#80a9e8;font-size:12px; margin-left:15px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-							추가질문하기
-						</button>
-					</div>
-				</div>
-				<hr>	
-			</div>
-			<!-- 추가질문답변 목록-->
-			<div class="questionInfo" th:each="questionIdx : ${questionInfo}">
-				<th:block th:each="question: ${questionIdx.value}">	
-					<div th:if="${question.addStatus == 'R002'}">
-							<div id="qna_add">
-								<!-- 질문자/작성자 구분 -->
-								<img th:if="${question.addWriterType == 'J001'}"
-									class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
-								<img th:unless="${question.addWriterType == 'J001'}" 
-									class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
-								<div class="qna_add_info">
-									<span th:if="${question.addWriterType == 'J001'}" 
-										class="m-1" style="font-weight:bold;">질문자의 추가질문</span>
-									<span th:unless="${question.addWriterType == 'J001'}" 
-										class="m-1" style="font-weight:bold;">답변자의 추가답변</span>
-									<span th:if="${loginId != questionInfo[0][0].id}" style="float:right;font-size: 15px;color:#76767e;">신고</span>
-									
-								<!-- 추가질문답변 리스트 -->
-									<p class="m-1" th:text="${question.addContents}">추가로 질문할 게 있는데 </p>
-									<span class="m-1" th:text="${question.addWriteDate}" style="font-size: 15px; color:#76767e;">2023.01.27</span>
-									<span style="float:right;" th:if="${loginId == questionInfo[0][0].id} and ${question.addWriterType == 'J002'} ">
-										<img src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
-										<a style="color:#3e6ce3;font-weight:bold;">채택</a>
-									</span>
-								</div>
-							</div>
-					</div>		
-				</th:block>
-			</div>
-			<!-- 추가질문답변 목록 끝 -->		
-			<!-- 추가질문답변 등록칸 -->
-			<div>
-				<div>
-					<div id="qna_add" th:if="${loginId == questionInfo[0][0].id}">				
-					<img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
-					<textarea class="form-control" id="qna_add_form" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
-				</div>
-				<div id="qna_add" th:unless="${loginId == questionInfo[0][0].id}">				
-					<img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
-					<textarea class="form-control" id="qna_add_form" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
-				</div>
-				<div style="float: right;margin-bottom:10px;">
-					<button type="button" class="btn text-white" style="background-color:#3e6ce3;margin-right:66px;">등록</button>
-				</div>
-				<br><br><br><hr>
-				</div>
-			</div>	
-			<!-- 추가질문,답변 끝 -->
-		</th:block>
+		<div class="questionInfo" th:if="${isAdopt} == true">
+	      	<div>
+	            <div style="width:900px; margin:0 auto">
+	               <div class="row" id="questionInfo2">
+	                  <!--사이드 태그 / 질문제목, 포인트-->
+	                  <div id="questionTitle" class="col-9">  
+	                     <h1 class="qna_logo">A</h1>
+	                     <div class="qna_title">
+	                        <div>
+	                           <button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+	                                   --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+	                              질문자 채택
+	                           </button>
+	                           <h4 style="font-weight:bold" th:text="${AdoptQuestionVO.answerTitle}">질문에 대한 답변입니다.</h4>
+	                        </div>
+	                     </div>
+	                  </div>
+	                  <div id="qna_deleteBtn" class="col-2"> <!-- 신고 / 작성날짜 -->
+	                     <span th:unless="${loginId != AdoptQuestionVO.id}">신고</span>
+	                     <p>2023.01.28</p>
+	                  </div>
+	               </div>
+	               <!-- 질문글 제목 / 신고삭제 끝 -->
+	               <div class="qna_contents" th:utext="${AdoptQuestionVO.answerContents}">
+	                  <p>답변 내용입니다</p>
+	               </div>
+	               <div id="question_bottom" class="row"> <!--작성자 프로필 -->
+	                  <div id="member" class="col-7" style="height:40px;">
+	                     <div class="qna_box2">
+	                        <img class="qna_profile" th:src="|/upload/profile/${AdoptQuestionVO.answerProfileImage}|" alt="profile">
+	                     </div>
+	                     <p class="m-0" th:text="${AdoptQuestionVO.answerId}">cookie123</p>
+	                     <p class="m-0" th:text="${AdoptQuestionVO.answerMemberLevel}">silver</p>
+	                  </div>
+	                  <!-- 조회, 북마크, 추천, 덧글수 버튼 -->
+	                  <div id="qna_iconAll" class="col-3">
+	                     <span>               
+	                        <img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
+	                     </span>
+	                     <span th:text="${AdoptQuestionVO.answerViewCnt}">9</span>
+	                     <span>      
+	                        <img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply">
+	                     </span>
+	                     <span th:text="${AdoptQuestionVO.answerReplyCnt}">7</span>
+	                     <button type="button" class="btn text-white" 
+	                        th:if="${AdoptQuestionVO.answerAdoptStatus == 'I002'}"
+	                        style="background-color:#80a9e8;font-size:12px; margin-left:15px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+	                        추가질문하기
+	                     </button>
+	                  </div>
+	               </div>
+	               <hr>   
+	            </div>
+	            <!-- 추가질문답변 목록-->
+	            <div class="questionInfo" th:each="questionIdx : ${questionInfo}">
+	               <th:block th:each="question: ${questionIdx.value}">   
+	                  <div th:if="${question.addStatus == 'R002'}">
+	                        <div id="qna_add">
+	                           <!-- 질문자/작성자 구분 -->
+	                           <img th:if="${question.addWriterType == 'J001'}"
+	                              class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
+	                           <img th:unless="${question.addWriterType == 'J001'}" 
+	                              class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
+	                           <div class="qna_add_info">
+	                              <span th:if="${question.addWriterType == 'J001'}" 
+	                                 class="m-1" style="font-weight:bold;">질문자의 추가질문</span>
+	                              <span th:unless="${question.addWriterType == 'J001'}" 
+	                                 class="m-1" style="font-weight:bold;">답변자의 추가답변</span>
+	                              <span th:if="${loginId != questionInfo[0][0].id}" style="float:right;font-size: 15px;color:#76767e;">신고</span>
+	                              
+	                           <!-- 추가질문답변 리스트 -->
+	                              <p class="m-1" th:text="${question.addContents}">추가로 질문할 게 있는데 </p>
+	                              <span class="m-1" th:text="${question.addWriteDate}" style="font-size: 15px; color:#76767e;">2023.01.27</span>
+	                              <span style="float:right;" th:if="${loginId == questionInfo[0][0].id} and ${question.addWriterType == 'J002'} ">
+	                                 <img src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
+	                                 <a style="color:#3e6ce3;font-weight:bold;">채택</a>
+	                              </span>
+	                           </div>
+	                        </div>
+	                  </div>      
+	               </th:block>
+	            </div>
+	            <!-- 추가질문답변 목록 끝 -->      
+	            <!-- 추가질문답변 등록칸 -->
+	            <div>
+	               <div>
+	                  <div id="qna_add" th:if="${loginId == questionInfo[0][0].id}">            
+	                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
+	                  <textarea class="form-control" id="qna_add_form" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
+	               </div>
+	               
+	               <div id="qna_add" th:if="${loginId == AdoptQuestionVO.answerId}">            
+	                  <img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
+	                  <textarea class="form-control" id="qna_add_form" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
+	               </div>
+	               
+	               <div  th:if="${loginId == questionInfo[0][0].id} or ${loginId == AdoptQuestionVO.answerId}" style="float: right;margin-bottom:10px;">
+	                  <button type="button" class="btn text-white" style="background-color:#3e6ce3;margin-right:66px;">등록</button>
+	               </div>
+	               <br><br><br><hr>
+	               </div>
+	            </div>   
+	            <!-- 추가질문,답변 끝 -->
+	     	 </div>
+		</div>
 		<!-- 채택답변 끝 -->
-
-		
 		
 		<!-- 미채택답변 리스트 -->
+			<!-- 답변 수정 -->
+					<div style="display:none" th:if="${writePost} == true and ${session.member.memberNo} == ${question.answerMemberNo}" id="answerModifyForm">	
+						<form name="answerModify">
+						 	<div style="width:900px;margin: 0 auto;">
+								<div class="answer-top" style="height:80px;">
+									<div class="min_answerbox" >
+									   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
+									</div>
+									<div class="min_align_bottom">
+										<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님의 답변 수정하기</h6>
+										<p class="m-0" style="font-size:13px;color:#989daa;"> 답변이 채택되면 활동점수 20점을 드립니다.</p>
+									</div>
+								</div>
+								<div>
+									<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
+									<input id="answerTitle" name="answerTitle" type="text" th:value="${question.answerTitle}" class="form-control" placeholder="제목을 입력해주세요">
+									<br>
+								
+									<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
+									<div id="editor" name="editor" style="height:300px;" th:utext="${question.answerContents}"></div>
+									<br>
+								</div>
+								<div style="float: right;margin-bottom:10px;">
+									<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+									<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:onclick="sendAnswerModify([[${question.answerBoardNo}]])">수정</button>
+								</div>
+								<br><br><br><hr>
+						 	</div>
+					 	</form>		
+					</div>
+					<!-- 답변 수정 끝 -->
 		<div class="questionInfo" th:each="questionIdx : ${questionInfo}">
 			<th:block th:each="question: ${questionIdx.value}">				
 				<div th:if="${question.answerAdoptStatus == 'I001'}">
@@ -279,45 +312,11 @@
 					</div>
 					<!-- 답변글 본문 끝 -->
 					<hr>
-					<!-- 답변 수정 테스트 -->
-					<div style="display:none" th:if="${writePost} == true and ${session.member.memberNo} == ${question.answerMemberNo}" id="answerModifyForm">	
-						<form name="answerModify">
-						 	<div style="width:900px;margin: 0 auto;">
-								<div class="answer-top" style="height:80px;">
-									<div class="min_answerbox" >
-									   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
-									</div>
-									<div class="min_align_bottom">
-										<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님의 답변 수정하기</h6>
-										<p class="m-0" style="font-size:13px;color:#989daa;"> 답변이 채택되면 활동점수 20점을 드립니다.</p>
-									</div>
-								</div>
-								<div>
-									<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
-									<input id="answerTitle" name="answerTitle" type="text" th:value="${question.answerTitle}" class="form-control" placeholder="제목을 입력해주세요">
-									<br>
-								
-									<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
-									<div id="editor" name="editor" style="height:300px;" th:utext="${question.answerContents}"></div>
-									<br>
-								</div>
-								<div style="float: right;margin-bottom:10px;">
-									<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
-									<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:onclick="sendAnswerModify([[${question.answerBoardNo}]])">수정</button>
-								</div>
-								<br><br><br><hr>
-						 	</div>
-					 	</form>		
-					</div>
-					<!-- 답변 수정 테스트 끝 -->
-						
 				</div>
 			</th:block> 
 		</div>
 		<!-- 미채택답변 리스트 끝 -->
-		
 	</div>
-	
 	<!-- end of container -->
 </section>
 </div>

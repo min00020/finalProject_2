@@ -58,7 +58,7 @@ public class QuestionController {
 	*/
 	@GetMapping("/questionList")
 	public String getquestionBoard(@RequestParam int pageNo, Model model) {
-		//log.info("uuuuuuuuuuuuuuuu");
+		log.info("uuuuuuuuuuuuuuuu");
 		questionService.getQuestionList(model, Integer.valueOf(pageNo));
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -77,11 +77,11 @@ public class QuestionController {
 	* 질문글과 답변글 분류별 조회
 	* @param topic 
 	* @param model 
-	* @return String
+	* @return question/questionList
 	*/
 	@GetMapping("/questionList/{topic}")
-	public String getquestionSelect(@PathVariable("topic") String topic, Model model) {
-		model.addAttribute("questionList", questionService.getQuestionListSelect(topic));
+	public String getquestionSelect(Model model, @RequestParam int pageNo, @PathVariable("topic") String topic) {
+		questionService.getQuestionListTopic(model, Integer.valueOf(pageNo), topic);
 		
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -227,5 +227,19 @@ public class QuestionController {
 	public int adoptAnswer(int ano){
 		return questionService.adoptAnswer(ano);
 	}
+	
+	
+	
+	/**
+	* 추가질문 작성
+	* @param question 
+	* @return String
+	*/
+	@PostMapping("/questionAddWrite")
+	@ResponseBody
+	public Map<String, Object> writeAnswerAdd(QuestionVO question){
+		return questionService.writeAnswer(question);
+	}
+	
 	
 }
