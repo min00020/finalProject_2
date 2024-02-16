@@ -334,7 +334,17 @@ public class MemberController {
 	}
 	
 	@GetMapping("/member/{mno}")
-	public String getMemberProfileInfo(@PathVariable("mno") int memberNo) {
+	public String getMemberProfileInfo(@PathVariable("mno") int memberNo, Model model) {
+		MemberVO memberVO = new MemberVO();
+		memberVO.setMemberNo(memberNo);
+		
+		memberVO = memberService.getMemberInfo(memberVO);
+		if(memberVO == null || memberVO.getId() == null) {
+			return "common/errorPage";
+		}
+		
+		model.addAttribute("member", memberVO);
+		
 		
 		return "common/memberProfile";
 	}
