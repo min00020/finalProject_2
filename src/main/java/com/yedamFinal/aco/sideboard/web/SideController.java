@@ -21,6 +21,8 @@ import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.sideboard.SideVO;
 import com.yedamFinal.aco.sideboard.serviceImpl.SideServiceImpl;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * 사이드프로젝트
  * @author 태경
@@ -54,8 +56,10 @@ public class SideController {
 		var ret = sideService.getRecruitingList(pageNo, status);
 		model.addAttribute("recList", ret.get("sideList"));
 		model.addAttribute("pageDTO", ret.get("pageDTO"));
+		
 		return "sideboard/sideProjectList";
 	}
+	
 	
 	/**
 	 * 사이드 프로젝트 단건조회
@@ -167,7 +171,11 @@ public class SideController {
 		 return "redirect:sideProjectList/Q001/?pageNo=1";
 	 }
 	 /**
-	  * 깃이슈 작성
+	  * 깃 이슈 작성
+	  * @param title
+	  * @param body
+	  * @param bno
+	  * @return success : 작성된 상태
 	  */
 	 @PostMapping("/insertGitIssueAjax")
 	 @ResponseBody
@@ -179,8 +187,6 @@ public class SideController {
 		 Map<String, Object> success = gitService.insertGitIssue(vo.getGitToken(), sideVO.getGitAddress(),title, body);
 		 return success;
 	 }
-	 
-	
 	
 		
 }

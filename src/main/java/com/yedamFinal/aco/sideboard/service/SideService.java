@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.sideboard.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +18,6 @@ public interface SideService {
 	public int deleteProject(int bno);
 	
 	public Map<String, Object> updateBoardStatus(SideVO sideVO);
-
+	public List<SideVO> getParticipateList(int memberNo);
 	
 }

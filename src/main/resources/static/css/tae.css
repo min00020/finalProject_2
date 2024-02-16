@@ -57,6 +57,7 @@
 }
 #myTabContent-2{
 	height: 900px;
+	
 }
 .btn btn-modal {
 	padding-bottom: 0px;
@@ -97,6 +98,7 @@
 	margin-left: -10px;
 	padding-left: 30px;
 	float: right;
+	border-radius:30px;
 }
 
 #myTab {
@@ -281,6 +283,7 @@ input::placeholder
 	height: 470px; 
 	margin-top: 30px; 
 	margin-left: 15px;
+	border-radius: 25px;
 }
 .tae-container4{
 	background-color: #aebfec; 
@@ -302,6 +305,7 @@ input::placeholder
 	margin: 15px;
 	height: 350px;
     margin-top: 20px;
+    border-radius: 25px;
 }
 #tae-sum-h5{
 	padding-top: 30px; 
@@ -410,6 +414,7 @@ input::placeholder
 #tae-card-1{
 	width: 437px; 
 	height: 277px;
+	border-radius:30px;
 }
 #tae-card-4{
 	width: auto; 

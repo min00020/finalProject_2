@@ -45,9 +45,8 @@
            END AS available_accum_point
     FROM member m
     WHERE member_no = #{memberNo}
-
-
 </select>
+
 <!-- 내이모티콘구매내역조회 -->
 <select id="selectMyemoticonList" resultType="com.yedamFinal.aco.myemoticon.MyEmoticonJoinVO">
 	SELECT 
@@ -99,13 +98,24 @@
 </select>
 <!-- 내가 질문한 리스트전체 페이지처리 -->
 <select id="selectQuestionList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
-	 SELECT question_board_no,
+	SELECT *
+    FROM (SELECT question_board_no,
 		    title,write_date,
 		    answer_cnt,
 	        member_no
-	FROM question_board
-	WHERE member_no= #{memberNo}
-	ORDER BY write_date desc
+		FROM question_board
+		WHERE member_no= #{memberNo}
+		ORDER BY write_date desc
+		)
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
+</select>
+<select id="selectQuestionCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM question_board
+    WHERE member_no = #{memberNo}
+
 </select>
 <!-- 활동점수 리스트 -->
 <select id="selectActivityList" resultType="com.yedamFinal.aco.activity.ActivityPointVO">

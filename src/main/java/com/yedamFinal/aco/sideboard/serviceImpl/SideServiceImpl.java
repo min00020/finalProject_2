@@ -110,9 +110,10 @@ public class SideServiceImpl implements SideService{
 	public int deleteProject(int bno){
 		return sideMapper.deleteSide(bno);
 	}
-	
-	
-	
-	
-	
+
+	@Override 
+	public List<SideVO> getParticipateList(int memberNo) {
+		return sideMapper.selectParticipateList(memberNo);
+	}
+	 
 }

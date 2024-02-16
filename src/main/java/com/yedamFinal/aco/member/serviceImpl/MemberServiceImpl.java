@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.NaverMailSender;
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.RandomString;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
@@ -36,6 +36,7 @@ import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
+import com.yedamFinal.aco.sideboard.mapper.SideMapper;
 
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
@@ -49,6 +50,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 	@Autowired
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	private SideMapper sideMapper;
 
 	@Value("${cool.sms.key}")
 	private String coolSmsApiKey;
@@ -250,12 +254,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return memberMapper.selectMybmList(memberVO);
 	}
 
-	// 내가 작성한 질문글 목록
-	@Override
-	public List<MyquestionVO> getMyqList(MemberVO memberVO) {
-		return memberMapper.selectMyqList(memberVO);
-	}
-
 	@Override
 	public List<MybookmarkVO> getMyBookList(MemberVO memberVO) {
 		return memberMapper.selectMyBookList(memberVO);
@@ -267,8 +265,16 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	}
 
 	@Override
-	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO) {
-		return memberMapper.selectQuestionList(memberVO);
+	public Map<String, Object> getMyQuestionList(MemberVO memberVO, int pageNo) {
+		Map<String, Object> map = new HashMap<>();
+		var QuestionList = memberMapper.selectQuestionList(memberVO, pageNo);
+		PaginationDTO dto = null;
+		if(QuestionList.size() > 0) {
+			dto = new PaginationDTO(memberMapper.selectQuestionCnt(memberVO), pageNo, 10);
+		}
+		map.put("questionList", QuestionList);
+		map.put("pageDTO", dto);
+		return map;
 	}
 
 	// 활동내역점수
@@ -305,7 +311,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		activityVO.setCurActivityPoint(vo.getAvailableActivityPoint());
 		activityVO.setActivityPointType("F005");
 		activityVO.setActivityPointDate(new Date());
-		activityVO.setIncDecActivityPoint(resPoint);
+		activityVO.setIncDecActivityPoint(resPoint * -1);
 		memberMapper.insertActivityDetail(activityVO);
 
 		// 멤버테이블 update
@@ -499,6 +505,5 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		
 		return ret;
 	}
-
 
 }

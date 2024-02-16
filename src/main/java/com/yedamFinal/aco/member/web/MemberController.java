@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
-import com.yedamFinal.aco.common.service.SessionUtil;
 import com.yedamFinal.aco.common.ReplyJoinVO;
+import com.yedamFinal.aco.common.service.SessionUtil;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
@@ -35,6 +34,8 @@ import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
+import com.yedamFinal.aco.sideboard.SideVO;
+import com.yedamFinal.aco.sideboard.service.SideService;
 
 /**
  * 회원로그인, 마이페이지
@@ -51,6 +52,8 @@ public class MemberController {
 	private MemberService memberService;
 	@Autowired
 	private FreeBoardService freeBoardService;
+	@Autowired
+	private SideService sideService;
 
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
@@ -117,6 +120,8 @@ public class MemberController {
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
 		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
 		var tagList = memberService.getTagList();
+		var sideList = sideService.getParticipateList(findVO.getMemberNo());
+		model.addAttribute("sideList", sideList);
 		model.addAttribute("tagList", tagList);
 		model.addAttribute("accountList", list3);
 		model.addAttribute("pointList", list);
@@ -125,7 +130,7 @@ public class MemberController {
 		model.addAttribute("memberInfo", findVO);
 		return "common/myPage";
 	}
-	
+	 
 	/**
 	 * 회원 포인트 환전요청
 	 * @param resPoint
@@ -173,13 +178,13 @@ public class MemberController {
 	 * @return common/myPage2
 	 */
 	@GetMapping("/myPage2")
-	public String getMyPageForm2(Model model) {
+	public String getMyPageForm2(Model model, @PathVariable("pageNo") int pageNo) {
 		MemberVO memberVO = SessionUtil.getSession();
 		
 		MemberQuestionChartVO chartVO = memberService.getMemberChart(memberVO);
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
-		List<MyquestionVO> myquestion = memberService.getMyqList(memberVO);
+		var ret = memberService.getMyQuestionList(memberVO, pageNo);
 		List<MybookmarkVO> bmarkList = memberService.getMyBookList(memberVO);
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
@@ -191,9 +196,10 @@ public class MemberController {
 		model.addAttribute("activityList", list2);
 		model.addAttribute("memberInfo", findVO);
 		model.addAttribute("bmarkList", bmark);
-		model.addAttribute("mquestionList", myquestion);
+		model.addAttribute("mquestionList", ret.get("questionList"));
 		model.addAttribute("bookmarkList2", bmarkList);
-		model.addAttribute("memberChart", chartVO); 
+		model.addAttribute("memberChart", chartVO);
+		model.addAttribute("pageDTO", ret.get("pageDTO"));
 
 		return "common/myPage2";
 	}
