@@ -1,6 +1,6 @@
 <div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
-	layout:decorate="@{/layout/member/mainTemplate.html}"
+	layout:decorate="@{layout/member/mainTemplate.html}"
 	layout:fragment="content">
 	<div class="d-flex">
 		<section class="d-flex" id="tae-section">
@@ -413,13 +413,28 @@
 													</div>
 													<!--/* 비밀번호 수정 */-->
 													<div id="modAccDiv1" style="display:none;">
-														<h1>하이2</h1>
+														<div class="container">
+															<form>
+																<div class="my-4 center">
+																	<label for="userpw" class="w-100">새 비밀번호</label>
+																	<div class="mt-1 d-flex justify-content-center">
+																		<input id="userpw" type="password" class="px-3 py-2 min-rounded w-100" name="userpw" placeholder="8자리 이상 기호,영문,숫자 조합 입력" autoComplete="off">
+																	</div>
+																</div>
+																<div class="my-4 center">
+																	<label for="userpwverify" class="w-100">새 비밀번호 확인</label>
+																	<div class="mt-1 d-flex justify-content-center">
+																		<input id="userpwverify" type="password" class="px-3 py-2 min-rounded w-100" name="userpwverify" placeholder="8자리 이상 기호,영문,숫자 조합 입력" autoComplete="off">
+																	</div>
+																</div>
+															</form>
+														</div>
 													</div>
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
 														data-bs-dismiss="modal">닫기</button>
-													<button type="button" class="btn btn-primary">변경하기</button>
+													<button type="button" class="btn btn-primary" onclick="changeAccountInfo()">변경하기</button>
 												</div>
 											</div>
 										</div>
@@ -648,7 +663,135 @@
 </script>
 
 <!--/* 개인정보수정 */-->
-<script>
+<script th:inline="javascript">
+	const memberInfo = [[${memberInfo}]];
+	let originalFileName = null;
+	const pwReg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^])(?=.*[0-9]).{8,30}$/;
+	const checkInfo = {
+		emailDuplicateCheck : false,
+		nicknameDuplicateCheck : false
+	}
+	
+	function changeAccountInfo() {
+		const result = $('#modAccDiv0').css('display');
+		if(result != 'none') { // 개인정보 수정
+			const formData = new FormData();
+			
+			// 변경된것들만 체크해서 요청
+			const inputEmail = $('input[name="email"]').val();
+			if(inputEmail != memberInfo.email) {
+				if(!checkInfo.emailDuplicateCheck) {
+					showWarningAlert('이메일 중복체크 해주세요.');
+					return;
+				}
+				formData.append('email',inputEmail);
+			}
+			
+			const inputName = $('input[name="name"]').val();
+			if(inputName != memberInfo.name) {
+				formData.append('name',inputName);
+			}
+				
+			const inputNickName = $('input[name="nickname"]').val();
+			if(inputNickName != memberInfo.nickname) {
+				formData.append('nickname',inputNickName);
+			}
+			
+			const fileName = $('#customFileInput').val();
+			if(fileName != originalFileName) {
+				const file = $("#profileImg")[0].files[0];
+				formData.append('profileImage',file);
+			}
+			
+			const hashTag = insertTagList.join(',');
+			if(hashTag != memberInfo.topicHashtag) {
+				formData.append('tag', hashTag);
+			}
+			
+			// 값이 있는지 체크
+			let isSendable = false;
+			for(let key of formData.keys()) {
+				isSendable = true;
+				break;
+			}
+			
+			if(!isSendable) {
+				showWarningAlert('변경된 정보가 없습니다.');
+				return;
+			}
+			else {
+				formData.append(csrfPara, csrfToken);
+				$.ajax('/changeAccountInfo', {
+					type : "POST",
+					data : formData,
+					contentType : false,
+					processData : false  
+			    })
+			    .done(res => {
+			    	if(res.result == "200") {
+			    		window.location.href = window.location.href;
+			    		return;
+			    	}
+			    })
+			    .fail(err => {
+			    	showWarningAlert('다시 시도해주세요.');
+			    })
+			}
+		}
+		else { // 비밀번호 변경
+			const userPw = $('input[name="userpw"]').val();
+			const userPwVerify = $('input[name="userpwverify"]').val();
+			if(userPw == '' || userPwVerify == '') {
+				showWarningAlert('변경할 비밀번호를 입력해주세요');
+				return;
+			}
+			
+			if(userPw != userPwVerify) {
+				showWarningAlert('비밀번호가 일치하지 않습니다.');
+				return;	
+			}
+			
+			if(!pwReg.test(userPw)) {
+				showWarningAlert('비밀번호 양식에 맞추어 작성해주세요.');
+				return;	
+			}
+			
+			let object = {
+				password : userPw,
+				passwordVerify : userPwVerify
+			}
+			
+			$.ajax('/changePasswordMypage', {
+				type : "POST",
+				data : object,
+				beforeSend : function(xhr){
+					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+				}
+		    })
+		    .done(res => {
+		    	if(res.result == "200") {
+		    		showSuccessAlert('변경 성공!');
+		    		$('input[name="userpw"]').val('');
+		    		$('input[name="userpwverify"]').val('');
+		    	}
+		    	else {
+		    		showFailAlert('비밀번호 변경에 실패했습니다.');
+		    	}
+		    })
+		    .fail(err => {
+		    	showWarningAlert('다시 시도해주세요.');
+		    })
+		}
+		
+		
+	}
+	
+	if(memberInfo.profileImage != null) {
+		originalFileName = memberInfo.profileImage.split('_').slice(2).join('');
+		$('#customFileInput').val(originalFileName);	
+	}
+	
+	
 	const allowImgExtension = ['jpg','jpeg','png'];
 	$("#profileImg").on('change', (e) => {
 		const fileName = $("#profileImg")[0].files[0].name;
@@ -660,6 +803,14 @@
 		}
 	
 		$('#customFileInput').val($("#profileImg")[0].files[0].name);
+	})
+	
+	$("input[name='nickname']").on('change', (e) => {
+		checkInfo.nicknameDuplicateCheck = false;
+	})
+	
+	$("input[name='email']").on('change', (e) => {
+		checkInfo.emailDuplicateCheck = false;
 	})
 
 	function changeModifyAccountView(curView) {
@@ -687,7 +838,8 @@
 	    .done(res => {
 	    	if(res.result == "200") {
 	    		showSuccessAlert('사용가능한 닉네임 입니다.');
-	    		$("input[name='nickname']").prop("disabled", true);
+	    		//$("input[name='nickname']").prop("disabled", true);
+	    		checkInfo.nicknameDuplicateCheck = true;
 	    	}
 	    	else {
 	    		showFailAlert('이미 사용중인 닉네임 입니다.');
@@ -698,34 +850,6 @@
 	    })
 	}
 	
-	// 아이디 중복체크
-	function checkDuplicateId() {
-		const reqId = $('input[name="userid"]').val();
-		
-		const regId = /^(?=.*[a-z0-9])[a-z0-9]{4,15}$/;
-		if(!regId.test(reqId)) {
-			showWarningAlert('아이디 양식에 맞추어 작성해주세요.');
-			return;
-		}
-		
-		const url = "/checkId?id="+reqId;
-		$.ajax(url,{
-	        type : "GET",
-	    })
-	    .done(res => {
-	    	if(!res.result) {
-	    		showSuccessAlert('사용가능한 아이디 입니다.');
-	    		$("input[name='userid']").prop("disabled", true);
-	    		joinCheckObj.checkId = true;
-	    	}
-	    	else {
-	    		showFailAlert('사용불가능한 아이디 입니다.');
-	    	}
-	    })
-	    .fail(err => {
-	    	showWarningAlert('다시 시도해주세요.');
-	    })
-	}
 
 	function checkDuplicateEmail() {
 		const reqEmail = $('input[name="email"]').val();
@@ -744,72 +868,10 @@
 	    .done(res => {
 	    	if(!res.result) {
 	    		showSuccessAlert('사용가능한 이메일 입니다.');
-	    		$('input[name="email"]').prop('disabled',true);
-	    		joinCheckObj.checkEmail = true;
+	    		checkInfo.emailDuplicateCheck = true;
 	    	}
 	    	else {
 	    		showFailAlert('사용불가능한 이메일 입니다.');
-	    	}
-	    })
-	    .fail(err => {
-	    	showWarningAlert('다시 시도해주세요.');
-	    })
-	}
-
-	function sendAuthNumberRequest() {
-		const reqPhoneNum = $('input[name="phone"]').val();
-		
-		//휴대폰 정규식
-		const regPhone = /^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$/;
-		if(!regPhone.test(reqPhoneNum)) {
-			showWarningAlert("휴대폰 양식에 맞추어 작성해주세요");
-			return;
-		}
-		
-		
-		const url = "/authPhoneNum?phoneNum="+reqPhoneNum;
-		
-		$.ajax(url,{
-	        type : "GET",
-	    })
-	    .done(res => {
-	    	if(res.result.statusCode == 2000) {
-	    		showSuccessAlert('인증번호 발송 완료');
-	    		$("input[name='phone']").prop("disabled", true);
-	    	}
-	    	else if(res.result.statusCode == 9876) {
-	    		alert('테스트용(시연시 변경) : ' + res.result.authCode);
-	    		$("input[name='phone']").prop("disabled", true);
-	    	}
-	    	else if(res.result.statusCode == 9999) {
-	    		showWarningAlert("이미 인증이 진행중인 번호입니다.");
-	    	}
-	    	else {
-	    		showFailAlert('인증번호 발송 실패. 다시 시도해주세요');
-	    	}
-	    })
-	    .fail(err => {
-	    	showWarningAlert('다시 시도해주세요.');
-	    })
-	}
-
-	function verifyAuthNumberRequest() {
-		const reqPhoneNum = $('input[name="phone"]').val();
-		const reqPhoneCheckNum = $('input[name="phoneCheck"]').val();
-		
-		const url = "/verifyAuthPhoneNum?authNum="+reqPhoneCheckNum +"&phoneNum=" + reqPhoneNum;
-		
-		$.ajax(url,{
-	        type : "GET",
-	    })
-	    .done(res => {
-	    	if(res.result == 200) {
-	    		showSuccessAlert('인증 완료');
-	    		$("input[name='phoneCheck']").prop("disabled", true);
-	    		joinCheckObj.checkPhone = true;
-	    	}
-	    	else {
-	    		showFailAlert('인증 실패');
 	    	}
 	    })
 	    .fail(err => {

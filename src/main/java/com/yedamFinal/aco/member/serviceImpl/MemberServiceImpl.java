@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.yedamFinal.aco.common.RandomString;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
+import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
@@ -440,6 +442,62 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public int updateResetBan(int memberNo) {
 		// TODO Auto-generated method stub
 		return memberMapper.updateResetBan(memberNo);
+	}
+
+	@Override
+	public Map<String, Object> changeAccountInfo(AccountChangeDTO accountDTO, MemberVO vo) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		// 없는애들은 기본값으로 SET
+		if(accountDTO.getEmail() == null) {
+			accountDTO.setEmail(vo.getEmail());
+		}
+		if(accountDTO.getName() == null) {
+			accountDTO.setName(vo.getName());
+		}
+		if(accountDTO.getNickname() == null) {
+			accountDTO.setNickname(vo.getNickname());
+		}
+		if(accountDTO.getTag() == null) {
+			accountDTO.setTag(vo.getTopicHashtag());
+		}
+		
+		if(accountDTO.getProfileImage() == null) {
+			accountDTO.setProfileImageName(vo.getProfileImage());
+		}
+		else {
+			String serverFileName = fileService.profileUpload(accountDTO.getProfileImage());
+			accountDTO.setProfileImageName(serverFileName);
+		}
+		
+		accountDTO.setMemberNo(vo.getMemberNo());
+		int result = memberMapper.updateAccountInfo(accountDTO);
+		if(result <= 0) {
+			ret.put("result", "500");
+		}
+		return ret;
+	}
+
+	@Override
+	public Map<String, Object> changePasswordFromMyPage(String password, String passwordVerify, String id) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+
+		if (!password.equals(passwordVerify)) {
+			ret.put("result", "400");
+			return ret;
+		}
+
+		String bCryptPassword = bCryptPasswordEncoder.encode(password);
+		if (memberMapper.updateMemberPassword(id, bCryptPassword) <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		return ret;
 	}
 
 
