@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.TagVO;
+import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
@@ -56,4 +57,9 @@ public interface MemberService {
 	public MemberQuestionChartVO getMemberChart(MemberVO memberVO);
 	
 	public Map<String, Object> checkDuplicateNickname(String nickname);
+	
+	public int updateResetBan(int memberNo);
+	
+	public Map<String, Object> changeAccountInfo(AccountChangeDTO accountDTO, MemberVO vo);
+	public Map<String, Object> changePasswordFromMyPage(String password, String passwordVerify, String id);
 }

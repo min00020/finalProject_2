@@ -85,7 +85,7 @@
 		const csrfToken = $('meta[name="csrf"]').attr("content");
 		const cid = [[${clientId}]];
 		function gitLink() {
-			const GITHUB_LOGIN_URL = "https://github.com/login/oauth/authorize?client_id=" + cid;
+			const GITHUB_LOGIN_URL = "https://github.com/login/oauth/authorize?client_id=" + cid + '&scope=repo';
 		    window.location.assign(GITHUB_LOGIN_URL);
 		}
 		
