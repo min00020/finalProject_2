@@ -12,12 +12,16 @@ public interface FreeBoardService {
 	
 	public List<FreeBoardVO> getFreeBoardAll();
 	
-	public FreeBoardVO getFreeBoard(int fbno, Model model);
+	public FreeBoardVO getFreeBoard(int fboardNo, Model model);
 	
 	//등록
 	public Map<String, Object> insertFreeBoard(FreeBoardVO freeBoardVO, MultipartFile[] files);
 	
+	//수정
+	public Map<String, Object> modifyFreeBoard(String title, String content, int fboardNo);
 	
+	//삭제
+	public int deleteFreeBoard(int fboardNo);
 	
 	
 }

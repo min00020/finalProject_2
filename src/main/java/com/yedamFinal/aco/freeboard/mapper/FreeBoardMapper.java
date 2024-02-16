@@ -14,11 +14,18 @@ public interface FreeBoardMapper {
 	public List<FreeBoardVO> getFreeBoardAll();
 
 	//게시글 단건조회
-	public FreeBoardVO getFreeBoard(@Param("fbno") int fbno);
+	public FreeBoardVO getFreeBoard(@Param("fboardNo") int fboardNo);
 	
 	//게시글 등록
 	public int insertFreeBoard(FreeBoardVO freeBoardVO);
 	
 	//게시글 조회수
-	public int updateFreeBoardViewCnt(int fBoardNo);
+	public int updateFreeBoardViewCnt(int fboardNo);
+	
+	//게시글 수정
+	public int updateFreeBoard(String title, String content, int fboardNo);
+	
+	//게시글 삭제
+	public int deleteFreeBoard(int fboardNo);
+	
 }

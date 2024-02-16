@@ -29,7 +29,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Autowired
 	private ReplyMapper replyMapper;
 	
-	
 	@Autowired
 	private FreeBoardMapper freeBoardMapper;
 
@@ -40,9 +39,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public FreeBoardVO getFreeBoard(int fbno, Model model) {
-		freeBoardMapper.updateFreeBoardViewCnt(fbno);
-		List<ReplyJoinVO> list = replyMapper.selectReply("N004", fbno);
+	public FreeBoardVO getFreeBoard(int fboardNo, Model model) {
+		freeBoardMapper.updateFreeBoardViewCnt(fboardNo);
+		List<ReplyJoinVO> list = replyMapper.selectReply("N004", fboardNo);
 		Map<Integer, List<ReplyJoinVO>> groupByData = list.stream().collect(Collectors.groupingBy(ReplyJoinVO::getParentReplyNo));
 		groupByData = groupByData.entrySet().stream()
 		        .sorted(Map.Entry.comparingByKey())
@@ -55,7 +54,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 		model.addAttribute("replyList", groupByData);
 	
-		return freeBoardMapper.getFreeBoard(fbno);
+		return freeBoardMapper.getFreeBoard(fboardNo);
 	}
 
 	@Override
@@ -80,11 +79,29 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				return ret;
 			}
 		}
+		return ret;
+	}
+	
+	//수정
+	@Override
+	public Map<String, Object> modifyFreeBoard(String title, String content, int fboardNo) {
+		
+		Map<String, Object> ret = new HashMap<>();
+		ret.put("result", "200");
+		
+		int result = freeBoardMapper.updateFreeBoard(title, content, fboardNo);
+		if(result<=0) {
+			ret.put("result", "500");
+			return ret;
+		}
 		
 		return ret;
 	}
-
-
-
+	
+	//삭제
+	@Override
+	public int deleteFreeBoard(int fboardNo) {
+		return freeBoardMapper.deleteFreeBoard(fboardNo);
+	}
 	
 }

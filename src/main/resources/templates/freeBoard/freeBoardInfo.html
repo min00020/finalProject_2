@@ -32,6 +32,8 @@
 				</div>
 				<div id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
 					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo.writeDate, 'yyyy-MM-dd HH:mm')}"></p>
+					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo.fboardNo}'|">수정</button>
+					<button class="btn" style ="background-color : #848484; color:white">삭제</button>
 				</div>
 
 			</div><!-- 질문글 제목 / 신고삭제 끝-->

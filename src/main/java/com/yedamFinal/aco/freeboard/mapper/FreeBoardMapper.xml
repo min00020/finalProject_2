@@ -59,13 +59,13 @@
 	       REPLY_CNT
 	       
 	FROM FREE_BOARD
-	WHERE FBOARD_NO= #{fbno}
+	WHERE FBOARD_NO= #{fboardNo}
 </select>
 
 <update id="updateviewCnt">
 	UPDATE FREE_BOARD 
 	   SET VIEW_CNT = VIEW_CNT + 1 
-	 WHERE FBOARD_NO = #{fbno}
+	 WHERE FBOARD_NO = #{fboardNo}
 </update>
 
 <insert id="insertFreeBoard" parameterType="FreeBoardVO" useGeneratedKeys="false">
@@ -99,9 +99,26 @@
 	
 	     UPDATE FREE_BOARD
    		    SET VIEW_CNT = VIEW_CNT+1
-     	  WHERE FBOARD_NO = #{fbno}
+     	  WHERE FBOARD_NO = #{fboardNo}
      	  
 	</update>
+	
+	<update id="updateFreeBoard">
+	
+	  UPDATE FREE_BOARD
+   		  	  SET TITLE = #{title},
+   		    	CONTENT = #{content} 		    	
+        WHERE FBOARD_NO = #{fboardNo}
+     	  
+	</update>
+	
+	<delete id="deleteFreeBoard">
+	
+		DELETE 
+		FROM FREE_BOARD
+		WHERE FBOARD_NO = #{fboardNo}
+		
+	</delete>
 	
 
 </mapper>

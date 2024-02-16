@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,14 +61,14 @@ public class FreeBoardController {
 	
 	/**
 	 * 자유게시판 단건조회
-	 * @param fbno
+	 * @param fboardNo
 	 * @param model
 	 * @return freeBoard/freeBoardInfo
 	 */
-	@GetMapping("/freeBoardInfo/{fbno}")
-	public String getFreeBoard(@PathVariable("fbno") int fbno, Model model) {
+	@GetMapping("/freeBoardInfo/{fboardNo}")
+	public String getFreeBoard(@PathVariable("fboardNo") int fboardNo, Model model) {
 		
-		model.addAttribute("freeBoardInfo",freeBoardService.getFreeBoard(fbno,model));
+		model.addAttribute("freeBoardInfo",freeBoardService.getFreeBoard(fboardNo,model));
 		
 		return "freeBoard/freeBoardInfo";
 		
@@ -106,6 +108,32 @@ public class FreeBoardController {
         
 		return ret;
 	}
+	
+	//수정 - 별도 페이지
+	@GetMapping("/freeBoardUpdate/{fboardNo}")
+	public String freeBoardUpdateForm(@PathVariable("fboardNo") int fboardNo, Model model) {
+		FreeBoardVO findVO = freeBoardService.getFreeBoard(fboardNo, model);
+		model.addAttribute("freeBoardInfo", findVO);
+		return "freeBoard/freeBoardUpdateForm";
+	}
+	
+	//수정 - 처리
+	@PutMapping("/freeBoardUpdate/{fboardNo}")
+	@ResponseBody
+	public Map<String,Object> updateFreeBoard( String title,String content,@PathVariable("fboardNo") int fboardNo){
+	
+		return freeBoardService.modifyFreeBoard(title, content, fboardNo);
+		
+	}
+	
+	
+	
+	@GetMapping("/deleteFreeBoard")
+	public String deleteFreeBoard(@RequestParam int fboardNo) {
+		freeBoardService.deleteFreeBoard(fboardNo);
+		return "redirect:freeBoardList";
+	}
+	
 
 	
 }
