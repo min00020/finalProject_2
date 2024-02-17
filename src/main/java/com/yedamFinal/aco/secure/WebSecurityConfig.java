@@ -93,6 +93,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/findAccount");
 		permitAllUrl.add("/changePassword");
 		permitAllUrl.add("/attachFile/**");
+		permitAllUrl.add("/checkNickname/**");
 	}
 	
 	private void insertPermitAllUrlByChae() {

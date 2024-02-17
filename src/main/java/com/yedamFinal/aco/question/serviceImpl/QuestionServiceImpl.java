@@ -1,5 +1,7 @@
 package com.yedamFinal.aco.question.serviceImpl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,7 @@ public class QuestionServiceImpl implements QuestionService{
 				if(vo.getAnswerAdoptStatus() == null) {
 					continue;
 				}
+				
 				//채택답변 AdoptQuestionVO에 담아주기
 				if(vo.getAnswerAdoptStatus().equals("I002")) {
 					model.addAttribute("isAdopt",true);
@@ -84,6 +87,20 @@ public class QuestionServiceImpl implements QuestionService{
 		                  var findData = list.stream().filter(questionVO -> questionVO.getAnswerAdoptStatus().equals("I002")).findFirst();
 		                  if(findData.isPresent()) {
 		                     model.addAttribute("AdoptQuestionVO", findData.get());
+		                     Collections.sort(list, new Comparator<QuestionVO>() {
+		                    	 public int compare(QuestionVO o1, QuestionVO o2) {
+		                    	  	return o1.getAddWriteDate().compareTo(o2.getAddWriteDate());
+		                    	 }
+		                     }); 
+		                     var lastVO = list.get(list.size()-1);
+		                     //질문자 J001 답변자 J002
+		                     if(lastVO.getAddWriterType().equals("J001")) {
+		                    	 model.addAttribute("currentWriterType", 1);
+		                     }
+		                     else {
+		                    	 model.addAttribute("currentWriterType", 2);
+		                     }
+		                     
 		                     break;
 		                  }
 		             }
