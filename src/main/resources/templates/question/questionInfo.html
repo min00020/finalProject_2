@@ -89,7 +89,7 @@
 		<!-- questionInfo 질문글 끝-->
 		 
 		<!-- 답변 작성폼 / 작성자 != 로그인유저 and 답변 단 적 없을 때-->
-	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id and writePost == false}" >
+	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id and writePost == false and  AdoptQuestionVO.answerAdoptStatus != 'I002'}" >
 		 	<form name="answerWrite">
 			 	<div style="width:900px;margin: 0 auto;">
 					<div class="answer-top" style="height:80px;">
@@ -343,7 +343,7 @@
 	 let test2 = Object.values(test)[0][1];
 	 let test3 = [[${writePost}]];
 	 let test4 = [[${AdoptQuestionVO}]];
-	 
+	
 	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
 
 	 //질문글 수정폼 이동
