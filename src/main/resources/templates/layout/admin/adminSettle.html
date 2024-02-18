@@ -25,6 +25,12 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.css" rel="stylesheet">
+    
+    <!-- sweetAlert2 -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
+      <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+      <script type="text/javascript" th:src="@{/js/commonMethod.js}"></script>
+      <!-- sweetAlert2 -->
 
 </head>
 
@@ -208,7 +214,6 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">정산관리</h1>
       					<div class="dropdown" style="text-align: right">
@@ -226,7 +231,6 @@
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">정산요청내역</h6>
                         </div>
-                       
                         	
                         <div class="card-body">
                             <div class="table-responsive">
@@ -237,7 +241,22 @@
                                             <th>정산 요청금액</th>
                                             <th>처리상태</th>
                                             <th>
-                                            <div style="text-align: center;"><button class="btn btn-primary">일괄정산</button></div>
+                                            <div style="text-align: center;"><button class="btn btn-primary" data-bs-toggle="modal" th:data-bs-target="|#exampleModalAll|">일괄정산</button>
+                                           <!-- Modal -->
+												<div class="modal fade" th:id="|exampleModalAll|" tabindex="-1" aria-labelledby="exampleModalLabel0" aria-hidden="true">
+												  <div class="modal-dialog">
+												    <div class="modal-content">
+												      <div class="modal-header" style="margin: auto;">
+												        <h1 class="modal-title fs-5" id="exampleModalLabel0">정산요청을 일괄처리 하시겠습니까?</h1>
+												      </div>
+												      <div class="modal-footer" style="margin: auto;">
+												        <button type="button" class="btn btn-primary" th:onclick="settleOnAll()">일괄정산</button>
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+                                            </div>
                                             </th>
                                         </tr>
                                     </thead>
@@ -247,7 +266,28 @@
                                             <td th:text=${settles.settleName}></td>
                                             <td th:text=${settles.settlementReqPoint}></td>
                                             <td th:text=${settles.settleState}></td>
-                                            <td><div style="text-align: center"><button class="btn btn-success">정산</button></div></td>
+                                            <td><div style="text-align: center" th:if="${settles.processStatus == 'O002'}"><button type="button" disabled="disabled" class="btn btn-secondary">정산완료</button></div>
+                                            <div style="text-align: center" th:unless="${settles.processStatus == 'O002'}">
+                                                                                   <!-- Button trigger modal -->
+												<button type="button" class="btn btn-success" data-bs-toggle="modal" th:data-bs-target="|#exampleModal${settles.settlementNo}|"
+												>
+												  정산
+												</button>
+												<!-- Modal -->
+												<div class="modal fade" th:id="|exampleModal${settles.settlementNo}|" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+												  <div class="modal-dialog">
+												    <div class="modal-content">
+												      <div class="modal-header" style="margin: auto;">
+												        <h1 class="modal-title fs-5" id="exampleModalLabel">정산요청을 처리하시겠습니까?</h1>
+												      </div>
+												      <div class="modal-footer" style="margin: auto;">
+												        <button type="button" class="btn btn-primary" th:onclick="settleOn([[${settles.settlementNo}]], [[${settles.memberNo}]])">정산</button>
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+												      </div>
+												    </div>
+												  </div>
+												</div>
+                                            </div></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -333,48 +373,119 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+<script th:inline="javascript">
+const csrfPara = [[${_csrf.parameterName}]];
+const csrfToken = [[${_csrf.token}]];
+const date = new Date();
+const time = date.getTime();
+let today = getFormatDate(date);
+const accessToken = [[${nhAccessToken}]];
+const Iscd = [[${Iscd}]];
+const accountNo = '3020000010135';
+const settleAll = [[${allSettle}]]
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+function settleOn(settlementNo, settlementReqPoint, sendAll){
+	let obj={};
+	obj={	
+			Header:{
+				ApiNm:"DrawingTransfer",
+				Tsymd:today,
+			    Trtm:"125237",
+			    Iscd:Iscd,
+			    FintechApsno : "001",
+			    ApiSvcCd:"DrawingTransferA",
+			    IsTuno:settlementNo+settlementReqPoint+time, 
+			    AccessToken: accessToken
+			},
+			FinAcno:"00820100023050000000000017704",
+			Tram: settlementReqPoint,
+			DractOtlt:"정산",
+			MractOtlt:"정산"
+	}	
+	
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	$.ajax('https://developers.nonghyup.com/DrawingTransfer.nh', {
+		type:'post',
+		contentType: 'application/json',
+		data : JSON.stringify(obj)
+	})
+	.done(res =>{
+		console.log(res);
+		let url = '';
+		let settleUpdateObj = {};
+		if(typeof sendAll != 'undefined' && sendAll != null) {
+			url = '/updateAllSettlementStatus';
+		}
+		else {
+			settleUpdateObj = {
+				settlementNo : settlementNo
+			};
+				
+			url = '/updateSettlementStatus';
+		}
+		settleUpdateObj[csrfPara] = csrfToken;
+		
+		$.ajax(url, {
+			type : 'post',
+			data : settleUpdateObj,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			if(res.result == '200'){
+				if(typeof sendAll == 'undefined') {
+					Swal.fire({
+						  title: '정산이 완료되었습니다.',
+						  text: '',
+						  icon: 'success',
+						  confirmButtonClass: "btn-danger",
+						  confirmButtonText: "확인",
+						}).then((result) => {
+						  if (result.value != null) {
+							  window.location.href = "/adminSettle?pageNo=1";
+						  }
+						});	
+				}
+			}else{
+				showFailAlert('에러가 발생했습니다.')
+			}
+		}).fail(err=>{
+			console.log(err);
+			showFailAlert('정산 실패')
+		});
+	})
+	
+	
+}//submit end
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-
+function settleOnAll(){
+	for(var i = 0; i < settleAll.length; i++){
+		settleOn(settleAll[i].settlementNo, settleAll[i].settlementReqPoint, '1');
+	}
+	
+	Swal.fire({
+		  title: '일괄 정산이 완료되었습니다.',
+		  text: '',
+		  icon: 'success',
+		  confirmButtonClass: "btn-danger",
+		  confirmButtonText: "확인",
+		}).then((result) => {
+		  if (result.value != null) {
+			  window.location.href = "/adminSettle?pageNo=1";
+		  }
+	});	
+}
+function getFormatDate(date){
+	var year = date.getFullYear();              //yyyy
+	var month = (1 + date.getMonth());          //M
+	month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+	var day = date.getDate();                   //d
+	day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+	return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+}
+</script>
 </body>
 
 </html>

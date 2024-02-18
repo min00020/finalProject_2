@@ -53,4 +53,10 @@ public interface AdminService {
 	public int insertNotice(AdminMainVO adminMainVO);
 
 	public List<AdminEmoVO> getMyEmoList(int memberNo);
+	
+	public List<AdminSettleVO> getAllSettleList();
+	public int updateSettlementStatus(int settlementNo);
+	public int updateAllSettlementStatus();
+	public int updateAdminReportI(int reportNo, int reportee, String banType);
+	public int updateAdminReportB(int reportNo);
 }
