@@ -455,7 +455,7 @@
 		<div class="container" id="tae-container-3">
 			<div class="container" id="tae-container-1">
 				<div class="card" id="myTabContent">
-					<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<ul class="nav nav-tabs" id="myTab" role="tablist" style="--bs-nav-tabs-border-width:0px;">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link" id="tae-profile-tab" data-bs-toggle="tab"
 								data-bs-target="#profile-tab-pane" type="button" role="tab"
@@ -536,7 +536,7 @@
 															</tr>
 														</tbody>
 														<!-- 페이지 -->
-														<th:block th:if="${pageDTO != null}">
+														<!-- <th:block th:if="${pageDTO != null}">
 															<div>
 															    <ul class="pagination justify-content-center">
 															        <li class="page-item" th:if="${pageDTO.prev}">
@@ -556,7 +556,7 @@
 															        </li>
 															    </ul>
 															</div>
-													    </th:block>
+													    </th:block> -->
 													</table>
 												</div>
 											</div>

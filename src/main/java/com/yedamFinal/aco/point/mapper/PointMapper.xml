@@ -43,7 +43,6 @@ FROM (
 
 	</select>
 
-
 	<!-- 은행 목록 -->
 	<select id="getBank" resultType="BankVO">
 		SELECT *

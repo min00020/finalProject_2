@@ -63,7 +63,8 @@
 
 
 <update id="updatereviewCnt">
-	UPDATE side_project_board SET view_cnt = view_cnt + 1 where side_board_no = #{bno}
+	UPDATE side_project_board 
+	SET view_cnt = view_cnt + 1 where side_board_no = #{bno}
 </update>
 
 

@@ -35,11 +35,36 @@
 
 .tab-ul {
 	list-style: none;
-	/* text-align: center; */
+	text-align: center;
 	/* display:inline-block; */
 	padding: 10px;
 	margin: 0px;
 }
+.tab-ul-2 {
+	list-style: none;
+	/* text-align: center; */
+	/* display:inline-block; */
+	padding: 10px;
+	margin: 0px;
+    display: flex; /* 요소를 가로로 배치하기 위해 Flexbox 사용 */
+    flex-wrap: wrap; /* 요소가 너비를 초과하면 다음 줄로 넘어가도록 설정 */
+}
+.tab-ul-3 {
+	list-style: none;
+	padding: 10px;
+	margin: 0px;
+}
+.tab-ul li {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #f9f9f9;
+    flex: 0 0 calc(50% - 20px); /* 너비를 50%로 설정하고 여백을 뺀 값으로 지정 */
+    max-width: calc(50% - 20px); /* 최대 너비 설정 */
+}
+
 
 
 
@@ -220,10 +245,10 @@ input::placeholder
 	color:#979da9;
 }
 .bank{
-	width:100px;
-	height:100px;
-	display:inlineblock;
-	background-color:beige;"
+	width:120px;
+	height:120px;
+	display:inline-block;
+	border-radius:20px;
 	border : 0px;
 }
 #tae-hr{
@@ -422,8 +447,10 @@ input::placeholder
 }
 
 .tae-bank-1{
-	 width:80px;height:auto;
+	 width:25px;
+	 height:25px;
 	 text-align:center;
+	 margin-top:10px;
 }
 .tae-piechart{
 	width: 900px; 

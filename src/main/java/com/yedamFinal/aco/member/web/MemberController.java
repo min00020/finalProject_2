@@ -28,13 +28,12 @@ import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.SettlementVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
-import com.yedamFinal.aco.questionboard.MyquestionVO;
-import com.yedamFinal.aco.sideboard.SideVO;
 import com.yedamFinal.aco.sideboard.service.SideService;
 
 /**
@@ -317,8 +316,6 @@ public class MemberController {
 		
 		Map<Integer, List<ReplyJoinVO>> map = new HashMap<Integer, List<ReplyJoinVO>>();
 		
-		
-		
 		List<ReplyJoinVO> list1 = new ArrayList<ReplyJoinVO>();
 		ReplyJoinVO vo = new ReplyJoinVO();
 		vo.setParentReplyNo(1);
@@ -396,12 +393,7 @@ public class MemberController {
 	@PostMapping("/changeAccountInfo")
 	@ResponseBody
 	public Map<String, Object> changeAccountInfo(AccountChangeDTO changeDTO,HttpServletRequest req) {
-		MemberVO memberVO = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-		}
+		MemberVO memberVO = SessionUtil.getSession();
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		var result = memberService.changeAccountInfo(changeDTO,findVO);
 		
@@ -414,13 +406,7 @@ public class MemberController {
 	@PostMapping("/changePasswordMypage")
 	@ResponseBody
 	public Map<String, Object> changePasswordMypage(@RequestParam String password, @RequestParam String passwordVerify) {
-		MemberVO memberVO = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-			memberVO = userDetails.getMemberVO();
-		}
-		
+		MemberVO memberVO = SessionUtil.getSession();
 		return memberService.changePasswordFromMyPage(password, passwordVerify, memberVO.getId());
 	}
 	
@@ -428,6 +414,18 @@ public class MemberController {
 	public String getMemberProfileInfo(@PathVariable("mno") int memberNo) {
 		
 		return "common/memberProfile";
+	}
+	/**
+	 * 정산요청을 보냄
+	 * @param memberNo
+	 * @return memberService.updateResetBan(memberNo)
+	 */
+	@PostMapping("/updateSettlement")
+	@ResponseBody
+	public Map<String, Object> updateSettlement(SettlementVO vo, @RequestParam int memberNo) {
+		MemberVO memberVO = SessionUtil.getSession();
+		memberNo = memberVO.getMemberNo();
+		return memberService.updateSettlement(vo, memberNo);
 	}
 	
 }

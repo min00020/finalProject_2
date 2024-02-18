@@ -12,11 +12,10 @@ import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.SettlementVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
-import com.yedamFinal.aco.questionboard.MyquestionVO;
-import com.yedamFinal.aco.sideboard.SideVO;
 
 @Service
 
@@ -59,4 +58,6 @@ public interface MemberService {
 	
 	public Map<String, Object> changeAccountInfo(AccountChangeDTO accountDTO, MemberVO vo);
 	public Map<String, Object> changePasswordFromMyPage(String password, String passwordVerify, String id);
+	
+	public Map<String, Object> updateSettlement(SettlementVO settlementVO,int memberNo);
 }

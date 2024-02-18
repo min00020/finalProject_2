@@ -29,13 +29,13 @@ import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.SettlementVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
-import com.yedamFinal.aco.questionboard.MyquestionVO;
 import com.yedamFinal.aco.sideboard.mapper.SideMapper;
 
 import net.nurigo.sdk.NurigoApp;
@@ -504,6 +504,19 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		}
 		
 		return ret;
+	}
+	@Override
+	public Map<String, Object> updateSettlement(SettlementVO vo, int memberNo) {
+		Map<String, Object> map = new HashMap<>();
+		vo.setMemberNo(memberNo);
+		int result = memberMapper.settlementRequest(vo, memberNo);
+		if(result <= 0) {
+			map.put("result" , "500");
+		}else {
+			map.put("result", "200");
+			map.put("vo" , vo);
+		}
+		return map;
 	}
 
 }

@@ -311,5 +311,18 @@ VALUES (activity_point_detail_seq.NEXTVAL,
 <update id="updateAccountInfo">
 	UPDATE MEMBER SET EMAIL = #{email}, NAME = #{name}, NICKNAME = #{nickname}, PROFILE_IMAGE = #{profileImageName}, TOPIC_HASHTAG = #{tag} WHERE MEMBER_NO = #{memberNo}
 </update>
+<!-- 정산요청 -->
+<update id="settlementRequest" parameterType="SettlementVO">
+		UPDATE settlement
+		SET (
+		     settlement_req_point = #{settlementReqPoint},
+		     req_account = #{reqAccount},
+		     req_account_name = #{reqAccountName},
+		     req_account_bankcode = #{reqAccountBankcode},
+		     req_bankname = #{reqBankname},
+		     subcode_to_name(process_status) as process_status = 'O001'
+		     )
+		WHERE member_no = #{memberNo}
+</update>
 
 </mapper>
