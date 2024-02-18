@@ -94,6 +94,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/changePassword");
 		permitAllUrl.add("/attachFile/**");
 		permitAllUrl.add("/checkNickname/**");
+		permitAllUrl.add("/member/**");
 	}
 	
 	private void insertPermitAllUrlByChae() {

@@ -64,4 +64,20 @@
 	<update id="updateCommentReply">
 		UPDATE REPLY SET EMOTICON = #{emoticon}, contents = #{contents} WHERE REPLY_NO = #{replyNo}
 	</update>
+	
+	<insert id="insertReport">
+		 INSERT INTO REPORT 
+		 VALUES(
+   			 REPORT_SEQ.NEXTVAL, 
+   			 #{reportType}, 
+   			 #{reportContent}, 
+   			 #{reporter}, 
+   			 SYSDATE, 
+   			 'B001', 
+   			 #{boardType}, 
+   			 #{boardNo}, 
+   			 #{reportee},
+   			 #{replyContent}
+   			 )
+	</insert>
 </mapper>

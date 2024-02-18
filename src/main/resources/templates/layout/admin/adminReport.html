@@ -22,6 +22,12 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+        
+              <!-- sweetAlert2 -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
+      <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
+      <script type="text/javascript" th:src="@{/js/commonMethod.js}"></script>
+      <!-- sweetAlert2 -->
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.css" rel="stylesheet">
@@ -217,9 +223,9 @@
 						  </button>
 						  <ul class="dropdown-menu">
 						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?pageNo=1'|">전체</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=0&pageNo=1'|">처리대기중</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=1&pageNo=1'|">제재</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=2&pageNo=1'|">반려</a></li>
+						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=B001&pageNo=1'|">처리대기중</a></li>
+						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=B002&pageNo=1'|">제재</a></li>
+						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=B003&pageNo=1'|">반려</a></li>
 						  </ul>
 						</div>
                     <!-- DataTales Example -->
@@ -236,8 +242,10 @@
                                             <th>신고종류</th>
                                             <th>신고사유</th>
                                             <th>피신고자</th>
+                                            <th>신고댓글</th>
                                             <th>신고일</th>
                                             <th>처리상태</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                    
@@ -252,10 +260,42 @@
                                             <td th:text="기타" th:if="${reports.reportType == 'A006'}"></td>
                                             <td th:text="${reports.reportContent}"></td>
                                             <td th:text="${reports.reporteeName}"></td>
+                                            <td th:text="${reports.replyContent}"></td>
                                             <td th:text="${#dates.format(reports.reportDate, 'yyyy/MM/dd')}"></td>
                                             <td th:text="처리대기중" th:if="${reports.reportState == 'B001'}"></td>
                                             <td th:text="제재" th:if="${reports.reportState == 'B002'}"></td>
                                             <td th:text="반려" th:if="${reports.reportState == 'B003'}"></td>
+                                            <td><div style="text-align: center">
+                                            <!-- Button trigger modal -->
+												<button type="button" class="btn btn-danger" th:if="${reports.reportState == 'B001'}" data-bs-toggle="modal" th:data-bs-target="|#exampleModal1${reports.reportNo}|">
+												  신고처리
+												</button>
+												<button type="button" disabled="disabled" class="btn btn-secondary" th:unless="${reports.reportState == 'B001'}" data-bs-toggle="modal" th:data-bs-target="|#exampleModal1${reports.reportNo}|">
+												  처리완료
+												</button>
+												<!-- Modal -->
+												<div class="modal fade" th:id="|exampleModal1${reports.reportNo}|" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+												  <div class="modal-dialog">
+												    <div class="modal-content">
+												      <div class="modal-header" style="margin: auto;">
+												        <h1 class="modal-title fs-5" id="exampleModalLabel">신고처리</h1>
+												      </div>
+												      <div class="modal-body">
+												      	<select th:name="banType" th:id="|banType${reports.reportNo}|">
+													  					<option th:value="null">--제재종류를 선택해주세요--</option>
+													  					<option th:value="M004">로그인 7일 정지</option>
+													  					<option th:value="M005">로그인 30일 정지</option>
+													  					<option th:value="M006">로그인 영구 정지</option>
+													  	</select>
+												      </div>
+												      <div class="modal-footer" style="margin: auto;">
+												        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:onclick="updateReportI([[${reports.reportNo}]], [[${reports.reportee}]])">제재</button>
+												        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" th:onclick="updateReportB([[${reports.reportNo}]])">반려</button>
+												        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+												      </div>
+												    </div>
+												  </div>
+												</div></div></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -270,20 +310,8 @@
                 <span class="sr-only">Previous</span>
             </a>
             </th:block>
-        	<th:block th:if="${reportStatus == '2'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=2&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '1'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=1&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '0'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=0&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+        	<th:block th:unless="${reportStatus == null}">
+            <a class="page-link" th:href="|/adminReport?reportStatus=${reportStatus}&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
@@ -293,14 +321,8 @@
         	<th:block th:if="${reportStatus == null}">
         		<a class="page-link" th:href="|/adminReport?pageNo=${pageNo}|">[[${pageNo}]]</a>
         	</th:block>
-        	<th:block th:if="${reportStatus == '2'}">
-        		<a class="page-link" th:href="|/adminReport?reportStatus=2&pageNo=${pageNo}|">[[${pageNo}]]</a>
-        	</th:block>
-        	<th:block th:if="${reportStatus == '1'}">
-        		<a class="page-link" th:href="|/adminReport?reportStatus=1&pageNo=${pageNo}|">[[${pageNo}]]</a>
-        	</th:block>
-        	<th:block th:if="${reportStatus == '0'}">
-        		<a class="page-link" th:href="|/adminReport?reportStatus=0&pageNo=${pageNo}|">[[${pageNo}]]</a>
+        	<th:block th:unless="${reportStatus == null}">
+        		<a class="page-link" th:href="|/adminReport?reportStatus=${reportStatus}&pageNo=${pageNo}|">[[${pageNo}]]</a>
         	</th:block>
         </li>
         <li class="page-item">
@@ -310,20 +332,8 @@
                 <span class="sr-only">Next</span>
             </a>
             </th:block>
-        	<th:block th:if="${reportStatus == '2'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=2&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '1'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=1&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${reportStatus == '0'}">
-            <a class="page-link" th:href="|/adminReport?reportStatus=0&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+        	<th:block th:unless="${reportStatus == null}">
+            <a class="page-link" th:href="|/adminReport?reportStatus=${reportStatus}&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>
@@ -355,48 +365,79 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+<script th:inline="javascript">
+const csrfPara = [[${_csrf.parameterName}]];
+const csrfToken = [[${_csrf.token}]];
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-
+function updateReportI(reportNo, reportee){
+	const banType = $('#banType' + reportNo).val();	
+	if(banType == '') {
+		showFailAlert('제제 종류를 선택해주세요.')
+		return;
+	}
+	// 여기서 banType받아서 보내줘야함.
+	const objectR = {
+			reportNo : reportNo ,
+			reportee : reportee ,
+			banType : banType
+		};
+	$.ajax('/updateAdminReportI', {
+		type: "PUT",
+		data: objectR,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	}).done(res => {
+		if(res.result == '200'){
+				Swal.fire({
+					  title: '제재가 완료되었습니다.',
+					  text: '',
+					  icon: 'success',
+					  confirmButtonClass: "btn-danger",
+					  confirmButtonText: "확인",
+					}).then((result) => {
+					  if (result.value != null) {
+						  window.location.href = "/adminReport?pageNo=1";
+					  }
+					});	
+		}else{
+			showFailAlert('에러가 발생했습니다.')
+		}
+	}).fail(err => {
+		console.log(err);
+	})
+}
+function updateReportB(reportNo){
+	let object = {
+		reportNo : reportNo
+	}
+	$.ajax('/updateAdminReportB', {
+		type: "PUT",
+		data : object,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	}).done(res => {
+		if(res.result == '200'){
+				Swal.fire({
+					  title: '반려되었습니다.',
+					  text: '',
+					  icon: 'success',
+					  confirmButtonClass: "btn-danger",
+					  confirmButtonText: "확인",
+					}).then((result) => {
+					  if (result.value != null) {
+						  window.location.href = "/adminReport?pageNo=1";
+					  }
+					});	
+		}else{
+			showFailAlert('에러가 발생했습니다.')
+		}
+	}).fail(err => {
+		console.log(err);
+	})
+}
+</script>
 </body>
-
 </html>

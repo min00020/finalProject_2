@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.ReplyVO;
+import com.yedamFinal.aco.common.ReportVO;
 import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.common.service.ReplyService;
 import com.yedamFinal.aco.member.MemberVO;
@@ -96,6 +97,12 @@ public class ReplyServiceImpl implements ReplyService {
 		}
 		
 		return ret;
+	}
+
+	@Override
+	public int insertReport(ReportVO reportVO, int memberNo) {
+		reportVO.setReporter(memberNo);
+		return replyMapper.insertReport(reportVO);
 	}
 
 }

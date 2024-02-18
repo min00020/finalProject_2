@@ -1,12 +1,10 @@
-package com.yedamFinal.aco.admin;
-
+package com.yedamFinal.aco.common;
 import java.util.Date;
 
 import lombok.Data;
 
 @Data
-public class AdminReportVO {
-
+public class ReportVO {
 	private int reportNo;
 	private String reportType;
 	private String reportContent;
@@ -17,6 +15,4 @@ public class AdminReportVO {
 	private int boardNo;
 	private int reportee;
 	private String replyContent;
-	private String reporterName;
-	private String reporteeName;
 }

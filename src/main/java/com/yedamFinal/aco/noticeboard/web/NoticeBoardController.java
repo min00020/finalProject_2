@@ -13,7 +13,12 @@ import com.yedamFinal.aco.noticeboard.service.NoticeBoardService;
 public class NoticeBoardController {
 	@Autowired
 	NoticeBoardService noticeBoardService;
-	
+	/**
+	 * 공지사항 리스트페이지
+	 * @param model
+	 * @param pageNo
+	 * @return
+	 */
 	@GetMapping("/noticeBoard")
 	public String getNoticeBoard(Model model, int pageNo) {
 		var ret = noticeBoardService.getAdNoticeList(pageNo);
@@ -21,7 +26,12 @@ public class NoticeBoardController {
 		model.addAttribute("pageDTO",ret.get("pageDTO"));
 		return "notice/noticeList";
 	}
-	
+	/**
+	 * 공지사항 상세페이지
+	 * @param noticeBoardVO
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/noticeInfo")
 	public String getNoticeInfo(NoticeBoardVO noticeBoardVO, Model model) {
 		NoticeBoardVO noticeInfo = noticeBoardService.getNoticeInfo(noticeBoardVO);
