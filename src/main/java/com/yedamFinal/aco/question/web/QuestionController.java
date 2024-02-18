@@ -173,7 +173,16 @@ public class QuestionController {
 	@PostMapping("/questionWrite")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
-		return questionService.writeQuestion(question);
+		//memberVO
+		MemberVO username = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			username = userDetails.getMemberVO();
+			username = memberService.getMemberInfo(username);
+		}
+			
+		return questionService.writeQuestion(question, username);
 	}
 
 	/**

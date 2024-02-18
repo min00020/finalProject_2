@@ -2,24 +2,34 @@ package com.yedamFinal.aco.question.serviceImpl;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.yedamFinal.aco.common.PaginationDTO;
+import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.point.PointDetailVO;
+import com.yedamFinal.aco.point.mapper.PointMapper;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.question.service.QuestionService;
+import com.yedamFinal.aco.question.web.QuestionActivityPointVO;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	private QuestionMapper questionMapper;
+	
+	@Autowired
+	private PointMapper pointMapper;
 	
 	//질문글 리스트 조회
 	@Override
@@ -126,14 +136,71 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 	
 	//질문글작성
+	@Transactional
 	@Override
-	public Map<String, Object> writeQuestion(QuestionVO vo) {
+	public Map<String, Object> writeQuestion(QuestionVO vo, MemberVO mvo) {
 		
 		//질문글 작성
 		Map<String,Object> ret = new HashMap<String,Object>();
 		int insertId = questionMapper.insertQuestion(vo);
 		int bno = vo.getPk();
+		mvo.setPoint(vo.getPoint());
 		
+		/*활동점수 내역 업데이트*/
+		QuestionActivityPointVO activityPointVO = new QuestionActivityPointVO();
+		
+		activityPointVO.setMemberNo(mvo.getMemberNo());
+		activityPointVO.setAccumActivityPoint(mvo.getAccumActivityPoint());
+		activityPointVO.setCurActivityPoint(mvo.getAvailableActivityPoint());
+		activityPointVO.setActivityPointType("C001");
+		activityPointVO.setActivityPointDate(new Date());
+		activityPointVO.setIncDecActivityPoint(50);
+		
+		questionMapper.updateActivityPoint(activityPointVO);
+		
+		/*포인트 차감 insert*/
+		PointDetailVO pointVO = new PointDetailVO();
+		pointVO.setMemberNo(mvo.getMemberNo());
+		pointVO.setLatestAcoMoney(mvo.getAcoMoney());
+		pointVO.setLatestAcoPoint(mvo.getAcoPoint());
+		pointVO.setLatestTotalPoints(mvo.getAcoMoney() + mvo.getAcoPoint());
+		pointVO.setHistoryDate(new Date());
+		pointVO.setHistoryType("F008");
+	
+		if(mvo.getAcoPoint()-vo.getPoint() < 0) {
+			//point 내역 테이블에 point, money 두 번 인서트해주기
+			if(mvo.getAcoPoint() > 0) {
+				//사용하려는 포인트보다 보유 에코포인트가 적은 경우
+				//에코포인트 전체 사용 후 + 에코머니로 나머지 차감
+				pointVO.setPointType("G002");
+				pointVO.setIncDecPoint(mvo.getAcoPoint() * -1);
+				
+				//에코머니 차감
+				PointDetailVO pointVO2 = new PointDetailVO();
+				pointVO2.setMemberNo(mvo.getMemberNo());
+				pointVO2.setLatestAcoMoney(mvo.getAcoMoney());
+				pointVO2.setLatestAcoPoint(mvo.getAcoPoint());
+				pointVO2.setLatestTotalPoints(mvo.getAcoMoney() + mvo.getAcoPoint());
+				pointVO2.setHistoryDate(new Date());
+				pointVO2.setHistoryType("F008");
+				pointVO2.setPointType("G001");
+				pointVO2.setIncDecPoint((vo.getPoint() - mvo.getAcoPoint()) * -1);
+
+				pointMapper.insertAcoMoneyHistory(pointVO2);
+			}
+			else {
+				//인서트 에코머니만 한 번
+				pointVO.setPointType("G001");
+				pointVO.setIncDecPoint(vo.getPoint() * -1);
+			}
+		}
+		else {
+			//인서트 point에 한번만
+			pointVO.setPointType("G002");
+			pointVO.setIncDecPoint(vo.getPoint() * -1);
+		}
+
+		pointMapper.insertAcoMoneyHistory(pointVO);
 		
 		if(insertId <= 0) {
 			ret.put("result", "500");
@@ -142,6 +209,7 @@ public class QuestionServiceImpl implements QuestionService{
 			ret.put("result", "200");
 			ret.put("vo", vo);
 			ret.put("bno", bno);
+			questionMapper.updatePoint(mvo);
 		}
 		
 		return ret;

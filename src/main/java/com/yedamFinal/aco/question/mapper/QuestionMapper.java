@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.question.QuestionVO;
+import com.yedamFinal.aco.question.web.QuestionActivityPointVO;
 
 public interface QuestionMapper {
 	/*질문글*/
@@ -22,7 +24,9 @@ public interface QuestionMapper {
 	
 	/*질문글 작성*/
 	public int insertQuestion(QuestionVO questionVO);
-	
+	//활동점수 지급 + 포인트 차감
+	public int updateActivityPoint(QuestionActivityPointVO activityPointVO);
+	public int updatePoint(MemberVO memberVO);
 	
 	//질문글 수정
 	public int updateQuestion(QuestionVO questionVO);

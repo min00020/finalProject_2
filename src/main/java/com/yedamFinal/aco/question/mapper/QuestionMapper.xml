@@ -160,6 +160,43 @@
     		SELECT question_board_seq.CURRVAL FROM DUAL
     	</selectKey>
 	</insert>
+	<!-- 질문글 작성시 포인트차감 -->
+	<update id="updatePoint" parameterType="int">
+		UPDATE MEMBER
+	       SET ACCUM_ACTIVITY_POINT = #{accumActivityPoint} + 50,
+	           AVAILABLE_ACTIVITY_POINT = #{availableActivityPoint} +50,
+		<choose>
+			<when test="((acoPoint - point) >= 0)">
+				ACO_POINT = #{acoPoint} - #{point}
+			</when>
+			<otherwise>
+				ACO_POINT = 0, ACO_MONEY = #{acoMoney} + #{acoPoint} - #{point} 
+			</otherwise>
+		</choose>
+	     WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	<insert id="updateActivityPoint">
+		INSERT INTO ACTIVITY_POINT_DETAIL(
+		            ACTIVITY_POINT_NO,
+		            MEMBER_NO,
+		            ACCUM_ACTIVITY_POINT,
+		            CUR_ACTIVITY_POINT,
+		            ACTIVITY_POINT_TYPE,
+		            ACTIVITY_POINT_DATE,
+		            INC_DEC_ACTIVITY_POINT
+		)
+		VALUES(
+					activity_point_detail_seq.NEXTVAL,
+					#{memberNo},
+					#{accumActivityPoint},
+					#{curActivityPoint},
+					#{activityPointType},
+					#{activityPointDate},
+					#{incDecActivityPoint}
+		
+		)
+	</insert>
 	
 	<!-- 질문글 수정 -->
 	<update id="updateQuestion" parameterType="QuestionVO">
