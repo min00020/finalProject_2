@@ -131,7 +131,6 @@
 <!-- 		 AND POINT_TYPE = 'G001' -->
 <!-- 		 AND INC_DEC_POINT <![CDATA[>]]> 0 -->
 <!-- 		 ORDER BY A.HISTORY_DATE DESC -->
-
 		SELECT *		FROM (		SELECT			ROWNUM AS RN,			C.*			FROM (
 		
 				SELECT

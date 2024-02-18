@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
@@ -33,9 +34,15 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	private FreeBoardMapper freeBoardMapper;
 
 	@Override
-	public List<FreeBoardVO> getFreeBoardAll() {
-
-		return freeBoardMapper.getFreeBoardAll();
+	public List<FreeBoardVO> getFreeBoardAll(Model model,int pg) {
+		var freeBoardList = freeBoardMapper.getFreeBoardAll(pg);
+		PaginationDTO dto = null;
+		if(freeBoardList.size() > 0) {
+			dto = new PaginationDTO(freeBoardMapper.getFreeBoardAllCnt(), pg, 10);
+		}
+		model.addAttribute("pageDTO", dto);
+		
+		return freeBoardMapper.getFreeBoardAll(pg);
 	}
 
 	@Override
@@ -102,6 +109,18 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public int deleteFreeBoard(int fboardNo) {
 		return freeBoardMapper.deleteFreeBoard(fboardNo);
+	}
+
+	//검색
+	@Override
+	public List<FreeBoardVO> getSearchFreeBoard(Model model,String search,int pg) {
+		var searchFreeBoardList = freeBoardMapper.searchFreeBoard(search, pg);
+		PaginationDTO dto = null;
+		if(searchFreeBoardList.size() > 0) {
+			dto = new PaginationDTO(freeBoardMapper.searchFreeBoardCnt(search), pg, 10);
+		}
+		model.addAttribute("pageDTO", dto);
+		return freeBoardMapper.searchFreeBoard(search,pg);
 	}
 	
 }

@@ -10,7 +10,7 @@ import com.yedamFinal.aco.freeboard.FreeBoardVO;
 
 public interface FreeBoardService {
 	
-	public List<FreeBoardVO> getFreeBoardAll();
+	public List<FreeBoardVO> getFreeBoardAll(Model model,int pg);
 	
 	public FreeBoardVO getFreeBoard(int fboardNo, Model model);
 	
@@ -22,6 +22,9 @@ public interface FreeBoardService {
 	
 	//삭제
 	public int deleteFreeBoard(int fboardNo);
+	
+	//검색
+	public List<FreeBoardVO> getSearchFreeBoard(Model model,String search, int pg);
 	
 	
 }

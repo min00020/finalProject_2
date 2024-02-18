@@ -63,12 +63,36 @@
 			<button class="park_S">
 				<span class="park_boardname">사이드 프로젝트</span>
 			</button>
+			<section class="park_child2">
+				<div>
+					<ul class = "park_fb">
+						<li th:each="rec : ${recList}">
+		
+							<span class="park_title"  th:text="${rec.title}" ></span>
+							<hr />
+							
+						</li>
+					</ul>
+				</div>
+			</section>
 		</section>
 
 		<section class="park_child">
 			<button class="park_S">
 				<span class="park_boardname">공지사항</span>
 			</button>
+			<section class="park_child2">
+				<div>
+					<ul class = "park_fb">
+						<li th:each="notice: ${noticeList}">
+		
+							<span class="park_title"  th:text="${notice.title}" ></span>
+							<hr />
+							
+						</li>
+					</ul>
+				</div>
+			</section>
 		</section>
 	</div>
 

@@ -11,7 +11,8 @@ import com.yedamFinal.aco.sideboard.SideVO;
 @Mapper
 public interface FreeBoardMapper {
 	//게시글 전체조회
-	public List<FreeBoardVO> getFreeBoardAll();
+	public List<FreeBoardVO> getFreeBoardAll(int pg);
+	public int getFreeBoardAllCnt();
 
 	//게시글 단건조회
 	public FreeBoardVO getFreeBoard(@Param("fboardNo") int fboardNo);
@@ -28,4 +29,7 @@ public interface FreeBoardMapper {
 	//게시글 삭제
 	public int deleteFreeBoard(int fboardNo);
 	
+	//게시글 검색
+	public List<FreeBoardVO> searchFreeBoard(@Param("search") String search,@Param("pg") int pg);
+	public int searchFreeBoardCnt(String search);
 }

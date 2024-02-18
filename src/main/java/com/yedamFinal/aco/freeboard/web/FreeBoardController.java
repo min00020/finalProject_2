@@ -1,5 +1,6 @@
 package com.yedamFinal.aco.freeboard.web;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
+import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
@@ -45,6 +48,9 @@ public class FreeBoardController {
 	
 	@Autowired
 	private FreeBoardService freeBoardService;
+	
+	@Autowired
+	private FreeBoardMapper freeBoardMapper;
 
 	/**
 	 * 자유게시판 전체조회
@@ -53,8 +59,23 @@ public class FreeBoardController {
 	 */
 	
 	@GetMapping("/freeBoardList")
-	public String getFreeBoardList(Model model) {
-		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
+	public String getFreeBoardList(String search, @RequestParam(value = "pg", required = false, defaultValue = "1") int pg, Model model) {
+		
+		
+		List<FreeBoardVO> ret = null;
+		 // 검색창 입력의 경우.
+        if(search == null)
+        	ret = freeBoardService.getFreeBoardAll(model, pg);
+        else {
+        	ret = freeBoardService.getSearchFreeBoard(model,search, pg);
+        	model.addAttribute("search",search); // 해당 search키워드로 페이징해야함.
+        }
+        
+        if(ret == null) {
+        	return "redirect:/loginForm";
+        }
+		
+		model.addAttribute("getFreeBoardList", ret);
 		return "freeBoard/freeBoardList";
 	}
 	
@@ -127,12 +148,27 @@ public class FreeBoardController {
 	}
 	
 	
-	
+	//삭제
 	@GetMapping("/deleteFreeBoard")
 	public String deleteFreeBoard(@RequestParam int fboardNo) {
 		freeBoardService.deleteFreeBoard(fboardNo);
 		return "redirect:freeBoardList";
 	}
+	
+//	//검색
+//	@GetMapping("/getSearchFreeBoard")
+//	public String searchFreeBoard(@RequestParam("search") String search,@RequestParam("pg") int pg, Model model) {
+//		model.addAttribute("searchFreeBoard", freeBoardService.getSearchFreeBoard(search, pg));
+//		
+//		var freeBoardSearchList = freeBoardService.getSearchFreeBoard(search,pg);
+//		PaginationDTO dto = null;
+//		if(freeBoardSearchList.size() > 0) {
+//			dto = new PaginationDTO(freeBoardMapper.searchFreeBoardCnt(), pg, 10);
+//		}
+//		model.addAttribute("pageDTO", dto);
+//		return "freeBoard/freeBoardList";
+//		
+//	}
 	
 
 	

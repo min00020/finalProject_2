@@ -31,6 +31,7 @@ import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
+import com.yedamFinal.aco.noticeboard.service.NoticeBoardService;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
@@ -42,6 +43,8 @@ public class MemberController {
 	private MemberServiceImpl memberService;
 	@Autowired
 	private FreeBoardService freeBoardService;
+	@Autowired
+	private NoticeBoardService noticeBoardService;
 
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
@@ -61,10 +64,12 @@ public class MemberController {
 	 * @return common/mainPage
 	 */
 	@GetMapping("/")
-	public String getMainPageForm(Model model) {
+	public String getMainPageForm(@RequestParam(value = "pg", required = true, defaultValue = "1") int pg,Integer pageNo,Model model) {
 		model.addAttribute("main", "1");
 		//자유게시판 글 표시
-		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll());
+		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll(model,1));
+	    Map<String, Object> noticeListMap = noticeBoardService.getAdNoticeList(1);
+	    model.addAttribute("noticeList", noticeListMap.get("noticeList"));
 
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -76,6 +81,8 @@ public class MemberController {
 		
 		return "common/mainPage";
 	}
+	
+	
 	
 	// min 회원가입 form
 	@GetMapping("/createAccountForm")

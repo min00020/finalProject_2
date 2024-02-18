@@ -33,7 +33,7 @@
 				<div id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
 					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo.writeDate, 'yyyy-MM-dd HH:mm')}"></p>
 					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo.fboardNo}'|">수정</button>
-					<button class="btn" style ="background-color : #848484; color:white">삭제</button>
+					<button class="btn" style ="background-color : #848484; color:white" th:onclick="delFreeBoard([[${freeBoardInfo.fboardNo}]])">삭제</button>
 				</div>
 
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
@@ -324,6 +324,59 @@
 			$('#' + divId).css('display','none');
 		}
 	}
+	//글삭제
+
+	function delFreeBoard(fboardNo){
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("본인의 게시글만 삭제할 수 있습니다.");
+			return;
+		}
+		
+	object = {
+			fboardNo : fboardNo
+	}
+		
+		 Swal.fire({
+		        title: '정말로 게시글을 삭제하시겠습니까?',
+		        text: "삭제된 게시글은 복구할 수 없습니다.",
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: '#3e6ce3',
+		        cancelButtonColor: '#FA5858',
+		        confirmButtonText: '삭제',
+		        cancelButtonText: '취소'
+		    }).then((result) => {
+		        // 사용자가 "네, 삭제하겠습니다." 버튼을 클릭했을 때
+		        if (result.isConfirmed) {
+		
+		$.ajax('/deleteFreeBoard',{
+			type : "GET",
+			data : object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res=>{
+		Swal.fire({
+			  title: '게시글 삭제에 성공했습니다.',
+			  text: '',
+			  icon: 'success',
+			  confirmButtonClass: "btn-danger",
+			  confirmButtonText: "확인",
+			}).then((result) => {
+			  if (result.value) {
+ 				location.href = '/freeBoardList';	
+			  }
+			}); 
+	})
+	.fail(err=>{
+		showFailAlert("게시글 삭제에 실패했습니다. 다시 시도해주세요.");
+		console.log(err);
+					 });
+		        }
+		    });
+		}
+	
 	
 	function delReply(replyNo) {
 		if(typeof memberNo == "undefined" || memberNo == null) {

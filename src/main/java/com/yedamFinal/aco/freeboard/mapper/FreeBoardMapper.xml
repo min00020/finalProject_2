@@ -25,7 +25,29 @@
 
 <!-- 전체조회 -->
 <mapper namespace="com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper">
+<!-- 	<select id="getFreeBoardAll" resultType="FreeBoardVO"> -->
+<!-- 	SELECT FBOARD_NO, -->
+<!-- 			A.MEMBER_NO, -->
+<!-- 			TITLE, -->
+<!-- 			CONTENT, -->
+<!-- 			B.NICKNAME, -->
+<!-- 			WRITE_DATE, -->
+<!-- 			VIEW_CNT, -->
+<!-- 			RECOMMEND_CNT, -->
+<!-- 			REPLY_CNT, -->
+<!--             B.ACCUM_ACTIVITY_POINT, -->
+<!--             ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE, -->
+<!--             B.PROFILE_IMAGE -->
+<!-- 	FROM FREE_BOARD A -->
+<!-- 	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO -->
+	
+<!--     ORDER BY WRITE_DATE DESC -->
+
+<!-- 	</select> -->
+	
 	<select id="getFreeBoardAll" resultType="FreeBoardVO">
+	SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
+	
 	SELECT FBOARD_NO,
 			A.MEMBER_NO,
 			TITLE,
@@ -42,7 +64,20 @@
 	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO
 	
     ORDER BY WRITE_DATE DESC
+    
+    ) C ) A
+    
+     <![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+	]]>	
 
+	</select>
+	
+	<select id="getFreeBoardAllCnt" resultType="int">
+	
+		SELECT COUNT(*) AS CNT
+		FROM FREE_BOARD
+		
 	</select>
 	
 	<!-- 단건조회 -->
@@ -119,6 +154,45 @@
 		WHERE FBOARD_NO = #{fboardNo}
 		
 	</delete>
+	
+	<select id="searchFreeBoard" resultType="FreeBoardVO">
+	
+	SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
+	
+	SELECT FBOARD_NO,
+			A.MEMBER_NO,
+			TITLE,
+			CONTENT,
+			B.NICKNAME,
+			WRITE_DATE,
+			VIEW_CNT,
+			RECOMMEND_CNT,
+			REPLY_CNT,
+            B.ACCUM_ACTIVITY_POINT,
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+            B.PROFILE_IMAGE
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO
+	WHERE TITLE LIKE '%'||#{search}||'%'
+	
+    ORDER BY WRITE_DATE DESC
+    
+    ) C ) A
+    
+     <![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+	]]>	
+     
+	</select>
+	
+	<select id="searchFreeBoardCnt" resultType="int">
+	
+	SELECT 
+		COUNT(*) AS CNT
+		FROM FREE_BOARD
+		WHERE TITLE LIKE '%'||#{search}||'%'
+		
+	</select>
 	
 
 </mapper>
