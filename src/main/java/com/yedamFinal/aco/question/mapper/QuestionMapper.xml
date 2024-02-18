@@ -288,6 +288,11 @@
 		   SET ADOPT_STATUS = 'I002'
 		 WHERE ANSWER_BOARD_NO = #{answerBoardNo}
 	</update>
+	<select id="selectAdoptAnswer" parameterType="int">
+		SELECT * 
+		  FROM ANSWER_BOARD
+		 WHERE ANSWER_BOARD_NO = #{ano}
+	</select>
 	
 	
 	<!-- 추가질문답변 등록 -->
@@ -307,8 +312,4 @@
 		    SYSDATE
 		)
 	</insert>
-	<select id="asdfsdf">
-		SELECT question_add_seq.NEXTVAL
-			FROM DUAL
-	</select>
 </mapper>

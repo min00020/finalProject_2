@@ -103,12 +103,15 @@ public class QuestionServiceImpl implements QuestionService{
 		                    	 }
 		                     }); 
 		                     var lastVO = list.get(list.size()-1);
-		                     //질문자 J001 답변자 J002
-		                     if(lastVO.getAddWriterType().equals("J001")) {
-		                    	 model.addAttribute("currentWriterType", 1);
-		                     }
-		                     else {
-		                    	 model.addAttribute("currentWriterType", 2);
+		                     
+		                     if(lastVO.getAddWriterType() != null) {
+		                    	 //질문자 J001 답변자 J002
+		                    	 if(lastVO.getAddWriterType().equals("J001")) {
+		                    		 model.addAttribute("currentWriterType", 1);
+		                    	 }
+		                    	 else {
+		                    		 model.addAttribute("currentWriterType", 2);
+		                    	 }
 		                     }
 		                     
 		                     break;
@@ -272,6 +275,9 @@ public class QuestionServiceImpl implements QuestionService{
 	//답변글 채택
 	@Override
 	public int adoptAnswer(int ano) {
+		QuestionVO vo = questionMapper.selectAdoptAnswer(ano);
+		vo.getMemberNo();
+		
 		return questionMapper.adoptAnswer(ano);
 	}
 	

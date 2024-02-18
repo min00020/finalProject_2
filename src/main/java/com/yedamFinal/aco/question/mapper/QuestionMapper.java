@@ -42,6 +42,7 @@ public interface QuestionMapper {
 	public int updateAnswer(QuestionVO questionVO);
 	//답변글 채택
 	public int adoptAnswer(int ano);
+	public QuestionVO selectAdoptAnswer(int ano);
 	
 	
 	/*추가질문답변*/
