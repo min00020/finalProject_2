@@ -35,7 +35,10 @@ import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 
+import lombok.extern.log4j.Log4j2;
+
 @Controller
+@Log4j2
 public class MemberController {
 
 	@Autowired
@@ -66,7 +69,7 @@ public class MemberController {
         	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
             MemberVO username = userDetails.getMemberVO();
         }
-		
+		log.info("log Info");
 		return "common/mainPage";
 	}
 	
