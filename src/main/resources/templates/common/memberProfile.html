@@ -15,7 +15,7 @@
 				</div>
 				<div class="d-flex gap-4">
 					<h2 class="ms-3 mt-3">[[${member.nickname}]]</h2>
-					<button type="button" class="text-white btn mt-3" style="background-color:#80a9e8; height:40px;">팔로우</button>
+					<button type="button" class="text-white btn mt-3" style="background-color:#80a9e8; height:40px; width:400px; visibility:hidden;">팔로우</button>
 				</div>
 				<div class="d-flex ps-2 pt-1">
 					<div class="qna_box">
@@ -24,11 +24,11 @@
 					<div class="pt-1">
 						<span style="margin:0;" class="align-middle">[[${member.gradeName}]]</span>
 					</div>
-					<div class="ms-2 pt-1 d-flex">
+					<div class="ms-2 pt-1 d-flex gap-1">
 						<img src="/commonResource/thunder.png" alt="acti">
 					</div>
 					<div class="d-flex">
-						<span style="margin:0; padding-top:6px;">활동점수</span>
+						<span style="margin:0; padding-top:6px;">활동점수 [[${member.accumActivityPoint}]]</span>
 					</div>
 				</div>
 			</div>
@@ -39,30 +39,35 @@
 					<h4 style="color:#BDBDBD">채택률</h4>
 				</div>
 				<div class="d-flex gap-5 justify-content-between pt-2">
-					<h5 style="color:#3e6ce3" class="ms-4"><b>200건</b></h5>
-					<h5 style="color:#3e6ce3" class="ms-2"><b>189건</b></h5>
-					<h5 style="color:#3e6ce3" class="me-1"><b>94.5%</b></h5>
+					<h5 style="color:#3e6ce3" class="ms-4"><b>[[${mapResult.stat.allCnt}]]건</b></h5>
+					<h5 style="color:#3e6ce3" class="ms-2"><b>[[${mapResult.stat.adoptCnt}]]건</b></h5>
+					<h5 style="color:#3e6ce3" class="me-1"><b>[[${mapResult.stat.percent}]]%</b></h5>
 				</div>
 			</div>
 		</div>
 	</div>
 	
 	<div class="mt-5">
-		<a th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">질문</a>
-		<a th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">답변</a>
-		<a th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">사이드 프로젝트</a>
+		<a th:if="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>질문</b></a>
+		<a th:unless="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">질문</a>
+		<a th:if="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>답변</b></a>
+		<a th:unless="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">답변</a>
+		<a th:if="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>사이드 프로젝트</b></a>
+		<a th:unless="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">사이드 프로젝트</a>
 		<hr>
 	</div>
 	<div>
+		<!--/* 질문 리스트 */-->
+		<!-- img에 th:onclick="|location.href='/member/회원번호'|" 꼭달아야함. -->
 		<th:block th:if="${mapResult.questionList} != null">
 			<div id="questionList"  class="row" th:each="question : ${mapResult.questionList}">
 				<div id="title" class="col-8">
 					<div id="member" style="height:40px;">
 						<div class="qna_box">
-						    <img th:if="${question.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile">
-						    <img th:unless="${question.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${question.profileImage}|" alt="profile">
+						    <img th:if="${question.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|">
+						    <img th:unless="${question.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${question.profileImage}|" alt="profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|">
 						</div>
-						<p th:text="${question.id}">cookie123</p>
+						<p th:text="${question.nickname}">cookie123</p>
 					</div>
 				  	<div id="titleTag">
 					    <h4 th:text="${question.title}" th:onclick="|location.href='/questionInfo/${question.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
@@ -110,18 +115,21 @@
 				<div id="title" class="col-8">
 					<div id="member" style="height:40px;">
 						<div class="qna_box">
-						    <img th:if="${answer.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile">
-						    <img th:unless="${answer.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${answer.profileImage}|" alt="profile">
+						    <img th:if="${answer.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${answer.memberNo}?pg=1'|">
+						    <img th:unless="${answer.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${answer.profileImage}|" alt="profile" th:onclick="|location.href='/member/${answer.memberNo}?pg=1'|">
 						</div>
-						<p th:text="${answer.id}">cookie123</p>
+						<p th:text="${answer.nickname}">cookie123</p>
 					</div>
 				  	<div id="titleTag">
-					    <h4 th:text="${question.title}" th:onclick="|location.href='/questionInfo/${answer.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
+					    <h4 th:text="${answer.title}" th:onclick="|location.href='/questionInfo/${answer.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
 					    <p style="color:blue" th:text="${answer.tag}">#node.js #mysql</p>
 				 	</div>
 				</div>
-				<div id="answercnt" class="col-1" style="text-align:center; margin:auto;">
-				 	<h6 class="QNAcnt" th:text="${question.answerCnt}">10</h6>
+				<div class="col-1" style="text-align:center; margin:auto;">
+				 	<h6 th:text="${answer.viewCnt}">2</h6>
+				 	<h6>조회</h6>
+				</div>
+				<div id="answercnt" style="text-align:center; margin:auto;">
 				 	<h6>답변</h6>
 				</div>
 				<hr style="margin-top:30px; margin-bottom:30px;">
@@ -131,16 +139,58 @@
 	         <div>
 	             <ul class="pagination justify-content-center">
 	                 <li class="page-item" th:if="${mapResult.pageDTO.prev}">
-	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage-1}|" aria-label="Previous">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage-1}&tp=1|" aria-label="Previous">
 	                         <span aria-hidden="true">&laquo;</span>
 	                         <span class="sr-only">Previous</span>
 	                     </a>
 	                 </li>
 	                 <li th:class="${pageNo == mapResult.pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(mapResult.pageDTO.startPage, mapResult.pageDTO.endPage)}">
-	                       <a class="page-link" th:href="|/member/${member.memberNo}?pg=${pageNo}|">[[${pageNo}]]</a>
+	                       <a class="page-link" th:href="|/member/${member.memberNo}?pg=${pageNo}&tp=1|">[[${pageNo}]]</a>
 	                 </li>
 	                 <li class="page-item">
-	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage+1}|" aria-label="Next" th:if="${mapResult.pageDTO.next}">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage+1}&tp=1|" aria-label="Next" th:if="${mapResult.pageDTO.next}">
+	                         <span aria-hidden="true">&raquo;</span>
+	                         <span class="sr-only">Next</span>
+	                     </a>
+	                 </li>
+	             </ul>
+	         </div>
+	       </th:block>
+		</th:block>
+	
+		<th:block th:if="${mapResult.sideList} != null">
+			<div class="recList_1 clearfix" style="width:1200px;" th:each="rec:${mapResult.sideList}">
+				<h6 th:if="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
+				<h6 th:unless="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
+				<div class="qna_box">
+					<img th:if="${rec.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+					<img th:unless="${rec.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${rec.profileImage}|" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+				</div>
+				<p th:text="${rec.nickname}">cookie123</p>
+				<h5 th:onclick="|location.href='/sideInfo/${rec.sideBoardNo}'|" style="font-weight:bolder;">[[ ${rec.title }]]</h5>
+				<br>
+				<p>[[${rec.projectOutline}]]</p>
+				<br>
+				<p style=";color:#979da9;float:left;">기간 | [[${rec.devPeriod}]]일  모집인원 [[${rec.recruitPersonnel}]]명</p>
+				<span><p style="float:right;color:#979da9;">조회수 [[ ${rec.viewCnt} ]]회  댓글수 [[ ${rec.replyCnt} ]]개</p></span>
+				<br>
+				<hr id="tae-hr"  style="width:1200px;">	
+			</div>
+			<!-- 페이지 새로 -->
+			<th:block th:if="${mapResult.pageDTO} != null">
+	         <div>
+	             <ul class="pagination justify-content-center">
+	                 <li class="page-item" th:if="${mapResult.pageDTO.prev}">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage-1}&tp=2|" aria-label="Previous">
+	                         <span aria-hidden="true">&laquo;</span>
+	                         <span class="sr-only">Previous</span>
+	                     </a>
+	                 </li>
+	                 <li th:class="${pageNo == mapResult.pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(mapResult.pageDTO.startPage, mapResult.pageDTO.endPage)}">
+	                       <a class="page-link" th:href="|/member/${member.memberNo}?pg=${pageNo}&tp=2|">[[${pageNo}]]</a>
+	                 </li>
+	                 <li class="page-item">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage+1}&tp=2|" aria-label="Next" th:if="${mapResult.pageDTO.next}">
 	                         <span aria-hidden="true">&raquo;</span>
 	                         <span class="sr-only">Next</span>
 	                     </a>

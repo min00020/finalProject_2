@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
+import com.yedamFinal.aco.member.MemberStatVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
@@ -534,12 +534,16 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		else { // 사이드 탭
 			var sideList = sideMapper.selectListAllByMember(pg,memberNo);
 			if(sideList.size() > 0) {
-				dto = new PaginationDTO(sideMapper.selectProjectListAllCnt(memberNo), pg, 5);
+				dto = new PaginationDTO(sideMapper.selectListAllCntByMember(memberNo), pg, 5);
 			}
 			ret.put("sideList", sideList);
 		}
 		
 		ret.put("pageDTO", dto);
+		
+		MemberStatVO stat = memberMapper.otherMemberStatInfo(memberNo);
+		ret.put("stat", stat);
+		
 		return ret;
 	}
 

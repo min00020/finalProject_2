@@ -22,6 +22,20 @@
 	border-color: hsla(220, 9%, 46%, .3);
 }
 
+#answercnt10{
+		color : #3e6ce3;
+		border-width : 1px;
+	    border-style : solid;
+	    border-radius: 15%;
+	    border-color: #989daa !important;
+	    width: 80px; 
+	    height: 80px; 
+	    text-align: center; 
+	    display: flex; 
+	    flex-direction: column; 
+	    justify-content: center;
+}
+
 .qna_box3 {
    width: 100px;
    height: 100px;

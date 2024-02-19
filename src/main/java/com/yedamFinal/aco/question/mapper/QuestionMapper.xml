@@ -45,7 +45,7 @@
 		SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
 	  
 	  
-	                SELECT m.id, 
+	                SELECT m.nickname, 
 	                	m.profile_image,
 	                    q.QUESTION_BOARD_NO,
 	                    q.MEMBER_NO,
@@ -54,7 +54,7 @@
 	                    q.TITLE,
 	                    q.TAG,
 	                    q.CONTENTS,
-	                    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
+	                    q.WRITE_DATE,
 	                    q.VIEW_CNT,
 	                    q.RECOMMEND_CNT,
 	                    q.BOOKMARK_CNT,
@@ -83,7 +83,7 @@
 		 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
 	  
 	  
-	                SELECT m.id, 
+	                SELECT m.nickname, 
 	                	m.profile_image,
 	                    q.ANSWER_BOARD_NO,
 	                    q.QUESTION_BOARD_NO,
@@ -92,10 +92,12 @@
 	                    q.TAG,
 	                    q.CONTENTS,
 	                    q.WRITE_DATE,
-	                    q.VIEW_CNT,
+	                    P.VIEW_CNT,
 	                    q.RECOMMEND_CNT,
 	                    q.ADOPT_STATUS
 	            FROM answer_board q
+	            JOIN QUESTION_BOARD P
+	            ON Q.QUESTION_BOARD_NO = P.QUESTION_BOARD_NO
 	            JOIN MEMBER m
 	            ON q.MEMBER_NO = m.MEMBER_NO
 	            WHERE q.MEMBER_NO = #{memNo}
