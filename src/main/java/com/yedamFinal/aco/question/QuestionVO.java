@@ -1,5 +1,7 @@
 package com.yedamFinal.aco.question;
 
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -45,7 +47,7 @@ public class QuestionVO {
 	private int questionAddNo;
 	private String addContents;
 	private String addWriterType;
-	private String addWriteDate;
+	private Date addWriteDate;
 	private String addStatus;
 	
 	private int pk;
