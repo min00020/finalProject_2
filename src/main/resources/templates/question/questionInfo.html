@@ -158,8 +158,8 @@
 	                        <img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply">
 	                     </span>
 	                     <span th:text="${AdoptQuestionVO.answerReplyCnt}">7</span>
-	                     <button type="button" class="btn text-white" 
-	                        th:if="${AdoptQuestionVO.answerAdoptStatus == 'I002'}"
+	                     <button type="button" id="addQuestionBtn" class="btn text-white" 
+	                        th:if="${AdoptQuestionVO.answerAdoptStatus == 'I002' and loginId == questionInfo[0][0].id}"
 	                        style="background-color:#80a9e8;font-size:12px; margin-left:15px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
 	                        추가질문하기
 	                     </button>
@@ -199,19 +199,29 @@
 	            <!-- 추가질문답변 등록칸 -->
 	            <div>
 	              <div>
-	                <div id="qna_add" th:if="${loginId == questionInfo[0][0].id and currentWriterType == 2}">            
-		                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
-		                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
+	                <div id="qnaAddModal" th:if="${loginId == questionInfo[0][0].id and currentWriterType == 2 or currentWriterType == null}">    
+		                <div id="qna_add">
+			                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
+			                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
+		                </div>      
+		                <div style="float: right;margin-bottom:10px;">
+		                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
+		               </div>   
 	                </div>
 	               
-	               <div id="qna_add" th:if="${loginId == AdoptQuestionVO.answerId and currentWriterType == 1}">            
-	                  <img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
-	                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
+	               <div id="qnaAddModal" th:if="${loginId == AdoptQuestionVO.answerId and currentWriterType == 1}">        
+		               <div id="qna_add">
+		                  <img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
+		                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
+		               </div>      
+		               <div style="float: right;margin-bottom:10px;">
+		                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
+		               </div> 
 	               </div>
-	               
-	               <div  th:if="${loginId == questionInfo[0][0].id} or ${loginId == AdoptQuestionVO.answerId}" style="float: right;margin-bottom:10px;">
+	               <!-- 
+	               <div style="float: right;margin-bottom:10px;">
 	                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
-	               </div> 
+	               </div>  -->
 	               <br><br><br><hr>
 	               </div>
 	            </div>   
@@ -266,10 +276,10 @@
 							<h1 class="qna_logo">A</h1>
 							<div class="qna_title">
 								<div>
-									<button type="button" 
-											class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+									<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
 											--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-											 th:if="${isAdopt == false}" th:onclick="adoptAnswer([[${question.answerBoardNo}]])">
+											  th:if="${isAdopt == false and loginId == questionInfo[0][0].id}"
+											 th:onclick="adoptAnswer([[${question.answerBoardNo}]])">
 										답변 채택하기
 									</button>
 									<h4 style="font-weight:bold" th:text="${question.answerTitle}">질문에 대한 답변입니다.</h4>
@@ -428,6 +438,16 @@
 	    })
 		
 	}
+	
+	//추가질문답변 모달
+/* 	$('#addQuestionBtn').on('click', function(e) {
+		$('#addAnswerModal').modal('hide');
+	})
+	 */
+
+ 	$("#addQuestionBtn").click(function(e) {
+		$("#qnaAddModal").slideToggle();	
+	}) 
 	
 	//추가질문답변 작성
 	function sendAddAnswer(ano, answerWriter){
