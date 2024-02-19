@@ -53,10 +53,14 @@
 							</a>
                     
                </div>
-                    <div class="mink_box">
+                    <div class="mink_box"  th:if="${session.member.permission != 'ROLE_ADMIN'}">
                     	<a th:href="|/myPage|">
                     		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
-
+                    	</a>
+                    	</div>
+                    <div class="mink_box"   th:unless="${session.member.permission != 'ROLE_ADMIN'}">
+                    	<a th:href="|/admin|">
+                    		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
                     	</a>
                     </div> 
                     <form action="/logout" method="post">
