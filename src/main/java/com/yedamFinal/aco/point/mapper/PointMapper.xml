@@ -4,32 +4,20 @@
 <mapper namespace="com.yedamFinal.aco.point.mapper.PointMapper">
 	<!-- 계좌 조회 -->
 	<select id="getAccountNumber" resultType="AccountVO">
-	SELECT 
-    ACCOUNT_NO,
-    MEMBER_NO,
-    ACCOUNT_HOLDER,
-    BANK_CODE,
-    BANK_NAME
-FROM (
-    SELECT 
-        ROWNUM AS RN,
-        A.ACCOUNT_NO,
-        A.MEMBER_NO,
-        A.ACCOUNT_HOLDER,
-        A.BANK_CODE,
-        A.BANK_NAME
-    FROM (
+	SELECT *  FROM (    SELECT         ROWNUM AS RN,       A.*    FROM (
+	
         SELECT 
-            ACCOUNT_NO,
-            MEMBER_NO,
-            ACCOUNT_HOLDER,
-            BANK_CODE,
-            BANK_NAME
-        FROM ACCOUNT
-        WHERE MEMBER_NO = #{memberNo}
-        ORDER BY ACCOUNT_NO
-    ) A
-   )
+               ACCOUNT_NO,
+               MEMBER_NO,
+               ACCOUNT_HOLDER,
+               BANK_CODE,
+               BANK_NAME
+          FROM ACCOUNT
+         WHERE MEMBER_NO = #{memberNo}
+         ORDER BY ACCOUNT_NO
+        
+        
+    ) A   )
    <![CDATA[
    WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo} * 5)
 	]]>	
@@ -48,8 +36,7 @@ FROM (
 	<select id="getBank" resultType="BankVO">
 		SELECT *
 		FROM BANK_CODE
-		ORDER BY
-		BANK_CODE
+		ORDER BY BANK_CODE
 	</select>
 
 	<!-- 계좌 등록 -->
@@ -79,8 +66,8 @@ FROM (
 	<!-- AcoMoneyUpdate -->
 	<update id="updateAcoMoney">
 		UPDATE MEMBER
-		SET ACO_MONEY = ACO_MONEY + #{acoMoney}
-		WHERE MEMBER_NO = #{memberNo}
+		   SET ACO_MONEY = ACO_MONEY + #{acoMoney}
+		 WHERE MEMBER_NO = #{memberNo}
 
 	</update>
 
@@ -89,6 +76,7 @@ FROM (
 		select aco_money
 		from member
 		where member_no = #{memberNo}
+		
 	</select>
 
 	<!-- getAcoPoint -->
@@ -102,29 +90,29 @@ FROM (
 		INSERT INTO
 		POINT_DETAIL(
 
-		POINT_DETAIL_NO,
-		MEMBER_NO,
-		LATEST_TOTAL_POINTS,
-		latest_ACO_MONEY,
-		latest_ACO_POINT,
-		HISTORY_TYPE,
-		HISTORY_DATE,
-		INC_DEC_POINT,
-		POINT_TYPE,
-		ACCOUNT_NO)
+				POINT_DETAIL_NO,
+				MEMBER_NO,
+				LATEST_TOTAL_POINTS,
+				latest_ACO_MONEY,
+				latest_ACO_POINT,
+				HISTORY_TYPE,
+				HISTORY_DATE,
+				INC_DEC_POINT,
+				POINT_TYPE,
+				ACCOUNT_NO)
 
 		VALUES(
 
-		POINT_DETAIL_seq.nextval,
-		#{memberNo},
-		#{latestTotalPoints},
-		#{latestAcoMoney},
-		#{latestAcoPoint},
-		#{historyType},
-		#{historyDate},
-		#{incDecPoint},
-		#{pointType},
-		#{accountNo}
+				POINT_DETAIL_seq.nextval,
+				#{memberNo},
+				#{latestTotalPoints},
+				#{latestAcoMoney},
+				#{latestAcoPoint},
+				#{historyType},
+				#{historyDate},
+				#{incDecPoint},
+				#{pointType},
+				#{accountNo}
 		)
 	</insert>
 
@@ -143,24 +131,8 @@ FROM (
 <!-- 		 AND POINT_TYPE = 'G001' -->
 <!-- 		 AND INC_DEC_POINT <![CDATA[>]]> 0 -->
 <!-- 		 ORDER BY A.HISTORY_DATE DESC -->
-
-		SELECT
-		A.ACCOUNT_NO,
-		A.POINT_TYPE,
-		A.HISTORY_DATE,
-		A.INC_DEC_POINT,
-		A.BANK_NAME,
-		A.latest_ACO_MONEY
-		FROM (
-		SELECT 
-			ROWNUM AS RN,
-			C.ACCOUNT_NO,
-			C.POINT_TYPE,
-			C.HISTORY_DATE,
-			C.INC_DEC_POINT,
-			C.BANK_NAME,
-			C.LATEST_ACO_MONEY
-			FROM (
+		SELECT *		FROM (		SELECT			ROWNUM AS RN,			C.*			FROM (
+		
 				SELECT
 					A.ACCOUNT_NO,
 					A.POINT_TYPE,
@@ -168,14 +140,17 @@ FROM (
 					A.INC_DEC_POINT,
 					B.BANK_NAME,
 					A.latest_ACO_MONEY
-				FROM POINT_DETAIL A JOIN
-				ACCOUNT B ON A.account_no = B.account_no
+					
+				FROM POINT_DETAIL A 
+				JOIN ACCOUNT B ON A.account_no = B.account_no
+				
 				WHERE A.MEMBER_NO = #{memberNo}
-		 		AND POINT_TYPE = 'G001'
-		 		AND INC_DEC_POINT <![CDATA[>]]> 0
+		 		  AND POINT_TYPE = 'G001'
+		 		  AND INC_DEC_POINT <![CDATA[>]]> 0
+		 		  
 		 		ORDER BY A.HISTORY_DATE DESC
-			) C
-		) A
+		 		
+			) C		) A
    <![CDATA[
    WHERE RN > ((#{cp}-1) * 5) AND RN <= (#{cp} * 5)
 	]]>	
@@ -215,24 +190,25 @@ FROM (
 					AND POINT_TYPE = 'G001' 
 					AND( history_type = 'F004' OR history_type ='F006')
 					AND INC_DEC_POINT <![CDATA[<]]>	 0
+				   ORDER BY POINT_DETAIL_NO DESC
 				)A
 			)
 		
 		<![CDATA[
  		  WHERE RN > ((#{up}-1) * 5) AND RN <= (#{up} * 5)
 		]]>	
-		ORDER BY HISTORY_DATE DESC
+	
 		
 			 
 	</select>
 	
 	<select id="acoMoneyUseInquiryCnt" resultType="int">
 		SELECT COUNT(*) AS CNT 
-			FROM point_detail
-					WHERE member_no = #{memberNo}
-					AND POINT_TYPE = 'G001' 
-					AND( history_type = 'F004' OR history_type ='F006')
-					AND INC_DEC_POINT <![CDATA[<]]>	 0
+		FROM point_detail
+		WHERE member_no = #{memberNo}
+		AND POINT_TYPE = 'G001' 
+		AND( history_type = 'F004' OR history_type ='F006')
+		AND INC_DEC_POINT <![CDATA[<]]>	 0
 
 	</select>
 	
@@ -255,12 +231,13 @@ FROM (
 				WHERE MEMBER_NO = #{memberNo}
 				AND POINT_TYPE = 'G002' 
 				AND INC_DEC_POINT <![CDATA[>]]> 0
+				ORDER BY HISTORY_DATE DESC
 			)A
 		)
 		<![CDATA[
  		  WHERE RN > ((#{ap}-1) * 5) AND RN <= (#{ap} * 5)
 		]]>	
-		ORDER BY HISTORY_DATE DESC
+		
 		
 			 
 	</select>
@@ -293,12 +270,13 @@ FROM (
 					WHERE MEMBER_NO = #{memberNo}
 					AND POINT_TYPE = 'G002' 
 					AND INC_DEC_POINT <![CDATA[<]]> 0
+			  ORDER BY HISTORY_DATE DESC
 			)A	
 		)
 		<![CDATA[
  		  WHERE RN > ((#{up}-1) * 5) AND RN <= (#{up} * 5)
 		]]>	
-		ORDER BY HISTORY_DATE DESC
+		
 		
 			 
 	</select>
