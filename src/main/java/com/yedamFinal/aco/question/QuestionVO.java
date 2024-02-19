@@ -16,7 +16,7 @@ public class QuestionVO {
 	private String title;
 	private String tag;
 	private String contents;
-	private String writeDate;
+	private Date writeDate;
 	private int viewCnt;
 	private int recommendCnt;
 	private int bookmarkCnt;
@@ -38,7 +38,7 @@ public class QuestionVO {
 	private int answerBoardNo;
 	private String answerTitle;
 	private String answerContents;
-	private String answerWriteDate;
+	private Date answerWriteDate;
 	private int answerViewCnt;
 	private int answerRecommendCnt;
 	private String answerAdoptStatus;

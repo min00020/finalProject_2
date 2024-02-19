@@ -11,12 +11,16 @@ import com.yedamFinal.aco.question.QuestionVO;
 public interface QuestionService {
 	/*질문글*/
 	//질문글 전체조회
-	public List<QuestionVO> getQuestionList(Model model, int pageNo);
+	public List<QuestionVO> getQuestionList(Model model, int pageNo, String search);
 	//질문글 분류조회
-	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic);
+	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic, String search);
 	
 	//질문글 + 답변글 + 추가답변 단건 조회
 	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno,  Model model, int memberNo);
+	//질문글 북마크 관련
+	public Map<String, Object> updateBookmark(int qno, int memberNo);
+			
+	
 	//질문글 작성
 	public Map<String, Object> writeQuestion(QuestionVO vo, MemberVO mvo);
 	

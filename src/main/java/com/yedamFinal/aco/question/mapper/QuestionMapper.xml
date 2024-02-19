@@ -26,6 +26,9 @@
 	            FROM QUESTION_BOARD q
 	            JOIN MEMBER m
 	            ON q.MEMBER_NO = m.MEMBER_NO
+	         <if test='search != null'>
+	            WHERE UPPER(q.TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	         </if>
 	            ORDER BY WRITE_DATE DESC
 	             
 	            
@@ -39,7 +42,54 @@
 		SELECT 
         	COUNT(*) AS CNT
             FROM QUESTION_BOARD
+         <if test='search != null'>
+	        WHERE UPPER(TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	     </if>
 	</select>
+	
+	<!-- 질문글 분류 조회 -->
+	<select id="getQuestionListTopic" resultType="QuestionVO">
+	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+			SELECT m.id, 
+				   m.profile_image,
+			       q.QUESTION_BOARD_NO,
+			       q.MEMBER_NO,
+			       q.TOPIC,
+			       q.POINT,
+			       q.TITLE,
+			       q.TAG,
+			       q.CONTENTS,
+			       q.WRITE_DATE,
+			       q.VIEW_CNT,
+			       q.RECOMMEND_CNT,
+			       q.BOOKMARK_CNT,
+			       q.ANSWER_CNT
+			       
+			 FROM QUESTION_BOARD q
+			 JOIN MEMBER m  ON q.MEMBER_NO = m.MEMBER_NO
+			 
+			WHERE q.TOPIC = #{topic}
+		<if test='search != null'>
+	          AND UPPER(q.TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	    </if>
+			ORDER BY WRITE_DATE DESC
+			
+		) B  ) A 
+		<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+		]]>
+	</select>
+	
+	<select id="getQuestionTopicCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+            WHERE TOPIC = #{topic}
+         <if test='search != null'>
+	          AND UPPER(TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	     </if>
+	</select>
+	
 	
 	<select id="getQuestionListByMember" resultType="QuestionVO">
 		SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
@@ -116,43 +166,7 @@
 			WHERE MEMBER_NO = #{memberNo}
 	</select>
 	
-	<!-- 질문글 분류 조회 -->
-	<select id="getQuestionListTopic" resultType="QuestionVO">
-	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
-			SELECT m.id, 
-				   m.profile_image,
-			       q.QUESTION_BOARD_NO,
-			       q.MEMBER_NO,
-			       q.TOPIC,
-			       q.POINT,
-			       q.TITLE,
-			       q.TAG,
-			       q.CONTENTS,
-			       q.WRITE_DATE,
-			       q.VIEW_CNT,
-			       q.RECOMMEND_CNT,
-			       q.BOOKMARK_CNT,
-			       q.ANSWER_CNT
-			       
-			 FROM QUESTION_BOARD q
-			 JOIN MEMBER m  ON q.MEMBER_NO = m.MEMBER_NO
-			 
-			WHERE q.TOPIC = #{topic}
-			ORDER BY WRITE_DATE DESC
-			
-		) B  ) A 
-		<![CDATA[
-        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
-		]]>
-	</select>
 	
-	<select id="getQuestionTopicCount" resultType="int">
-		SELECT 
-        	COUNT(*) AS CNT
-            FROM QUESTION_BOARD
-            WHERE TOPIC = #{topic}
-	</select>
-
 	<!-- 질문글,답변글 단건조회 -->
 	<select id="getQuestionInfo" resultType="QuestionVO">	
 		SELECT m.ID, 
@@ -201,7 +215,39 @@
 	        ORDER BY a.ADOPT_STATUS DESC, 
 	        		 a.WRITE_DATE DESC
 	</select>
-
+	<!-- 개별게시글 북마크 조회/ +1 / -1/ 해당 게시글 cnt update -->
+	<select id="questionBookmarkInfo" resultType="MybookmarkVO">
+		SELECT MEMBER_NO,
+			   QUESTION_BOARD_NO,
+			   REGIST_DATE,
+		       TITLE
+	      FROM MY_BOOKMARK 
+	     WHERE MEMBER_NO = #{memberNo} AND QUESTION_BOARD_NO = #{questionBoardNo}
+	</select>
+	<insert id="insertBookmark" parameterType="MybookmarkVO">
+		INSERT INTO MY_BOOKMARK(
+			   MEMBER_NO,
+			   QUESTION_BOARD_NO,
+			   REGIST_DATE,
+		       TITLE
+		)
+		VALUES(
+			#{memberNo},
+			#{questionBoardNo},
+			#{registDate},
+			#{title}
+		)
+	</insert>
+	<delete id="deleteBookmark">
+		DELETE MY_BOOKMARK
+		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</delete>
+	<update id="updateBookmarkCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET BOOKMARK_CNT = BOOKMARK_CNT + 1 - #{value} 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	
 	<!-- 질문글 작성 -->
 	<insert id="insertQuestion" parameterType="QuestionVO">
 		INSERT INTO QUESTION_BOARD (

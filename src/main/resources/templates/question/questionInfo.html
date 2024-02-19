@@ -42,9 +42,7 @@
 							<span id="questionModify">수정</span><span>삭제</span>
 						</div>
 						<span th:unless="${loginId == questionInfo[0][0].id}">신고</span>
-						<p th:text="${questionInfo[0][0].writeDate}">2023.01.28</p>
-						<!-- <p th:text="${#dates.format(questionInfo[0][0].writeDate, 'yyyy.MM.dd')}">2023.01.28</p> -->
-						
+						<p th:text="${#dates.format(questionInfo[0][0].writeDate, 'yyyy.MM.dd')}"></p>
 				</div>
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
 			<div class="qna_contents" > <!-- 질문 내용 -->
@@ -70,7 +68,10 @@
 				<div id="qna_iconAll" class="col-3"> 
 					<span><img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye"></span>
 					<span th:text="${questionInfo[0][0].viewCnt}">10</span>
-					<span><img class="qna_icon" src="/commonResource/icon/bookmark.png" alt="bookmark"></span>
+					<span>
+						<img class="qna_icon" src="/commonResource/icon/bookmark.png" alt="bookmark" th:if="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+						<img class="qna_icon" src="/commonResource/icon/bookmark2.png" alt="bookmark" th:unless="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+					</span>
 					<span th:text="${questionInfo[0][0].bookmarkCnt}">13</span>
 					<span><img class="qna_icon" src="/commonResource/icon/best.png" alt="best"></span>
 					<span th:text="${questionInfo[0][0].recommendCnt}">9</span>
@@ -352,6 +353,7 @@
 	 let test3 = [[${writePost}]];
 	 let test4 = [[${AdoptQuestionVO}]];
 	 let test5 = [[${currentWriterType}]]
+	 let test6 = [[${isCheckBookmark}]]
 	
 	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
 
@@ -512,7 +514,7 @@
 		})
 		.done(res => {
 			/* showSuccessAlert('채택성공'); */
-	    	/* window.location.href = "/questionInfo/"+ bno; */
+	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
 	    .fail(err => {
@@ -521,11 +523,42 @@
 	    })
 		
 	}
-	
-	//테스트용 (지우기)
-	function testBtn(answerBoardNo){
-		console.log(answerBoardNo);
-	}
+ 	
+ 	function bookmarkBtn(){
+ 		const member = [[${session.member}]];
+ 		
+ 		if(member == null){
+ 			showWarningAlert('로그인을 해주세요');
+ 			return;
+ 		}
+ 		
+ 		let object = {
+ 				qno : bno
+ 		};
+ 		
+ 		$.ajax('/bookmarkUpdate', {
+			type : "POST",
+			data : object,
+			beforeSend : function(xhr){
+	               xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+	        }
+		})
+		.done(res => {
+			if(res.result == "200"){
+				console.log(res);
+			/* showSuccessAlert('채택성공'); */
+	    		window.location.href = "/questionInfo/"+ bno;
+			}
+			else{
+				showWarningAlert('북마크 실패');
+			}
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('채택실패');
+	    })
+ 	}
+
 </script>
 
 <!-- text editor -->

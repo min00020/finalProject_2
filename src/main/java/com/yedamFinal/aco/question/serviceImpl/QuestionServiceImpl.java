@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
@@ -37,11 +38,11 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	//질문글 리스트 조회
 	@Override
-	public List<QuestionVO> getQuestionList(Model model, int pageNo) {
-		var questionList = questionMapper.getQuestionList(pageNo);
+	public List<QuestionVO> getQuestionList(Model model, int pageNo, String search) {
+		var questionList = questionMapper.getQuestionList(pageNo, search);
 		PaginationDTO dto = null;
 		if(questionList.size() > 0) {
-			dto = new PaginationDTO(questionMapper.getQuestionCount(),pageNo,5);
+			dto = new PaginationDTO(questionMapper.getQuestionCount(search),pageNo,5);
 		}
 		
 		model.addAttribute("pageDTO", dto);
@@ -52,20 +53,18 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	//질문글 리스트 분류 조회
 	@Override
-	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic) {
-		var questionListTopic = questionMapper.getQuestionListSelect(pageNo, topic);
+	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic, String search) {
+		var questionListTopic = questionMapper.getQuestionListTopic(pageNo, topic, search);
 		PaginationDTO dto = null;
 		if(questionListTopic.size() > 0) {
-			dto = new PaginationDTO(questionMapper.getQuestionTopicCount(topic),pageNo,5);
+			dto = new PaginationDTO(questionMapper.getQuestionTopicCount(topic, search),pageNo,5);
 		}
 		
 		model.addAttribute("pageDTO", dto);
-		model.addAttribute("questionListTopic", questionListTopic);
+		model.addAttribute("questionList", questionListTopic);
 		
 		return null;
 	}
-	
-	
 
 	//단건조회
 	@Override
@@ -75,6 +74,16 @@ public class QuestionServiceImpl implements QuestionService{
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
+		
+		//북마크 조회
+		MybookmarkVO bookmarkvo= questionMapper.questionBookmarkInfo(memberNo, qno);
+		
+		if(bookmarkvo == null || bookmarkvo.getTitle() == null) {
+			model.addAttribute("isCheckBookmark", 0);
+		}
+		else {
+			model.addAttribute("isCheckBookmark", 1);
+		}
 		
 		//번호 boardNo 기준 > 0부터 시작하게 변경
 		Map<Integer, List<QuestionVO>> ret = new HashMap<Integer, List<QuestionVO>>();
@@ -141,6 +150,39 @@ public class QuestionServiceImpl implements QuestionService{
 		}
 		return ret;
 	}
+	
+
+	//질문글 단건조회 북마크
+	@Transactional
+	@Override
+	public Map<String, Object> updateBookmark(int qno, int memberNo) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
+
+		ret.put("result", "200");
+		if(result.size() <= 0) {
+			ret.put("result", "400");
+		}
+		else {
+			MybookmarkVO myBookmark = questionMapper.questionBookmarkInfo(memberNo, qno);
+			MybookmarkVO bookmarkvo = new MybookmarkVO();
+			//북마크 없는 경우 , 있는 경우
+			if(myBookmark == null || myBookmark.getTitle() == null) {
+				bookmarkvo.setMemberNo(memberNo);
+				bookmarkvo.setQuestionBoardNo(qno);
+				bookmarkvo.setRegistDate(new Date());
+				bookmarkvo.setTitle(result.get(0).getTitle());
+				questionMapper.insertBookmark(bookmarkvo);
+				questionMapper.updateBookmarkCnt(0, qno);
+			}
+			else {
+				questionMapper.updateBookmarkCnt(2, qno);
+				questionMapper.deleteBookmark(qno);
+			}
+		}
+		return ret;
+	}
+	
 	
 	//질문글작성
 	@Transactional
@@ -353,7 +395,4 @@ public class QuestionServiceImpl implements QuestionService{
 	public int adoptAddAnswer(int questionAddNo) {
 		return questionMapper.adoptAddAnswer(questionAddNo);
 	}
-	
-	//추가질문답변 채택
-	
 }
