@@ -30,7 +30,7 @@ import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
-import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
+import com.yedamFinal.aco.member.service.MemberService;
 
 
 /**
@@ -54,7 +54,7 @@ public class CommonController {
 	private FileServiceImpl fileService;
 	
 	@Autowired
-	private MemberServiceImpl memberService;
+	private MemberService memberService;
 	
 	@Autowired
 	private ReplyServiceImpl replyService;

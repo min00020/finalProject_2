@@ -62,5 +62,5 @@ public interface MemberService {
 	
 	public Map<String, Object> changeAccountInfo(AccountChangeDTO accountDTO, MemberVO vo);
 	public Map<String, Object> changePasswordFromMyPage(String password, String passwordVerify, String id);
-	public Map<String, Object> getOtherMemberInfo(String pg, String tp);
+	public Map<String, Object> getOtherMemberInfo(int pg, String tp, int memberNo);
 }

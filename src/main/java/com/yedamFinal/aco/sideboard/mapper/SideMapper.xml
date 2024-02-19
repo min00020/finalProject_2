@@ -31,6 +31,38 @@
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
 </select>
 
+<select id="selectListAll" resultType="SideVO">
+	SELECT *
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            side_board_no, 
+	        publishing_status, 
+	        title, 
+	        content, 
+	        project_outline,
+	        writer, 
+	        write_date, 
+	        recruit_personnel, 
+	        dev_period, 
+	        git_address, 
+	        view_cnt,
+	        reply_cnt,
+	        tech_of_use,
+	        member_no	
+	FROM side_project_board
+    ORDER BY write_date desc
+    )
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5]]>
+</select>
+
+<select id="selectProjectListAllCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM side_project_board
+</select>
+
 <select id="selectProjectListCnt" resultType="int">
 	SELECT 
         COUNT(*) AS CNT

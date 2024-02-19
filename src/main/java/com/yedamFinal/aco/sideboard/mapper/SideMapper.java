@@ -19,4 +19,7 @@ public interface SideMapper {
 	public int updateStatus(@Param(value="bno") int bno, @Param(value="status") String status, SideVO sideVO);
 	
 	public int updatereviewCnt(@Param(value="bno") int bno);
+	
+	public List<SideVO> selectListAllByMember(@Param(value="pageNo")int pageNo, @Param(value="memNo") int memberNo);
+	public int selectProjectListAllCnt(int memberNo);
 }
