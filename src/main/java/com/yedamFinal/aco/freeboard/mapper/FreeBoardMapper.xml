@@ -23,9 +23,31 @@
 <!-- 	</select> -->
 <!-- </mapper> -->
 
-
+<!-- 전체조회 -->
 <mapper namespace="com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper">
-	<select id="getFreeBoard" resultType="FreeBoardVO">
+<!-- 	<select id="getFreeBoardAll" resultType="FreeBoardVO"> -->
+<!-- 	SELECT FBOARD_NO, -->
+<!-- 			A.MEMBER_NO, -->
+<!-- 			TITLE, -->
+<!-- 			CONTENT, -->
+<!-- 			B.NICKNAME, -->
+<!-- 			WRITE_DATE, -->
+<!-- 			VIEW_CNT, -->
+<!-- 			RECOMMEND_CNT, -->
+<!-- 			REPLY_CNT, -->
+<!--             B.ACCUM_ACTIVITY_POINT, -->
+<!--             ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE, -->
+<!--             B.PROFILE_IMAGE -->
+<!-- 	FROM FREE_BOARD A -->
+<!-- 	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO -->
+	
+<!--     ORDER BY WRITE_DATE DESC -->
+
+<!-- 	</select> -->
+	
+	<select id="getFreeBoardAll" resultType="FreeBoardVO">
+	SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
+	
 	SELECT FBOARD_NO,
 			A.MEMBER_NO,
 			TITLE,
@@ -36,12 +58,142 @@
 			RECOMMEND_CNT,
 			REPLY_CNT,
             B.ACCUM_ACTIVITY_POINT,
-            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
-	FROM FREE_BOARD A LEFT JOIN MEMBER B
-    ON A.MEMBER_NO = B.MEMBER_NO
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+            B.PROFILE_IMAGE
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO
+	
     ORDER BY WRITE_DATE DESC
+    
+    ) C ) A
+    
+     <![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+	]]>	
 
 	</select>
+	
+	<select id="getFreeBoardAllCnt" resultType="int">
+	
+		SELECT COUNT(*) AS CNT
+		FROM FREE_BOARD
+		
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="getFreeBoard" parameterType="int" resultType="FreeBoardVO">
+	SELECT 
+		   FBOARD_NO, 
+	       MEMBER_NO, 
+	       TITLE, 
+	       CONTENT, 
+	       NICKNAME,
+	       WRITE_DATE, 
+	       VIEW_CNT, 
+	       RECOMMEND_CNT, 
+	       REPLY_CNT
+	       
+	FROM FREE_BOARD
+	WHERE FBOARD_NO= #{fboardNo}
+</select>
+
+<update id="updateviewCnt">
+	UPDATE FREE_BOARD 
+	   SET VIEW_CNT = VIEW_CNT + 1 
+	 WHERE FBOARD_NO = #{fboardNo}
+</update>
+
+<insert id="insertFreeBoard" parameterType="FreeBoardVO" useGeneratedKeys="false">
+	INSERT INTO FREE_BOARD(
+                       FBOARD_NO,
+                       MEMBER_NO,
+                       TITLE,
+                       CONTENT,
+                       NICKNAME,
+                       WRITE_DATE,
+                       VIEW_CNT,
+                       RECOMMEND_CNT,
+                       REPLY_CNT)
+		VALUES(
+					FREE_BOARD_SEQ.NEXTVAL,
+			        #{memberNo},
+			        #{title},
+			        #{content},
+			        #{nickname},
+			        SYSDATE,
+			        #{viewCnt},
+			        #{recommendCnt},
+			        #{replyCnt})
+        
+        <selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT FREE_BOARD_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
+</insert>
+
+	<update id="updateFreeBoardViewCnt" parameterType="int">
+	
+	     UPDATE FREE_BOARD
+   		    SET VIEW_CNT = VIEW_CNT+1
+     	  WHERE FBOARD_NO = #{fboardNo}
+     	  
+	</update>
+	
+	<update id="updateFreeBoard">
+	
+	  UPDATE FREE_BOARD
+   		  	  SET TITLE = #{title},
+   		    	CONTENT = #{content} 		    	
+        WHERE FBOARD_NO = #{fboardNo}
+     	  
+	</update>
+	
+	<delete id="deleteFreeBoard">
+	
+		DELETE 
+		FROM FREE_BOARD
+		WHERE FBOARD_NO = #{fboardNo}
+		
+	</delete>
+	
+	<select id="searchFreeBoard" resultType="FreeBoardVO">
+	
+	SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
+	
+	SELECT FBOARD_NO,
+			A.MEMBER_NO,
+			TITLE,
+			CONTENT,
+			B.NICKNAME,
+			WRITE_DATE,
+			VIEW_CNT,
+			RECOMMEND_CNT,
+			REPLY_CNT,
+            B.ACCUM_ACTIVITY_POINT,
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+            B.PROFILE_IMAGE
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO
+	WHERE TITLE LIKE '%'||#{search}||'%'
+	
+    ORDER BY WRITE_DATE DESC
+    
+    ) C ) A
+    
+     <![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+	]]>	
+     
+	</select>
+	
+	<select id="searchFreeBoardCnt" resultType="int">
+	
+	SELECT 
+		COUNT(*) AS CNT
+		FROM FREE_BOARD
+		WHERE TITLE LIKE '%'||#{search}||'%'
+		
+	</select>
+	
 
 </mapper>
 

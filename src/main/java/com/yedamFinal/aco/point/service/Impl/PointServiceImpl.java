@@ -91,12 +91,14 @@ public class PointServiceImpl implements PointService {
 	@Override
 	public void getAcoMoneyChargeAndUse(Model model, int memberNo, int cp, int up) {
 		
+		//애코머니 충전내역 
 		var acoMoneyList = pointMapper.acoMoneyChargeInquiry(memberNo,cp);
 		PaginationDTO dto = null;
 		if(acoMoneyList.size() > 0) {
 			dto = new PaginationDTO(pointMapper.acoMoneyChargeInquiryCnt(memberNo), cp, 5);
 		}
 		
+		//애코머니 사용내역
 		var acoMoneyUseList = pointMapper.acoMoneyUseInquiry(memberNo,up);
 		PaginationDTO dto2 = null;
 		if(acoMoneyUseList.size() > 0) {

@@ -93,12 +93,13 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/findAccount");
 		permitAllUrl.add("/changePassword");
 		permitAllUrl.add("/attachFile/**");
+		permitAllUrl.add("/checkNickname/**");
 		permitAllUrl.add("/member/**");
 	}
 	
 	private void insertPermitAllUrlByChae() {
 		permitAllUrl.add("/questionInfo/**");
-		permitAllUrl.add("/questionList");
+		permitAllUrl.add("/questionList/**");
 		permitAllUrl.add("/questionWrite");
 	}
 	
@@ -119,7 +120,9 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByKyung() {
-		permitAllUrl.add("/freeBoard/freeBoardList");
+		permitAllUrl.add("/freeBoardList");
+		permitAllUrl.add("/freeBoardInfo/**");
+		
 //		permitAllUrl.add("/point");
 		
 	}

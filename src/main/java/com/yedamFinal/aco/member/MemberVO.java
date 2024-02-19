@@ -31,4 +31,7 @@ public class MemberVO {
 	private int acoTotal;
 	private int availableAccumPoint;
 	private int resPoint;
+	
+	//질문글 작성시 선택한 포인트
+	private int point;
 }

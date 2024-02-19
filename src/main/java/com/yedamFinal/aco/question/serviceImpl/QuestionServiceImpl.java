@@ -1,41 +1,73 @@
 package com.yedamFinal.aco.question.serviceImpl;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.common.PaginationDTO;
+import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.point.PointDetailVO;
+import com.yedamFinal.aco.point.mapper.PointMapper;
 import com.yedamFinal.aco.question.QuestionVO;
 import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.question.service.QuestionService;
+import com.yedamFinal.aco.question.web.QuestionActivityPointVO;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	private QuestionMapper questionMapper;
 	
-	//리스트 조회
+	@Autowired
+	private PointMapper pointMapper;
+	
+	//질문글 리스트 조회
 	@Override
-	public List<QuestionVO> getQuestionList() {
-		return questionMapper.getQuestionList();
+	public List<QuestionVO> getQuestionList(Model model, int pageNo) {
+		var questionList = questionMapper.getQuestionList(pageNo);
+		PaginationDTO dto = null;
+		if(questionList.size() > 0) {
+			dto = new PaginationDTO(questionMapper.getQuestionCount(),pageNo,5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+		model.addAttribute("questionList", questionList);
+		
+		return null;
 	}
 	
+	//질문글 리스트 분류 조회
 	@Override
-	public List<QuestionVO> getQuestionListSelect(String topic) {
-		return questionMapper.getQuestionListSelect(topic);
+	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic) {
+		var questionListTopic = questionMapper.getQuestionListSelect(pageNo, topic);
+		PaginationDTO dto = null;
+		if(questionListTopic.size() > 0) {
+			dto = new PaginationDTO(questionMapper.getQuestionTopicCount(topic),pageNo,5);
+		}
+		
+		model.addAttribute("pageDTO", dto);
+		model.addAttribute("questionListTopic", questionListTopic);
+		
+		return null;
 	}
+	
+	
 
 	//단건조회
 	@Override
-	/*
-	 * public List<QuestionVO> getQuestionInfo(int qno) { return
-	 * questionMapper.getQuestionInfo(qno); }
-	 */
 	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model, int memberNo) {
+		//조회수 +1
+		questionMapper.updateQuestionViewCnt(qno);
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
@@ -56,12 +88,40 @@ public class QuestionServiceImpl implements QuestionService{
 				if(vo.getAnswerAdoptStatus() == null) {
 					continue;
 				}
+				
+				//채택답변 AdoptQuestionVO에 담아주기
 				if(vo.getAnswerAdoptStatus().equals("I002")) {
 					model.addAttribute("isAdopt",true);
-					break;
+					for(Map.Entry<Integer, List<QuestionVO>> myEntry : questionMap.entrySet()) {
+		                  List<QuestionVO> list = myEntry.getValue();
+		                  var findData = list.stream().filter(questionVO -> questionVO.getAnswerAdoptStatus().equals("I002")).findFirst();
+		                  if(findData.isPresent()) {
+		                     model.addAttribute("AdoptQuestionVO", findData.get());
+		                     Collections.sort(list, new Comparator<QuestionVO>() {
+		                    	 public int compare(QuestionVO o1, QuestionVO o2) {
+		                    	  	return o1.getAddWriteDate().compareTo(o2.getAddWriteDate());
+		                    	 }
+		                     }); 
+		                     var lastVO = list.get(list.size()-1);
+		                     
+		                     if(lastVO.getAddWriterType() != null) {
+		                    	 //질문자 J001 답변자 J002
+		                    	 if(lastVO.getAddWriterType().equals("J001")) {
+		                    		 model.addAttribute("currentWriterType", 1);
+		                    	 }
+		                    	 else {
+		                    		 model.addAttribute("currentWriterType", 2);
+		                    	 }
+		                     }
+		                     
+		                     break;
+		                  }
+		             }
+					 break;
 				}
 			}
-		}	
+		}
+		
 		System.out.print(memberNo);
 		//로그인 유저의 답변글 작성 여부 체크
 		model.addAttribute("writePost",false);
@@ -79,11 +139,72 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 	
 	//질문글작성
+	@Transactional
 	@Override
-	public Map<String, Object> writeQuestion(QuestionVO vo) {
+	public Map<String, Object> writeQuestion(QuestionVO vo, MemberVO mvo) {
+		
+		//질문글 작성
 		Map<String,Object> ret = new HashMap<String,Object>();
 		int insertId = questionMapper.insertQuestion(vo);
 		int bno = vo.getPk();
+		mvo.setPoint(vo.getPoint());
+		
+		/*활동점수 내역 업데이트*/
+		QuestionActivityPointVO activityPointVO = new QuestionActivityPointVO();
+		
+		activityPointVO.setMemberNo(mvo.getMemberNo());
+		activityPointVO.setAccumActivityPoint(mvo.getAccumActivityPoint());
+		activityPointVO.setCurActivityPoint(mvo.getAvailableActivityPoint());
+		activityPointVO.setActivityPointType("C001");
+		activityPointVO.setActivityPointDate(new Date());
+		activityPointVO.setIncDecActivityPoint(50);
+		
+		questionMapper.updateActivityPoint(activityPointVO);
+		
+		/*포인트 차감 insert*/
+		PointDetailVO pointVO = new PointDetailVO();
+		pointVO.setMemberNo(mvo.getMemberNo());
+		pointVO.setLatestAcoMoney(mvo.getAcoMoney());
+		pointVO.setLatestAcoPoint(mvo.getAcoPoint());
+		pointVO.setLatestTotalPoints(mvo.getAcoMoney() + mvo.getAcoPoint());
+		pointVO.setHistoryDate(new Date());
+		pointVO.setHistoryType("F008");
+	
+		if(mvo.getAcoPoint()-vo.getPoint() < 0) {
+			//point 내역 테이블에 point, money 두 번 인서트해주기
+			if(mvo.getAcoPoint() > 0) {
+				//사용하려는 포인트보다 보유 에코포인트가 적은 경우
+				//에코포인트 전체 사용 후 + 에코머니로 나머지 차감
+				pointVO.setPointType("G002");
+				pointVO.setIncDecPoint(mvo.getAcoPoint() * -1);
+				
+				//에코머니 차감
+				PointDetailVO pointVO2 = new PointDetailVO();
+				pointVO2.setMemberNo(mvo.getMemberNo());
+				pointVO2.setLatestAcoMoney(mvo.getAcoMoney());
+				pointVO2.setLatestAcoPoint(mvo.getAcoPoint());
+				pointVO2.setLatestTotalPoints(mvo.getAcoMoney() + mvo.getAcoPoint());
+				pointVO2.setHistoryDate(new Date());
+				pointVO2.setHistoryType("F008");
+				pointVO2.setPointType("G001");
+				pointVO2.setIncDecPoint((vo.getPoint() - mvo.getAcoPoint()) * -1);
+
+				pointMapper.insertAcoMoneyHistory(pointVO2);
+			}
+			else {
+				//인서트 에코머니만 한 번
+				pointVO.setPointType("G001");
+				pointVO.setIncDecPoint(vo.getPoint() * -1);
+			}
+		}
+		else {
+			//인서트 point에 한번만
+			pointVO.setPointType("G002");
+			pointVO.setIncDecPoint(vo.getPoint() * -1);
+		}
+
+		pointMapper.insertAcoMoneyHistory(pointVO);
+		
 		if(insertId <= 0) {
 			ret.put("result", "500");
 		}
@@ -91,24 +212,86 @@ public class QuestionServiceImpl implements QuestionService{
 			ret.put("result", "200");
 			ret.put("vo", vo);
 			ret.put("bno", bno);
+			questionMapper.updatePoint(mvo);
+		}
+		
+		return ret;
+	}
+	
+	//질문글 수정
+	@Override
+	public Map<String, Object> modifyQuestion(QuestionVO vo) {
+		// TODO Auto-generated method stub
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = questionMapper.updateQuestion(vo);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
 		}
 		
 		return ret;
 	}
 
 	@Override
-	public Map<String, Object> updateQuestion(QuestionVO vo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public QuestionVO deleteQuestion(int qno) {
 		return questionMapper.deleteQuestion(qno);
 	}
-
 	
-
-
+	//답변글 작성
+	@Override
+	public Map<String, Object> writeAnswer(QuestionVO vo) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		int insertId = questionMapper.insertAnswer(vo);
+		if(insertId <= 0) {
+			ret.put("result", "500");
+		}
+		else {
+			ret.put("result", "200");
+			//답변수+1
+			questionMapper.plusAnswerCnt(vo.getQuestionBoardNo());
+			//활동점수 지급
+			
+		}
+		return ret;
+	}
 	
+	//답변글 수정
+	@Override
+	public Map<String, Object> modifyAnswer(QuestionVO vo) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		ret.put("result", "200");
+		
+		int result = questionMapper.updateAnswer(vo);
+		if(result <= 0) {
+			ret.put("result", "500");
+			return ret;
+		}
+		
+		return ret;
+	}
+	
+	//답변글 채택
+	@Override
+	public int adoptAnswer(int ano) {
+		QuestionVO vo = questionMapper.selectAdoptAnswer(ano);
+		vo.getMemberNo();
+		
+		return questionMapper.adoptAnswer(ano);
+	}
+	
+	//추가질문답변 작성
+	@Override
+	public Map<String, Object> writeQuestionAdd(QuestionVO vo) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		int insertId = questionMapper.insertQuestionAdd(vo);
+		if(insertId <= 0) {
+			ret.put("result", "500");
+		}
+		else {
+			ret.put("result", "200");
+		}
+		return ret;
+	}
 }

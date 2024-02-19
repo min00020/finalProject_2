@@ -24,7 +24,7 @@
 						<p style="text-align : left; color : #808080; font-size:small; margin-top : -10px;">보유한 애코포인트</p>
 						<div class="park_points">
 							<h2>
-  								<span style="color: red; font-weight : bold" th:text="${latestAcoPoint}"></span>
+  								<span style="color: red; font-weight : bold" th:text="${#numbers.formatInteger(latestAcoPoint, 0, 'COMMA')}"></span>
   								<span style="font-weight : bold">P</span>
 							</h2>
 						</div>
@@ -37,7 +37,7 @@
 						<div class="park_acoPoint d-flex align-items-center" >
 							<p th:text="${#dates.format(acoPoint.historyDate, 'yy.MM.dd')}"></p>
 							<p>[[${acoPoint.historyType}]]</p>
-							<p style = "color : red">+ [[${acoPoint.incDecPoint}]] P</p>
+							<p style = "color : red">+ <span th:text="|${#numbers.formatInteger(acoPoint.incDecPoint, 0, 'COMMA')} P|"></span></p>
 							
 							
 						</div>
@@ -79,7 +79,7 @@
 						<div class="park_acoPoint d-flex align-items-center" >
 							<p th:text="${#dates.format(acoPoint.historyDate, 'yy.MM.dd')}"></p>
 							<p>[[${acoPoint.historyType}]]</p>
-							<p style = "color : blue" th:text="${acoPoint.incDecPoint < 0 ? '- ' + (-acoPoint.incDecPoint) : acoPoint.incDecPoint} + ' P'"></p>		
+							<p style="color: blue" th:text="| - ${#numbers.formatInteger(-acoPoint.incDecPoint, 0, 'COMMA')} P |"></p>
 						</div>
 						 <hr>
 					  </div><!-- th:each end -->
