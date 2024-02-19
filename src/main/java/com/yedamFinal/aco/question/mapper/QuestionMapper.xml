@@ -41,6 +41,81 @@
             FROM QUESTION_BOARD
 	</select>
 	
+	<select id="getQuestionListByMember" resultType="QuestionVO">
+		SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	  
+	                SELECT m.nickname, 
+	                	m.profile_image,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+	                    q.POINT,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    q.WRITE_DATE,
+	                    q.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.BOOKMARK_CNT,
+	                    q.ANSWER_CNT
+	            FROM QUESTION_BOARD q
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            WHERE q.member_no = #{memNo}
+	            ORDER BY WRITE_DATE DESC
+	             
+	            
+	            )B	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	
+	<select id="getQuestionListCntByMember" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+            WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="getAnswerListByMember" resultType="QuestionVO">
+		 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	  
+	                SELECT m.nickname, 
+	                	m.profile_image,
+	                    q.ANSWER_BOARD_NO,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    q.WRITE_DATE,
+	                    P.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.ADOPT_STATUS
+	            FROM answer_board q
+	            JOIN QUESTION_BOARD P
+	            ON Q.QUESTION_BOARD_NO = P.QUESTION_BOARD_NO
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            WHERE q.MEMBER_NO = #{memNo}
+	            ORDER BY WRITE_DATE DESC
+	             
+	            
+	            )B	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	
+	<select id="getAnswerListCntByMember" resultType="int">
+		SELECT COUNT(*) AS CNT
+			FROM answer_board
+			WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
 	<!-- 질문글 분류 조회 -->
 	<select id="getQuestionListTopic" resultType="QuestionVO">
 	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(

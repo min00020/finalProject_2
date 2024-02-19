@@ -23,4 +23,8 @@ public class SideVO {
 	private int bno;
 	private int pk;
 	
+	
+	private String profileImage;
+	private String nickname;
+	
 }
