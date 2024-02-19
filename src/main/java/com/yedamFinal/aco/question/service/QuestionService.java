@@ -26,15 +26,15 @@ public interface QuestionService {
 	
 	/*답변글*/
 	//답변글 작성
-	public Map<String, Object> writeAnswer(QuestionVO vo);
+	public Map<String, Object> writeAnswer(QuestionVO vo, MemberVO mvo);
 	//답변글 수정
 	public Map<String, Object> modifyAnswer(QuestionVO vo);
 	//답변글 채택
-	public int adoptAnswer(int ano);
+	public int adoptAnswer(int ano, MemberVO mvo);
 	
 	/*추가질문답변*/
 	//추가질문답변 작성
 	public Map<String, Object> writeQuestionAdd(QuestionVO vo);
-	
+	public int adoptAddAnswer(int questionAddNo);
 	
 } 

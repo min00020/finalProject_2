@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.point.PointDetailVO;
 import com.yedamFinal.aco.point.mapper.PointMapper;
 import com.yedamFinal.aco.question.QuestionVO;
@@ -30,6 +31,9 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	@Autowired
 	private PointMapper pointMapper;
+	
+	@Autowired
+	private MemberMapper memberMapper;
 	
 	//질문글 리스트 조회
 	@Override
@@ -240,9 +244,24 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 	
 	//답변글 작성
+	@Transactional
 	@Override
-	public Map<String, Object> writeAnswer(QuestionVO vo) {
+	public Map<String, Object> writeAnswer(QuestionVO vo, MemberVO mvo) {
+		//활동점수+50 내역
+		QuestionActivityPointVO activityPointVO = new QuestionActivityPointVO();
+		
+		activityPointVO.setMemberNo(mvo.getMemberNo());
+		activityPointVO.setAccumActivityPoint(mvo.getAccumActivityPoint());
+		activityPointVO.setCurActivityPoint(mvo.getAvailableActivityPoint());
+		activityPointVO.setActivityPointType("C002");
+		activityPointVO.setActivityPointDate(new Date());
+		activityPointVO.setIncDecActivityPoint(50);
+		
+		questionMapper.updateActivityPoint(activityPointVO);
+		
+		//답변글 작성
 		Map<String,Object> ret = new HashMap<String,Object>();
+		
 		int insertId = questionMapper.insertAnswer(vo);
 		if(insertId <= 0) {
 			ret.put("result", "500");
@@ -251,7 +270,8 @@ public class QuestionServiceImpl implements QuestionService{
 			ret.put("result", "200");
 			//답변수+1
 			questionMapper.plusAnswerCnt(vo.getQuestionBoardNo());
-			//활동점수 지급
+			questionMapper.updateAnsWritePoint(mvo);
+			
 			
 		}
 		return ret;
@@ -273,10 +293,44 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 	
 	//답변글 채택
+	@Transactional
 	@Override
-	public int adoptAnswer(int ano) {
+	public int adoptAnswer(int ano, MemberVO mvo) {
+		//답변 채택
 		QuestionVO vo = questionMapper.selectAdoptAnswer(ano);
-		vo.getMemberNo();
+		
+		mvo.setMemberNo(vo.getMemberNo());
+		mvo = memberMapper.selectMemberInfo(mvo);
+		
+		mvo.setPoint(vo.getPoint());
+		
+		//활동점수 내역 업데이트
+		QuestionActivityPointVO activityPointVO = new QuestionActivityPointVO();
+		
+		activityPointVO.setMemberNo(mvo.getMemberNo());
+		activityPointVO.setAccumActivityPoint(mvo.getAccumActivityPoint());
+		activityPointVO.setCurActivityPoint(mvo.getAvailableActivityPoint());
+		activityPointVO.setActivityPointType("C003");
+		activityPointVO.setActivityPointDate(new Date());
+		activityPointVO.setIncDecActivityPoint(20);
+		
+		questionMapper.updateActivityPoint(activityPointVO);
+
+		//포인트 내역 업데이트
+		PointDetailVO pointVO = new PointDetailVO();
+		pointVO.setMemberNo(mvo.getMemberNo());
+		pointVO.setLatestAcoMoney(mvo.getAcoMoney());
+		pointVO.setLatestAcoPoint(mvo.getAcoPoint());
+		pointVO.setLatestTotalPoints(mvo.getAcoMoney() + mvo.getAcoPoint());
+		pointVO.setHistoryDate(new Date());
+		pointVO.setHistoryType("F004");
+		pointVO.setPointType("G002"); //에코포인트 G002
+		pointVO.setIncDecPoint(mvo.getPoint());
+				
+		pointMapper.insertAcoMoneyHistory(pointVO);
+		
+		//활동점수, 포인트 지급
+		questionMapper.updateAdoptPoint(mvo);
 		
 		return questionMapper.adoptAnswer(ano);
 	}
@@ -294,4 +348,12 @@ public class QuestionServiceImpl implements QuestionService{
 		}
 		return ret;
 	}
+	//추가질문답변 채택
+	@Override
+	public int adoptAddAnswer(int questionAddNo) {
+		return questionMapper.adoptAddAnswer(questionAddNo);
+	}
+	
+	//추가질문답변 채택
+	
 }

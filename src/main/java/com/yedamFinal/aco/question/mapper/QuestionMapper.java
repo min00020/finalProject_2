@@ -22,10 +22,12 @@ public interface QuestionMapper {
 	//조회수 +1
 	public int updateQuestionViewCnt(int qno);
 	
-	/*질문글 작성*/
-	public int insertQuestion(QuestionVO questionVO);
-	//활동점수 지급 + 포인트 차감
+	
+	//활동점수 지급
 	public int updateActivityPoint(QuestionActivityPointVO activityPointVO);
+	
+	/*질문글 작성, 포인트 차감*/
+	public int insertQuestion(QuestionVO questionVO);
 	public int updatePoint(MemberVO memberVO);
 	
 	//질문글 수정
@@ -34,18 +36,20 @@ public interface QuestionMapper {
 	
 	
 	/*답변글*/
-	//답변글 작성
+	//답변글 작성 (작성, 답변수 +1, 활동점수 지급)
 	public int insertAnswer(QuestionVO questionVO);
 	public int plusAnswerCnt(int qno);
+	public int updateAnsWritePoint(MemberVO memberVO);
 	
 	//답변글 수정
 	public int updateAnswer(QuestionVO questionVO);
-	//답변글 채택
+	
+	//답변글 채택 (채택, 채택상태 변경, 포인트지급)
 	public int adoptAnswer(int ano);
 	public QuestionVO selectAdoptAnswer(int ano);
+	public int updateAdoptPoint(MemberVO memberVO);
 	
-	
-	/*추가질문답변*/
-	//추가질문답변 작성
+	/*추가질문답변 작성 & 채택+활동점수 지급*/
 	public int insertQuestionAdd(QuestionVO questionVO);
+	public int adoptAddAnswer(int questionAddNo);
 }

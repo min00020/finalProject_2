@@ -42,7 +42,9 @@
 							<span id="questionModify">수정</span><span>삭제</span>
 						</div>
 						<span th:unless="${loginId == questionInfo[0][0].id}">신고</span>
-						<p  th:text="${questionInfo[0][0].writeDate}">2023.01.28</p>
+						<p th:text="${questionInfo[0][0].writeDate}">2023.01.28</p>
+						<!-- <p th:text="${#dates.format(questionInfo[0][0].writeDate, 'yyyy.MM.dd')}">2023.01.28</p> -->
+						
 				</div>
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
 			<div class="qna_contents" > <!-- 질문 내용 -->
@@ -133,7 +135,7 @@
 	                  </div>
 	                  <div id="qna_deleteBtn" class="col-2"> <!-- 신고 / 작성날짜 -->
 	                     <span th:unless="${loginId != AdoptQuestionVO.id}">신고</span>
-	                     <p>2023.01.28</p>
+	                     <p th:text="${AdoptQuestionVO.answerWriteDate}" >2023.01.28</p>
 	                  </div>
 	               </div>
 	               <!-- 질문글 제목 / 신고삭제 끝 -->
@@ -170,36 +172,44 @@
 	            <!-- 추가질문답변 목록-->
 	            <div class="questionInfo" th:each="questionIdx : ${questionInfo}">
 	               <th:block th:each="question: ${questionIdx.value}">   
-	                  <div th:if="${question.addStatus == 'R002'}">
-	                        <div id="qna_add">
-	                           <!-- 질문자/작성자 구분 -->
-	                           <img th:if="${question.addWriterType == 'J001'}"
-	                              class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
-	                           <img th:unless="${question.addWriterType == 'J001'}" 
-	                              class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
-	                           <div class="qna_add_info">
-	                              <span th:if="${question.addWriterType == 'J001'}" 
-	                                 class="m-1" style="font-weight:bold;">질문자의 추가질문</span>
-	                              <span th:unless="${question.addWriterType == 'J001'}" 
-	                                 class="m-1" style="font-weight:bold;">답변자의 추가답변</span>
-	                              <span th:if="${loginId != questionInfo[0][0].id}" style="float:right;font-size: 15px;color:#76767e;">신고</span>
-	                              
-	                           <!-- 추가질문답변 리스트 -->
-	                              <p class="m-1" th:text="${question.addContents}">추가로 질문할 게 있는데 </p>
-	                              <span class="m-1" th:text="${question.addWriteDate}" style="font-size: 15px; color:#76767e;">2023.01.27</span>
-	                              <span style="float:right;" th:if="${loginId == questionInfo[0][0].id} and ${question.addWriterType == 'J002'} ">
-	                                 <img src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
-	                                 <a style="color:#3e6ce3;font-weight:bold;">채택</a>
-	                              </span>
-	                           </div>
-	                        </div>
-	                  </div>   
+	                	<div th:if="${question.addStatus == 'R002'}">
+							<div id="qna_add">
+								<!-- 질문자/작성자 구분 -->
+								<img th:if="${question.addWriterType == 'J001'}"
+									class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
+								<img th:unless="${question.addWriterType == 'J001'}" 
+									class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
+								<div class="qna_add_info">
+									<span th:if="${question.addWriterType == 'J001'}" 
+									class="m-1" style="font-weight:bold;">질문자의 추가질문</span>
+									<span th:unless="${question.addWriterType == 'J001'}"class="m-1" style="font-weight:bold;">
+										<button th:if="${question.addAdoptStatus == 'S002'}"
+												type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+			                                   --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+			                              질문자 채택
+			                           </button>
+										답변자의 추가답변
+									</span>
+									<!-- <span th:if="${loginId != questionInfo[0][0].id}" style="float:right;font-size: 15px;color:#76767e;">신고</span> -->
+								
+									<!-- 추가질문답변 리스트 -->
+									<p class="m-1" th:text="${question.addContents}">추가로 질문할 게 있는데 </p>
+									<span class="m-1" th:text="${question.addWriteDate}" style="font-size: 15px; color:#76767e;">2023.01.27</span>
+									<span style="float:right;" th:if="${loginId == questionInfo[0][0].id} and ${question.addWriterType == 'J002'} and ${question.addAdoptStatus != 'S002'}">
+									<img src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
+										<a th:onclick="adoptAddAnswer([[${question.questionAddNo}]])" style="color:#3e6ce3;font-weight:bold;">채택</a>
+									</span>
+								</div>
+							</div>
+	               		</div>  
+	               </th:block> 
 	            </div>
 	            <!-- 추가질문답변 목록 끝 -->      
 	            <!-- 추가질문답변 등록칸 -->
 	            <div>
 	              <div>
-	                <div id="qnaAddModal" th:if="${loginId == questionInfo[0][0].id and currentWriterType == 2 or currentWriterType == null}">    
+	              <!-- or currentWriterType == null -->
+	                <div id="qnaAddModal" th:if="${loginId == questionInfo[0][0].id and currentWriterType != 1 }">    
 		                <div id="qna_add">
 			                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
 			                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
@@ -218,10 +228,6 @@
 		                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
 		               </div> 
 	               </div>
-	               <!-- 
-	               <div style="float: right;margin-bottom:10px;">
-	                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
-	               </div>  -->
 	               <br><br><br><hr>
 	               </div>
 	            </div>   
@@ -261,7 +267,7 @@
 							</div>
 							<br><br><br><hr>
 					 	</div>
-				 	</form>		
+				 	</form>
 				</div>
 			</th:block>
 		</div>
@@ -292,7 +298,7 @@
 								<span>삭제</span>
 							</div>
 							<span th:unless="${loginId == question.answerId}">신고</span>
-							<p th:onclick="testBtn([[${question.answerBoardNo}]])">2023.01.28</p>
+							<p th:onclick="testBtn([[${question.answerBoardNo}]])" th:text="${question.answerWriteDate}">2023.01.28</p>
 						</div>
 					</div>
 					<!-- 질문글 제목 / 신고삭제 끝 -->
@@ -439,12 +445,6 @@
 		
 	}
 	
-	//추가질문답변 모달
-/* 	$('#addQuestionBtn').on('click', function(e) {
-		$('#addAnswerModal').modal('hide');
-	})
-	 */
-
  	$("#addQuestionBtn").click(function(e) {
 		$("#qnaAddModal").slideToggle();	
 	}) 
@@ -492,6 +492,32 @@
 	    .fail(err => {
 	    	console.log(err);
 	    	showWarningAlert('등록실패');
+	    })
+		
+	}
+ 	//추가질문답변 채택
+ 	function adoptAddAnswer(questionAddNo){
+ 		console.log("test");
+ 		console.log(questionAddNo);
+		const formData = new FormData();
+	
+		formData.append(csrfPara, csrfToken);
+		formData.append("questionAddNo", questionAddNo);
+		
+		$.ajax('/answerAddAdopt', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+			/* showSuccessAlert('채택성공'); */
+	    	/* window.location.href = "/questionInfo/"+ bno; */
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('채택실패');
 	    })
 		
 	}
