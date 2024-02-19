@@ -24,7 +24,7 @@
 				<section class="park_child2">
 				<div>
 					<ul class = "park_fb">
-						<li th:each="free, iterStat : ${getFreeBoardList}" th:if="${iterStat.index < 6}">
+						<li th:each="free : ${getFreeBoardMainPage}">
 							<span class="park_nickname">[[${free.nickname}]]
 							<span class="park_box">
                           <img class="park_profile" th:src="|/upload/profile/${free.profileImage}|" alt="profile">
@@ -54,6 +54,17 @@
 			<button class="park_S">
 				<span class="park_boardname">질문&답변</span>
 			</button>
+			<section class="park_child2">
+				<div>
+					<ul class = "park_fb">
+						<li th:each="question : ${getQuestionBoardMainPage}">
+		
+							<span class="park_title"  th:text="${question.title}" ></span>
+							<hr />
+						</li>
+					</ul>
+				</div>
+			</section>
 		</section>
 		
 	</div>
@@ -84,7 +95,7 @@
 			<section class="park_child2">
 				<div>
 					<ul class = "park_fb">
-						<li th:each="notice: ${noticeList}">
+						<li th:each="notice: ${getNoticeBoardMainPage}">
 		
 							<span class="park_title"  th:text="${notice.title}" ></span>
 							<hr />

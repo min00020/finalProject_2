@@ -6,7 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
-import com.yedamFinal.aco.sideboard.SideVO;
+import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
+import com.yedamFinal.aco.question.QuestionVO;
 
 @Mapper
 public interface FreeBoardMapper {
@@ -32,4 +33,15 @@ public interface FreeBoardMapper {
 	//게시글 검색
 	public List<FreeBoardVO> searchFreeBoard(@Param("search") String search,@Param("pg") int pg);
 	public int searchFreeBoardCnt(String search);
+	
+	//메인페이지 표시할 게시판들
+	//메인페이지 자유게시판 불러오기
+	public List<FreeBoardVO> getFreeBoardMainPage();
+	
+	//메인페이지 공지사항 불러오기
+	public List<NoticeBoardVO> getNoticeBoardMainPage();
+	
+	//메인페이지 질문&답변 게시판 불러오기
+	public List<QuestionVO> getQuestionBoardMainPage();
+	
 }

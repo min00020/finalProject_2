@@ -19,6 +19,9 @@ import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
+import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
+import com.yedamFinal.aco.noticeboard.mapper.NoticeBoardMapper;
+import com.yedamFinal.aco.question.QuestionVO;
 
 
 @Service
@@ -32,6 +35,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	
 	@Autowired
 	private FreeBoardMapper freeBoardMapper;
+	
+
 
 	@Override
 	public List<FreeBoardVO> getFreeBoardAll(Model model,int pg) {
@@ -122,5 +127,24 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		model.addAttribute("pageDTO", dto);
 		return freeBoardMapper.searchFreeBoard(search,pg);
 	}
+
+	@Override
+	public List<FreeBoardVO> getFreeBoardMainPage() {
+
+		return freeBoardMapper.getFreeBoardMainPage();
+	}
+
+	@Override
+	public List<NoticeBoardVO> getNoticeBoardMainPage() {
+		
+		return freeBoardMapper.getNoticeBoardMainPage();
+	}
+
+	@Override
+	public List<QuestionVO> getQuestionBoardMainPage() {
+		
+		return freeBoardMapper.getQuestionBoardMainPage();
+	}
 	
+
 }

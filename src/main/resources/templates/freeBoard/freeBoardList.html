@@ -36,7 +36,14 @@
 				<div id="freeBoardList" class="row"
 					th:each="free : ${getFreeBoardList}">
 					<div id="title" class="col-8">
-						<div id="member" style="height: 40px;"></div>
+						<div id="member" style="height: 40px;">
+							<div id="member" style="height:40px;">
+								<div class="qna_box">
+									<img class="qna_profile" th:src="|/upload/profile/${free.profileImage}|" alt="profile" th:onclick="|location.href='/member/${free.memberNo}'|">
+										</div>
+											<p>[[${free.nickname}]]</p>
+										</div>
+						</div>
 						<div id="titleTag"
 							th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|">
 							<h4 th:text="${free.title}" style="text-align: left;"></h4>

@@ -30,7 +30,7 @@
 					
 
 				</div>
-				<div id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+				<div th:if ="${freeBoardInfo.memberNo} == ${session.member?.memberNo}" id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
 					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo.writeDate, 'yyyy-MM-dd HH:mm')}"></p>
 					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo.fboardNo}'|">수정</button>
 					<button class="btn" style ="background-color : #848484; color:white" th:onclick="delFreeBoard([[${freeBoardInfo.fboardNo}]])">삭제</button>
@@ -316,6 +316,7 @@
 	if(member != null) {
 		memberNo = member.memberNo;
 	}
+	const writerMemberNo = [[${freeBoardInfo.memberNo}]]
 	
 	const csrfPara = $('meta[name="csrfPara"]').attr("content");
 	const csrfToken = $('meta[name="csrf"]').attr("content");
@@ -336,7 +337,11 @@
 			showFailAlert("본인의 게시글만 삭제할 수 있습니다.");
 			return;
 		}
-		
+		if(memberNo != writerMemberNo ){
+			showFailAlert("본인의 게시글만 삭제할 수 있습니다.");
+			return;
+		}
+			
 	object = {
 			fboardNo : fboardNo
 	}
@@ -427,7 +432,7 @@
 	}
 	
 	function modifyReply(replyNo, emoticonImgName) {
-		if(typeof memberNo == "undefined" || memberNo == null) {
+		if(typeof member == "undefined" || member == null) {
 			showFailAlert("로그인 후 진행해주세요.");
 			return;
 		}
@@ -483,8 +488,8 @@
 
 	function registReply(emoticonImgName) {
 		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
-		if(typeof memberNo == "undefined" || memberNo == null) {
-			showFailAlert("로그인 후 진행해주세요.");
+		if(typeof member == "undefined" || member == null) {
+			showFailAlert("로그인 후 작성할 수 있습니다.");
 			return;
 		}
 	

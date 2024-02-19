@@ -67,12 +67,20 @@ public class MemberController {
 	 * @return common/mainPage
 	 */
 	@GetMapping("/")
-	public String getMainPageForm(@RequestParam(value = "pg", required = true, defaultValue = "1") int pg,Integer pageNo,Model model) {
+	public String getMainPageForm(Model model) {
 		model.addAttribute("main", "1");
-		//자유게시판 글 표시
-		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll(model,1));
-	    Map<String, Object> noticeListMap = noticeBoardService.getAdNoticeList(1);
-	    model.addAttribute("noticeList", noticeListMap.get("noticeList"));
+		
+		//메인-자유게시판 글 표시
+		model.addAttribute("getFreeBoardMainPage", freeBoardService.getFreeBoardMainPage());
+		
+		//메인-공지사항 글 표시
+		model.addAttribute("getNoticeBoardMainPage", freeBoardService.getNoticeBoardMainPage());
+		
+		//메인-질문&답변 게시판 글 표시
+		model.addAttribute("getQuestionBoardMainPage", freeBoardService.getQuestionBoardMainPage());
+		
+	    //Map<String, Object> noticeListMap = noticeBoardService.getAdNoticeList(1);
+	    //model.addAttribute("noticeList", noticeListMap.get("noticeList"));
 
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
