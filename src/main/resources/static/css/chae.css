@@ -72,7 +72,8 @@
 	    object-position: center top; 
 	    position: absolute;
 	    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
-	    transform: translateY(-50%); 
+	    transform: translateY(-50%);
+	    cursor: pointer; 
 	}
 	
 	/* 태그, 랭킹 */
