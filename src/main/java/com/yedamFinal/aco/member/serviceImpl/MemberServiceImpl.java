@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.NaverMailSender;
+import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.RandomString;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
@@ -28,6 +28,7 @@ import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
+import com.yedamFinal.aco.member.MemberStatVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
@@ -35,7 +36,9 @@ import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
+import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
+import com.yedamFinal.aco.sideboard.mapper.SideMapper;
 
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
@@ -49,6 +52,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 	@Autowired
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	private QuestionMapper questionMapper;
+	
+	@Autowired
+	private SideMapper sideMapper;
 
 	@Value("${cool.sms.key}")
 	private String coolSmsApiKey;
@@ -496,6 +505,44 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 			ret.put("result", "500");
 			return ret;
 		}
+		
+		return ret;
+	}
+
+	@Override
+	public Map<String, Object> getOtherMemberInfo(int pg, String tp, int memberNo) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		PaginationDTO dto = null;
+		ret.put("questionList", null);
+		ret.put("answerList", null);
+		ret.put("sideList", null);
+		//질문탭
+		if(tp == null || tp.equals("0")) {
+			var questionList = questionMapper.getQuestionListByMember(pg,memberNo);
+			if(questionList.size() > 0) {
+				dto = new PaginationDTO(questionMapper.getQuestionListCntByMember(memberNo),pg,5);
+			}
+			ret.put("questionList", questionList);
+		}
+		else if(tp.equals("1")) { // 답변 탭
+			var answerList = questionMapper.getAnswerListByMember(pg, memberNo);
+			if(answerList.size() > 0) {
+				dto = new PaginationDTO(questionMapper.getAnswerListCntByMember(memberNo),pg,5);
+			}
+			ret.put("answerList", answerList);
+		}
+		else { // 사이드 탭
+			var sideList = sideMapper.selectListAllByMember(pg,memberNo);
+			if(sideList.size() > 0) {
+				dto = new PaginationDTO(sideMapper.selectListAllCntByMember(memberNo), pg, 5);
+			}
+			ret.put("sideList", sideList);
+		}
+		
+		ret.put("pageDTO", dto);
+		
+		MemberStatVO stat = memberMapper.otherMemberStatInfo(memberNo);
+		ret.put("stat", stat);
 		
 		return ret;
 	}
