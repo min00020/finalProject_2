@@ -311,7 +311,12 @@
 <!--/* 댓글 복사할 스크립트 태그 */-->
 <script th:inline="javascript">
 	const freeBoardNo = [[${freeBoardInfo.fboardNo}]]
-	const memberNo = [[${session.member.memberNo}]]
+	const member = [[${session.member}]]
+	let memberNo = 0;
+	if(member != null) {
+		memberNo = member.memberNo;
+	}
+	
 	const csrfPara = $('meta[name="csrfPara"]').attr("content");
 	const csrfToken = $('meta[name="csrf"]').attr("content");
 	function openModifyTextarea(divId, btnId) {
