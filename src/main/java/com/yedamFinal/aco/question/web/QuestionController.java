@@ -57,9 +57,13 @@ public class QuestionController {
 	* @return question/questionList
 	*/
 	@GetMapping("/questionList")
-	public String getquestionBoard(@RequestParam int pageNo, Model model) {
+	public String getquestionBoard(@RequestParam int pageNo, String topic, Model model) {
 		log.info("uuuuuuuuuuuuuuuu");
-		questionService.getQuestionList(model, Integer.valueOf(pageNo));
+		if(topic == null) 
+			questionService.getQuestionList(model, Integer.valueOf(pageNo));
+		else {
+			questionService.getQuestionListTopic(model, Integer.valueOf(pageNo), topic);
+		}
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
@@ -169,7 +173,16 @@ public class QuestionController {
 	@PostMapping("/questionWrite")
 	@ResponseBody
 	public Map<String, Object> writeQuestion(QuestionVO question){
-		return questionService.writeQuestion(question);
+		//memberVO
+		MemberVO username = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			username = userDetails.getMemberVO();
+			username = memberService.getMemberInfo(username);
+		}
+			
+		return questionService.writeQuestion(question, username);
 	}
 
 	/**
@@ -237,8 +250,8 @@ public class QuestionController {
 	*/
 	@PostMapping("/questionAddWrite")
 	@ResponseBody
-	public Map<String, Object> writeAnswerAdd(QuestionVO question){
-		return questionService.writeAnswer(question);
+	public Map<String, Object> writeQuestionAdd(QuestionVO question){
+		return questionService.writeQuestionAdd(question);
 	}
 	
 	

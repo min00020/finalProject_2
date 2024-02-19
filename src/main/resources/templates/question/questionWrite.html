@@ -10,7 +10,7 @@
 		<h3 style="font-weight:bold; color:#3e6ce3;margin-left:20px;">질문 작성하기</h3>
 		<hr>
 		<!-- 질문폼 시작 -->
-		<form name="questionWriteModify" th:object="${questionVO}">
+		<form name="questionWrite" th:object="${questionVO}">
 			<div style="width:900px; margin:0 auto; ">
 				<!-- 토픽,포인트 -->
 				<div class="d-flex justify-content-between">	
@@ -55,7 +55,8 @@
 				<!-- 제목,태그,내용 끝 -->
 				<div style="float: right;margin-bottom:10px;">
 					<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
-					<button type="button" class="btn text-white" style="background-color:#3e6ce3;" onclick="sendQuestionModify()">수정</button>
+					<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:if="${questionVO.title} == null" onclick="sendQuestion()">작성</button>
+					<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:unless="${questionVO.title} == null" onclick="sendQuestionModify()">수정</button>
 				</div>
 			</div>
 			<!-- 질문폼 끝 -->
@@ -132,7 +133,8 @@ function sendQuestion(){
 	})
 	.done(res => {
 		/*showSuccessAlert('등록성공'); */
-		window.location.href = "/questionInfo/"+ bno;
+		window.location.href = "/questionInfo/"+ res.bno;
+		
 		console.log(res);
     })
     .fail(err => {
@@ -145,7 +147,7 @@ function sendQuestion(){
 //질문 게시글 수정
 function sendQuestionModify(){
 	let bno = [[${questionVO.questionBoardNo}]]
-	const formData = new FormData(document.questionWriteModify);
+	const formData = new FormData(document.questionWrite);
 	
 	formData.append(csrfPara, csrfToken);
 	formData.append("questionBoardNo", bno);

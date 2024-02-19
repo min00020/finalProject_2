@@ -34,6 +34,7 @@
         	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
 	]]>
 	</select>
+	
 	<select id="getQuestionCount" resultType="int">
 		SELECT 
         	COUNT(*) AS CNT
@@ -42,27 +43,34 @@
 	
 	<!-- 질문글 분류 조회 -->
 	<select id="getQuestionListTopic" resultType="QuestionVO">
-		SELECT m.id, 
-			   m.profile_image,
-		       q.QUESTION_BOARD_NO,
-		       q.MEMBER_NO,
-		       q.TOPIC,
-		       q.POINT,
-		       q.TITLE,
-		       q.TAG,
-		       q.CONTENTS,
-		       q.WRITE_DATE,
-		       q.VIEW_CNT,
-		       q.RECOMMEND_CNT,
-		       q.BOOKMARK_CNT,
-		       q.ANSWER_CNT
-		       
-		 FROM QUESTION_BOARD q
-		 JOIN MEMBER m  ON q.MEMBER_NO = m.MEMBER_NO
-		 
-		WHERE q.TOPIC = #{topic}
-		ORDER BY WRITE_DATE DESC
+	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+			SELECT m.id, 
+				   m.profile_image,
+			       q.QUESTION_BOARD_NO,
+			       q.MEMBER_NO,
+			       q.TOPIC,
+			       q.POINT,
+			       q.TITLE,
+			       q.TAG,
+			       q.CONTENTS,
+			       q.WRITE_DATE,
+			       q.VIEW_CNT,
+			       q.RECOMMEND_CNT,
+			       q.BOOKMARK_CNT,
+			       q.ANSWER_CNT
+			       
+			 FROM QUESTION_BOARD q
+			 JOIN MEMBER m  ON q.MEMBER_NO = m.MEMBER_NO
+			 
+			WHERE q.TOPIC = #{topic}
+			ORDER BY WRITE_DATE DESC
+			
+		) B  ) A 
+		<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+		]]>
 	</select>
+	
 	<select id="getQuestionTopicCount" resultType="int">
 		SELECT 
         	COUNT(*) AS CNT
@@ -105,7 +113,7 @@
 	           d.ANSWER_BOARD_NO,
 	           d.CONTENTS as add_contents,
 	           d.WRITER_TYPE as add_writer_type,
-	           TO_CHAR(d.WRITE_DATE, 'YYYY.MM.DD') as add_write_date, 
+	           d.WRITE_DATE as add_write_date, 
 	           d.ADD_STATUS
 			
 			FROM QUESTION_BOARD q LEFT JOIN MEMBER m          ON q.MEMBER_NO = m.MEMBER_NO
@@ -151,6 +159,43 @@
 	    <selectKey keyProperty="pk" resultType="int" order="AFTER">
     		SELECT question_board_seq.CURRVAL FROM DUAL
     	</selectKey>
+	</insert>
+	<!-- 질문글 작성시 포인트차감 -->
+	<update id="updatePoint" parameterType="int">
+		UPDATE MEMBER
+	       SET ACCUM_ACTIVITY_POINT = #{accumActivityPoint} + 50,
+	           AVAILABLE_ACTIVITY_POINT = #{availableActivityPoint} +50,
+		<choose>
+			<when test="((acoPoint - point) >= 0)">
+				ACO_POINT = #{acoPoint} - #{point}
+			</when>
+			<otherwise>
+				ACO_POINT = 0, ACO_MONEY = #{acoMoney} + #{acoPoint} - #{point} 
+			</otherwise>
+		</choose>
+	     WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	<insert id="updateActivityPoint">
+		INSERT INTO ACTIVITY_POINT_DETAIL(
+		            ACTIVITY_POINT_NO,
+		            MEMBER_NO,
+		            ACCUM_ACTIVITY_POINT,
+		            CUR_ACTIVITY_POINT,
+		            ACTIVITY_POINT_TYPE,
+		            ACTIVITY_POINT_DATE,
+		            INC_DEC_ACTIVITY_POINT
+		)
+		VALUES(
+					activity_point_detail_seq.NEXTVAL,
+					#{memberNo},
+					#{accumActivityPoint},
+					#{curActivityPoint},
+					#{activityPointType},
+					#{activityPointDate},
+					#{incDecActivityPoint}
+		
+		)
 	</insert>
 	
 	<!-- 질문글 수정 -->
@@ -243,6 +288,11 @@
 		   SET ADOPT_STATUS = 'I002'
 		 WHERE ANSWER_BOARD_NO = #{answerBoardNo}
 	</update>
+	<select id="selectAdoptAnswer" parameterType="int">
+		SELECT * 
+		  FROM ANSWER_BOARD
+		 WHERE ANSWER_BOARD_NO = #{ano}
+	</select>
 	
 	
 	<!-- 추가질문답변 등록 -->

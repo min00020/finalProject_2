@@ -9,7 +9,7 @@ public class QuestionActivityPointVO {
 	private String activityPointNo;
 	private int accumActivityPoint;
 	private int curActivityPoint;
-	private String activityPointYype;
+	private String activityPointType;
 	private Date activityPointDate;
 	private int incDecActivityPoint;
 }

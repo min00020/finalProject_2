@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.question.QuestionVO;
 
 public interface QuestionService {
@@ -17,7 +18,8 @@ public interface QuestionService {
 	//질문글 + 답변글 + 추가답변 단건 조회
 	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno,  Model model, int memberNo);
 	//질문글 작성
-	public Map<String, Object> writeQuestion(QuestionVO vo);
+	public Map<String, Object> writeQuestion(QuestionVO vo, MemberVO mvo);
+	
 	//질문글 수정
 	public Map<String, Object> modifyQuestion(QuestionVO vo);
 	public QuestionVO deleteQuestion(int qno);

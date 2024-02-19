@@ -10,15 +10,7 @@
 		<p style="color:#76767e">좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
 	</div>
 	<div class="container" style="width:1000px;">
-		<!-- 상단 선택 메뉴 -->
-		<div>
-			<ul id="qna_topic" class="list-unstyled d-flex gap-3 align-self-center ml-3">
-	             <li>전체</li>
-	             <li>기술</li>
-	             <li>사이드 프로젝트</li>
-	        </ul>
-	        <hr>
-		</div>
+		<hr>
 		<!--/* 질문글 */-->
 		<div class="questionInfo">
 			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
@@ -89,7 +81,7 @@
 		<!-- questionInfo 질문글 끝-->
 		 
 		<!-- 답변 작성폼 / 작성자 != 로그인유저 and 답변 단 적 없을 때-->
-	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id and writePost == false}" >
+	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id and writePost == false and AdoptQuestionVO == null}" >
 		 	<form name="answerWrite">
 			 	<div style="width:900px;margin: 0 auto;">
 					<div class="answer-top" style="height:80px;">
@@ -206,13 +198,13 @@
 	            <!-- 추가질문답변 목록 끝 -->      
 	            <!-- 추가질문답변 등록칸 -->
 	            <div>
-	               <div>
-	                  <div id="qna_add" th:if="${loginId == questionInfo[0][0].id}">            
-	                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
-	                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
-	               </div>
+	              <div>
+	                <div id="qna_add" th:if="${loginId == questionInfo[0][0].id and currentWriterType == 2}">            
+		                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
+		                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
+	                </div>
 	               
-	               <div id="qna_add" th:if="${loginId == AdoptQuestionVO.answerId}">            
+	               <div id="qna_add" th:if="${loginId == AdoptQuestionVO.answerId and currentWriterType == 1}">            
 	                  <img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
 	                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
 	               </div>
@@ -343,7 +335,8 @@
 	 let test2 = Object.values(test)[0][1];
 	 let test3 = [[${writePost}]];
 	 let test4 = [[${AdoptQuestionVO}]];
-	 
+	 let test5 = [[${currentWriterType}]]
+	
 	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
 
 	 //질문글 수정폼 이동
@@ -440,7 +433,11 @@
 	function sendAddAnswer(ano, answerWriter){
 		//추가질문답변 작성자 타입
 		//세션멤버 = 질문작성자 => J001 / 세션멤버 = 채택답변작성자 => J002
-		const sessionMember = [[${session.member.memberNo}]];
+		const member = [[${session.member}]];
+		if(member == null){
+			return;
+		}
+		const sessionMember = member.memberNo;
 		const questionWriter = [[${questionInfo[0][0].memberNo}]];
 		
 		let addWriterType = null;
