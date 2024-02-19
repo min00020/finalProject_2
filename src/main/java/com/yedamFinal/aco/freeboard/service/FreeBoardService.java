@@ -7,8 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
-import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
-import com.yedamFinal.aco.question.QuestionVO;
+import com.yedamFinal.aco.noticeboard.NoticeBoardVO2;
+import com.yedamFinal.aco.question.QuestionVO2;
+import com.yedamFinal.aco.sideboard.SideVO2;
 
 public interface FreeBoardService {
 	
@@ -34,8 +35,11 @@ public interface FreeBoardService {
 	public List<FreeBoardVO> getFreeBoardMainPage();
 	
 	//메인페이지 공지사항 불러오기
-	public List<NoticeBoardVO> getNoticeBoardMainPage();
+	public List<NoticeBoardVO2> getNoticeBoardMainPage();
 	
 	//메인페이지 질문&답변 불러오기
-	public List<QuestionVO> getQuestionBoardMainPage();
+	public List<QuestionVO2> getQuestionBoardMainPage();
+	
+	//메인페이지 사이드 프로젝트 불러오기
+	public List<SideVO2> getSideProjectBoardMainPage();
 }

@@ -79,8 +79,8 @@ public class MemberController {
 		//메인-질문&답변 게시판 글 표시
 		model.addAttribute("getQuestionBoardMainPage", freeBoardService.getQuestionBoardMainPage());
 		
-	    //Map<String, Object> noticeListMap = noticeBoardService.getAdNoticeList(1);
-	    //model.addAttribute("noticeList", noticeListMap.get("noticeList"));
+		//메인-사이드프로젝트 게시판 글 표시
+		model.addAttribute("getSideProjectBoardMainPage", freeBoardService.getSideProjectBoardMainPage());
 
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

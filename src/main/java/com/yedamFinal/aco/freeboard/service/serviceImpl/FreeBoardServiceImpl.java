@@ -19,9 +19,9 @@ import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
-import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
-import com.yedamFinal.aco.noticeboard.mapper.NoticeBoardMapper;
-import com.yedamFinal.aco.question.QuestionVO;
+import com.yedamFinal.aco.noticeboard.NoticeBoardVO2;
+import com.yedamFinal.aco.question.QuestionVO2;
+import com.yedamFinal.aco.sideboard.SideVO2;
 
 
 @Service
@@ -135,15 +135,21 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public List<NoticeBoardVO> getNoticeBoardMainPage() {
+	public List<NoticeBoardVO2> getNoticeBoardMainPage() {
 		
 		return freeBoardMapper.getNoticeBoardMainPage();
 	}
 
 	@Override
-	public List<QuestionVO> getQuestionBoardMainPage() {
+	public List<QuestionVO2> getQuestionBoardMainPage() {
 		
 		return freeBoardMapper.getQuestionBoardMainPage();
+	}
+
+	@Override
+	public List<SideVO2> getSideProjectBoardMainPage() {
+		
+		return freeBoardMapper.getSideProjectBoardMainPage();
 	}
 	
 

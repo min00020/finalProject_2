@@ -220,37 +220,60 @@
 	</select>
 	
 	<!-- 메인페이지 공지사항 글 불러오기 -->
-	<select id="getNoticeBoardMainPage" resultType="NoticeBoardVO">
+	<select id="getNoticeBoardMainPage" resultType="NoticeBoardVO2">
 	 SELECT * FROM (
  		SELECT
-            NOTICE_BOARD_NO, TITLE, CONTENT, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT 
+            NOTICE_BOARD_NO, 
+            TITLE, 
+            CONTENT, 
+            WRITE_DATE, 
+            VIEW_CNT, 
+            RECOMMEND_CNT,
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
         FROM NOTICE_BOARD
-		ORDER BY NOTICE_BOARD_NO desc)
+		ORDER BY NOTICE_BOARD_NO DESC)
      WHERE ROWNUM <![CDATA[<=]]> 6
 	</select>
 	
 	<!-- 메인페이지 질분&답변 글 불러오기 -->
-	<select id="getQuestionBoardMainPage" resultType="QuestionVO">
-    SELECT * FROM(
+	<select id="getQuestionBoardMainPage" resultType="QuestionVO2">
+        SELECT * FROM(
 	                SELECT m.id, 
 	                	m.profile_image,
+	                	m.nickname,
+	                	m.ACCUM_ACTIVITY_POINT,
 	                    q.QUESTION_BOARD_NO,
 	                    q.MEMBER_NO,
-	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
-	                    q.POINT,
 	                    q.TITLE,
-	                    q.TAG,
-	                    q.CONTENTS,
-	                    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
-	                    q.VIEW_CNT,
 	                    q.RECOMMEND_CNT,
-	                    q.BOOKMARK_CNT,
-	                    q.ANSWER_CNT
+	                    q.ANSWER_CNT,
+	                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
 	            FROM QUESTION_BOARD q
 	            JOIN MEMBER m
 	            ON q.MEMBER_NO = m.MEMBER_NO
 	            ORDER BY QUESTION_BOARD_NO DESC)
      WHERE ROWNUM <![CDATA[<=]]> 6
+	</select>
+	
+	<!-- 메인페이지 사이드 프로젝트 글 불러오기(모집중) -->
+	<select id="getSideProjectBoardMainPage" resultType="SideVO2">
+             SELECT *
+    FROM (
+        SELECT    
+            side_board_no, 
+	        title, 
+	        writer, 
+	        view_cnt,
+	        reply_cnt,
+	        A.member_no,
+            nickname,
+            ACCUM_ACTIVITY_POINT,
+	        ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+	FROM side_project_board A
+    JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+	WHERE publishing_status = 'Q001' 
+    ORDER BY SIDE_BOARD_NO DESC)
+    WHERE ROWNUM <![CDATA[<=]]> 6
 	</select>
 	
 	
