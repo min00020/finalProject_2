@@ -500,5 +500,13 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return ret;
 	}
 
+	@Override
+	public Map<String, Object> getOtherMemberInfo(String pg, String tp) {
+		
+		
+		
+		return null;
+	}
+
 
 }

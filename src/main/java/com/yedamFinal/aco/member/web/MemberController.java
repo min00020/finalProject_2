@@ -336,8 +336,9 @@ public class MemberController {
 		return memberService.changePasswordFromMyPage(password, passwordVerify, memberVO.getId());
 	}
 	
+	
 	@GetMapping("/member/{mno}")
-	public String getMemberProfileInfo(@PathVariable("mno") int memberNo, Model model) {
+	public String getMemberProfileInfo(@PathVariable("mno") int memberNo, String tp, int pg, Model model) {
 		MemberVO memberVO = new MemberVO();
 		memberVO.setMemberNo(memberNo);
 		
