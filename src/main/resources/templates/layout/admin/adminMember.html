@@ -117,21 +117,12 @@
 		    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:15%">
 						</a>
 					</div>
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">로그아웃</span>
-                            </a>
-                        </li>
-                    </ul>
+                   <form action="/logout" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button class="btn btn-secondary" type="submit">Logout</button>
+                    </form>
 
                 </nav>
                 <!-- End of Topbar -->
