@@ -513,13 +513,16 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	public Map<String, Object> getOtherMemberInfo(int pg, String tp, int memberNo) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		PaginationDTO dto = null;
+		ret.put("questionList", null);
+		ret.put("answerList", null);
+		ret.put("sideList", null);
 		//질문탭
 		if(tp == null || tp.equals("0")) {
 			var questionList = questionMapper.getQuestionListByMember(pg,memberNo);
 			if(questionList.size() > 0) {
 				dto = new PaginationDTO(questionMapper.getQuestionListCntByMember(memberNo),pg,5);
 			}
-			ret.put("questionList", dto);
+			ret.put("questionList", questionList);
 		}
 		else if(tp.equals("1")) { // 답변 탭
 			var answerList = questionMapper.getAnswerListByMember(pg, memberNo);
