@@ -272,6 +272,7 @@ header {
 
 .park_title:hover {
 	color: #3e6ce3;
+	cursor : pointer;
 }
 
 .park_activityPoint, .park_time {

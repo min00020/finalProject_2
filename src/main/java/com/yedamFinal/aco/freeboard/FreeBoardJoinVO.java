@@ -4,7 +4,7 @@ import java.util.Date;
 
 import lombok.Data;
 @Data
-public class FreeBoardVO {
+public class FreeBoardJoinVO {
 	
 	private int fboardNo;
 	private int memberNo;
@@ -17,7 +17,9 @@ public class FreeBoardVO {
 	private int replyCnt;
 	private int accumActivityPoint;
 	private int minute;
-	private String profileImage;
-	
-	private int pk;
+	private int attachedFileNo;
+	private String serverFileName;
+	private String originFileName;
+	private String filePath;
+	private Date registerDate;
 }

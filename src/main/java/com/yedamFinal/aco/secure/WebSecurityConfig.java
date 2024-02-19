@@ -120,7 +120,9 @@ public class WebSecurityConfig {
 	}
 	
 	private void insertPermitAllUrlByKyung() {
-		permitAllUrl.add("/freeBoard/freeBoardList");
+		permitAllUrl.add("/freeBoardList");
+		permitAllUrl.add("/freeBoardInfo/**");
+		
 //		permitAllUrl.add("/point");
 		
 	}
