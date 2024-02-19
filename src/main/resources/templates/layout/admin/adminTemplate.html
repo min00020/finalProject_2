@@ -207,7 +207,6 @@
                                             <th>내용</th>
                                             <th>작성일</th>
                                             <th>조회수</th>
-                                            <th>추천수</th>
                                     		<th>
                                     		                            	<!-- 모달 -->
 		                    <div style="text-align: center;">
@@ -269,7 +268,6 @@
                                             <td th:text="${notice.content}"></td>
                                             <td th:text="${#dates.format(notice.writeDate, 'yyyy/MM/dd')}"></td>
                                             <td th:text="${notice.viewCnt}"></td>
-                                            <td th:text="${notice.recommendCnt}"></td>
                                             <td><div style="text-align: center">
                                                                                        <!-- Button trigger modal -->
 												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal1${notice.noticeBoardNo}|">

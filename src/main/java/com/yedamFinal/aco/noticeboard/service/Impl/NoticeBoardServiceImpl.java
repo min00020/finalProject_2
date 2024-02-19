@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.admin.AdminMainVO;
 import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
@@ -44,6 +45,20 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 
 	@Override
 	public NoticeBoardVO getNoticeInfo(NoticeBoardVO noticeBoardVO) {
+		noticeBoardMapper.plusViewCnt(noticeBoardVO.getNoticeBoardNo());
 		return noticeBoardMapper.getNoticeInfo(noticeBoardVO);
+	}
+
+	@Override
+	public Map<String,Object> searchNoticeBoard(int pageNo, String search) {
+		Map<String,Object> mp = new HashMap<String, Object>();
+		var searchNoticeBoardList = noticeBoardMapper.searchNoticeBoard(pageNo, search);
+		PaginationDTO dto = null;
+		if(searchNoticeBoardList.size() > 0) {
+			dto = new PaginationDTO(noticeBoardMapper.searchNoticeBoardCnt(search), pageNo, 10);
+		}
+		mp.put("pageDTO", dto);
+		mp.put("searchNoticeBoardList", searchNoticeBoardList);
+		return mp;
 	}
 }
