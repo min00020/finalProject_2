@@ -34,6 +34,9 @@ public interface AdminMapper {
 	public List<AdminSettleVO> getAdSettleList(int pageNo);
 	public int selectAdSettleCount();
 	public int selectAdStateSettleCount(String processStatus);
+	public int updateSettlementStatus(int settlementNo);
+	public int updateAllSettlementStatus();
+	public List<AdminSettleVO> getAdAllSettleList();
 	
 	
 	public List<AdminEmoVO> getAdEmoList(int pageNo);
@@ -83,4 +86,8 @@ public interface AdminMapper {
 	public int deleteEmo(AdminEmoVO adminEmoVO);
 	//내이모티콘 (댓글)
 	public List<AdminEmoVO> getMyEmoList(int memberNo);
+	
+	public int updateAdminReportI(int reportNo);
+	public int updateAdminReportB(int reportNo);
+	public int updateBanMember(int reportee, String banType);
 }
