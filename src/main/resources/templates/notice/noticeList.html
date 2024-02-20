@@ -3,6 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="@{layout/member/mainTemplate.html}"
 	layout:fragment="content"
+	style="margin:0 auto;"
 >
 <section>
 	<div id="qna_banner">
@@ -11,7 +12,7 @@
 	</div>
 	<!-- start of question -->
 	<div class="container">
-		<div class="questionBoard" style="width:1344px;">
+		<div class="questionBoard" style="width:1100px;">
 	<div style="display: flex; justify-content: flex-end;">
 			<div style="position: relative;">
 				<input type="text" id="searchInput" th:value="${search != null} ? ${search} : ''" placeholder="검색어 입력" class="min_searchInput"
@@ -33,7 +34,7 @@
 					    <p style="color:blue" th:text="${notice.writeDate}"></p>
 				 	</div>
 			 	</div>
-				<div class="col-1" style="text-align:center; margin:auto;">
+				<div class="col-1" style="text-align:center; margin-bottom:auto; margin-left: auto; margin-top: auto;">
 				 	<h6 th:text="${notice.viewCnt}"></h6>
 				 	<h6>조회</h6>
 				</div>
