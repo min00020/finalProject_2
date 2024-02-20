@@ -38,7 +38,7 @@
 						<img th:unless="${rec.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${rec.profileImage}|" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
 					</div>
 					
-					<span  class="park_activityPoint_free"><span th:text="${rec.nickname}">cookie123</span><span class= "park_dot"> · </span><img id="thunder" src="/commonResource/thunder.png" alt="acti"
+					<span  class="park_activityPoint_free"><span th:text="${rec.nickname}" style="font-size: medium;font-weight: bold;">cookie123</span><span class= "park_dot"> · </span><img id="thunder" src="/commonResource/thunder.png" alt="acti"
 					th:text="|${#numbers.formatInteger(rec.accumActivityPoint, 0, 'COMMA')}|">
 								<span class= "park_dot" th:if="${rec.minute < 60}" th:text="' · ' + (${rec.minute}) + '분 전'"></span>
 								<span class= "park_dot" th:if="${rec.minute >= 60 && rec.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(rec.minute / 60.0)}) + '시간 전'"></span>
