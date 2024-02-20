@@ -4,5 +4,6 @@ import java.util.Map;
 
 public interface GitHubService {
 	public Map<String, String> getAccessTokenByGitLink(String tempGitCode);
-	public void getGitHubUserInfo(String userAccessToken);
+	public Map<String, Object> getGitHubRepositoryInfo(String userAccessToken, String userRepositoryName);
+	public Map<String, Object> insertGitIssue(String usertAccessToken, String userRepositoryName, String title, String body);
 }

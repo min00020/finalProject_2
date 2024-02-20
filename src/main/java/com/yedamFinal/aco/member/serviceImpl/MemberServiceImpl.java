@@ -30,6 +30,7 @@ import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberStatVO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.SettlementVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.member.service.MemberService;
@@ -52,7 +53,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
 	@Autowired
 	private MemberMapper memberMapper;
-	
 	@Autowired
 	private QuestionMapper questionMapper;
 	
@@ -259,12 +259,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return memberMapper.selectMybmList(memberVO);
 	}
 
-	// 내가 작성한 질문글 목록
-	@Override
-	public List<MyquestionVO> getMyqList(MemberVO memberVO) {
-		return memberMapper.selectMyqList(memberVO);
-	}
-
 	@Override
 	public List<MybookmarkVO> getMyBookList(MemberVO memberVO) {
 		return memberMapper.selectMyBookList(memberVO);
@@ -276,10 +270,18 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	}
 
 	@Override
-	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO) {
-		return memberMapper.selectQuestionList(memberVO);
+	public Map<String, Object> getMyQuestionList(MemberVO memberVO) {
+		Map<String, Object> map = new HashMap<>();
+		var QuestionList = memberMapper.selectQuestionList(memberVO);
+		map.put("questionList", QuestionList);
+		return map;
 	}
 
+	@Override
+	public List<MyquestionVO> getMyQuestionListModal(MemberVO memberVO){
+		return memberMapper.selectMyqList(memberVO);
+	}
+	
 	// 활동내역점수
 	@Override
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO) {
@@ -314,7 +316,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		activityVO.setCurActivityPoint(vo.getAvailableActivityPoint());
 		activityVO.setActivityPointType("F005");
 		activityVO.setActivityPointDate(new Date());
-		activityVO.setIncDecActivityPoint(resPoint);
+		activityVO.setIncDecActivityPoint(resPoint * -1);
 		memberMapper.insertActivityDetail(activityVO);
 
 		// 멤버테이블 update
@@ -508,6 +510,48 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		
 		return ret;
 	}
+	@Override
+	public Map<String, Object> updateSettlement(SettlementVO reqVO, MemberVO vo, int settlementReqPoint) {
+		var accList = memberMapper.selectMemberAccountList(vo);
+		AccountVO findVO = null;
+		for(AccountVO accVO : accList) {
+			if(accVO.getAccountNo().equals(reqVO.getReqAccount())) {
+				findVO = accVO;
+				break;
+			}
+		}
+		PointDetailJoinVO pointVO = new PointDetailJoinVO();
+		pointVO.setMemberNo(vo.getMemberNo());
+		pointVO.setLatestTotalPoints(vo.getAcoMoney() - vo.getAcoPoint());
+		pointVO.setLatestAcoMoney(vo.getAcoMoney());
+		pointVO.setLatestAcoPoint(vo.getAcoPoint());
+		pointVO.setHistoryType("F009");
+		pointVO.setHistoryDate(new Date());
+		pointVO.setIncDecPoint(settlementReqPoint * -1);
+		pointVO.setPointType("G002");
+		pointVO.setAccountNo(findVO.getAccountNo());
+		memberMapper.insertPointDetail(pointVO);
+		
+		SettlementVO settleVO = new SettlementVO();
+		settleVO.setMemberNo(vo.getMemberNo());
+		settleVO.setSettlementReqPoint(settlementReqPoint);
+		settleVO.setReqAccount(findVO.getAccountNo()); 
+		settleVO.setReqAccountName(findVO.getAccountHolder());
+		settleVO.setReqAccountBankcode(findVO.getBankCode()); 
+		settleVO.setReqBankname(findVO.getBankName());
+		settleVO.setProcessStatus("O001");
+		memberMapper.insertsettlementPoint(settleVO);
+		
+		Map<String, Object> map = new HashMap<>();
+		vo.setAcoPoint(vo.getAcoPoint() - settlementReqPoint);
+		int result = memberMapper.updatesettlementRequest(settlementReqPoint,vo);
+		if(result <= 0) {
+			map.put("result", "400");
+		}
+		return map;
+	}
+	
+	
 
 	@Override
 	public Map<String, Object> getOtherMemberInfo(int pg, String tp, int memberNo) {

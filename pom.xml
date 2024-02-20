@@ -95,6 +95,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        
+        <!-- github api -->
+        <dependency>
+    		<groupId>org.kohsuke</groupId>
+    		<artifactId>github-api</artifactId>
+    		<version>1.317</version>
+		</dependency>
+        
 	</dependencies>
 
 	<build>
