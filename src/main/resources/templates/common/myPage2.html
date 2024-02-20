@@ -88,7 +88,7 @@
 																		<p class="tae-p-1">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
 																		<br>
 																		<div class="input-group mb-3" style="height:50px;">
-																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2">
+																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|원하는 환전 포인트를 입력하세요|" aria-label="Recipient's username" aria-describedby="button-addon2">
 																			<button class="btn btn-outline-secondary" id="accountApprove" type="button">정산요청</button>
 																		</div>
 																	</div>
@@ -509,9 +509,16 @@
 											<div class="modal-body" style="text-align:center;height:700px;">
 													<ul class="tab d-flex justify-content-center">
 														<li data-tab="tab1" class='tabmenu' id="default" style="margin-top:20px;float:left;list-style-type: none;text-decoration: none;"><a style="font-size:large;font-weight:bold;color:black;text-decoration: none;" href="#">질답형 게시판</a></li>
-														<li data-tab="tab2" class='tabmenu' style="margin-top:20px;float:left;padding-left:20px;list-style-type: none;"><a style="font-size:large;font-weight:bold;color:#979da9;text-decoration: none;" href="#">사이드프로젝트</a></li>
 													</ul>
 														<p>* 최대 10개까지 확인 가능합니다.</p>
+														<button type="button" class="btn btn-modal" id="tae-modal-btn" th:onclick="|location.href='/member/${session.member.memberNo}?pg=1'|">
+															더보러 가기
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+																viewBox="0 0 24 24" fill="none" stroke="currentColor"
+																stroke-width="2" stroke-linecap="round"
+																stroke-linejoin="round" class="feather feather-chevron-right">
+															<polyline points="9 18 15 12 9 6"></polyline></svg>
+														</button>
 													<div id="tabcontent"></div>
 
 												<div class="scroll type3" style="overflow-y: scroll; height: 600px; overflow-x: hidden;padding-top: 40px;">
@@ -536,6 +543,7 @@
 														</tbody>
 													</table>
 												</div>
+												
 											</div>
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary"
