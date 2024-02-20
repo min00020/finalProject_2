@@ -26,9 +26,9 @@
 					<ul class = "park_fb">
 						<li th:each="free : ${getFreeBoardMainPage}">
 						<span class="park_box">
-                          <img class="park_profile" th:onclick="|location.href='/member/${free.memberNo}'|" th:src="|/upload/profile/${free.profileImage}|" alt="profile">
+                          <img class="park_profile" th:onclick="|location.href='/member/${free.memberNo}?pg=1'|" th:src="|/upload/profile/${free.profileImage}|" alt="profile">
                         </span>
-							<span class="park_nickname" th:onclick="|location.href='/member/${free.memberNo}'|">[[${free.nickname}]]
+							<span class="park_nickname" th:onclick="|location.href='/member/${free.memberNo}?pg=1'|">[[${free.nickname}]]
 							
                        
 							</span>
@@ -59,9 +59,9 @@
 				<div>
 					<ul class = "park_fb">
 						<li th:each="question : ${getQuestionBoardMainPage}">
-							<span class="park_nickname">[[${question.nickname}]]
+							<span class="park_nickname" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|">[[${question.nickname}]]
 							<span class="park_box">
-                          <img class="park_profile" th:onclick="|location.href='/member/${question.memberNo}'|" th:src="|/upload/profile/${question.profileImage}|" alt="profile">
+                          <img class="park_profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|" th:src="|/upload/profile/${question.profileImage}|" alt="profile">
                         </span>
                        
 							</span>
@@ -94,9 +94,9 @@
 				<div>
 					<ul class = "park_fb">
 						<li th:each="side : ${getSideProjectBoardMainPage}">
-							<span class="park_nickname">[[${side.nickname}]]
+							<span class="park_nickname" th:onclick="|location.href='/member/${side.memberNo}?pg=1'|">[[${side.nickname}]]
 							<span class="park_box">
-                         <img class="park_profile" th:onclick="|location.href='/member/${side.memberNo}'|" th:src="|/upload/profile/${side.profileImage}|" alt="profile">
+                         <img class="park_profile" th:onclick="|location.href='/member/${side.memberNo}?pg=1'|" th:src="|/upload/profile/${side.profileImage}|" alt="profile">
                       </span>
                       
 							</span>
