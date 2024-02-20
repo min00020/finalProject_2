@@ -14,10 +14,23 @@
 		<div class="questionInfo">
 			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
 			<hr>
-						<div>
-							<p th:text="${freeBoardInfo.nickname}"></p>
-						</div>
-					
+			<div class="d-flex">
+				<div id="park_member" style="height: 40px;">
+					<span class="park_box_free">
+						<img class="park_profile_free" th:onclick="|location.href='/member/${freeBoardInfo.memberNo}'|" th:src="|/upload/profile/${freeBoardInfo.profileImage}|" alt="profile">
+                    </span>
+                    <span class="park_nickname_free" th:onclick="|location.href='/member/${freeBoardInfo.memberNo}'|" style="font-weight : bold;">[[${freeBoardInfo.nickname}]]
+               	</span>
+               	<span  style="font-weight :; " class="park_activityPoint_free"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${freeBoardInfo.accumActivityPoint}]]
+								<span th:if="${freeBoardInfo.minute < 60}" th:text="' · ' + (${freeBoardInfo.minute}) + '분 전'"></span>
+								<span th:if="${freeBoardInfo.minute >= 60 && freeBoardInfo.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 60.0)}) + '시간 전'"></span>
+								<span th:if="${freeBoardInfo.minute >= 1440 && freeBoardInfo.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 1440.0)}) + '일 전'"></span>
+								<span th:if="${freeBoardInfo.minute >= 43200 && freeBoardInfo.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 43200.0)}) + '달 전'"></span>
+								<span th:if="${freeBoardInfo.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 518400.0)}) + '년 전'"></span>
+							</span>
+						</div>			
+						<br>
+					</div>
 				<div id="questionTitle" class="col-7">  <!-- 사이드 태그 / 질문제목, 포인트 -->
 					<h5 class="qna_logo" style="font-size: 30px"></h5>
 	
@@ -30,7 +43,7 @@
 					
 
 				</div>
-				<div id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+				<div th:if ="${freeBoardInfo.memberNo} == ${session.member?.memberNo}" id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
 					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo.writeDate, 'yyyy-MM-dd HH:mm')}"></p>
 					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo.fboardNo}'|">수정</button>
 					<button class="btn" style ="background-color : #848484; color:white" th:onclick="delFreeBoard([[${freeBoardInfo.fboardNo}]])">삭제</button>
@@ -316,6 +329,7 @@
 	if(member != null) {
 		memberNo = member.memberNo;
 	}
+	const writerMemberNo = [[${freeBoardInfo.memberNo}]]
 	
 	const csrfPara = $('meta[name="csrfPara"]').attr("content");
 	const csrfToken = $('meta[name="csrf"]').attr("content");
@@ -336,7 +350,11 @@
 			showFailAlert("본인의 게시글만 삭제할 수 있습니다.");
 			return;
 		}
-		
+		if(memberNo != writerMemberNo ){
+			showFailAlert("본인의 게시글만 삭제할 수 있습니다.");
+			return;
+		}
+			
 	object = {
 			fboardNo : fboardNo
 	}
@@ -427,7 +445,7 @@
 	}
 	
 	function modifyReply(replyNo, emoticonImgName) {
-		if(typeof memberNo == "undefined" || memberNo == null) {
+		if(typeof member == "undefined" || member == null) {
 			showFailAlert("로그인 후 진행해주세요.");
 			return;
 		}
@@ -483,8 +501,8 @@
 
 	function registReply(emoticonImgName) {
 		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
-		if(typeof memberNo == "undefined" || memberNo == null) {
-			showFailAlert("로그인 후 진행해주세요.");
+		if(typeof member == "undefined" || member == null) {
+			showFailAlert("로그인 후 작성할 수 있습니다.");
 			return;
 		}
 	
