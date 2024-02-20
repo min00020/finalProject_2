@@ -268,6 +268,10 @@ header {
 
 .park_nickname:hover {
 	color: #3e6ce3;
+	cursor:pointer;
+}
+.park_nickname{
+
 }
 
 .park_title:hover {
@@ -281,15 +285,16 @@ header {
 }
 
 .park_title {
-	font-weight: bold;
+	font-weight: 600;
+	margin-left : 20px;
 }
 
 .park_S {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	height: 50px;
-	width: 400px;
+	height: 57px;
+	width: 410px;
 	border-radius: 10px;
 	font-weight: bold;
 	text-align: left;
@@ -610,3 +615,51 @@ input::-webkit-inner-spin-button {
 	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
 }
 /*insertAccountCss End*/
+
+/*freeBoard*/
+  #park_member {
+        display: flex;
+        align-items: center; /* 세로 중앙 정렬 */
+        justify-content: flex-start; /* 가로 시작점 정렬 */
+        height: 40px;
+    }
+    .park_box_free {
+        display: flex;
+        align-items: center;
+        margin-left : 5px;
+    }
+    .park_nickname_free{
+        display: flex;
+        align-items: center;
+        margin-left :3px;
+        cursor : pointer;
+        
+    }
+    .park_nickname_free:hover{
+    color : #3e6ce3
+    }
+    
+    .park_activityPoint_free{
+        display: flex;
+        align-items: center;
+        margin-left : 5px;
+         font-size: small;
+    }
+    
+    /* 추가 스타일 */
+    #thunder {
+        
+    }
+    .park_profile_free{
+    width : 25px;
+    cursor : pointer;
+    }
+    .park_dot{
+    margin-left : 5px;
+  
+    font-size: small;
+    
+    }
+ 
+    
+/*freeBoard End*/
