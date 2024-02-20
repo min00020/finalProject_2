@@ -50,10 +50,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType("application/json;charset=UTF-8");
-        
+        MemberVO vo = null;
         if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
         	UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
-            MemberVO vo = userDetails.getMemberVO();
+            vo = userDetails.getMemberVO();
             
             vo = memberMapper.selectMemberInfo(vo);
             String banType = vo.getBanType();
@@ -86,19 +86,25 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             request.getSession().setAttribute("member", vo);
             request.getSession().setAttribute("myEmoList",adminMapper.getMyEmoList(vo.getMemberNo()));
         }
-
+        
         Map<String, Object> ret = new HashMap<>();
-        SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+        if(!vo.getPermission().equals("ROLE_ADMIN")) {
+            SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
 
-        if (savedRequest != null) {
-            String redirectUrl = savedRequest.getRedirectUrl();
-            // "http://"
-            redirectUrl = redirectUrl.replace("http://", "");
-            redirectUrl = redirectUrl.substring(redirectUrl.indexOf("/"));
-            ret.put("result", redirectUrl);
-        } else {
-        	ret.put("result", "/");
+            if (savedRequest != null) {
+                String redirectUrl = savedRequest.getRedirectUrl();
+                // "http://"
+                redirectUrl = redirectUrl.replace("http://", "");
+                redirectUrl = redirectUrl.substring(redirectUrl.indexOf("/"));
+                ret.put("result", redirectUrl);
+            } else {
+            	ret.put("result", "/");
+            }
         }
+        else {
+        	ret.put("result", "/admin?PageNo=1");
+        }
+
         response.getWriter().write(objectMapper.writeValueAsString(ret));
     }
 }

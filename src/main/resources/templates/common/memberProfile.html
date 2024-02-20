@@ -2,7 +2,202 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="@{layout/member/mainTemplate.html}"
-	layout:fragment="content"	  
->
-	<div class="w-full lg:static lg:max-h-full lg:overflow-visible"><div class="overflow-hidden rounded-lg border border-gray-500/30 dark:border-gray-500/70"><div class="mx-5 my-7 flex items-center justify-center sm:mx-6 sm:my-8"><a href="https://okky.kr/users/178086" target="_blank"><img class="h-7 w-7 rounded-full border border-gray-500/30 sm:h-10 sm:w-10" alt="프로필 사진" src="//www.gravatar.com/avatar/c90b15130a0f92aba8281cb2bb1e6a85?d=identicon&amp;s=96"></a><div class="ml-3.5 flex flex-1 flex-col sm:ml-5 sm:text-2xl"><div class="flex items-center gap-x-1"><span class="w-fit pl-0.5 font-bold">개백수</span></div><div class="flex items-center gap-x-0.5 text-sm font-normal text-gray-500 sm:gap-x-1 sm:text-base"><svg class="inline h-3 w-3 sm:h-4 sm:w-4" width="9" height="12" viewBox="0 1 9 12" fill="none" xmlns="http://www.w3.org/2000/svg"><title>bolt icon</title><path fill-rule="evenodd" clip-rule="evenodd" d="M5.21535 0.575533C5.4443 0.647704 5.6 0.86003 5.6 1.10009V3.85009L7.8 3.85009C8.00508 3.85009 8.19313 3.96419 8.28783 4.14609C8.38254 4.328 8.36818 4.54748 8.25057 4.71549L4.40057 10.2155C4.26291 10.4122 4.0136 10.4968 3.78464 10.4246C3.55569 10.3525 3.4 10.1401 3.4 9.90009L3.4 7.15009H1.2C0.994914 7.15009 0.806866 7.03599 0.712157 6.85408C0.617448 6.67218 0.631811 6.45269 0.749418 6.28468L4.59942 0.784684C4.73708 0.588021 4.98639 0.503362 5.21535 0.575533Z" fill="currentColor"></path></svg><span>활동점수 21</span></div></div></div><div class="relative flex gap-x-6 border-t border-gray-500/30 px-6 sm:gap-x-8 dark:border-gray-500/70"><a class="text-gray-500 hover:text-blue-500 dark:hover:text-blue-200 group relative flex min-w-0 items-center justify-center overflow-hidden px-1 py-4 text-center text-sm font-medium focus:z-10" href="/users/178086/activity"><span class="hover:no-underline">최근 활동</span><span aria-hidden="true" class="group-hover:bg-blue-500 dark:group-hover:bg-blue-200 absolute inset-x-0 bottom-0 h-0.5"></span></a><a class="text-gray-500 hover:text-blue-500 dark:hover:text-blue-200 group relative flex min-w-0 items-center justify-center overflow-hidden px-1 py-4 text-center text-sm font-medium focus:z-10" href="/users/178086/questions"><span class="hover:no-underline">Q&amp;A</span><span aria-hidden="true" class="group-hover:bg-blue-500 dark:group-hover:bg-blue-200 absolute inset-x-0 bottom-0 h-0.5"></span></a><a class="text-gray-500 hover:text-blue-500 dark:hover:text-blue-200 group relative flex min-w-0 items-center justify-center overflow-hidden px-1 py-4 text-center text-sm font-medium focus:z-10" href="/users/178086/articles"><span class="hover:no-underline">게시물</span><span aria-hidden="true" class="group-hover:bg-blue-500 dark:group-hover:bg-blue-200 absolute inset-x-0 bottom-0 h-0.5"></span></a><a class="text-blue-500 group relative flex min-w-0 items-center justify-center overflow-hidden px-1 py-4 text-center text-sm font-medium focus:z-10" href="/users/178086/scraped" aria-current="page"><span class="hover:no-underline">스크랩</span><span aria-hidden="true" class="bg-blue-500 absolute inset-x-0 bottom-0 h-0.5"></span></a></div></div><div class="mt-7"><div class="mb-9 sm:mb-16"><h1 class="sr-only">Recent activities</h1><ul class="divide-y divide-gray-500/30 dark:divide-gray-500/70"></ul></div><div class="my-4 flex justify-center border-t border-gray-500/30 dark:border-gray-500/70"></div></div></div>
+	layout:fragment="content"
+	style="margin:0 auto;"	  
+>	
+
+	<div class="min-rounded p-4" style="border: 1px solid hsla(220,9%,46%,.3); width:1200px;">
+		<div class="d-flex justify-content-between px-5">
+			<div>
+				<div class="qna_box3">
+					<img class="qna_profile" th:if="${member.profileImage} == null" src="commonResource/default_profile.jpg" />
+					<img class="qna_profile" th:unless="${member.profileImage} == null" th:src="|/upload/profile/${member.profileImage}|" />
+				</div>
+				<div class="d-flex gap-4">
+					<h2 class="ms-3 mt-3">[[${member.nickname}]]</h2>
+					<button type="button" class="text-white btn mt-3" style="background-color:#80a9e8; height:40px; width:400px; visibility:hidden;">팔로우</button>
+				</div>
+				<div class="d-flex ps-2 pt-1">
+					<div class="qna_box">
+						<img class="qna_profile" th:src="|/commonResource/gradeimage/${member.gradeName}.png|" />
+					</div>
+					<div class="pt-1">
+						<span style="margin:0;" class="align-middle">[[${member.gradeName}]]</span>
+					</div>
+					<div class="ms-2 pt-1 d-flex gap-1">
+						<img src="/commonResource/thunder.png" alt="acti">
+					</div>
+					<div class="d-flex">
+						<span style="margin:0; padding-top:6px;">활동점수 [[${member.accumActivityPoint}]]</span>
+					</div>
+				</div>
+			</div>
+			<div class="pt-3">
+				<div class="d-flex gap-5">
+					<h4 style="color:#BDBDBD">전체답변</h4>
+					<h4 style="color:#BDBDBD">채택답변</h4>
+					<h4 style="color:#BDBDBD">채택률</h4>
+				</div>
+				<div class="d-flex gap-5 justify-content-between pt-2">
+					<h5 style="color:#3e6ce3" class="ms-4"><b>[[${mapResult.stat.allCnt}]]건</b></h5>
+					<h5 style="color:#3e6ce3" class="ms-2"><b>[[${mapResult.stat.adoptCnt}]]건</b></h5>
+					<h5 style="color:#3e6ce3" class="me-1"><b>[[${mapResult.stat.percent}]]%</b></h5>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="mt-5">
+		<a th:if="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>질문</b></a>
+		<a th:unless="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">질문</a>
+		<a th:if="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>답변</b></a>
+		<a th:unless="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">답변</a>
+		<a th:if="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>사이드 프로젝트</b></a>
+		<a th:unless="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">사이드 프로젝트</a>
+		<hr>
+	</div>
+	<div>
+		<!--/* 질문 리스트 */-->
+		<!-- img에 th:onclick="|location.href='/member/회원번호'|" 꼭달아야함. -->
+		<th:block th:if="${mapResult.questionList} != null">
+			<div id="questionList"  class="row" th:each="question : ${mapResult.questionList}">
+				<div id="title" class="col-8">
+					<div id="member" style="height:40px;">
+						<div class="qna_box">
+						    <img th:if="${question.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|">
+						    <img th:unless="${question.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${question.profileImage}|" alt="profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|">
+						</div>
+						<p th:text="${question.nickname}">cookie123</p>
+					</div>
+				  	<div id="titleTag">
+					    <h4 th:text="${question.title}" th:onclick="|location.href='/questionInfo/${question.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
+					    <p style="color:blue" th:text="${question.tag}">#node.js #mysql</p>
+				 	</div>
+					</div>
+				<div class="col-1" style="text-align:center; margin:auto;">
+				 	<h6 th:text="${question.viewCnt}">2</h6>
+				 	<h6>조회</h6>
+				</div>
+				<div id="answercnt" class="col-1" style="text-align:center; margin:auto;">
+				 	<h6 class="QNAcnt" th:text="${question.answerCnt}">10</h6>
+				 	<h6>답변</h6>
+				</div>
+				<hr style="margin-top:30px; margin-bottom:30px;">
+			</div>
+			<!-- 페이지 새로 -->
+			<th:block th:if="${mapResult.pageDTO} != null">
+	         <div>
+	             <ul class="pagination justify-content-center">
+	                 <li class="page-item" th:if="${mapResult.pageDTO.prev}">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage-1}|" aria-label="Previous">
+	                         <span aria-hidden="true">&laquo;</span>
+	                         <span class="sr-only">Previous</span>
+	                     </a>
+	                 </li>
+	                 <li th:class="${pageNo == mapResult.pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(mapResult.pageDTO.startPage, mapResult.pageDTO.endPage)}">
+	                       <a class="page-link" th:href="|/member/${member.memberNo}?pg=${pageNo}|">[[${pageNo}]]</a>
+	                 </li>
+	                 <li class="page-item">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage+1}|" aria-label="Next" th:if="${mapResult.pageDTO.next}">
+	                         <span aria-hidden="true">&raquo;</span>
+	                         <span class="sr-only">Next</span>
+	                     </a>
+	                 </li>
+	             </ul>
+	         </div>
+	       </th:block>
+	       <!-- 페이지 끝 -->
+		</th:block>
+		
+		<!--/* 답변 리스트 */-->
+		<th:block th:if="${mapResult.answerList} != null">
+			<div id="questionList"  class="row" th:each="answer : ${mapResult.answerList}">
+				<div id="title" class="col-8">
+					<div id="member" style="height:40px;">
+						<div class="qna_box">
+						    <img th:if="${answer.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${answer.memberNo}?pg=1'|">
+						    <img th:unless="${answer.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${answer.profileImage}|" alt="profile" th:onclick="|location.href='/member/${answer.memberNo}?pg=1'|">
+						</div>
+						<p th:text="${answer.nickname}">cookie123</p>
+					</div>
+				  	<div id="titleTag">
+					    <h4 th:text="${answer.title}" th:onclick="|location.href='/questionInfo/${answer.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
+					    <p style="color:blue" th:text="${answer.tag}">#node.js #mysql</p>
+				 	</div>
+				</div>
+				<div class="col-1" style="text-align:center; margin:auto;">
+				 	<h6 th:text="${answer.viewCnt}">2</h6>
+				 	<h6>조회</h6>
+				</div>
+				<div id="answercnt" style="text-align:center; margin:auto;">
+				 	<h6>답변</h6>
+				</div>
+				<hr style="margin-top:30px; margin-bottom:30px;">
+			</div>
+			<!-- 페이지 새로 -->
+			<th:block th:if="${mapResult.pageDTO} != null">
+	         <div>
+	             <ul class="pagination justify-content-center">
+	                 <li class="page-item" th:if="${mapResult.pageDTO.prev}">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage-1}&tp=1|" aria-label="Previous">
+	                         <span aria-hidden="true">&laquo;</span>
+	                         <span class="sr-only">Previous</span>
+	                     </a>
+	                 </li>
+	                 <li th:class="${pageNo == mapResult.pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(mapResult.pageDTO.startPage, mapResult.pageDTO.endPage)}">
+	                       <a class="page-link" th:href="|/member/${member.memberNo}?pg=${pageNo}&tp=1|">[[${pageNo}]]</a>
+	                 </li>
+	                 <li class="page-item">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage+1}&tp=1|" aria-label="Next" th:if="${mapResult.pageDTO.next}">
+	                         <span aria-hidden="true">&raquo;</span>
+	                         <span class="sr-only">Next</span>
+	                     </a>
+	                 </li>
+	             </ul>
+	         </div>
+	       </th:block>
+		</th:block>
+	
+		<th:block th:if="${mapResult.sideList} != null">
+			<div class="recList_1 clearfix" style="width:1200px;" th:each="rec:${mapResult.sideList}">
+				<h6 th:if="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
+				<h6 th:unless="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
+				<div class="qna_box">
+					<img th:if="${rec.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+					<img th:unless="${rec.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${rec.profileImage}|" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+				</div>
+				<p th:text="${rec.nickname}">cookie123</p>
+				<h5 th:onclick="|location.href='/sideInfo/${rec.sideBoardNo}'|" style="font-weight:bolder;">[[ ${rec.title }]]</h5>
+				<br>
+				<p>[[${rec.projectOutline}]]</p>
+				<br>
+				<p style=";color:#979da9;float:left;">기간 | [[${rec.devPeriod}]]일  모집인원 [[${rec.recruitPersonnel}]]명</p>
+				<span><p style="float:right;color:#979da9;">조회수 [[ ${rec.viewCnt} ]]회  댓글수 [[ ${rec.replyCnt} ]]개</p></span>
+				<br>
+				<hr id="tae-hr"  style="width:1200px;">	
+			</div>
+			<!-- 페이지 새로 -->
+			<th:block th:if="${mapResult.pageDTO} != null">
+	         <div>
+	             <ul class="pagination justify-content-center">
+	                 <li class="page-item" th:if="${mapResult.pageDTO.prev}">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage-1}&tp=2|" aria-label="Previous">
+	                         <span aria-hidden="true">&laquo;</span>
+	                         <span class="sr-only">Previous</span>
+	                     </a>
+	                 </li>
+	                 <li th:class="${pageNo == mapResult.pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(mapResult.pageDTO.startPage, mapResult.pageDTO.endPage)}">
+	                       <a class="page-link" th:href="|/member/${member.memberNo}?pg=${pageNo}&tp=2|">[[${pageNo}]]</a>
+	                 </li>
+	                 <li class="page-item">
+	                     <a class="page-link" th:href="|/member/${member.memberNo}?pg=${mapResult.pageDTO.curPage+1}&tp=2|" aria-label="Next" th:if="${mapResult.pageDTO.next}">
+	                         <span aria-hidden="true">&raquo;</span>
+	                         <span class="sr-only">Next</span>
+	                     </a>
+	                 </li>
+	             </ul>
+	         </div>
+	       </th:block>
+		</th:block>
+	</div>
 </div>

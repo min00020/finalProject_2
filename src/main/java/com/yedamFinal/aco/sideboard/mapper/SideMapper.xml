@@ -31,6 +31,39 @@
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
 </select>
 
+<select id="selectListAll" resultType="SideVO">
+	SELECT *
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            side_board_no, 
+	        publishing_status, 
+	        title, 
+	        content, 
+	        project_outline,
+	        writer, 
+	        write_date, 
+	        recruit_personnel, 
+	        dev_period, 
+	        git_address, 
+	        view_cnt,
+	        reply_cnt,
+	        tech_of_use,
+	        member_no	
+	FROM side_project_board
+    ORDER BY write_date desc
+    )
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5]]>
+</select>
+
+
+<select id="selectProjectListAllCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM side_project_board
+</select>
+
 <select id="selectProjectListCnt" resultType="int">
 	SELECT 
         COUNT(*) AS CNT
@@ -148,5 +181,40 @@
 	DELETE FROM side_project_board
 	WHERE side_board_no = #{bno}
 </delete>
+
+
+<select id="selectListAllByMember" resultType="SideVO">
+	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+			SELECT 
+				s.side_board_no, 
+	        	s.publishing_status, 
+	        	s.title, 
+	        	s.content, 
+	        	s.project_outline,
+	        	s.writer, 
+	        	s.write_date, 
+	        	s.recruit_personnel, 
+	        	s.dev_period, 
+	        	s.git_address, 
+	        	s.view_cnt,
+	        	s.reply_cnt,
+	        	s.tech_of_use,
+	        	s.member_no,
+	        	M.profile_image,
+	        	M.nickname
+			FROM side_project_board s
+			JOIN MEMBER M ON S.MEMBER_NO = M.MEMBER_NO
+			WHERE S.member_no = #{memNo}
+    		ORDER BY S.write_date desc
+	            )B	        )A
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5]]>
+</select>
+
+<select id="selectListAllCntByMember" resultType="int">
+	SELECT COUNT(*) AS CNT
+		FROM SIDE_PROJECT_BOARD
+		WHERE MEMBER_NO = #{memberNo}
+</select>
 
 </mapper>

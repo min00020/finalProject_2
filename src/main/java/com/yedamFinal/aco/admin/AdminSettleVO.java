@@ -12,7 +12,7 @@ public class AdminSettleVO {
 	private String reqAccountName;
 	private int reqAccountBankcode;
 	private String reqBankname;
-	private String processState;
+	private String processStatus;
 	
 	private String settleName;
 	private String settleState;	

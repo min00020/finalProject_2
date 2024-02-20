@@ -6,38 +6,11 @@
 <mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
 	<!-- 질문글 전체조회 -->
 	<select id="getQuestionList" resultType="QuestionVO">
-	  SELECT
-            a.id, a.profile_image,
-            a.QUESTION_BOARD_NO,
-            a.MEMBER_NO,
-            a.TOPIC,
-            a.POINT,
-            a.TITLE,
-            a.TAG,
-            a.CONTENTS,
-            a.WRITE_DATE,
-            a.VIEW_CNT,
-            a.RECOMMEND_CNT,
-            a.BOOKMARK_CNT,
-            a.ANSWER_CNT
-	    FROM (
-	        SELECT 
-	            ROWNUM AS RN,
-	            b.id, b.profile_image,
-	            b.QUESTION_BOARD_NO,
-	            b.MEMBER_NO,
-	            b.TOPIC,
-	            b.POINT,
-	            b.TITLE,
-	            b.TAG,
-	            b.CONTENTS,
-	            b.WRITE_DATE,
-	            b.VIEW_CNT,
-	            b.RECOMMEND_CNT,
-	            b.BOOKMARK_CNT,
-	            b.ANSWER_CNT
-	            FROM(
-	                SELECT m.id, m.profile_image,
+	  SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	  
+	                SELECT m.id, 
+	                	m.profile_image,
 	                    q.QUESTION_BOARD_NO,
 	                    q.MEMBER_NO,
 	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
@@ -54,79 +27,261 @@
 	            JOIN MEMBER m
 	            ON q.MEMBER_NO = m.MEMBER_NO
 	            ORDER BY WRITE_DATE DESC
-	            )B
-	        )A
+	             
+	            
+	            )B	        )A
 	<![CDATA[
         	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
 	]]>
 	</select>
-	<!-- 질문글 분류 조회 -->
-	<select id="getQuestionListSelect" resultType="QuestionVO">
-		SELECT m.id, m.profile_image,
-		    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
-		    q.WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT
-		FROM QUESTION_BOARD q
-		JOIN MEMBER m
-		ON q.MEMBER_NO = m.MEMBER_NO
-		WHERE q.TOPIC = #{topic}
-		ORDER BY WRITE_DATE DESC
-	</select>
-
-
-	<!-- 질문글 단건조회 -->
-	<select id="getQuestionInfo" resultType="QuestionVO">	
-		SELECT m.ID, m.PROFILE_IMAGE,SUBCODE_TO_NAME(m.MEMBER_LEVEL) as member_level,
-		 		m2.ID as answer_id , m2.PROFILE_IMAGE as answer_profile_image,SUBCODE_TO_NAME(m2.MEMBER_LEVEL) as answer_member_level,
-			    q.QUESTION_BOARD_NO,q.MEMBER_NO,q.TOPIC,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
-			    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT,q.REPLY_CNT,
-	            a.ANSWER_BOARD_NO,a.QUESTION_BOARD_NO,a.MEMBER_NO as answer_member_no,a.TITLE as answer_title,a.CONTENTS as answer_contents, 
-	            TO_CHAR(a.WRITE_DATE, 'YYYY.MM.DD') as ANSWER_WRITE_DATE,a.RECOMMEND_CNT,a.ADOPT_STATUS as answer_adopt_status,a.REPLY_CNT as answer_reply_cnt,
-	            d.QUESTION_ADD_NO,d.ANSWER_BOARD_NO,d.CONTENTS as add_contents,d.WRITER_TYPE as add_writer_type,TO_CHAR(d.WRITE_DATE, 'YYYY.MM.DD') as add_write_date, d.ADD_STATUS
-			FROM QUESTION_BOARD q LEFT JOIN MEMBER m
-	                              ON q.MEMBER_NO = m.MEMBER_NO
-	                              LEFT JOIN ANSWER_BOARD a
-	                              ON q.QUESTION_BOARD_NO = a.QUESTION_BOARD_NO
-	                              LEFT JOIN QUESTION_ADD d
-	                              ON a.ANSWER_BOARD_NO = d.ANSWER_BOARD_NO
-	                              LEFT JOIN MEMBER m2
-	                              ON a.MEMBER_NO = m2.MEMBER_NO
-	        WHERE q.QUESTION_BOARD_NO = #{questionBoardNo}
-	        ORDER BY a.ADOPT_STATUS DESC, a.WRITE_DATE DESC
-	</select>
-	<!-- <select id="getQuestionInfo" resultType="QuestionVO">
-		SELECT m.id, m.profile_image,SUBCODE_TO_NAME(m.member_level) as member_level,
-		    q.QUESTION_BOARD_NO,q.MEMBER_NO,SUBCODE_TO_NAME(q.TOPIC) as topic,q.POINT,q.TITLE,q.TAG,q.CONTENTS,
-		    TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,q.VIEW_CNT,q.RECOMMEND_CNT,q.BOOKMARK_CNT,q.ANSWER_CNT
-		FROM QUESTION_BOARD q
-		JOIN MEMBER m
-		ON q.MEMBER_NO = m.MEMBER_NO
-		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
-	</select> -->
 	
+	<select id="getQuestionCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+	</select>
+	
+	<select id="getQuestionListByMember" resultType="QuestionVO">
+		SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	  
+	                SELECT m.nickname, 
+	                	m.profile_image,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+	                    q.POINT,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    q.WRITE_DATE,
+	                    q.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.BOOKMARK_CNT,
+	                    q.ANSWER_CNT
+	            FROM QUESTION_BOARD q
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            WHERE q.member_no = #{memNo}
+	            ORDER BY WRITE_DATE DESC
+	             
+	            
+	            )B	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	
+	<select id="getQuestionListCntByMember" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+            WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="getAnswerListByMember" resultType="QuestionVO">
+		 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	  
+	                SELECT m.nickname, 
+	                	m.profile_image,
+	                    q.ANSWER_BOARD_NO,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    q.WRITE_DATE,
+	                    P.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.ADOPT_STATUS
+	            FROM answer_board q
+	            JOIN QUESTION_BOARD P
+	            ON Q.QUESTION_BOARD_NO = P.QUESTION_BOARD_NO
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            WHERE q.MEMBER_NO = #{memNo}
+	            ORDER BY WRITE_DATE DESC
+	             
+	            
+	            )B	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	
+	<select id="getAnswerListCntByMember" resultType="int">
+		SELECT COUNT(*) AS CNT
+			FROM answer_board
+			WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	<!-- 질문글 분류 조회 -->
+	<select id="getQuestionListTopic" resultType="QuestionVO">
+	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+			SELECT m.id, 
+				   m.profile_image,
+			       q.QUESTION_BOARD_NO,
+			       q.MEMBER_NO,
+			       q.TOPIC,
+			       q.POINT,
+			       q.TITLE,
+			       q.TAG,
+			       q.CONTENTS,
+			       q.WRITE_DATE,
+			       q.VIEW_CNT,
+			       q.RECOMMEND_CNT,
+			       q.BOOKMARK_CNT,
+			       q.ANSWER_CNT
+			       
+			 FROM QUESTION_BOARD q
+			 JOIN MEMBER m  ON q.MEMBER_NO = m.MEMBER_NO
+			 
+			WHERE q.TOPIC = #{topic}
+			ORDER BY WRITE_DATE DESC
+			
+		) B  ) A 
+		<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+		]]>
+	</select>
+	
+	<select id="getQuestionTopicCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+            WHERE TOPIC = #{topic}
+	</select>
+
+	<!-- 질문글,답변글 단건조회 -->
+	<select id="getQuestionInfo" resultType="QuestionVO">	
+		SELECT m.ID, 
+			   m.PROFILE_IMAGE,SUBCODE_TO_NAME(m.MEMBER_LEVEL) as member_level,
+		 	   m2.ID as answer_id , 
+		 	   m2.PROFILE_IMAGE as answer_profile_image,
+		 	   SUBCODE_TO_NAME(m2.MEMBER_LEVEL) as answer_member_level,
+		 	   
+			   q.QUESTION_BOARD_NO,
+			   q.MEMBER_NO,
+			   q.TOPIC,
+			   q.POINT,
+			   q.TITLE,
+			   q.TAG,
+			   q.CONTENTS,
+			   TO_CHAR(q.WRITE_DATE, 'YYYY.MM.DD') as WRITE_DATE,
+			   q.VIEW_CNT,
+			   q.RECOMMEND_CNT,
+			   q.BOOKMARK_CNT,
+			   q.ANSWER_CNT,
+			   q.REPLY_CNT,
+			   
+	           a.ANSWER_BOARD_NO,a.QUESTION_BOARD_NO,
+	           a.MEMBER_NO as answer_member_no,
+	           a.TITLE as answer_title,
+	           a.CONTENTS as answer_contents, 
+	           TO_CHAR(a.WRITE_DATE, 'YYYY.MM.DD') as ANSWER_WRITE_DATE,
+	           a.RECOMMEND_CNT,
+	           a.ADOPT_STATUS as answer_adopt_status,
+	           a.REPLY_CNT as answer_reply_cnt,
+	           
+	           d.QUESTION_ADD_NO,
+	           d.ANSWER_BOARD_NO,
+	           d.CONTENTS as add_contents,
+	           d.WRITER_TYPE as add_writer_type,
+	           d.WRITE_DATE as add_write_date, 
+	           d.ADD_STATUS
+			
+			FROM QUESTION_BOARD q LEFT JOIN MEMBER m          ON q.MEMBER_NO = m.MEMBER_NO
+	                              LEFT JOIN ANSWER_BOARD a    ON q.QUESTION_BOARD_NO = a.QUESTION_BOARD_NO
+	                              LEFT JOIN QUESTION_ADD d    ON a.ANSWER_BOARD_NO = d.ANSWER_BOARD_NO
+	                              LEFT JOIN MEMBER m2         ON a.MEMBER_NO = m2.MEMBER_NO
+	       
+	        WHERE q.QUESTION_BOARD_NO = #{questionBoardNo}
+	        ORDER BY a.ADOPT_STATUS DESC, 
+	        		 a.WRITE_DATE DESC
+	</select>
+
 	<!-- 질문글 작성 -->
 	<insert id="insertQuestion" parameterType="QuestionVO">
 		INSERT INTO QUESTION_BOARD (
-		    QUESTION_BOARD_NO,MEMBER_NO,TOPIC, POINT, TITLE, TAG, 
-		    CONTENTS, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT, BOOKMARK_CNT, ANSWER_CNT
+			    QUESTION_BOARD_NO,
+			    MEMBER_NO,
+			    TOPIC, 
+			    POINT, 
+			    TITLE, 
+			    TAG, 
+			    CONTENTS, 
+			    WRITE_DATE, 
+			    VIEW_CNT, 
+			    RECOMMEND_CNT, 
+			    BOOKMARK_CNT, 
+			    ANSWER_CNT
 	    )
 	    VALUES(
-		    question_board_seq.NEXTVAL, #{memberNo}, #{topic}, #{point}, 
-		    #{title}, #{tag},#{contents},SYSDATE,0,0,0,0
+			    question_board_seq.NEXTVAL, 
+			    #{memberNo}, 
+			    #{topic}, 
+			    #{point}, 
+			    #{title}, 
+			    #{tag},
+			    #{contents},
+			    SYSDATE,
+			    0,
+			    0,
+			    0,
+			    0
 	    )
 	    <selectKey keyProperty="pk" resultType="int" order="AFTER">
     		SELECT question_board_seq.CURRVAL FROM DUAL
     	</selectKey>
 	</insert>
+	<!-- 질문글 작성시 포인트차감 -->
+	<update id="updatePoint" parameterType="int">
+		UPDATE MEMBER
+	       SET ACCUM_ACTIVITY_POINT = #{accumActivityPoint} + 50,
+	           AVAILABLE_ACTIVITY_POINT = #{availableActivityPoint} +50,
+		<choose>
+			<when test="((acoPoint - point) >= 0)">
+				ACO_POINT = #{acoPoint} - #{point}
+			</when>
+			<otherwise>
+				ACO_POINT = 0, ACO_MONEY = #{acoMoney} + #{acoPoint} - #{point} 
+			</otherwise>
+		</choose>
+	     WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	<insert id="updateActivityPoint">
+		INSERT INTO ACTIVITY_POINT_DETAIL(
+		            ACTIVITY_POINT_NO,
+		            MEMBER_NO,
+		            ACCUM_ACTIVITY_POINT,
+		            CUR_ACTIVITY_POINT,
+		            ACTIVITY_POINT_TYPE,
+		            ACTIVITY_POINT_DATE,
+		            INC_DEC_ACTIVITY_POINT
+		)
+		VALUES(
+					activity_point_detail_seq.NEXTVAL,
+					#{memberNo},
+					#{accumActivityPoint},
+					#{curActivityPoint},
+					#{activityPointType},
+					#{activityPointDate},
+					#{incDecActivityPoint}
+		
+		)
+	</insert>
 	
 	<!-- 질문글 수정 -->
 	<update id="updateQuestion" parameterType="QuestionVO">
 		UPDATE QUESTION_BOARD
-	    SET TOPIC = #{topic},
-	        POINT = #{point},
-	        TITLE = #{title},
-	        TAG = #{tag},
-	        CONTENTS = #{contents}
-	    WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+		   SET TOPIC = #{topic}, 
+		       POINT = #{point}, 
+		       TITLE = #{title}, 
+		       TAG = #{tag}, 
+		       CONTENTS = #{contents}
+	     WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</update>
 	
 	<!-- 질문글 삭제 -->
@@ -134,4 +289,102 @@
 		DELETE QUESTION_BOARD
 		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</delete>
+	
+	<!-- 조회수 -->
+	<update id="updateQuestionViewCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET VIEW_CNT = VIEW_CNT + 1 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	
+	
+	<!-- 1-1.답변글 작성 -->
+	<insert id="insertAnswer" parameterType="QuestionVO">
+		INSERT INTO ANSWER_BOARD (
+			    ANSWER_BOARD_NO, 
+			    QUESTION_BOARD_NO, 
+			    MEMBER_NO, 
+			    TITLE, 
+			    CONTENTS, 
+			    WRITE_DATE, 
+			    ADOPT_STATUS, 
+			    ADD_STATUS
+		)
+		VALUES(
+				answer_board_seq.NEXTVAL, 
+				#{questionBoardNo},
+				#{answerMemberNo}, 
+				#{answerTitle}, 
+				#{answerContents}, 
+				SYSDATE, 
+				'I001',
+				'R001'
+		)
+	</insert>
+	<!-- 1-2. 답변글 작성 : 답변수 +1 -->
+	<update id="plusAnswerCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET ANSWER_CNT = ANSWER_CNT + 1 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	<!-- 1-3. 답변글 작성 : 활동점수 +50점 -->
+	<insert id="plusAnswerActivityPoint" parameterType="memberVO">
+		INSERT INTO ACTIVITY_POINT_DETAIL(
+		    ACTIVITY_POINT_NO,
+		    MEMBER_NO,
+		    ACCUM_ACTIVITY_POINT,
+		    CUR_ACTIVITY_POINT,
+		    ACTIVITY_POINT_TYPE,
+		    ACTIVITY_POINT_DATE,
+		    INC_DEC_ACTIVITY_POINT
+	    )
+	    VALUES(
+		    activity_point_detail_seq.NEXTVAL,
+		    #{memberNo},
+		    #{accumActivityPoint}+50,
+		    #{availableActivityPoint}+50,
+		    'C002',
+		    SYSDATE,
+		    50
+	    )
+	</insert>
+	
+	<!-- 답변글 수정 -->
+	<update id="updateAnswer" parameterType="QuestionVO">
+		UPDATE ANSWER_BOARD 
+		   SET TITLE = #{answerTitle}, 
+			   CONTENTS = #{answerContents}
+	     WHERE ANSWER_BOARD_NO = #{answerBoardNo}
+	</update>
+
+	<!-- 답변글 채택 -->
+	<update id="adoptAnswer" parameterType="int">
+		UPDATE ANSWER_BOARD
+		   SET ADOPT_STATUS = 'I002'
+		 WHERE ANSWER_BOARD_NO = #{answerBoardNo}
+	</update>
+	<select id="selectAdoptAnswer" parameterType="int">
+		SELECT * 
+		  FROM ANSWER_BOARD
+		 WHERE ANSWER_BOARD_NO = #{ano}
+	</select>
+	
+	
+	<!-- 추가질문답변 등록 -->
+	<insert id="insertQuestionAdd" parameterType="QuestionVO">
+		INSERT INTO question_add(
+		    QUESTION_ADD_NO,
+		    ANSWER_BOARD_NO,
+		    CONTENTS,
+		    WRITER_TYPE,
+		    WRITE_DATE
+		) 
+		VALUES (
+		    question_add_seq.NEXTVAL,
+		    #{answerBoardNo},
+		    #{addContents},
+		    #{addWriterType},
+		    SYSDATE
+		)
+	</insert>
 </mapper>

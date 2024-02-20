@@ -91,32 +91,25 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/findAccount");
 		permitAllUrl.add("/changePassword");
 		permitAllUrl.add("/attachFile/**");
+		permitAllUrl.add("/checkNickname/**");
+		permitAllUrl.add("/member/**");
 	}
 	
 	private void insertPermitAllUrlByChae() {
 		permitAllUrl.add("/questionInfo/**");
-		permitAllUrl.add("/questionList");
+		permitAllUrl.add("/questionList/**");
 		permitAllUrl.add("/questionWrite");
 	}
 	
 	private void insertPermitAllUrlByHa() {
-		permitAllUrl.add("/admin");
-		permitAllUrl.add("/adminMember");
-		permitAllUrl.add("/adminStat");
-		permitAllUrl.add("/adminReport");
-		permitAllUrl.add("/adminQna");
-		permitAllUrl.add("/adminSettle");
-		permitAllUrl.add("/adminEmo");
-		permitAllUrl.add("/emoMain");
-		permitAllUrl.add("/emoDetail");
-		//permitAllUrl.add("/emoBuyList");
-		permitAllUrl.add("/adminStatAjax");
-		permitAllUrl.add("/adminStatAjax2");
-		
+		permitAllUrl.add("/noticeBoard");
+		permitAllUrl.add("/noticeInfo/**");
 	}
 	
 	private void insertPermitAllUrlByKyung() {
-		permitAllUrl.add("/freeBoard/freeBoardList");
+		permitAllUrl.add("/freeBoardList");
+		permitAllUrl.add("/freeBoardInfo/**");
+		
 //		permitAllUrl.add("/point");
 		
 	}

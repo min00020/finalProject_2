@@ -26,12 +26,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.AttachedFileVO;
+import com.yedamFinal.aco.common.ReportVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
-import com.yedamFinal.aco.member.serviceImpl.MemberServiceImpl;
+import com.yedamFinal.aco.member.service.MemberService;
 
 
 /**
@@ -55,7 +56,7 @@ public class CommonController {
 	private FileServiceImpl fileService;
 	
 	@Autowired
-	private MemberServiceImpl memberService;
+	private MemberService memberService;
 	
 	@Autowired
 	private ReplyServiceImpl replyService;
@@ -176,7 +177,11 @@ public class CommonController {
 		}
 	}
 
-	//chae toast ui
+	/**
+	* toast ui를 이용한 텍스트 에디터
+	* @param image 
+	* @return Map<String, String>
+	*/
 	@PostMapping("/texteditorimage")
 	@ResponseBody
 	public Map<String, String> uploadEditorImage(@RequestParam final MultipartFile image) {
@@ -184,4 +189,17 @@ public class CommonController {
 	}
 	
 	//tae 깃허브 연동
+	@PostMapping("/insertReport")
+	@ResponseBody
+	public int insertReportProcess(ReportVO reportVO) {
+		MemberVO memberVO = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();
+			memberVO = userDetails.getMemberVO();
+			
+			memberVO = memberService.getMemberInfo(memberVO);
+		}
+		 return replyService.insertReport(reportVO, memberVO.getMemberNo());
+	}
 }

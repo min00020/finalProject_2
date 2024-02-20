@@ -20,4 +20,7 @@ public interface SideMapper {
 	
 	public int updatereviewCnt(@Param(value="bno") int bno);
 	public List<SideVO> selectParticipateList(int memberNo);
+	
+	public List<SideVO> selectListAllByMember(@Param(value="pageNo")int pageNo, @Param(value="memNo") int memberNo);
+	public int selectListAllCntByMember(int memberNo);
 }

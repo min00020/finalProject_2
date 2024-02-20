@@ -22,7 +22,12 @@ public class EmoticonController {
 	
 	@Autowired
 	MemberService memberService;
-	
+	/**
+	 * 이모티콘 상점 메인
+	 * @param model
+	 * @param pageNo
+	 * @return
+	 */
 	@GetMapping("/emoMain")
 	public String getEmoMain(Model model, int pageNo) {
 		var ret = adminService.getMainEmoList(pageNo);
@@ -32,6 +37,12 @@ public class EmoticonController {
 	}
 	
 	//이모티콘 상세
+	/**
+	 * 
+	 * @param adminEmoVO
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/emoDetail")
 	public String getEmoDetail(AdminEmoVO adminEmoVO, Model model) {
 		// MemberVO 꺼내오기.
@@ -52,6 +63,11 @@ public class EmoticonController {
 	}
 	
 	//내 이모티콘 구매목록
+	/**
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/emoBuyList")
 	public String getEmoBuyList(Model model) {
 		// MemberVO 꺼내오기.

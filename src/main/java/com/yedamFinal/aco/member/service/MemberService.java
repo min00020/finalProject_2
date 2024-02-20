@@ -62,4 +62,5 @@ public interface MemberService {
 	
 	public Map<String, Object> updateSettlement(SettlementVO reqVO, MemberVO memberVO, int settlementReqPoint);
 	
+	public Map<String, Object> getOtherMemberInfo(int pg, String tp, int memberNo);
 }
