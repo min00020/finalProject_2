@@ -21,7 +21,7 @@
 
 
 		<div style="display: flex; justify-content: space-between;">
-			<button type="button" class="btn btn-secondary dropdown-toggle"
+			<button type="button" class="btn btn-secondary dropdown-toggle" style="visibility:hidden;"
 				data-bs-toggle="dropdown" aria-expanded="false" th:text="최신순"></button>
 			<button type="button" class="btn text-white"
 				style="background-color: #3e6ce3;"
@@ -36,15 +36,29 @@
 				<div id="freeBoardList" class="row"
 					th:each="free : ${getFreeBoardList}">
 					<div id="title" class="col-8">
-						<div id="member" style="height: 40px;"></div>
-						<div id="titleTag"
-							th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|">
-							<h4 th:text="${free.title}" style="text-align: left;"></h4>
-								<p style="color:#3e6ce3" th:text="${#dates.format(free.writeDate, 'yyyy-MM-dd HH:mm')}"></p>
-
+						<div id="park_member" style="height: 40px;">
+								<span class="park_box_free">
+                          			<img class="park_profile_free" th:onclick="|location.href='/member/${free.memberNo}'|" th:src="|/upload/profile/${free.profileImage}|" alt="profile">
+                       			</span>
+								<span class="park_nickname_free" th:onclick="|location.href='/member/${free.memberNo}'|" style="font-weight : bold;">[[${free.nickname}]]
+								
+								</span>
+							<span  style="font-weight :; " class="park_activityPoint_free"><span class= "park_dot"> · </span><img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${free.accumActivityPoint}]]
+								<span class= "park_dot" th:if="${free.minute < 60}" th:text="' · ' + (${free.minute}) + '분 전'"></span>
+								<span class= "park_dot" th:if="${free.minute >= 60 && free.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 60.0)}) + '시간 전'"></span>
+								<span class= "park_dot" th:if="${free.minute >= 1440 && free.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 1440.0)}) + '일 전'"></span>
+								<span class= "park_dot" th:if="${free.minute >= 43200 && free.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 43200.0)}) + '달 전'"></span>
+								<span class= "park_dot" th:if="${free.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 518400.0)}) + '년 전'"></span>
+							</span><br>
+						
 						</div>
-					</div>
-					<div class="col-1" style="text-align: center; margin: auto;">
+					<div id="titleTag" class=park_title th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|">
+							<h4 th:text="${free.title}" style="text-align: left;"></h4>
+							<p style="color:#3e6ce3" th:text="${#dates.format(free.writeDate, 'yyyy-MM-dd')}"></p>
+
+				</div>
+			</div>
+		<div class="col-1" style="text-align: center; margin: auto;">
 						<h6 th:text="${free.viewCnt}"></h6>
 						<h6>조회</h6>
 					</div>
@@ -131,3 +145,6 @@ $('#searchInput').on('keydown', function(e) {
 	});
 	
 </script>
+<style>
+
+</style>

@@ -17,8 +17,12 @@ import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
+import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
+import com.yedamFinal.aco.noticeboard.NoticeBoardVO2;
+import com.yedamFinal.aco.question.QuestionVO2;
+import com.yedamFinal.aco.sideboard.SideVO2;
 
 
 @Service
@@ -32,6 +36,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	
 	@Autowired
 	private FreeBoardMapper freeBoardMapper;
+	
+
 
 	@Override
 	public List<FreeBoardVO> getFreeBoardAll(Model model,int pg) {
@@ -122,5 +128,48 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		model.addAttribute("pageDTO", dto);
 		return freeBoardMapper.searchFreeBoard(search,pg);
 	}
+
+	@Override
+	public List<FreeBoardVO> getFreeBoardMainPage() {
+
+		return freeBoardMapper.getFreeBoardMainPage();
+	}
+
+	@Override
+	public List<NoticeBoardVO2> getNoticeBoardMainPage() {
+		
+		return freeBoardMapper.getNoticeBoardMainPage();
+	}
+
+	@Override
+	public List<QuestionVO2> getQuestionBoardMainPage() {
+		
+		return freeBoardMapper.getQuestionBoardMainPage();
+	}
+
+	@Override
+	public List<SideVO2> getSideProjectBoardMainPage() {
+		
+		return freeBoardMapper.getSideProjectBoardMainPage();
+	}
+
+	@Override
+	public List<MainTotalVO> getMainTotalSearch(Model model,String search, int pg) {
+		
+		var searchMainTotalList = freeBoardMapper.getMainTotalSearch(search, pg);
+		PaginationDTO dto = null;
+		if(searchMainTotalList.size() > 0) {
+			dto = new PaginationDTO(freeBoardMapper.getMainTotalSearchCnt(search), pg, 10);
+		}
+		model.addAttribute("pageDTO", dto);
+
+		return freeBoardMapper.getMainTotalSearch(search, pg);
+	}
+
+	@Override
+	public int getMainTotalSearchCnt(String search) {
+		return freeBoardMapper.getMainTotalSearchCnt(search);
+	}
 	
+
 }
