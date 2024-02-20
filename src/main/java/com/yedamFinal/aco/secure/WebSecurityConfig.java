@@ -118,6 +118,5 @@ public class WebSecurityConfig {
 		//permitAllUrl.add("/myPage");
 		//permitAllUrl.add("/myPage2");
 		permitAllUrl.add("/sideProjectList/**");
-		permitAllUrl.add("/sideInfo/**");
 	}
 }

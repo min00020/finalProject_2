@@ -7,26 +7,30 @@
 <select id="selectRecruitingList" resultType="SideVO">
 	SELECT *
     FROM (
-        SELECT  
-            ROWNUM AS RN,
-            side_board_no, 
-	        publishing_status, 
-	        title, 
-	        content, 
-	        project_outline,
-	        writer, 
-	        write_date, 
-	        recruit_personnel, 
-	        dev_period, 
-	        git_address, 
-	        view_cnt,
-	        reply_cnt,
-	        tech_of_use,
-	        member_no	
-	FROM side_project_board
-	WHERE publishing_status = #{status}
-    ORDER BY write_date desc
-    )
+        SELECT ROWNUM AS RN, B.*
+        FROM (SELECT  
+	            s.side_board_no, 
+		        s.publishing_status, 
+		        s.title, 
+		        s.content, 
+		        s.project_outline,
+		        s.writer, 
+		        s.write_date, 
+		        s.recruit_personnel, 
+		        s.dev_period, 
+		        s.git_address, 
+		        s.view_cnt,
+		        s.reply_cnt,
+		        s.tech_of_use,
+		        s.member_no,
+		        m.profile_image,
+		        m.nickname
+			FROM side_project_board s
+			JOIN member m ON s.member_no = m.member_no
+			WHERE s.publishing_status = #{status}
+	    	ORDER BY s.write_date desc
+	    	)B
+    )A
 	<![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
 </select>

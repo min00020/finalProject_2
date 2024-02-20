@@ -46,14 +46,15 @@ public class SideController {
 	 * @param status
 	 * @param pageNo
 	 * @param model
+	 * @param memberNo
 	 * @return sideboard/sideProjectList
 	 */
 	@GetMapping("/sideProjectList/{status}")
 	public String getsideProjectForm(@PathVariable("status") String status, 
-			                         @RequestParam("pageNo") int pageNo,  
+			                         @RequestParam("pageNo") int pageNo,
 			                         Model model) {
-		
 		var ret = sideService.getRecruitingList(pageNo, status);
+		
 		model.addAttribute("recList", ret.get("sideList"));
 		model.addAttribute("pageDTO", ret.get("pageDTO"));
 		
@@ -82,7 +83,7 @@ public class SideController {
         }
         
         // 사이드프로젝트 게시글 협업중 상태일때 정보(깃허브 레포지토리, 이슈리스트, 커밋리스트)
-        if(vo.getPublishingStatus().equals("Q002")) {
+        if(memberVO != null && vo.getPublishingStatus().equals("Q002")) {
         	Map<String, Object> list = gitService.getGitHubRepositoryInfo(memberVO.getGitToken(),vo.getGitAddress());
         	model.addAttribute("issueDTO", list.get("issueList"));
         	model.addAttribute("commitDTO", list.get("commitList"));

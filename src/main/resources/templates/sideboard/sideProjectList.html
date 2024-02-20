@@ -33,11 +33,16 @@
 				<div class="recList_1 clearfix" th:each="rec:${recList}">
 					<h6 th:if="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
 					<h6 th:unless="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
+					<div class="qna_box">
+					<img th:if="${rec.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+					<img th:unless="${rec.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${rec.profileImage}|" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+					</div>
+					<p th:text="${rec.nickname}">cookie123</p>
 					<h5 th:onclick="goInfoPage([[${rec.sideBoardNo}]])" style="font-weight:bolder;">[[ ${rec.title }]]</h5>
 					<br>
 					<p>[[${rec.projectOutline}]]</p>
 					<br>
-					<p style=";color:#979da9;float:left;">기간 | [[${rec.devPeriod}]]일  모집인원 [[${rec.recruitPersonnel}]]명</p>
+					<p style="color:#979da9;float:left;">기간 | [[${rec.devPeriod}]]일  모집인원 [[${rec.recruitPersonnel}]]명</p>
 					<span><p style="float:right;color:#979da9;">조회수 [[ ${rec.viewCnt} ]]회  댓글수 [[ ${rec.replyCnt} ]]개</p></span>
 					<br>
 					<hr id="tae-hr">	
@@ -68,16 +73,16 @@
 	
 	
 </div> <!-- header -->
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
 
-	const memberNo = [[${session.member.memberNo}]]
+	const member = [[${session.member}]];
 	
 	function goInfoPage(bno){
 	    
 	      location.href='/sideInfo/' +  bno;
 	   }
 	function goWriting(){
-		if(memberNo == null){
+		if(member == null){
 			showWarningAlert("회원만이 글을 작성할 수 있습니다.");
 			return location.href='/loginForm';
 		}
