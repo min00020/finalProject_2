@@ -18,6 +18,7 @@ import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.question.QuestionVO;
+import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.question.service.QuestionService;
 
 import lombok.extern.log4j.Log4j2;
@@ -57,12 +58,14 @@ public class QuestionController {
 	* @return question/questionList
 	*/
 	@GetMapping("/questionList")
-	public String getquestionBoard(@RequestParam int pageNo, String topic, Model model) {
-		log.info("uuuuuuuuuuuuuuuu");
-		if(topic == null) 
-			questionService.getQuestionList(model, Integer.valueOf(pageNo));
+	public String getquestionBoard(@RequestParam int pageNo, String topic, Model model, String search) {
+		/* log.info("uuuuuuuuuuuuuuuu"); */
+		
+		if(topic == null) {
+			questionService.getQuestionList(model, Integer.valueOf(pageNo),search);
+		}
 		else {
-			questionService.getQuestionListTopic(model, Integer.valueOf(pageNo), topic);
+			questionService.getQuestionListTopic(model, Integer.valueOf(pageNo), topic, search);
 		}
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,33 +76,13 @@ public class QuestionController {
 		}
 		else {
 			model.addAttribute("loginId", "-1");
-		}		
+		}
+		model.addAttribute("topic", topic);
+		model.addAttribute("search", search);
+		
 		return "question/questionList";
 	}
 	
-	/**
-	* 질문글과 답변글 분류별 조회
-	* @param topic 
-	* @param model 
-	* @return question/questionList
-	*/
-	@GetMapping("/questionList/{topic}")
-	public String getquestionSelect(Model model, @RequestParam int pageNo, @PathVariable("topic") String topic) {
-		questionService.getQuestionListTopic(model, Integer.valueOf(pageNo), topic);
-		
-		// MemberVO 꺼내오기.
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
-			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
-			MemberVO username = userDetails.getMemberVO();
-			model.addAttribute("loginId", username.getId());
-		}
-		else {
-			model.addAttribute("loginId", "-1");
-		}
-		
-		return "question/questionList";
-	}
 	
 	/**
 	* 질문글 상세조회 페이지
@@ -127,6 +110,25 @@ public class QuestionController {
 		model.addAttribute("questionInfo", result);
 		
 		return "question/questionInfo";
+	}
+	
+	/**
+	* 질문글 북마크
+	* @param MybookmarkVO 
+	* @return 
+	*/
+	@PostMapping("/bookmarkUpdate")
+	@ResponseBody
+	public Map<String, Object> updateBookmark(int qno){
+		//memberVO
+		MemberVO username = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+			UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+			username = userDetails.getMemberVO();
+			username = memberService.getMemberInfo(username);
+		}
+		return questionService.updateBookmark(qno, username.getMemberNo());
 	}
 	
 	/**
@@ -216,7 +218,7 @@ public class QuestionController {
 			username.getAvailableActivityPoint();
 		}
 		
-		return questionService.writeAnswer(question);
+		return questionService.writeAnswer(question, username);
 	}
 	
 	/**
@@ -238,10 +240,16 @@ public class QuestionController {
 	@PostMapping("/answerAdopt")
 	@ResponseBody
 	public int adoptAnswer(int ano){
-		return questionService.adoptAnswer(ano);
+		//memberVO
+				MemberVO username = null;
+				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				if (authentication != null && authentication.getPrincipal() instanceof UserDetailVO) {
+					UserDetailVO userDetails = (UserDetailVO) authentication.getPrincipal();	
+					username = userDetails.getMemberVO();
+					username = memberService.getMemberInfo(username);
+				}
+		return questionService.adoptAnswer(ano,username);
 	}
-	
-	
 	
 	/**
 	* 추가질문 작성
@@ -254,5 +262,15 @@ public class QuestionController {
 		return questionService.writeQuestionAdd(question);
 	}
 	
+	/**
+	* 추가질문 답변채택
+	* @param question 
+	* @return Map<String, Object>
+	*/
+	@PostMapping("/answerAddAdopt")
+	@ResponseBody
+	public int adoptAddAnswer(int questionAddNo){
+		return questionService.adoptAddAnswer(questionAddNo);
+	}
 	
 }
