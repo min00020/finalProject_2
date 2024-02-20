@@ -35,7 +35,7 @@
                 			C.ANSWER_STATE, 
                 			C.VIEW_CNT,
                 			D.ACCUM_ACTIVITY_POINT,
-           					ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+           					ROUND((SYSDATE - CAST(WRITE_DATE AS DATE))) * 24 * 60 AS MINUTE
                     			FROM QNA_BOARD C
                     			JOIN MEMBER D ON C.MEMBER_NO = D.MEMBER_NO
                     			WHERE D.MEMBER_NO = #{memberNo}
@@ -78,7 +78,7 @@
             		B.ANSWER_STATE, 
             		B.VIEW_CNT,
             		B.ACCUM_ACTIVITY_POINT,
-           			B.MINUTE 
+           			B.MINUTE
             		FROM (
                 		SELECT 
                 			C.QNA_BOARD_NO, 
@@ -88,8 +88,8 @@
                 			C.CHANGE_DATE, 
                 			C.ANSWER_STATE, 
                 			C.VIEW_CNT,
-                			C.ACCUM_ACTIVITY_POINT,
-           					TO_NUMBER(ROUND((SYSDATE - WRITE_DATE) * 24 * 60)) AS MINUTE
+                			D.ACCUM_ACTIVITY_POINT,
+           					ROUND((SYSDATE - CAST(WRITE_DATE AS DATE))) * 24 * 60 AS MINUTE
                     			FROM QNA_BOARD C
                     			JOIN MEMBER D ON C.MEMBER_NO = D.MEMBER_NO
                     			WHERE D.MEMBER_NO = #{memberNo} AND UPPER(C.TITLE) LIKE '%' || UPPER(#{search}) || '%' 

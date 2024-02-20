@@ -59,9 +59,9 @@
 					<span class="park_nickname_free" th:onclick="|location.href='/member/${session.member.memberNo}?pg=1'|">[[${qna.nickname}]]</span>
 					<span  style="font-weight :; " class="park_activityPoint_free"><span class= "park_dot"> · </span><img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${qna.accumActivityPoint}]]
 								<span class= "park_dot" th:if="${qna.minute < 60}" th:text="' · ' + (${qna.minute}) + '분 전'"></span>
-								<span class= "park_dot" th:if="${qna.minute >= 60 && free.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 60.0)}) + '시간 전'"></span>
-								<span class= "park_dot" th:if="${qna.minute >= 1440 && free.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 1440.0)}) + '일 전'"></span>
-								<span class= "park_dot" th:if="${qna.minute >= 43200 && free.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 43200.0)}) + '달 전'"></span>
+								<span class= "park_dot" th:if="${qna.minute >= 60 && qna.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 60.0)}) + '시간 전'"></span>
+								<span class= "park_dot" th:if="${qna.minute >= 1440 && qna.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 1440.0)}) + '일 전'"></span>
+								<span class= "park_dot" th:if="${qna.minute >= 43200 && qna.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 43200.0)}) + '달 전'"></span>
 								<span class= "park_dot" th:if="${qna.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 518400.0)}) + '년 전'"></span>
 					</span><br>
 				</div>
