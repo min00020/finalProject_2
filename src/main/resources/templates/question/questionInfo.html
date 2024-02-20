@@ -70,10 +70,10 @@
 					<span><img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye"></span>
 					<span th:text="${questionInfo[0][0].viewCnt}">10</span>
 					<span>
-						<img class="qna_icon" src="/commonResource/icon/bookmark.png" alt="bookmark" th:if="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
-						<img class="qna_icon" src="/commonResource/icon/bookmark2.png" alt="bookmark" th:unless="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+						<img class="qna_icon" id="bookmarkImage" src="/commonResource/icon/bookmark.png" alt="bookmark" th:if="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+						<img class="qna_icon" id="bookmarkImage" src="/commonResource/icon/bookmark2.png" alt="bookmark" th:unless="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
 					</span>
-					<span th:text="${questionInfo[0][0].bookmarkCnt}">13</span>
+					<span id="bookmarkCnt" th:text="${questionInfo[0][0].bookmarkCnt}">13</span>
 					<!-- <span><img class="qna_icon" src="/commonResource/icon/best.png" alt="best"></span>
 					<span th:text="${questionInfo[0][0].recommendCnt}">9</span> -->
 					<span id="replyBtn"><img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply"></span>
@@ -562,8 +562,7 @@
 	 let test3 = [[${writePost}]];
 	 let test4 = [[${AdoptQuestionVO}]];
 	 let test5 = [[${currentWriterType}]]
-	 let test6 = [[${isCheckBookmark}]]
-	
+	 
 	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
 
 	 //질문글 수정폼 이동
@@ -738,6 +737,10 @@
 		
 	}
  	
+
+	 
+	let isCheckBookmark = [[${isCheckBookmark}]]
+ 	
  	function bookmarkBtn(){
  		const member = [[${session.member}]];
  		
@@ -760,8 +763,16 @@
 		.done(res => {
 			if(res.result == "200"){
 				console.log(res);
-			/* showSuccessAlert('채택성공'); */
-	    		window.location.href = "/questionInfo/"+ bno;
+				$("#bookmarkCnt").text(res.bookmarkCnt);
+				if(isCheckBookmark == 0){
+					isCheckBookmark = 1;
+					$("#bookmarkImage").attr("src","/commonResource/icon/bookmark2.png");
+				}
+				else{
+					isCheckBookmark = 0;
+					$("#bookmarkImage").attr("src","/commonResource/icon/bookmark.png");
+				}
+	    		/* window.location.href = "/questionInfo/"+ bno; */
 			}
 			else{
 				showWarningAlert('북마크 실패');

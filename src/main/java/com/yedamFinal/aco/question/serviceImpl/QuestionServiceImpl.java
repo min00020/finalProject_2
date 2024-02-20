@@ -176,6 +176,7 @@ public class QuestionServiceImpl implements QuestionService{
 	public Map<String, Object> updateBookmark(int qno, int memberNo) {
 		Map<String,Object> ret = new HashMap<String,Object>();
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
+		int bookmarkCnt = result.get(0).getBookmarkCnt();
 
 		ret.put("result", "200");
 		if(result.size() <= 0) {
@@ -192,12 +193,16 @@ public class QuestionServiceImpl implements QuestionService{
 				bookmarkvo.setTitle(result.get(0).getTitle());
 				questionMapper.insertBookmark(bookmarkvo);
 				questionMapper.updateBookmarkCnt(0, qno);
+				bookmarkCnt += 1;
 			}
 			else {
 				questionMapper.updateBookmarkCnt(2, qno);
 				questionMapper.deleteBookmark(qno);
+				bookmarkCnt -= 1;
 			}
 		}
+		ret.put("bookmarkCnt", bookmarkCnt);
+		
 		return ret;
 	}
 	
