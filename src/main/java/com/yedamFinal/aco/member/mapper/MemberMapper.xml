@@ -98,17 +98,17 @@
 </select>
 <!-- 내가 질문한 리스트전체 페이지처리 -->
 <select id="selectQuestionList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
-	SELECT *
-    FROM (SELECT question_board_no,
-		    title,write_date,
-		    answer_cnt,
-	        member_no
-		FROM question_board
-		WHERE member_no= #{memberNo}
-		ORDER BY write_date desc
-		)
-	<![CDATA[
-    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
+	SELECT ROWNUM, A.*
+	 FROM
+	   (SELECT q.question_board_no,
+		       q.title,write_date,
+		       q.answer_cnt,
+	           q.member_no
+		FROM question_board q
+		ORDER BY q.write_date desc ) A
+	JOIN member B ON A.member_no = B.member_no
+	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 10
+	
 </select>
 <select id="selectQuestionCnt" resultType="int">
 	SELECT 
@@ -312,17 +312,32 @@ VALUES (activity_point_detail_seq.NEXTVAL,
 	UPDATE MEMBER SET EMAIL = #{email}, NAME = #{name}, NICKNAME = #{nickname}, PROFILE_IMAGE = #{profileImageName}, TOPIC_HASHTAG = #{tag} WHERE MEMBER_NO = #{memberNo}
 </update>
 <!-- 정산요청 -->
-<update id="settlementRequest" parameterType="SettlementVO">
-		UPDATE settlement
-		SET (
-		     settlement_req_point = #{settlementReqPoint},
-		     req_account = #{reqAccount},
-		     req_account_name = #{reqAccountName},
-		     req_account_bankcode = #{reqAccountBankcode},
-		     req_bankname = #{reqBankname},
-		     subcode_to_name(process_status) as process_status = 'O001'
-		     )
-		WHERE member_no = #{memberNo}
+<update id="updatesettlementRequest" parameterType="SettlementVO">
+	UPDATE member
+    SET aco_point = aco_point - #{settlementReqPoint}
+    WHERE member_no = #{memberVO.memberNo}
 </update>
+<insert id="insertsettlementPoint" parameterType="SettlementVO">
+	INSERT INTO settlement(
+	                       settlement_no,
+	                       member_no,
+	                       settlement_req_point,
+	                       req_account,
+	                       req_account_name,
+	                       req_account_bankcode,
+	                       req_bankname,
+	                       process_status
+	                       )
+	VALUES (
+		    settlement_seq.NEXTVAL,
+	        #{memberNo},
+	        #{settlementReqPoint},
+	        #{reqAccount},
+	        #{reqAccountName},
+	        #{reqAccountBankcode},
+	        #{reqBankname},
+	        #{processStatus}
+	        )
+</insert>
 
 </mapper>

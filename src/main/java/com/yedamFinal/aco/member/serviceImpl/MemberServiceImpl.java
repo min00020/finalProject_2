@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.NaverMailSender;
-import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.RandomString;
 import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
@@ -36,6 +35,7 @@ import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
+import com.yedamFinal.aco.questionboard.MyquestionVO;
 import com.yedamFinal.aco.sideboard.mapper.SideMapper;
 
 import net.nurigo.sdk.NurigoApp;
@@ -265,18 +265,18 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 	}
 
 	@Override
-	public Map<String, Object> getMyQuestionList(MemberVO memberVO, int pageNo) {
+	public Map<String, Object> getMyQuestionList(MemberVO memberVO) {
 		Map<String, Object> map = new HashMap<>();
-		var QuestionList = memberMapper.selectQuestionList(memberVO, pageNo);
-		PaginationDTO dto = null;
-		if(QuestionList.size() > 0) {
-			dto = new PaginationDTO(memberMapper.selectQuestionCnt(memberVO), pageNo, 10);
-		}
+		var QuestionList = memberMapper.selectQuestionList(memberVO);
 		map.put("questionList", QuestionList);
-		map.put("pageDTO", dto);
 		return map;
 	}
 
+	@Override
+	public List<MyquestionVO> getMyQuestionListModal(MemberVO memberVO){
+		return memberMapper.selectMyqList(memberVO);
+	}
+	
 	// 활동내역점수
 	@Override
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO) {
@@ -506,17 +506,46 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		return ret;
 	}
 	@Override
-	public Map<String, Object> updateSettlement(SettlementVO vo, int memberNo) {
+	public Map<String, Object> updateSettlement(SettlementVO reqVO, MemberVO vo, int settlementReqPoint) {
+		var accList = memberMapper.selectMemberAccountList(vo);
+		AccountVO findVO = null;
+		for(AccountVO accVO : accList) {
+			if(accVO.getAccountNo().equals(reqVO.getReqAccount())) {
+				findVO = accVO;
+				break;
+			}
+		}
+		PointDetailJoinVO pointVO = new PointDetailJoinVO();
+		pointVO.setMemberNo(vo.getMemberNo());
+		pointVO.setLatestTotalPoints(vo.getAcoMoney() - vo.getAcoPoint());
+		pointVO.setLatestAcoMoney(vo.getAcoMoney());
+		pointVO.setLatestAcoPoint(vo.getAcoPoint());
+		pointVO.setHistoryType("F009");
+		pointVO.setHistoryDate(new Date());
+		pointVO.setIncDecPoint(settlementReqPoint * -1);
+		pointVO.setPointType("G002");
+		pointVO.setAccountNo(findVO.getAccountNo());
+		memberMapper.insertPointDetail(pointVO);
+		
+		SettlementVO settleVO = new SettlementVO();
+		settleVO.setMemberNo(vo.getMemberNo());
+		settleVO.setSettlementReqPoint(settlementReqPoint);
+		settleVO.setReqAccount(findVO.getAccountNo()); 
+		settleVO.setReqAccountName(findVO.getAccountHolder());
+		settleVO.setReqAccountBankcode(findVO.getBankCode()); 
+		settleVO.setReqBankname(findVO.getBankName());
+		settleVO.setProcessStatus("O001");
+		memberMapper.insertsettlementPoint(settleVO);
+		
 		Map<String, Object> map = new HashMap<>();
-		vo.setMemberNo(memberNo);
-		int result = memberMapper.settlementRequest(vo, memberNo);
+		vo.setAcoPoint(vo.getAcoPoint() - settlementReqPoint);
+		int result = memberMapper.updatesettlementRequest(settlementReqPoint,vo);
 		if(result <= 0) {
-			map.put("result" , "500");
-		}else {
-			map.put("result", "200");
-			map.put("vo" , vo);
+			map.put("result", "400");
 		}
 		return map;
 	}
+	
+	
 
 }

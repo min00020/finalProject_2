@@ -30,7 +30,7 @@ public interface MemberMapper {
 	//작성한 질문글 리스트
 	public List<MyquestionVO> selectMyqList(MemberVO memberVO);
 	//작성한 질문글 모달 리스트
-	public List<MyquestionVO> selectQuestionList(MemberVO memberVO, int pageNo);
+	public List<MyquestionVO> selectQuestionList(MemberVO memberVO);
 	public int selectQuestionCnt(MemberVO memberVO);
 	
 	//포인트 사용내역
@@ -70,5 +70,6 @@ public interface MemberMapper {
 	
 	public int updateAccountInfo(AccountChangeDTO dto);
 	
-	public int settlementRequest(SettlementVO settleVO, int memberNo);
+	public int updatesettlementRequest(@Param(value="settlementReqPoint") int settlementReqPoint, @Param(value="memberVO") MemberVO memberVO);
+	public int insertsettlementPoint(SettlementVO settleVO);
 }

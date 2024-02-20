@@ -34,6 +34,7 @@ import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
+import com.yedamFinal.aco.questionboard.MyquestionVO;
 import com.yedamFinal.aco.sideboard.service.SideService;
 
 /**
@@ -177,28 +178,29 @@ public class MemberController {
 	 * @return common/myPage2
 	 */
 	@GetMapping("/myPage2")
-	public String getMyPageForm2(Model model, @PathVariable("pageNo") int pageNo) {
+	public String getMyPageForm2(Model model) {
 		MemberVO memberVO = SessionUtil.getSession();
 		
 		MemberQuestionChartVO chartVO = memberService.getMemberChart(memberVO);
 		MemberVO findVO = memberService.getMemberInfo(memberVO);
 		List<MybookmarkVO> bmark = memberService.getMybmList(memberVO);
-		var ret = memberService.getMyQuestionList(memberVO, pageNo);
+		var ret = memberService.getMyQuestionList(memberVO);
 		List<MybookmarkVO> bmarkList = memberService.getMyBookList(memberVO);
 		List<PointDetailJoinVO> list = memberService.getPointList(memberVO);
 		List<ActivityPointVO> list2 = memberService.getActivityList(memberVO);
 		List<AccountVO> list3 = memberService.getMemberAccountList(memberVO);
+		List<MyquestionVO> myQuestionList = memberService.getMyQuestionListModal(memberVO);
 		var tagList = memberService.getTagList();
 		model.addAttribute("tagList", tagList);
 		model.addAttribute("accountList", list3);
 		model.addAttribute("pointList", list);
 		model.addAttribute("activityList", list2);
 		model.addAttribute("memberInfo", findVO);
+		model.addAttribute("myQuestionList", myQuestionList);
 		model.addAttribute("bmarkList", bmark);
 		model.addAttribute("mquestionList", ret.get("questionList"));
 		model.addAttribute("bookmarkList2", bmarkList);
 		model.addAttribute("memberChart", chartVO);
-		model.addAttribute("pageDTO", ret.get("pageDTO"));
 
 		return "common/myPage2";
 	}
@@ -417,15 +419,19 @@ public class MemberController {
 	}
 	/**
 	 * 정산요청을 보냄
-	 * @param memberNo
-	 * @return memberService.updateResetBan(memberNo)
+	 * @param settlementReqPoint
+	 * @param vo
+	 * @return map
 	 */
 	@PostMapping("/updateSettlement")
 	@ResponseBody
-	public Map<String, Object> updateSettlement(SettlementVO vo, @RequestParam int memberNo) {
+	public Map<String, Object> updateSettlement(SettlementVO vo, Integer settlementReqPoint) {
 		MemberVO memberVO = SessionUtil.getSession();
-		memberNo = memberVO.getMemberNo();
-		return memberService.updateSettlement(vo, memberNo);
+		MemberVO findVO = memberService.getMemberInfo(memberVO);
+		Map<String,Object> map = memberService.updateSettlement(vo, findVO, settlementReqPoint);
+		map.put("memberInfo2", findVO);
+		
+		return map;
 	}
 	
 }

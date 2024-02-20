@@ -16,6 +16,7 @@ import com.yedamFinal.aco.member.SettlementVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
+import com.yedamFinal.aco.questionboard.MyquestionVO;
 
 @Service
 
@@ -39,8 +40,8 @@ public interface MemberService {
 	public List<MybookmarkVO> getMybmList(MemberVO memberVO);
 	// 책갈피 더보기 목록
 	public List<MybookmarkVO> getMyBookList(MemberVO memberVO);
-	public Map<String, Object> getMyQuestionList(MemberVO memberVO, int pageNo);
-
+	public Map<String, Object> getMyQuestionList(MemberVO memberVO);
+	public List<MyquestionVO> getMyQuestionListModal(MemberVO memberVO);
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO);
 	
 	public List<TagVO> getTagList();
@@ -59,5 +60,6 @@ public interface MemberService {
 	public Map<String, Object> changeAccountInfo(AccountChangeDTO accountDTO, MemberVO vo);
 	public Map<String, Object> changePasswordFromMyPage(String password, String passwordVerify, String id);
 	
-	public Map<String, Object> updateSettlement(SettlementVO settlementVO,int memberNo);
+	public Map<String, Object> updateSettlement(SettlementVO reqVO, MemberVO memberVO, int settlementReqPoint);
+	
 }

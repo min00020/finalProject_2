@@ -89,7 +89,7 @@
 																		<br>
 																		<div class="input-group mb-3" style="height:50px;">
 																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2">
-																			<button class="btn btn-outline-secondary" id="accountApprove" type="button" data-bs-toggle="modal" data-bs-target="#accountList">정산요청</button>
+																			<button class="btn btn-outline-secondary" id="accountApprove" type="button">정산요청</button>
 																		</div>
 																	</div>
 																	<div class="point-acc-1">
@@ -494,7 +494,6 @@
 							<div class="card-body" id="tae-card-1">
 								<h5 style="text-align: center; font-weight: bold;">내 관심주제</h5>
 								<ul class="tab-ul" id="topic">
-									<li id="tab-ul li" th:value="${memberInfo.topicHashtag}"></li>
 								</ul>
 							</div>
 						</div>
@@ -979,52 +978,99 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 			return true;
 		}	
 		
+	   $('#accountApprove').on('click', validation2);
 		
+	   // 계좌모달
+	   const myAccountModal = new bootstrap.Modal('#accountList', {
+		  keyboard: false
+	   })
+	   
 	   function validation2(){
-		   const memberGrade = [[${memberInfo.memberInfo.memberLevel}]]
-		   let accPoint = $('input[name="accPoint"]');
-		   const numPoint2 = Number(accPoint.val());
-		   if(memberGrade == 1 || accPoint <= 15000 || (numPoint2 % 1000) != 0){
-			   showWarningAlert("애코 포인트 15,000부터 1,000점 단위로 정산요청가능합니다.");
-		   }else if(memberGrade == 2 || accPoint <= 12000 || (numPoint2 % 1000) != 0){
-			   showWarningAlert("애코 포인트 12,000부터 1,000점 단위로 정산요청가능합니다.");
-		   }else if(memberGrade == 3 || accPoint <= 9000 || (numPoint2 % 1000) != 0){
-			   showWarningAlert("애코 포인트 9,000부터 1,000점 단위로 정산요청가능합니다.");
-		   }else if(memberGrade == 4 || accPoint <= 7000 || (numPoint2 % 1000) != 0){
-			   showWarningAlert("애코 포인트 7,000부터 1,000점 단위로 정산요청가능합니다.");
-		   }else if(memberGrade == 5 || accPoint <= 5000 || (numPoint2 % 1000) != 0){
-			   showWarningAlert("애코 포인트 5,000부터 1,000점 단위로 정산요청가능합니다.");
-		   }else{
-			   showWarningAlert("1,000점 단위로 환전 가능합니다");
+		   const memberGrade = [[${memberInfo.memberLevel}]]
+		   let accPoint = $('input[name="accPoint"]').val();
+		   accPoint = Number(accPoint);
+		   if(memberGrade == 'K001' && (accPoint < 15000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'루키'등급은 15,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K002' && (accPoint < 12000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'브론즈'등급은 12,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K003' && (accPoint < 9000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'실버'등급은 9,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K004' && (accPoint < 7000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'골드'등급은 7,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K005' && (accPoint < 5000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'다이아몬드'등급은 5,000P부터 1,000점 단위로 정산요청가능");
 			   return false;
 		   }
+		   
+		   const modalToggle = document.getElementById('accountApprove');		   
+		   myAccountModal.show(modalToggle);
 		   return true;
 	   }
 	   
 		let choiceAccountObj = null;
 		function sendSettlementRequest(){
-			if (!validation2()) return;
-			
-			let accPoint = $('input[name="accPoint"]');
-			let processStatus : 'O001';
-			let obj = {
-				memberNo : memberno,
-				settlementReqPoint : settlementReqPoint,
-				reqAccount : reqAccount,
-				reqAccountName : reqAccountName,
-				reqAccountBankcode : reqAccountBankcode,
-				reqBankname : reqBankname,
-				processStatus : processStatus
-			}
 			if (choiceAccountObj == null){
 				showWarningAlert('정산받을 계좌를 선택해주세요.');
-			}return;
+				return;
+			}
+			
+			let accPoint = $('input[name="accPoint"]');
+			let processStatus = 'O001';
+			let obj = {
+				memberNo : memberno,
+				reqAccount : choiceAccountObj,
+				processStatus : processStatus,
+				settlementReqPoint : accPoint.val()
+			}
 			
 			$.ajax('/updateSettlement', {
 		        type: 'POST',
-		        data: obj {
-		            
-		        })
+		        data: obj,
+		        beforeSend : function(xhr){
+					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+				}
+			}).done(result =>{
+				showSuccessAlert('환전 요청이 전달되었습니다.');
+				function dateFormat(date) {
+					let dateFormat2 = date.getFullYear() +
+						'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+						'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+					return dateFormat2;
+				}
+
+				const toDate = dateFormat(new Date());
+				const originalIntValue = Number(accPoint.val());
+				accPoint = originalIntValue.toLocaleString();
+				
+				const commaAccummPoint = Number(result.memberInfo2.availableAccumPoint - originalIntValue).toLocaleString();
+				const commaTotalPoint = Number(result.memberInfo2.acoTotal - originalIntValue).toLocaleString();
+				const liString = `
+									<li class="activity1">
+										<span style="font-weight:bold;font-size:large;">정산 요청</span>
+										<span class="decrease-point">-${accPoint}P</span>
+										<br>
+										<span class="tae_date">${toDate}</span>
+										<hr>
+									</li>`;
+				
+				$('#activityMypage').val('');
+				
+				
+				const accumList = $('#accumList');
+				accumList.prepend(liString);
+				
+				$('#pointMypage').text(commaTotalPoint);
+				$('#totalPointMypage').text(commaTotalPoint);
+				$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+				
+				const modalToggle = document.getElementById('accountApprove');		   
+				myAccountModal.hide(modalToggle);
+				
+			}).fail(err => console.log(err));
 		        
 		}
 		
@@ -1048,5 +1094,4 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 			
 	}
 
-	   }
 </script>
