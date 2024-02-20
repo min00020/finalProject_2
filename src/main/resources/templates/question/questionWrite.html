@@ -43,13 +43,13 @@
 						<br>
 					</div>
 					<div>
-						<label for="tags" style="font-weight:bold; ">태그</label>
+						<label for="tag" style="font-weight:bold; ">태그</label>
 						<p style="font-size:14px; margin-bottom:8px;">최대 5개까지 등록가능</p>
-						<input name='tags' type="text" th:field="*{tag}" class="form-control" placeholder="태그를 입력해주세요" data-blacklist='.NET,PHP' id="tags">
+						<input type="text" th:field="*{tag}" class="form-control" placeholder="태그를 입력해주세요" data-blacklist='.NET,PHP'>
 					</div>
 					<br>
 					<label for="editor" style="font-weight:bold; margin-bottom:8px;">질문 내용</label>
-					<div id="editor" name="editor" th:utext="${questionVO.contents}" ></div>
+					<div id="editor" name="editor" th:utext="*{contents}" ></div>
 					<br>
 				</div>
 				<!-- 제목,태그,내용 끝 -->
@@ -118,10 +118,24 @@
 //질문 게시글 작성
 function sendQuestion(){
 	console.log('test',[[${session.member.memberNo}]]);
+	
 	const formData = new FormData(document.questionWrite);
 	
+	//유효성검사
+	const member = [[${session.member}]];
+	if(member == null){
+			showWarningAlert('로그인을 해주세요');
+			return;
+	}
+	
+	/* const contents = editor.getHTML();
+	if(contents.length <= 0) {
+		showWarningAlert('내용을 입력해주세요.');
+		return;
+	} */
+	
 	formData.append(csrfPara, csrfToken);
-	formData.append("memberNo", [[${session.member.memberNo}]]);
+	formData.append("memberNo", member.memberNo);
 	formData.append("contents", editor.getHTML());
 	formData.append("tag", insertTagList.join(","));
 	
@@ -148,7 +162,7 @@ function sendQuestion(){
 function sendQuestionModify(){
 	let bno = [[${questionVO.questionBoardNo}]]
 	const formData = new FormData(document.questionWrite);
-	
+	formData.delete('tag');
 	formData.append(csrfPara, csrfToken);
 	formData.append("questionBoardNo", bno);
 	formData.append("memberNo", [[${session.member.memberNo}]]);
@@ -179,8 +193,9 @@ function sendQuestionModify(){
 <!-- 태그 -->
 <script th:inline="javascript">
 	let dbTagList = [[${tagList}]];
+	
 	//tagify
-	var inputElm = document.querySelector('input[name=tags]');
+	var inputElm = document.querySelector('input[name=tag]');
 	
 	let insertTagList = [];
 	// 나중에 바꿔치기해야함.

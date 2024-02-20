@@ -8,7 +8,6 @@
 	<select id="getQuestionList" resultType="QuestionVO">
 	  SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
 	  
-	  
 	                SELECT m.id, 
 	                	m.profile_image,
 	                    q.QUESTION_BOARD_NO,
@@ -31,7 +30,6 @@
 	         </if>
 	            ORDER BY WRITE_DATE DESC
 	             
-	            
 	            )B	        )A
 	<![CDATA[
         	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
