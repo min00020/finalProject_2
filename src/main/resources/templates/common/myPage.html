@@ -535,27 +535,26 @@
 	
 	//데이터를 콤마로 분리하여 배열로 변환
 	var hashtag = [[${memberInfo.topicHashtag}]];
-	var topics = hashtag.split(',');
+	if(hasttag != null) {
+		var topics = hashtag.split(',');
+		
+		// ul 요소를 가져오기
+		var ul = document.querySelector('#topic');
+		
+		// 각 주제에 대해 li 요소를 생성하여 ul에 추가
+		topics.forEach(function(topic) {
+		    var li = document.createElement('li');
+		    li.textContent = topic.trim(); // 주제 양쪽의 공백 제거
+		    ul.appendChild(li);
+		
+		    // 콤마 추가
+		    ul.insertAdjacentHTML('beforeend', '<span> </span>');
+		});
+		
+		// 마지막 콤마 제거
+		ul.lastElementChild.remove();	
+	}
 	
-	// ul 요소를 가져오기
-	var ul = document.querySelector('#topic');
-	
-	// 각 주제에 대해 li 요소를 생성하여 ul에 추가
-	topics.forEach(function(topic) {
-	    var li = document.createElement('li');
-	    li.textContent = topic.trim(); // 주제 양쪽의 공백 제거
-	    ul.appendChild(li);
-	
-	    // 콤마 추가
-	    ul.insertAdjacentHTML('beforeend', '<span> </span>');
-	});
-	
-	// 마지막 콤마 제거
-	ul.lastElementChild.remove();
-
-
-
-
 	let dbTagList = [[${tagList}]];
 	//tagify
 	var inputElm = document.querySelector('input[name=tags]');
