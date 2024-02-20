@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import com.yedamFinal.aco.freeboard.FreeBoardVO;
+import com.yedamFinal.aco.freeboard.MainTotalVO;
+import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
@@ -82,12 +86,20 @@ public class MemberController {
 	 * @return common/mainPage
 	 */
 	@GetMapping("/")
-	public String getMainPageForm(@RequestParam(value = "pg", required = true, defaultValue = "1") int pg,Integer pageNo,Model model) {
+	public String getMainPageForm(Model model) {
 		model.addAttribute("main", "1");
-		//자유게시판 글 표시
-		model.addAttribute("getFreeBoardList", freeBoardService.getFreeBoardAll(model,1));
-	    Map<String, Object> noticeListMap = noticeBoardService.getAdNoticeList(1);
-	    model.addAttribute("noticeList", noticeListMap.get("noticeList"));
+		
+		//메인-자유게시판 글 표시
+		model.addAttribute("getFreeBoardMainPage", freeBoardService.getFreeBoardMainPage());
+		
+		//메인-공지사항 글 표시
+		model.addAttribute("getNoticeBoardMainPage", freeBoardService.getNoticeBoardMainPage());
+		
+		//메인-질문&답변 게시판 글 표시
+		model.addAttribute("getQuestionBoardMainPage", freeBoardService.getQuestionBoardMainPage());
+		
+		//메인-사이드프로젝트 게시판 글 표시
+		model.addAttribute("getSideProjectBoardMainPage", freeBoardService.getSideProjectBoardMainPage());
 
 		// MemberVO 꺼내오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -98,6 +110,27 @@ public class MemberController {
         }
 		return "common/mainPage";
 	}
+
+	//메인페이지 통합검색
+	@GetMapping("/mainTotalSearch")
+	public String getMainTotalSearch(Model model, @RequestParam String search, @RequestParam int pg) {
+		
+		List<MainTotalVO> ret = null;
+		 // 검색창 입력의 경우.
+		if(search == null)
+    	   return "/";
+       else {
+       		ret = freeBoardService.getMainTotalSearch(model,search,pg);
+       		model.addAttribute("search",search); // 해당 search키워드로 페이징해야함.
+        }
+       
+        int ret2=freeBoardService.getMainTotalSearchCnt(search);
+		model.addAttribute("getMainTotalSearch", ret);
+		model.addAttribute("totalCnt",ret2);
+		return "freeBoard/mainTotalSearch";
+	}
+	
+	
 	// min 회원가입 form
 	@GetMapping("/createAccountForm")
 	public String getCreateAccountForm(HttpServletRequest request, Model model) {
