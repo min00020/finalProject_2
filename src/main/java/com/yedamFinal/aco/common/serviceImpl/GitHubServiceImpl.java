@@ -1,9 +1,17 @@
 package com.yedamFinal.aco.common.serviceImpl;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.kohsuke.github.GHCommit;
+import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHIssueState;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.yedamFinal.aco.common.GitCommitDTO;
+import com.yedamFinal.aco.common.GitIssueDTO;
 import com.yedamFinal.aco.common.service.GitHubService;
 
 @Service
@@ -78,22 +88,62 @@ public class GitHubServiceImpl implements GitHubService {
 	}
 
 	@Override
-	public void getGitHubUserInfo(String userAccessToken) {
-//		gitHub = new GitHubBuilder().withOAuthToken(userAccessToken).build();
-//        repository = github.getRepository("repository name");
-//        
-//        // Issue를 가져올 수도 있다.
-//        GHIssue issue = repository.getIssue(i);
-//        
-//        // Issue에 있는 comments도 가져올 수도 있다.
-//        List<GHIssueComment> comments = issue.getComments();
-//        
-//        // comments에 보면 User의 대한 정보를 가져올 수도 있다.
-//		for (GHIssueComment comment : comments) {
-//        	comment.getUser();
-//            comment.getUser().getName();
-//		}
-
+	public Map<String,Object> getGitHubRepositoryInfo(String userAccessToken, String userRepositoryName) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		try {
+            GitHub github = new GitHubBuilder().withOAuthToken(userAccessToken).build();  // GitHub 인증 토큰으로 GitHub 객체
+            GHRepository repository = github.getRepository(userRepositoryName);  // 리포지토리의 정보
+            List<GHIssue> issues = repository.getIssues(GHIssueState.ALL);  // 모든 이슈 정보
+            List<GHCommit> commitList = repository.listCommits().toList();
+            
+            List<GitIssueDTO> myGitIssueDTOList = new ArrayList<GitIssueDTO>();
+            for(GHIssue issue : issues) {
+            	GitIssueDTO issueDTO = new GitIssueDTO();
+            	issueDTO.setIssueTitle(issue.getTitle());
+            	issueDTO.setIssueDate(issue.getCreatedAt());
+            	issueDTO.setCommentCnt(issue.getCommentsCount());
+            	issueDTO.setIssueUrl(issue.getHtmlUrl().toString());
+            	
+            	myGitIssueDTOList.add(issueDTO);
+            }
+            
+            List<GitCommitDTO> myGitCommitDTOList = new ArrayList<GitCommitDTO>();
+            for(GHCommit commit : commitList) {
+            	GitCommitDTO commitDTO = new GitCommitDTO();
+            	
+            	commitDTO.setCommitMessage(commit.getCommitShortInfo().getMessage());
+            	commitDTO.setCommitDate(commit.getCommitDate());
+            	commitDTO.setCommitUrl(commit.getHtmlUrl().toString());
+            	
+            	myGitCommitDTOList.add(commitDTO);
+            }
+            
+            result.put("issueList", myGitIssueDTOList);
+            result.put("commitList", myGitCommitDTOList);
+            
+        } catch (IOException e) {
+        }	
+		
+		return result;
 	}
 
+	public Map<String, Object> insertGitIssue(String userAccessToken, String userRepositoryName,String title, String body) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		try {
+			GitHub github = new GitHubBuilder().withOAuthToken(userAccessToken).build();
+			GHRepository repository = github.getRepository(userRepositoryName);
+			
+			repository.createIssue(title)
+            .body(body)
+            .create();
+			
+			map.put("result", "200");
+			
+			} catch (IOException e) {
+				System.out.println(e);
+				map.put("result", "500");
+			}
+			return map;
+	}
 }

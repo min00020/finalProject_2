@@ -35,11 +35,36 @@
 
 .tab-ul {
 	list-style: none;
-	/* text-align: center; */
+	text-align: center;
 	/* display:inline-block; */
 	padding: 10px;
 	margin: 0px;
 }
+.tab-ul-2 {
+	list-style: none;
+	/* text-align: center; */
+	/* display:inline-block; */
+	padding: 10px;
+	margin: 0px;
+    display: flex; /* 요소를 가로로 배치하기 위해 Flexbox 사용 */
+    flex-wrap: wrap; /* 요소가 너비를 초과하면 다음 줄로 넘어가도록 설정 */
+}
+.tab-ul-3 {
+	list-style: none;
+	padding: 10px;
+	margin: 0px;
+}
+.tab-ul li {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #f9f9f9;
+    flex: 0 0 calc(50% - 20px); /* 너비를 50%로 설정하고 여백을 뺀 값으로 지정 */
+    max-width: calc(50% - 20px); /* 최대 너비 설정 */
+}
+
 
 
 
@@ -57,6 +82,7 @@
 }
 #myTabContent-2{
 	height: 900px;
+	
 }
 .btn btn-modal {
 	padding-bottom: 0px;
@@ -97,6 +123,7 @@
 	margin-left: -10px;
 	padding-left: 30px;
 	float: right;
+	border-radius:30px;
 }
 
 #myTab {
@@ -218,10 +245,10 @@ input::placeholder
 	color:#979da9;
 }
 .bank{
-	width:100px;
-	height:100px;
-	display:inlineblock;
-	background-color:beige;"
+	width:120px;
+	height:120px;
+	display:inline-block;
+	border-radius:20px;
 	border : 0px;
 }
 #tae-hr{
@@ -281,6 +308,7 @@ input::placeholder
 	height: 470px; 
 	margin-top: 30px; 
 	margin-left: 15px;
+	border-radius: 25px;
 }
 .tae-container4{
 	background-color: #aebfec; 
@@ -302,6 +330,7 @@ input::placeholder
 	margin: 15px;
 	height: 350px;
     margin-top: 20px;
+    border-radius: 25px;
 }
 #tae-sum-h5{
 	padding-top: 30px; 
@@ -410,6 +439,7 @@ input::placeholder
 #tae-card-1{
 	width: 437px; 
 	height: 277px;
+	border-radius:30px;
 }
 #tae-card-4{
 	width: auto; 
@@ -417,8 +447,10 @@ input::placeholder
 }
 
 .tae-bank-1{
-	 width:80px;height:auto;
+	 width:25px;
+	 height:25px;
 	 text-align:center;
+	 margin-top:10px;
 }
 .tae-piechart{
 	width: 900px; 
@@ -441,6 +473,12 @@ input::placeholder
 }
 .tae-ul-list{
 	float: inline-end;
+}
+.tae-ul-list-2{
+	/* height: 300px; 
+	overflow-x: hidden;*/
+	float: inline-end;
+	
 }
 #tae-insertReply{
 	background-color:#0C5FEC;
@@ -478,5 +516,54 @@ input::placeholder
 .sidetextarea{
 	overflow: scroll;
 }
+.gitCommit{
+	border-radius:20px;
+	border:1px solid black;
+}
+.tae-git-3{
+	
+}
+.tae-git-2{
+	list-style-type:none;
+	width: 390px;
+	
+}
 
+.tae-git-1 {
+	padding-left:20px;
+	overflow : scroll;
+	overflow-x: hidden;
+}
 
+/* 스크롤바 설정*/
+.tae-git-1::-webkit-scrollbar {
+	width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+.tae-git-1::-webkit-scrollbar-thumb {
+	height: 17%;
+	background-color: rgba(97, 160, 235, 0.51);
+	border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+.tae-git-1::-webkit-scrollbar-track {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+.tae-btn-text-white{
+	background-color: darkseagreen;
+	color:#fff;
+	font-size:16px;
+	height:38px;
+	width:105px;
+	margin-top: 15px;
+	float: right;
+	margin-left:15px;
+	bs-btn-padding-y: .25rem;
+	bs-btn-padding-x: .5rem;
+	bs-btn-font-size: .75rem;
+	border: 0px solid #fff;
+	border-radius:5px;
+	
+}

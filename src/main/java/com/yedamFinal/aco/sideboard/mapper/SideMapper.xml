@@ -7,26 +7,30 @@
 <select id="selectRecruitingList" resultType="SideVO">
 	SELECT *
     FROM (
-        SELECT  
-            ROWNUM AS RN,
-            side_board_no, 
-	        publishing_status, 
-	        title, 
-	        content, 
-	        project_outline,
-	        writer, 
-	        write_date, 
-	        recruit_personnel, 
-	        dev_period, 
-	        git_address, 
-	        view_cnt,
-	        reply_cnt,
-	        tech_of_use,
-	        member_no	
-	FROM side_project_board
-	WHERE publishing_status = #{status}
-    ORDER BY write_date desc
-    )
+        SELECT ROWNUM AS RN, B.*
+        FROM (SELECT  
+	            s.side_board_no, 
+		        s.publishing_status, 
+		        s.title, 
+		        s.content, 
+		        s.project_outline,
+		        s.writer, 
+		        s.write_date, 
+		        s.recruit_personnel, 
+		        s.dev_period, 
+		        s.git_address, 
+		        s.view_cnt,
+		        s.reply_cnt,
+		        s.tech_of_use,
+		        s.member_no,
+		        m.profile_image,
+		        m.nickname
+			FROM side_project_board s
+			JOIN member m ON s.member_no = m.member_no
+			WHERE s.publishing_status = #{status}
+	    	ORDER BY s.write_date desc
+	    	)B
+    )A
 	<![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
 </select>
@@ -71,9 +75,35 @@
     WHERE publishing_status = #{status}
 </select>
 
+<!-- 내가 작성한 사이드프로젝트 목록 조회 -->
+<select id="selectParticipateList" resultType="com.yedamFinal.aco.sideboard.SideVO">
+
+	SELECT *
+	FROM 
+		(SELECT ROWNUM AS RN,
+		        b.member_no, 
+		        a.side_board_no, 
+		        a.title, 
+		        a.project_outline, 
+		        a.dev_period, 
+		        a.recruit_personnel, 
+		        a.write_date
+		FROM side_project_board a 
+		JOIN member b ON a.member_no = b.member_no
+		WHERE b.member_no = #{memberNo}
+		ORDER BY a.write_date desc
+		) A
+	<![CDATA[
+    WHERE RN > 0 AND RN <= 3]]>
+		
+</select>
+
+
 <update id="updatereviewCnt">
-	UPDATE side_project_board SET view_cnt = view_cnt + 1 where side_board_no = #{bno}
+	UPDATE side_project_board 
+	SET view_cnt = view_cnt + 1 where side_board_no = #{bno}
 </update>
+
 
 <!-- 게시글 단건조회 가져오기 -->
 <select id="selectSideInfo" parameterType="int" resultType="SideVO">
@@ -137,7 +167,7 @@
 		FROM dual
 	</selectKey>
 </insert>
-
+<!-- 협업중 상태변경 -->
 <update id="updateSide" parameterType="SideVO">
 	UPDATE side_project_board
 	SET publishing_status = #{status}, 
@@ -150,7 +180,7 @@
 	    tech_of_use = #{techOfUse}
 	WHERE side_board_no = #{bno}
 </update>
-
+<!-- 사이드프로젝트 게시글 삭제 -->
 <delete id="deleteSide" parameterType="SideVO">
 	DELETE FROM side_project_board
 	WHERE side_board_no = #{bno}

@@ -100,11 +100,17 @@
 </section>
 </div>
 <script th:inline="javascript">
-//var user = [[${user}]]
-//var emoDetail = [[${emoDetail}]]
  	function buyEmo(){
-		document.buyForm.submit();
- 		showSuccessAlert('구매 완료');
-		//location.href=`/buyEmo?memberNo=${user.memberNo}&acoPoint=${user.acoPoint}&acoMoney=${user.acoMoney}&emoPrice=${emoDetail.emoPrice}&emoNo=${emoDetail.emoNo}&emoName=${emoDetail.emoName}`
+	var emoDetail = [[${emoDetail}]]
+	var emoBuyList = [[${emoBuyList}]]
+		for(let i =0; i < emoBuyList.length; i++){
+			console.log(emoBuyList[i].emoNo)
+			if(emoDetail.emoNo == emoBuyList[i].emoNo){
+				showWarningAlert('이미 구매한 이모티콘입니다.');
+				return;
+			}
+		}
+		showSuccessAlert('구매 완료','1초 후 구매내역으로 이동합니다.');
+		setTimeout("document.buyForm.submit()", 1000);
 	} 
 </script>
