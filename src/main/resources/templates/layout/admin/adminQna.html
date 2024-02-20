@@ -158,7 +158,6 @@
                                         <tr>
                                             <th>작성자</th>
                                             <th>문의제목</th>
-                                            <th>문의내용</th>
                                             <th>문의일자</th>
                                             <th>처리상태</th>
                                         </tr>
@@ -168,7 +167,6 @@
                                         <tr th:each="qna : ${adminQna}" th:onclick="|location.href='/qnaBoard/${qna.qnaBoardNo}'|">
                                             <td th:text="${qna.qnaName}"></td>
                                             <td th:text="${qna.title}"></td>
-                                            <td th:text="${qna.content}"></td>
                                             <td th:text="${#dates.format(qna.writeDate, 'yyyy/MM/dd')}"></td>
                                             <td th:text="${qna.qnaState}"></td>
                                         </tr>

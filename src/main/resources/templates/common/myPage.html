@@ -89,7 +89,7 @@
 																		<br>
 																		<div class="input-group mb-3" style="height:50px;">
 																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2">
-																			<button class="btn btn-outline-secondary" id="accountApprove" type="button" data-bs-toggle="modal" data-bs-target="#accountList">정산요청</button>
+																			<button class="btn btn-outline-secondary" id="accountApprove" type="button">정산요청</button>
 																		</div>
 																	</div>
 																	<div class="point-acc-1">
@@ -124,7 +124,7 @@
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
-														data-bs-dismiss="modal">Close</button>
+														data-bs-dismiss="modal">닫기</button>
 												</div>
 											</div>
 										</div>
@@ -234,7 +234,7 @@
 																<h4 class="tae-h4-3">내 활동 내역</h4><hr>
 																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
 																		<li class="activity1" th:each="acp:${activityList}">
-																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증감되었습니다.|"></span>
+																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증가되었습니다.|"></span>
 																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
 																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
 																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점  |"></span>
@@ -250,7 +250,7 @@
 												</div>
 												<div class="modal-footer">
 													<button type="button" class="btn btn-secondary"
-														data-bs-dismiss="modal">Close</button>
+														data-bs-dismiss="modal">닫기</button>
 												</div>
 											</div>
 										</div>
@@ -264,17 +264,17 @@
 											    <div class="modal-content">
 											      <div class="modal-header">
 											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
-											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
 											      </div>
 											      <div class="modal-body">
 											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
 												      	<div class="bankcard">
 												       		<p style="text-align:center;color:#979da9;">"현재 등록된 계좌가 없습니다."</p>
+													        <button type="button" class="btn btn-primary" style="padding-left: 150px;text-align:center;background-color:#fff;color:#979da9;border:0px;" 
+													        th:onclick="goRegAccount()">계좌 등록하러가기 〉</button>
 												       	</div>
 											      </div>
 											      <div class="modal-footer">
 											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-											        <button type="button" class="btn btn-primary">정산요청</button>
 											      </div>
 											    </div>
 											  </div>
@@ -288,18 +288,18 @@
 											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
 											      </div>
 											      <div class="modal-body">
-											        <button type="button" class="btn-noaccount" data-bs-dismiss="modal" aria-label="계좌가 없어요 〉"></button>
 											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
-												       <div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
-												       		<button type="button" style="border:0;" th:onclick="choiceAccount([[${acc.accountNo}]])">
+														<div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
+												       		<button type="button" style="border:0;background-color:#fff;padding-left:20px;padding-top:10px;"
+												       		 th:onclick="choiceAccount([[${acc.accountNo}]])">
 												       			<img class="tae-bank-1" th:src="|commonResource/bankImage/${acc.bankName}.png|">
+													       		<p th:text="${acc.bankName}" style="float:left;padding-left:25px;">/</p>
 															</button>											       		
-												       		<p th:text="${acc.bankName}" style="float:left;">/</p>
-												       </div>
+												       </div>												       
 											      </div>
 											      <div class="modal-footer">
 											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-											        <button type="button" class="btn btn-primary">정산요청</button>
+											        <button type="button" th:onclick="sendSettlementRequest()" class="btn btn-primary">정산요청</button>
 											      </div>
 											    </div>
 											  </div>
@@ -454,50 +454,50 @@
 		<div class="container" id="tae-container-3">
 			<div class="container" id="tae-container-1">
 				<div class="card" id="myTabContent">
-					<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<ul class="nav nav-tabs" id="myTab" role="tablist" style="--bs-nav-tabs-border-width:0px;">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 							data-bs-target="#profile-tab-pane" type="button" role="tab"
 							aria-controls="profile-tab-pane" aria-selected="true"
-							style="width: 380px;">내가 참여한 프로젝트</button>
+							style="width: 380px;">🏃‍♀️내가 주최한 프로젝트</button>
 						</li>
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="tae-profile-tab-2"
 							data-bs-toggle="tab" data-bs-target="#home-tab-pane"
 							type="button" role="tab" aria-controls="home-tab-pane"
-							aria-selected="false" style="width: 380px;" onclick="location.href='/myPage2'">내 질답 통계</button>
+							aria-selected="false" style="width: 380px;" onclick="location.href='/myPage2'">🙋‍♀️내 질답‍통계</button>
 						</li>
 
 					</ul>
 					
 					
-					
-					
-					
-					<div class="card d-flex">
-						<div class="card">
+					<h5 style="padding-left:40px;padding-top:30px;font-weight:bold;">가장 최근에 작성한 사이드프로젝트 TOP3</h5>
+					<div class="d-flex" style="margin-top:-20px;">
+						<div class="card" style="box-shadow: 9px 6px 10px 1px #d5d8df;border-radius:30px;width:285px;height:230px;margin-top:30px;margin-left:20px;"th:each="side:${sideList}">
 							<div class="card-body" id="card-1">
-								<h5 class="card-title">🏃‍♀️참여프로젝트 목록</h5>
-								<h6 class="card-subtitle mb-2 text-body-secondary">Card
-									subtitle</h6>
-								<p class="card-text">Some quick example text to build on the
-									card title and make up the bulk of the card's content.</p>
-								<a href="#" class="card-link">Card link</a> <a href="#"
-									class="card-link">Another link</a>
-							</div>
-						</div>
-					</div>
-					<div>
-
-						<div class="card d-flex" id="tae-card-2">
-							<div class="card-body" id="tae-card-1">
-								<h5 style="text-align: center; font-weight: bold;">내 관심주제</h5>
-								<ul class="tab-ul">
-									<li th:text="${memberInfo.topicHashtag}"></li>
+								<ul class="tab-ul-2">
+									<li>
+										<p style="font-size:15px;color:#979da9;">프로젝트명 | [[${side.title}]]</p>
+										<br>
+											<h6 style="padding-bottom: 80px;height:10px;text-align:center;font-weight:bold;overflow:hidden;text-overflow:ellipsis;
+											">"[[${side.projectOutline}]]"</h6>
+											<span style="margin-top:30px;color:#979da9;">개발기간 : [[${side.devPeriod}]]</span>
+											<span style="color:#979da9;">모집인원 : [[${side.recruitPersonnel}]]</span>
+									</li>
 								</ul>
 							</div>
 						</div>
-						<div class="card d-flex" id="tae-card-2">
+					</div>
+					<div style="margin-top:40px;">
+
+						<div class="card d-flex" id="tae-card-2" style="border-radius: 30px;">
+							<div class="card-body" id="tae-card-1">
+								<h5 style="text-align: center; font-weight: bold;">내 관심주제</h5>
+								<ul class="tab-ul" id="topic">
+								</ul>
+							</div>
+						</div>
+						<div class="card d-flex" id="tae-card-2" style="border-radius: 30px;">
 							<div class="card-body" id="tae-card-1">
 								<h5 style="margin-bottom: -8px; font-weight: bold;">
 									😉 이모티콘 구매내역
@@ -514,7 +514,7 @@
 									</button>
 								</h5>
 									<hr>
-								<ul class="tab-ul">
+								<ul class="tab-ul-3">
 									<li th:each="emo:${emoInfo}">[[ ${emo.emoName} ]] 
 										<span class="tae-ul-list" th:text="|구매날짜 ${#dates.format(emo.emoBuydate, 'yyyy-MM-dd')}|">
 										[[${emo.emoBuydate}]] </span>
@@ -531,7 +531,31 @@
 </div>
 
 
-<script th:inline="javascript">
+<script type="text/javascript" th:inline="javascript">
+	
+	//데이터를 콤마로 분리하여 배열로 변환
+	var hashtag = [[${memberInfo.topicHashtag}]];
+	var topics = hashtag.split(',');
+	
+	// ul 요소를 가져오기
+	var ul = document.querySelector('#topic');
+	
+	// 각 주제에 대해 li 요소를 생성하여 ul에 추가
+	topics.forEach(function(topic) {
+	    var li = document.createElement('li');
+	    li.textContent = topic.trim(); // 주제 양쪽의 공백 제거
+	    ul.appendChild(li);
+	
+	    // 콤마 추가
+	    ul.insertAdjacentHTML('beforeend', '<span> </span>');
+	});
+	
+	// 마지막 콤마 제거
+	ul.lastElementChild.remove();
+
+
+
+
 	let dbTagList = [[${tagList}]];
 	//tagify
 	var inputElm = document.querySelector('input[name=tags]');
@@ -881,22 +905,7 @@
 </script>
 
 <script type="text/javascript" th:inline="javascript">
-let choiceAccountObj = null;
-function choiceAccount(accountObj){
-	if(choiceAccountObj != null  || choiceAccountObj == accountObj){
-		$('#'+ choiceAccountObj).css("border", "");
-		if(choiceAccountObj == accountObj) {
-			choiceAccountObj = null;
-			return;
-		}
-	}
-	choiceAccountObj = accountObj
 	
-	$('#'+ accountObj).css("border", "1px solid skyblue");
-	
-}
-
-
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 	const memberno = [[${session.member.memberNo}]]
@@ -968,4 +977,121 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 			}
 			return true;
 		}	
+		
+	   $('#accountApprove').on('click', validation2);
+		
+	   // 계좌모달
+	   const myAccountModal = new bootstrap.Modal('#accountList', {
+		  keyboard: false
+	   })
+	   
+	   function validation2(){
+		   const memberGrade = [[${memberInfo.memberLevel}]]
+		   let accPoint = $('input[name="accPoint"]').val();
+		   accPoint = Number(accPoint);
+		   if(memberGrade == 'K001' && (accPoint < 15000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'루키'등급은 15,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K002' && (accPoint < 12000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'브론즈'등급은 12,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K003' && (accPoint < 9000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'실버'등급은 9,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K004' && (accPoint < 7000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'골드'등급은 7,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K005' && (accPoint < 5000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'다이아몬드'등급은 5,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }
+		   
+		   const modalToggle = document.getElementById('accountApprove');		   
+		   myAccountModal.show(modalToggle);
+		   return true;
+	   }
+	   
+		let choiceAccountObj = null;
+		function sendSettlementRequest(){
+			if (choiceAccountObj == null){
+				showWarningAlert('정산받을 계좌를 선택해주세요.');
+				return;
+			}
+			
+			let accPoint = $('input[name="accPoint"]');
+			let processStatus = 'O001';
+			let obj = {
+				memberNo : memberno,
+				reqAccount : choiceAccountObj,
+				processStatus : processStatus,
+				settlementReqPoint : accPoint.val()
+			}
+			
+			$.ajax('/updateSettlement', {
+		        type: 'POST',
+		        data: obj,
+		        beforeSend : function(xhr){
+					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+				}
+			}).done(result =>{
+				showSuccessAlert('환전 요청이 전달되었습니다.');
+				function dateFormat(date) {
+					let dateFormat2 = date.getFullYear() +
+						'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+						'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+					return dateFormat2;
+				}
+
+				const toDate = dateFormat(new Date());
+				const originalIntValue = Number(accPoint.val());
+				accPoint = originalIntValue.toLocaleString();
+				
+				const commaAccummPoint = Number(result.memberInfo2.availableAccumPoint - originalIntValue).toLocaleString();
+				const commaTotalPoint = Number(result.memberInfo2.acoTotal - originalIntValue).toLocaleString();
+				const liString = `
+									<li class="activity1">
+										<span style="font-weight:bold;font-size:large;">정산 요청</span>
+										<span class="decrease-point">-${accPoint}P</span>
+										<br>
+										<span class="tae_date">${toDate}</span>
+										<hr>
+									</li>`;
+				
+				$('#activityMypage').val('');
+				
+				
+				const accumList = $('#accumList');
+				accumList.prepend(liString);
+				
+				$('#pointMypage').text(commaTotalPoint);
+				$('#totalPointMypage').text(commaTotalPoint);
+				$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+				
+				const modalToggle = document.getElementById('accountApprove');		   
+				myAccountModal.hide(modalToggle);
+				
+			}).fail(err => console.log(err));
+		        
+		}
+		
+		
+		function goRegAccount(){
+			window.location.href="/accountConnect";
+		}
+		
+		
+	function choiceAccount(accountObj){
+		if(choiceAccountObj != null  || choiceAccountObj == accountObj){
+			$('#'+ choiceAccountObj).css("border", "");
+		if(choiceAccountObj == accountObj) {
+			choiceAccountObj = null;
+		return;
+		}
+	}
+	choiceAccountObj = accountObj
+			
+	$('#'+ accountObj).css("border", "1px solid skyblue");
+			
+	}
+
 </script>

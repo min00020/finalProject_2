@@ -12,6 +12,7 @@ import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.SettlementVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
@@ -39,18 +40,14 @@ public interface MemberService {
 	public List<MybookmarkVO> getMybmList(MemberVO memberVO);
 	// 책갈피 더보기 목록
 	public List<MybookmarkVO> getMyBookList(MemberVO memberVO);
-	//내가 작성한 질답글 목록
-	public List<MyquestionVO> getMyqList(MemberVO memberVO);
-	//질답글 모달
-	public List<MyquestionVO> getMyQuestionList(MemberVO memberVO);
-	//사이드 프로젝트 모달 리스트 --> 나중에 옮기기
-	//public List<SideVo> getMySideProjectList(MemberVO memberVO);
- 	//포인트 사용내역
+	public Map<String, Object> getMyQuestionList(MemberVO memberVO);
+	public List<MyquestionVO> getMyQuestionListModal(MemberVO memberVO);
 	public List<PointDetailJoinVO> getPointList(MemberVO memberVO);
+	
 	public List<TagVO> getTagList();
+	
 	public List<AccountVO> getMemberAccountList(MemberVO memberVO);
 	
-	//활동점수 내역 리스트 가져오기
 	public List<ActivityPointVO> getActivityList(MemberVO memberVO);
 	public Map<String, Object> updateMemberPoint(int resPoint, MemberVO memberVO);
 	boolean delBookmarkList(int qnaboardNo, int memberNo);
@@ -62,5 +59,8 @@ public interface MemberService {
 	
 	public Map<String, Object> changeAccountInfo(AccountChangeDTO accountDTO, MemberVO vo);
 	public Map<String, Object> changePasswordFromMyPage(String password, String passwordVerify, String id);
+	
+	public Map<String, Object> updateSettlement(SettlementVO reqVO, MemberVO memberVO, int settlementReqPoint);
+	
 	public Map<String, Object> getOtherMemberInfo(int pg, String tp, int memberNo);
 }
