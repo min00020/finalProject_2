@@ -9,12 +9,12 @@
 			<h3>이모티콘 상점</h3>
 			<p style="color:#76767e">포인트로 이모티콘을 구매해보세요</p>
 		</div>
-		<div style="text-align: right;">
+		<div style="text-align: right; margin-bottom: 10px">
                     <a class="btn btn-primary" th:onclick="|location.href='/emoBuyList'|">내 구매목록</a>
-             </div>
+       </div>
 <!-- Page Content -->
 <div class="hacontainer">
-    <div class="row">
+    <div class="row" style="justify-content:space-between;">
         <div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${emoList}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|">
             <div class="card h-100">
                 <a href="#"><img class="card-img-top" th:src="@{${emo.emoPath+emo.emoFirstimg}}" alt=""></a>
