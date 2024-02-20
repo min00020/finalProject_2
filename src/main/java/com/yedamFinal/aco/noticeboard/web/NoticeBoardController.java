@@ -20,10 +20,18 @@ public class NoticeBoardController {
 	 * @return
 	 */
 	@GetMapping("/noticeBoard")
-	public String getNoticeBoard(Model model, int pageNo) {
-		var ret = noticeBoardService.getAdNoticeList(pageNo);
-		model.addAttribute("noticeList",ret.get("noticeList"));
-		model.addAttribute("pageDTO",ret.get("pageDTO"));
+	public String getNoticeBoard(Model model, int pageNo, String search) {
+		if(search == null) {
+			var ret = noticeBoardService.getAdNoticeList(pageNo);
+			model.addAttribute("noticeList",ret.get("noticeList"));
+			model.addAttribute("pageDTO",ret.get("pageDTO"));
+		}else {
+			var ret = noticeBoardService.searchNoticeBoard(pageNo, search);
+			model.addAttribute("search", search);
+			model.addAttribute("noticeList",ret.get("searchNoticeBoardList"));
+			model.addAttribute("pageDTO",ret.get("pageDTO"));
+		}
+		
 		return "notice/noticeList";
 	}
 	/**

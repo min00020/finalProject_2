@@ -27,6 +27,7 @@ public class QuestionVO {
 	private String id;
 	private String profileImage;
 	private String memberLevel;
+	private String nickname;
 	
 	private String answerId;
 	private String answerProfileImage;
@@ -49,6 +50,8 @@ public class QuestionVO {
 	private String addWriterType;
 	private Date addWriteDate;
 	private String addStatus;
+	
+	
 	
 	private int pk;
 }

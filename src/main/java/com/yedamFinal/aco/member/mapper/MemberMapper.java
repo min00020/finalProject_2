@@ -10,6 +10,7 @@ import com.yedamFinal.aco.common.TagVO;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
+import com.yedamFinal.aco.member.MemberStatVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
@@ -65,4 +66,6 @@ public interface MemberMapper {
 	public int updateResetBan(int memberNo);
 	
 	public int updateAccountInfo(AccountChangeDTO dto);
+	
+	public MemberStatVO otherMemberStatInfo(int memNo);
 }

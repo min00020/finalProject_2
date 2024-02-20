@@ -48,4 +48,16 @@ public interface QuestionMapper {
 	/*추가질문답변*/
 	//추가질문답변 작성
 	public int insertQuestionAdd(QuestionVO questionVO);
+	
+	//전민교
+	
+	//질문글 프로필 조회
+	public List<QuestionVO> getQuestionListByMember(@Param(value="pageNo") int pageNo, @Param(value="memNo") int memNo);
+	//질문글 프로필 갯수 조회
+	public int getQuestionListCntByMember(int memberNo);
+	//답변글 프로필 조회
+	public List<QuestionVO> getAnswerListByMember(@Param(value="pageNo") int pageNo, @Param(value="memNo") int memNo);
+	//답변글 프로필 갯수 조회
+	public int getAnswerListCntByMember(int memberNo);
+	
 }

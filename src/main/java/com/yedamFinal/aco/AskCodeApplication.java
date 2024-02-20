@@ -7,7 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.yedamFinal.aco.**.mapper")
-@PropertySource("classpath:config.properties")
 public class AskCodeApplication {
 
 	public static void main(String[] args) {

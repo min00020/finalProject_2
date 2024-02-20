@@ -378,19 +378,20 @@ public class MemberController {
 		return memberService.changePasswordFromMyPage(password, passwordVerify, memberVO.getId());
 	}
 	
+	
 	@GetMapping("/member/{mno}")
-	public String getMemberProfileInfo(@PathVariable("mno") int memberNo, Model model) {
+	public String getMemberProfileInfo(@PathVariable("mno") int memberNo, @RequestParam int pg, String tp, Model model) {
 		MemberVO memberVO = new MemberVO();
 		memberVO.setMemberNo(memberNo);
-		
 		memberVO = memberService.getMemberInfo(memberVO);
 		if(memberVO == null || memberVO.getId() == null) {
 			return "common/errorPage";
 		}
-		
+
+		Map<String, Object> ret = memberService.getOtherMemberInfo(pg, tp, memberVO.getMemberNo());
 		model.addAttribute("member", memberVO);
-		
-		
+		model.addAttribute("tp", tp);
+		model.addAttribute("mapResult", ret);
 		return "common/memberProfile";
 	}
 	
