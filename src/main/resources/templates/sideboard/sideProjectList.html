@@ -34,10 +34,18 @@
 					<h6 th:if="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
 					<h6 th:unless="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
 					<div class="qna_box">
-					<img th:if="${rec.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
-					<img th:unless="${rec.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${rec.profileImage}|" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+						<img th:if="${rec.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
+						<img th:unless="${rec.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${rec.profileImage}|" alt="profile" th:onclick="|location.href='/member/${rec.memberNo}?pg=1'|">
 					</div>
-					<p th:text="${rec.nickname}">cookie123</p>
+					
+					<span  class="park_activityPoint_free"><span th:text="${rec.nickname}">cookie123</span><span class= "park_dot"> · </span><img id="thunder" src="/commonResource/thunder.png" alt="acti"
+					th:text="|${#numbers.formatInteger(rec.accumActivityPoint, 0, 'COMMA')}|">
+								<span class= "park_dot" th:if="${rec.minute < 60}" th:text="' · ' + (${rec.minute}) + '분 전'"></span>
+								<span class= "park_dot" th:if="${rec.minute >= 60 && rec.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(rec.minute / 60.0)}) + '시간 전'"></span>
+								<span class= "park_dot" th:if="${rec.minute >= 1440 && rec.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(rec.minute / 1440.0)}) + '일 전'"></span>
+								<span class= "park_dot" th:if="${rec.minute >= 43200 && rec.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(rec.minute / 43200.0)}) + '달 전'"></span>
+								<span class= "park_dot" th:if="${rec.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(rec.minute / 518400.0)}) + '년 전'"></span>
+							</span><br>
 					<h5 th:onclick="goInfoPage([[${rec.sideBoardNo}]])" style="font-weight:bolder;">[[ ${rec.title }]]</h5>
 					<br>
 					<p>[[${rec.projectOutline}]]</p>
