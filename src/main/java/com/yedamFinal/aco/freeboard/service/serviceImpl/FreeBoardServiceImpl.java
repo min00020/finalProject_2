@@ -17,6 +17,7 @@ import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
+import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.noticeboard.NoticeBoardVO2;
@@ -150,6 +151,24 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public List<SideVO2> getSideProjectBoardMainPage() {
 		
 		return freeBoardMapper.getSideProjectBoardMainPage();
+	}
+
+	@Override
+	public List<MainTotalVO> getMainTotalSearch(Model model,String search, int pg) {
+		
+		var searchMainTotalList = freeBoardMapper.getMainTotalSearch(search, pg);
+		PaginationDTO dto = null;
+		if(searchMainTotalList.size() > 0) {
+			dto = new PaginationDTO(freeBoardMapper.getMainTotalSearchCnt(search), pg, 10);
+		}
+		model.addAttribute("pageDTO", dto);
+
+		return freeBoardMapper.getMainTotalSearch(search, pg);
+	}
+
+	@Override
+	public int getMainTotalSearchCnt(String search) {
+		return freeBoardMapper.getMainTotalSearchCnt(search);
 	}
 	
 

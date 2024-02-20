@@ -24,8 +24,8 @@
                  <li onclick="location.href='/point'">포인트 충전</li>
             </ul>
             <div class="park_search-align-self-center">
-             <input type="text" placeholder="검색어 입력" class="park_searchInput">
-             <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="park_searchImg">
+             <input type="text" id="park_searchInput2" placeholder="검색어 입력" class="park_searchInput">
+             <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="park_searchImg" id="clickMain" style="cursor:pointer;">
         </div>
             <div class="park_align-self-center">
                 <!-- 다크 모드/라이트 모드 토글 버튼 추가 -->
@@ -66,9 +66,14 @@
                 </div>
             </th:block> 
         </div>
-        <hr style = "margin-top : -5px;">
+      
     </header>
-    <script>
+ 
+    
+</div>
+<hr style = "margin-top : -15px;">
+
+<script>
     	$('#drmenu').on('show.bs.dropdown', function(e) {
     		$('#headerDropDown').css('display', 'block');
     	})
@@ -101,5 +106,30 @@
                 logoImage3.src = "/commonResource/askcodeLogo.png";
             }
         }
+    	
+    	//검색
+    	$('#park_searchInput2').on('keydown', function(e) {
+			if (e.keyCode === 13) {
+				e.preventDefault();
+				const searchValue = $('#park_searchInput2').val();
+				if(typeof searchValue == 'undefined' || searchValue == '') {
+					showWarningAlert('검색어를 입력해주세요.');
+				}
+				else {
+					window.location.href = "/mainTotalSearch?pg=1&search=" + $('#park_searchInput2').val();	
+				}
+				
+			}
+		});
+    	
+    	//검색아이콘
+        $('#clickMain').click(function() {
+            const searchValue = $('#park_searchInput2').val();
+            if (searchValue.trim() === '') {
+            	showWarningAlert('검색어를 입력해주세요.'); 
+            } else {
+                window.location.href = "/mainTotalSearch?pg=1&search=" + encodeURIComponent(searchValue);
+            }
+        });
+
     </script>
-</div>

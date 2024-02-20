@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.freeboard.FreeBoardVO;
+import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
@@ -93,6 +95,24 @@ public class MemberController {
 		return "common/mainPage";
 	}
 	
+	//메인페이지 통합검색
+	@GetMapping("/mainTotalSearch")
+	public String getMainTotalSearch(Model model, @RequestParam String search, @RequestParam int pg) {
+		
+		List<MainTotalVO> ret = null;
+		 // 검색창 입력의 경우.
+		if(search == null)
+    	   return "/";
+       else {
+       		ret = freeBoardService.getMainTotalSearch(model,search,pg);
+       		model.addAttribute("search",search); // 해당 search키워드로 페이징해야함.
+        }
+       
+        int ret2=freeBoardService.getMainTotalSearchCnt(search);
+		model.addAttribute("getMainTotalSearch", ret);
+		model.addAttribute("totalCnt",ret2);
+		return "freeBoard/mainTotalSearch";
+	}
 	
 	
 	// min 회원가입 form

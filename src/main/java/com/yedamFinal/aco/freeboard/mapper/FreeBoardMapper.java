@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
+import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
 import com.yedamFinal.aco.noticeboard.NoticeBoardVO2;
 import com.yedamFinal.aco.question.QuestionVO;
@@ -50,5 +51,9 @@ public interface FreeBoardMapper {
 	
 	//메인페이지 사이드게시판 불러오기
 	public List<SideVO2> getSideProjectBoardMainPage();
+	
+	//메인페이지 검색
+	public List<MainTotalVO> getMainTotalSearch(@Param("search") String search,@Param("pg") int pg);
+	public int getMainTotalSearchCnt(String search);
 	
 }

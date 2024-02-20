@@ -84,16 +84,20 @@
 	<select id="getFreeBoard" parameterType="int" resultType="FreeBoardVO">
 	SELECT 
 		   FBOARD_NO, 
-	       MEMBER_NO, 
+	       A.MEMBER_NO, 
 	       TITLE, 
 	       CONTENT, 
-	       NICKNAME,
+	       B.NICKNAME,
 	       WRITE_DATE, 
 	       VIEW_CNT, 
-	       RECOMMEND_CNT, 
+	       RECOMMEND_CNT,
+	       PROFILE_IMAGE,
+	       B.ACCUM_ACTIVITY_POINT,
+           ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
 	       REPLY_CNT
 	       
-	FROM FREE_BOARD
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
 	WHERE FBOARD_NO= #{fboardNo}
 </select>
 
@@ -275,6 +279,100 @@
     ORDER BY SIDE_BOARD_NO DESC)
     WHERE ROWNUM <![CDATA[<=]]> 6
 	</select>
+	
+	<!-- 메인페이지 통합 검색 -->
+	  <select id="getMainTotalSearch" resultType="MainTotalVO">  
+	   
+          
+SELECT * 
+   FROM 
+   ( SELECT ROWNUM AS RN, C.* FROM(   
+      SELECT 'F' BOARDS,
+			  		FBOARD_NO AS BOARD_NO,
+                    WRITE_DATE,
+	 				TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                     B.MEMBER_NO,
+                   ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+     	 FROM FREE_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+      	 WHERE TITLE LIKE '%'||#{search}||'%'
+         UNION ALL
+      	 
+      SELECT 'S',
+     				 SIDE_BOARD_NO,
+                     WRITE_DATE,
+      				 TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                     B.MEMBER_NO,
+                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+      	 FROM SIDE_PROJECT_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+     	 WHERE TITLE LIKE '%'||#{search}||'%'
+     	 UNION ALL
+         
+               SELECT 'Q',
+     				 QUESTION_BOARD_NO,
+                     WRITE_DATE,
+      				 TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                     B.MEMBER_NO,
+                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+      	 FROM QUESTION_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+     	 WHERE TITLE LIKE '%'||#{search}||'%'
+     	 UNION ALL
+     	 
+      SELECT 'N',
+      				 NOTICE_BOARD_NO,
+                     WRITE_DATE,
+      				 TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                    B.MEMBER_NO,
+                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+      	 FROM NOTICE_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+      	 WHERE TITLE LIKE '%'||#{search}||'%'
+      	 )C)
+
+      	<![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+		]]>	
+		 ORDER BY MINUTE
+      	
+	</select>
+	
+	<select id="getMainTotalSearchCnt" resultType="int">
+	
+SELECT SUM(CNT) AS TOTAL_CNT FROM (
+    SELECT COUNT(*) AS CNT FROM FREE_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
+    UNION ALL
+    SELECT COUNT(*) FROM NOTICE_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
+    UNION ALL
+    SELECT COUNT(*) FROM SIDE_PROJECT_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
+    UNION ALL
+    SELECT COUNT(*) FROM QUESTION_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
+)
+
+		
+	</select>
+	
 	
 	
 
