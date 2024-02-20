@@ -119,7 +119,6 @@
 function sendQuestion(){
 	console.log('test',[[${session.member.memberNo}]]);
 	
-	const formData = new FormData(document.questionWrite);
 	
 	//유효성검사
 	const member = [[${session.member}]];
@@ -128,12 +127,8 @@ function sendQuestion(){
 			return;
 	}
 	
-	/* const contents = editor.getHTML();
-	if(contents.length <= 0) {
-		showWarningAlert('내용을 입력해주세요.');
-		return;
-	} */
-	
+	const formData = new FormData(document.questionWrite);
+	formData.delete('tag');
 	formData.append(csrfPara, csrfToken);
 	formData.append("memberNo", member.memberNo);
 	formData.append("contents", editor.getHTML());
@@ -160,7 +155,8 @@ function sendQuestion(){
 
 //질문 게시글 수정
 function sendQuestionModify(){
-	let bno = [[${questionVO.questionBoardNo}]]
+	let bno = [[${questionVO.questionBoardNo}]];
+	
 	const formData = new FormData(document.questionWrite);
 	formData.delete('tag');
 	formData.append(csrfPara, csrfToken);
