@@ -59,6 +59,8 @@ public class EmoticonController {
 		
 		AdminEmoVO emoVO = adminService.getEmoDetail(adminEmoVO);
 		model.addAttribute("emoDetail",emoVO);
+		List<AdminEmoVO> list = adminService.getEmoBuyList(memberNo);
+		model.addAttribute("emoBuyList", list);
 		return "emoticon/emoDetail";
 	}
 	

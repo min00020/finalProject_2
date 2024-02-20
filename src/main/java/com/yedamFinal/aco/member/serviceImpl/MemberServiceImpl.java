@@ -586,6 +586,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		ret.put("pageDTO", dto);
 		
 		MemberStatVO stat = memberMapper.otherMemberStatInfo(memberNo);
+		if(stat == null) {
+			stat = new MemberStatVO();
+		}
 		ret.put("stat", stat);
 		
 		return ret;
