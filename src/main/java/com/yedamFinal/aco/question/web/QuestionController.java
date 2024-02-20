@@ -88,7 +88,7 @@ public class QuestionController {
 	* 질문글 상세조회 페이지
 	* @param qno 
 	* @param model
-	* @return String
+	* @return question/questionInfo
 	*/
 	@GetMapping("/questionInfo/{qno}")
 	public String getQuestionInfo(@PathVariable("qno") int qno, Model model) {

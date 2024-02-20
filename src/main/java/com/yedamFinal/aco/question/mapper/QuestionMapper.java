@@ -27,7 +27,8 @@ public interface QuestionMapper {
 	public int insertBookmark(MybookmarkVO mybookmarkVO);
 	public int deleteBookmark(int qno);
 	public int updateBookmarkCnt(@Param(value="value") int value, @Param(value="questionBoardNo")  int qno);
-	
+	//덧글수 +1 -1
+	public int updateReplyCnt(@Param(value="value") int value, @Param(value="questionBoardNo")  int qno);
 	
 	//활동점수 지급
 	public int updateActivityPoint(QuestionActivityPointVO activityPointVO);

@@ -245,6 +245,13 @@
 		   SET BOOKMARK_CNT = BOOKMARK_CNT + 1 - #{value} 
 		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</update>
+
+	<!-- 댓글 / 댓글수 증감-->
+	<update id="updateReplyCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET REPLY_CNT = REPLY_CNT + 1 - #{value} 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
 	
 	<!-- 질문글 작성 -->
 	<insert id="insertQuestion" parameterType="QuestionVO">
