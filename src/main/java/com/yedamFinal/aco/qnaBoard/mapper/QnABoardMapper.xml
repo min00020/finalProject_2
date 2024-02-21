@@ -10,7 +10,9 @@
         	A.WRITE_DATE, 
         	A.CHANGE_DATE, 
         	SUBCODE_TO_NAME(A.ANSWER_STATE) AS ANSWER_STATE,  
-        	A.VIEW_CNT
+        	A.VIEW_CNT,
+        	A.ACCUM_ACTIVITY_POINT,
+        	A.MINUTE
         	FROM (
             	SELECT 
             		ROWNUM AS RN, 
@@ -20,7 +22,10 @@
 					B.WRITE_DATE, 
 					B.CHANGE_DATE, 
 					B.ANSWER_STATE, 
-					B.VIEW_CNT FROM (
+					B.VIEW_CNT,
+					B.ACCUM_ACTIVITY_POINT,
+           			B.MINUTE
+					FROM (
                 		SELECT 
                 			C.QNA_BOARD_NO, 
                 			D.NICKNAME, 
@@ -28,7 +33,9 @@
                 			C.WRITE_DATE, 
                 			C.CHANGE_DATE, 
                 			C.ANSWER_STATE, 
-                			C.VIEW_CNT
+                			C.VIEW_CNT,
+                			D.ACCUM_ACTIVITY_POINT,
+           					ROUND((SYSDATE - CAST(WRITE_DATE AS DATE))) * 24 * 60 AS MINUTE
                     			FROM QNA_BOARD C
                     			JOIN MEMBER D ON C.MEMBER_NO = D.MEMBER_NO
                     			WHERE D.MEMBER_NO = #{memberNo}
@@ -57,7 +64,9 @@
         	A.WRITE_DATE, 
         	A.CHANGE_DATE, 
         	SUBCODE_TO_NAME(A.ANSWER_STATE) AS ANSWER_STATE,  
-        	A.VIEW_CNT
+        	A.VIEW_CNT,
+        	A.ACCUM_ACTIVITY_POINT,
+        	A.MINUTE
         	FROM (
             	SELECT 
             		ROWNUM AS RN, 
@@ -67,7 +76,10 @@
             		B.WRITE_DATE, 
             		B.CHANGE_DATE, 
             		B.ANSWER_STATE, 
-            		B.VIEW_CNT FROM (
+            		B.VIEW_CNT,
+            		B.ACCUM_ACTIVITY_POINT,
+           			B.MINUTE
+            		FROM (
                 		SELECT 
                 			C.QNA_BOARD_NO, 
                 			D.NICKNAME, 
@@ -75,7 +87,9 @@
                 			C.WRITE_DATE, 
                 			C.CHANGE_DATE, 
                 			C.ANSWER_STATE, 
-                			C.VIEW_CNT
+                			C.VIEW_CNT,
+                			D.ACCUM_ACTIVITY_POINT,
+           					ROUND((SYSDATE - CAST(WRITE_DATE AS DATE))) * 24 * 60 AS MINUTE
                     			FROM QNA_BOARD C
                     			JOIN MEMBER D ON C.MEMBER_NO = D.MEMBER_NO
                     			WHERE D.MEMBER_NO = #{memberNo} AND UPPER(C.TITLE) LIKE '%' || UPPER(#{search}) || '%' 

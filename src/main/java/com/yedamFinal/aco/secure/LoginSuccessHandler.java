@@ -89,17 +89,23 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         
         Map<String, Object> ret = new HashMap<>();
         if(!vo.getPermission().equals("ROLE_ADMIN")) {
-            SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+        	if(vo.getGitToken() != null) {
+        		SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
 
-            if (savedRequest != null) {
-                String redirectUrl = savedRequest.getRedirectUrl();
-                // "http://"
-                redirectUrl = redirectUrl.replace("http://", "");
-                redirectUrl = redirectUrl.substring(redirectUrl.indexOf("/"));
-                ret.put("result", redirectUrl);
-            } else {
-            	ret.put("result", "/");
-            }
+                if (savedRequest != null) {
+                    String redirectUrl = savedRequest.getRedirectUrl();
+                    // "http://"
+                    redirectUrl = redirectUrl.replace("http://", "");
+                    redirectUrl = redirectUrl.substring(redirectUrl.indexOf("/"));
+                    ret.put("result", redirectUrl);
+                } else {
+                	ret.put("result", "/");
+                }
+        	}
+        	else {
+        		ret.put("result", "/gitLinkPage?id=" + vo.getId());
+        	}
+            
         }
         else {
         	ret.put("result", "/admin?PageNo=1");
