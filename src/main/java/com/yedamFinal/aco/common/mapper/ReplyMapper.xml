@@ -80,4 +80,10 @@
    			 #{replyContent}
    			 )
 	</insert>
+	
+	<select id="selectReplyInfo" resultType="ReplyVO">
+		SELECT * 
+		  FROM REPLY 
+		 WHERE REPLY_NO = #{replyNo}
+	</select>
 </mapper>

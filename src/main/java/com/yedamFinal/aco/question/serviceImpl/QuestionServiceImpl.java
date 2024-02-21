@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import org.springframework.ui.Model;
 
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.PaginationDTO;
+import com.yedamFinal.aco.common.ReplyJoinVO;
+import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.point.PointDetailVO;
@@ -35,6 +38,9 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	@Autowired
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	private ReplyMapper replyMapper;
 	
 	//질문글 리스트 조회
 	@Override
@@ -126,7 +132,6 @@ public class QuestionServiceImpl implements QuestionService{
 		                    		 model.addAttribute("currentWriterType", 2);
 		                    	 }
 		                     }
-		                     
 		                     break;
 		                  }
 		             }
@@ -135,7 +140,20 @@ public class QuestionServiceImpl implements QuestionService{
 			}
 		}
 		
-		System.out.print(memberNo);
+		//댓글
+		List<ReplyJoinVO> list = replyMapper.selectReply("N001", qno);
+		Map<Integer, List<ReplyJoinVO>> groupByData = list.stream().collect(Collectors.groupingBy(ReplyJoinVO::getParentReplyNo));
+		groupByData = groupByData.entrySet().stream()
+		        .sorted(Map.Entry.comparingByKey())
+		        .collect(Collectors.toMap(
+		                Map.Entry::getKey,
+		                Map.Entry::getValue,
+		                (a, b) -> { throw new AssertionError(); },
+		                LinkedHashMap::new
+		        ));
+
+		model.addAttribute("replyList", groupByData);
+		
 		//로그인 유저의 답변글 작성 여부 체크
 		model.addAttribute("writePost",false);
 		for( Map.Entry<Integer, List<QuestionVO>> entry : questionMap.entrySet() ) {
@@ -158,6 +176,7 @@ public class QuestionServiceImpl implements QuestionService{
 	public Map<String, Object> updateBookmark(int qno, int memberNo) {
 		Map<String,Object> ret = new HashMap<String,Object>();
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
+		int bookmarkCnt = result.get(0).getBookmarkCnt();
 
 		ret.put("result", "200");
 		if(result.size() <= 0) {
@@ -174,12 +193,16 @@ public class QuestionServiceImpl implements QuestionService{
 				bookmarkvo.setTitle(result.get(0).getTitle());
 				questionMapper.insertBookmark(bookmarkvo);
 				questionMapper.updateBookmarkCnt(0, qno);
+				bookmarkCnt += 1;
 			}
 			else {
 				questionMapper.updateBookmarkCnt(2, qno);
 				questionMapper.deleteBookmark(qno);
+				bookmarkCnt -= 1;
 			}
 		}
+		ret.put("bookmarkCnt", bookmarkCnt);
+		
 		return ret;
 	}
 	
