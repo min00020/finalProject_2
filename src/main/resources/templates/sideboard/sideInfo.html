@@ -463,7 +463,7 @@
 					</div>
 					<div class="addgitIssue">
 						<!-- Button trigger modal -->
-						<button type="button" class="tae-btn-text-white" id="RegistIssue" data-bs-toggle="modal" data-bs-target="#IssueModal">새 이슈 등록</button>
+						<button type="button" class="tae-btn-text-white" data-bs-toggle="modal" data-bs-target="#IssueModal">새 이슈 등록</button>
 						<!-- Modal -->
 						<div class="modal fade" id="IssueModal" tabindex="-1" aria-labelledby="IssueModalLabel" aria-hidden="true">
 						  <div class="modal-dialog">
@@ -496,7 +496,7 @@
 					</div>
 				</div>				
 			</div>
-			<hr>
+			<hr id
 		<!--/* 댓글영역 */-->
 				<div class="w-100 mb-3 clearfix">
 					<div>
@@ -850,10 +850,6 @@ const memberNo = [[${session.member.memberNo}]]
 const status = 'Q002';
 const bno = [[${sideInfo.sideBoardNo}]];
 
-const myAccountModal = new bootstrap.Modal('#accountList', {
-	  keyboard: false
- })
-
 function sendIssue(){
 	const title = $('input[name="title"]').val();
 	const description = $('textarea[name="description"]').val();
@@ -872,8 +868,7 @@ function sendIssue(){
 	.done(res => {
 		if(res.result == "200") {
 			showSuccessAlert("이슈 등록에 성공했습니다.");
-			const modalToggle = document.getElementById('RegistIssue');		   
-			regIssueModal.hide(modalToggle);
+			window.location.reload();
 		}
 		else {
 			showFailAlert('이슈 등록에 실패하였습니다.');
@@ -884,10 +879,6 @@ function sendIssue(){
 		console.log(err);
 	})
 }
-
-	const modalToggle = document.getElementById('IssueModal');		   
-	regIssueModal.show(modalToggle);
-	return true;
 
 function openModifyTextarea(divId, btnId) {
 	if($('#' + btnId).text() == "수정") {
