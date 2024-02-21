@@ -221,13 +221,17 @@ input::placeholder
 .grade-h5{
 	font-weight:bold;
 	padding-top:9px;
+	font-size:15px;
 }
 .grade-p{
 	margin-top:-30px;
 	color:#979da9;
+    font-size:14px;
+	
 }
 .activity1{
 	list-style-type: none;
+	margin-bottom: -7px;
 }
 .increase-point{
 	font-weight : bold;
@@ -255,7 +259,7 @@ input::placeholder
 	width:1325px;
 }
 #a-1{
-	margin-left: 50px;
+	margin-left: 30px;
 	text-decoration: none;
 	font-weight:bold;
 	color:#000;
