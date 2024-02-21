@@ -13,12 +13,20 @@ import com.yedamFinal.aco.common.ReportVO;
 import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.common.service.ReplyService;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.question.mapper.QuestionMapper;
+import com.yedamFinal.aco.sideboard.mapper.SideMapper;
 
 @Service
 public class ReplyServiceImpl implements ReplyService {
 
 	@Autowired
 	private ReplyMapper replyMapper;
+	
+	@Autowired
+	private QuestionMapper questionMapper;
+	
+	@Autowired
+	private SideMapper sideMapper;
 	
 	@Override
 	public Map<String, Object> postReply(String boardType, String boardNo, String replyBody, String isEmoticon, String replyPno, MemberVO memVo) {
@@ -52,6 +60,14 @@ public class ReplyServiceImpl implements ReplyService {
 			ret.put("result", "500");
 		}
 		
+		//댓글 수 +1
+		if(boardType.equals("N001")) {
+			questionMapper.updateReplyCnt(0, Integer.valueOf(boardNo));
+		}
+		else if(boardType.equals("N006")){
+			 sideMapper.updateReplyCnt(0, Integer.valueOf(boardNo));
+		}
+		
 		return ret;
 	}
 
@@ -69,6 +85,16 @@ public class ReplyServiceImpl implements ReplyService {
 		
 		if(replyMapper.updateDeleteDateReply(Integer.valueOf(replyNo)) <= 0) {
 			ret.put("result", "500");
+		}
+		
+		ReplyVO replyVO = replyMapper.selectReplyInfo(Integer.valueOf(replyNo));
+
+		//댓글 수 -1
+		if(replyVO.getBoardType().equals("N001")) {
+			questionMapper.updateReplyCnt(2, Integer.valueOf(replyVO.getBoardNo()));
+		}
+		else if(replyVO.getBoardType().equals("N006")){
+			 sideMapper.updateReplyCnt(2, Integer.valueOf(replyVO.getBoardNo()));
 		}
 		
 		return ret;

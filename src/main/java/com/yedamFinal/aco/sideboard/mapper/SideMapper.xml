@@ -223,4 +223,12 @@
 		WHERE MEMBER_NO = #{memberNo}
 </select>
 
+
+<!-- 댓글수 증감-->
+<update id="updateReplyCnt" parameterType="int">
+	UPDATE SIDE_PROJECT_BOARD 
+	   SET REPLY_CNT = REPLY_CNT + 1 - #{value} 
+	 WHERE side_board_no = #{bno}
+</update>
+
 </mapper>

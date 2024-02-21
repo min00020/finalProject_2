@@ -16,4 +16,6 @@ public interface ReplyMapper {
 	
 	//harang
 	public int insertReport(ReportVO reportVO);
+	
+	public ReplyVO selectReplyInfo(int replyNo);
 }

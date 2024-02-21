@@ -10,8 +10,8 @@
 		<h3>질문&답변</h3>
 		<p style="color:#76767e">좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
 	</div>
-	<div class="container" style="width:1000px;">
-		<hr>
+	<hr>
+	<div class="container" style="width:1100px;">
 		<!--/* 질문글 */-->
 		<div class="questionInfo">
 			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
@@ -70,10 +70,10 @@
 					<span><img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye"></span>
 					<span th:text="${questionInfo[0][0].viewCnt}">10</span>
 					<span>
-						<img class="qna_icon" src="/commonResource/icon/bookmark.png" alt="bookmark" th:if="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
-						<img class="qna_icon" src="/commonResource/icon/bookmark2.png" alt="bookmark" th:unless="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+						<img class="qna_icon" id="bookmarkImage" src="/commonResource/icon/bookmark.png" alt="bookmark" th:if="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+						<img class="qna_icon" id="bookmarkImage" src="/commonResource/icon/bookmark2.png" alt="bookmark" th:unless="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
 					</span>
-					<span th:text="${questionInfo[0][0].bookmarkCnt}">13</span>
+					<span id="bookmarkCnt" th:text="${questionInfo[0][0].bookmarkCnt}">13</span>
 					<!-- <span><img class="qna_icon" src="/commonResource/icon/best.png" alt="best"></span>
 					<span th:text="${questionInfo[0][0].recommendCnt}">9</span> -->
 					<span id="replyBtn"><img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply"></span>
@@ -138,7 +138,7 @@
 								<div>
 									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
 									<!--/* 댓글신고는 댓글내용만 있고, 댓글 삭제하지않았으며 자기자신이 단 댓글이 아닌경우에만 뜬다. */-->
-									<button th:if="${reply.value[0].parentDelete} == null and ${reply.value[0].parentComment} != null and ${reply.value[0].parentMemberNo} != ${session.member.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<button th:if="${reply.value[0].parentDelete} == null and ${reply.value[0].parentComment} != null and ${reply.value[0].parentMemberNo} != ${session.member?.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
 									<!-- Modal -->
 			                  		<div class="modal fade" th:id="|reportModal${reply.key}|" tabindex="-1" role="dialog"
 			                     		aria-labelledby="AddReportLabel" aria-hidden="true">
@@ -211,7 +211,6 @@
 							</div>
 							<div style="width:90%; margin-left:80px; margin-top:10px;"> 
 								<!--/* 댓글 수정/삭제 */-->
-								<button type="button" class="btn" th:id="|nested${reply.key}|" th:onclick="|openNestedTextarea('nested${reply.key}','nestedComment${reply.key}')|">답글달기</button>
 								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:onclick="delReply([[${reply.key}]])">삭제</button>
 								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:id="|modifyBtn${reply.key}|" th:onclick="|openModifyTextarea('modifyCommentDiv${reply.key}','modifyBtn${reply.key}')|">수정</button>
 							</div>
@@ -563,8 +562,7 @@
 	 let test3 = [[${writePost}]];
 	 let test4 = [[${AdoptQuestionVO}]];
 	 let test5 = [[${currentWriterType}]]
-	 let test6 = [[${isCheckBookmark}]]
-	
+	 
 	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
 
 	 //질문글 수정폼 이동
@@ -646,7 +644,7 @@
 			processData : false 	
 		})
 		.done(res => {
-			showSuccessAlert('채택성공');
+			/* showSuccessAlert('채택성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -739,6 +737,10 @@
 		
 	}
  	
+
+	 
+	let isCheckBookmark = [[${isCheckBookmark}]]
+ 	
  	function bookmarkBtn(){
  		const member = [[${session.member}]];
  		
@@ -761,8 +763,16 @@
 		.done(res => {
 			if(res.result == "200"){
 				console.log(res);
-			/* showSuccessAlert('채택성공'); */
-	    		window.location.href = "/questionInfo/"+ bno;
+				$("#bookmarkCnt").text(res.bookmarkCnt);
+				if(isCheckBookmark == 0){
+					isCheckBookmark = 1;
+					$("#bookmarkImage").attr("src","/commonResource/icon/bookmark2.png");
+				}
+				else{
+					isCheckBookmark = 0;
+					$("#bookmarkImage").attr("src","/commonResource/icon/bookmark.png");
+				}
+	    		/* window.location.href = "/questionInfo/"+ bno; */
 			}
 			else{
 				showWarningAlert('북마크 실패');
@@ -823,7 +833,10 @@ const editor = new toastui.Editor({
 <!--/* 댓글 복사할 스크립트 태그 */-->
 <script th:inline="javascript">
 	const member = [[${session.member}]];
-	const memberNo = member.memberNo;
+	const memberNo = [[${session.member?.memberNo}]];
+	const questionBoardNo = [[${questionInfo[0][0].questionBoardNo}]];
+	
+	
 	function openModifyTextarea(divId, btnId) {
 		if($('#' + btnId).text() == "수정") {
 			$('#' + btnId).text('수정닫기');
@@ -889,7 +902,6 @@ const editor = new toastui.Editor({
 		}
 		
 		const boardType = 'N001';
-		const questionBoardNo = [[${questionInfo[0][0].questionBoardNo}]];
 		
 		// 이모티콘 등록이란 의미.
 		if(typeof emoticonImgName != "undefined") {
@@ -947,7 +959,7 @@ const editor = new toastui.Editor({
 		}
 	
 		const boardType = 'N001';
-		const questionBoardNo = [[${questionInfo[0][0].questionBoardNo}]];
+		
 
 		// 이모티콘 등록이란 의미.
 		if(typeof emoticonImgName != "undefined") {
@@ -1005,8 +1017,6 @@ const editor = new toastui.Editor({
 		}
 		
 		const boardType = 'N001';
-		const questionBoardNo = [[${questionInfo[0][0].questionBoardNo}]];
-		
 		
 		// 이모티콘 등록이란 의미.
 		if(typeof emoticonImgName != "undefined") {
@@ -1044,6 +1054,28 @@ const editor = new toastui.Editor({
 			},
 		})
 		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	function insertReport(replyNo){
+		const formData = new FormData($('#' + replyNo)[0]);
+		
+		$.ajax('/insertReport', {
+			type: "POST",
+			data: formData,
+			contentType : false,
+			processData : false,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			showSuccessAlert("해당 댓글이 신고되었습니다.");
 			document.location.href = document.location.href;
 		})
 		.fail(err => {
