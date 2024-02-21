@@ -44,15 +44,7 @@
             </th:block>
             <th:block sec:authorize="isAuthenticated()"> 
                 <div class = "park_align-self-center d-flex gap-2">
-                          <div class="park_alert" style="width :45px; margin-top:13px;  ">
-                              <a href='/' class="position-relative">
-  								<img class="bell" src="/commonResource/bell.png" alt="bell" style="width:50%">
-  								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-   									 99+<span class="visually-hidden">unread messages</span>
-  								</span>
-							</a>
-                    
-               </div>
+   
                     <div class="mink_box"  th:if="${session.member.permission != 'ROLE_ADMIN'}">
                     	<a th:href="|/myPage|">
                     		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
@@ -87,29 +79,41 @@
     	})
     	
         // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
-        function toggleDarkMode() {
-            const body = document.body;
-            const sunIcon = document.querySelector('.sun-icon');
-            const moonIcon = document.querySelector('.moon-icon');
-            const logoImage = document.getElementById('logoImage');
-            const logoImage3 = document.getElementById('logoImage3');
-            // body 요소에 'dark-mode' 클래스가 있는지 확인하여 토글
-            body.classList.toggle('dark-mode');
-            // dark-mode일 때는 라이트 모드로, 그 반대일 때는 다크 모드로 설정
-            if (body.classList.contains('dark-mode')) {
-                body.classList.remove('light-mode');
-                moonIcon.classList.remove('hidden');
-                sunIcon.classList.add('hidden');
-                logoImage.src = "/commonResource/askcodeLogo_dark.png";
-                logoImage3.src = "/commonResource/askcodeLogo_dark.png";
-            } else {
-                body.classList.add('light-mode');
-                moonIcon.classList.add('hidden');
-                sunIcon.classList.remove('hidden');
-                logoImage.src = "/commonResource/askcodeLogo.png";
-                logoImage3.src = "/commonResource/askcodeLogo.png";
-            }
-        }
+      document.addEventListener('DOMContentLoaded', function() {
+    const darkModeStatus = localStorage.getItem('darkMode');
+    updateDarkMode(darkModeStatus === 'enabled');
+
+    document.querySelector('.park_dark-mode-toggle').addEventListener('click', function() {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        updateDarkMode(!isDarkMode);
+        localStorage.setItem('darkMode', !isDarkMode ? 'enabled' : 'disabled');
+    });
+});
+
+function updateDarkMode(enable) {
+    const body = document.body;
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+    const logoImage = document.getElementById('logoImage');
+    const footerLogo = document.getElementById('logoImage3');
+    // 로고 이미지 변경 처리
+    if (enable) {
+        body.classList.add('dark-mode');
+        body.classList.remove('light-mode');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+        logoImage.src = "/commonResource/askcodeLogo_dark.png";
+        footerLogo.src = "/commonResource/askcodeLogo_dark.png";
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+        logoImage.src = "/commonResource/askcodeLogo.png";
+        footerLogo.src = "/commonResource/askcodeLogo.png";
+    }
+}
+
     	
     	//검색
     	$('#park_searchInput2').on('keydown', function(e) {

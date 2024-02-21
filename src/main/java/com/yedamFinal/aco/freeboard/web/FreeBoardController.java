@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedamFinal.aco.common.PaginationDTO;
+import com.yedamFinal.aco.freeboard.FreeBoardJoinVO;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
@@ -133,7 +134,7 @@ public class FreeBoardController {
 	//수정 - 별도 페이지
 	@GetMapping("/freeBoardUpdate/{fboardNo}")
 	public String freeBoardUpdateForm(@PathVariable("fboardNo") int fboardNo, Model model) {
-		FreeBoardVO findVO = freeBoardService.getFreeBoard(fboardNo, model);
+		List<FreeBoardJoinVO> findVO = freeBoardService.getFreeBoard(fboardNo, model);
 		model.addAttribute("freeBoardInfo", findVO);
 		return "freeBoard/freeBoardUpdateForm";
 	}

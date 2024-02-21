@@ -17,16 +17,16 @@
 			<div class="d-flex">
 				<div id="park_member" style="height: 40px;">
 					<span class="park_box_free">
-						<img class="park_profile_free" th:onclick="|location.href='/member/${freeBoardInfo.memberNo}'|" th:src="|/upload/profile/${freeBoardInfo.profileImage}|" alt="profile">
+						<img class="park_profile_free" th:onclick="|location.href='/member/${freeBoardInfo[0].memberNo}'|" th:src="|/upload/profile/${freeBoardInfo[0].profileImage}|" alt="profile">
                     </span>
-                    <span class="park_nickname_free" th:onclick="|location.href='/member/${freeBoardInfo.memberNo}'|" style="font-weight : bold;">[[${freeBoardInfo.nickname}]]
+                    <span class="park_nickname_free" th:onclick="|location.href='/member/${freeBoardInfo[0].memberNo}'|" style="font-weight : bold;">[[${freeBoardInfo[0].nickname}]]
                	</span>
-               	<span  style="font-weight :; " class="park_activityPoint_free"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${freeBoardInfo.accumActivityPoint}]]
-								<span th:if="${freeBoardInfo.minute < 60}" th:text="' · ' + (${freeBoardInfo.minute}) + '분 전'"></span>
-								<span th:if="${freeBoardInfo.minute >= 60 && freeBoardInfo.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 60.0)}) + '시간 전'"></span>
-								<span th:if="${freeBoardInfo.minute >= 1440 && freeBoardInfo.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 1440.0)}) + '일 전'"></span>
-								<span th:if="${freeBoardInfo.minute >= 43200 && freeBoardInfo.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 43200.0)}) + '달 전'"></span>
-								<span th:if="${freeBoardInfo.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo.minute / 518400.0)}) + '년 전'"></span>
+               	<span  style="font-weight :; " class="park_activityPoint_free"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${freeBoardInfo[0].accumActivityPoint}]]
+								<span th:if="${freeBoardInfo[0].minute < 60}" th:text="' · ' + (${freeBoardInfo[0].minute}) + '분 전'"></span>
+								<span th:if="${freeBoardInfo[0].minute >= 60 && freeBoardInfo[0].minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo[0].minute / 60.0)}) + '시간 전'"></span>
+								<span th:if="${freeBoardInfo[0].minute >= 1440 && freeBoardInfo[0].minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo[0].minute / 1440.0)}) + '일 전'"></span>
+								<span th:if="${freeBoardInfo[0].minute >= 43200 && freeBoardInfo[0].minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo[0].minute / 43200.0)}) + '달 전'"></span>
+								<span th:if="${freeBoardInfo[0].minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(freeBoardInfo[0].minute / 518400.0)}) + '년 전'"></span>
 							</span>
 						</div>			
 						<br>
@@ -36,24 +36,24 @@
 	
 					<div class="qna_title">
 						<div>
-							<h4  style="font-weight:bold" th:text="${freeBoardInfo.title}"></h4>
+							<h4  style="font-weight:bold" th:text="${freeBoardInfo[0].title}"></h4>
 						</div>
 						
 					</div>
 					
 
 				</div>
-				<div th:if ="${freeBoardInfo.memberNo} == ${session.member?.memberNo}" id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
-					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo.writeDate, 'yyyy-MM-dd HH:mm')}"></p>
-					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo.fboardNo}'|">수정</button>
-					<button class="btn" style ="background-color : #848484; color:white" th:onclick="delFreeBoard([[${freeBoardInfo.fboardNo}]])">삭제</button>
+				<div th:if ="${freeBoardInfo[0].memberNo} == ${session.member?.memberNo}" id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo[0].writeDate, 'yyyy-MM-dd HH:mm')}"></p>
+					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo[0].fboardNo}'|">수정</button>
+					<button class="btn" style ="background-color : #848484; color:white" th:onclick="delFreeBoard([[${freeBoardInfo[0].fboardNo}]])">삭제</button>
 				</div>
 
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
 			
 			<hr>
 			<div class="qna_contents"> <!-- 질문 내용 -->
-				<p th:utext="${freeBoardInfo.content}"></p>
+				<p th:utext="${freeBoardInfo[0].content}"></p>
 				
 			</div>
 			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
@@ -63,12 +63,30 @@
 						<img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye">
 					</span>
 					<span th:text="${freeBoardInfo.viewCnt}"></span>
-					<span>					
-						<img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
-					</span>
-					<span th:text="${freeBoardInfo.recommendCnt}"></span>
+<!-- 알림 -->
+<!-- 					<span>					 -->
+<!-- 						<img class="qna_icon" src="/commonResource/icon/best.png" alt="best"> -->
+<!-- 					</span> -->
+<!-- 					<span th:text="${freeBoardInfo.recommendCnt}"></span> -->
 				</div>
 			</div>
+			
+			
+			<div class="p-3" style="background-color:#aebfec">
+				<div class="clearfix">
+					<span style="float:left">첨부파일 리스트</span>
+					<span th:if="${freeBoardInfo[0].originFileName == null}" style="float:right; font-size:1rem;" id="attached_toggleButton" class="mink_li_highlight">목록확인</span>
+					<span th:unless="${freeBoardInfo[0].originFileName == null}" style="float:right; font-size:1rem;" id="attached_toggleButton" class="mink_li_highlight">목록확인([[${freeBoardInfo.size}]])</span>
+				</div>
+				<div id="attached_content" class="mt-1">
+					<ul class="list-unstyled" style="margin:0;">
+						<li th:each="file : ${freeBoardInfo}">
+							<button class="btn" th:text="${file.originFileName}" style="color:#007BFF;" th:onclick="|location.href='/attachFile/${file.attachedFileNo}'|"></button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
 			<hr>	
 		</div>
 		<!-- content end -->

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.yedamFinal.aco.freeboard.FreeBoardJoinVO;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
 import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
@@ -21,7 +22,7 @@ public interface FreeBoardMapper {
 	public int getFreeBoardAllCnt();
 
 	//게시글 단건조회
-	public FreeBoardVO getFreeBoard(@Param("fboardNo") int fboardNo);
+	public List<FreeBoardJoinVO> getFreeBoard(@Param("fboardNo") int fboardNo);
 	
 	//게시글 등록
 	public int insertFreeBoard(FreeBoardVO freeBoardVO);

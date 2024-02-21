@@ -81,7 +81,7 @@
 	</select>
 	
 	<!-- 단건조회 -->
-	<select id="getFreeBoard" parameterType="int" resultType="FreeBoardVO">
+	<select id="getFreeBoard" parameterType="int" resultType="FreeBoardJoinVO">
 	SELECT 
 		   FBOARD_NO, 
 	       A.MEMBER_NO, 
@@ -94,10 +94,16 @@
 	       PROFILE_IMAGE,
 	       B.ACCUM_ACTIVITY_POINT,
            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
-	       REPLY_CNT
+	       REPLY_CNT,
+	       C.ATTACHED_FILE_NO,
+    		C.SERVER_FILE_NAME,
+    		C.ORIGIN_FILE_NAME,
+    		C.FILE_PATH,
+    		C.REGISTER_DATE
 	       
 	FROM FREE_BOARD A
 	LEFT JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+	LEFT JOIN ATTACHED_FILE C ON A.FBOARD_NO = C.BOARD_NO AND C.BOARD_TYPE = 'N004'
 	WHERE FBOARD_NO= #{fboardNo}
 </select>
 
