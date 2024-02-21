@@ -245,10 +245,10 @@ input::placeholder
 	color:#979da9;
 }
 .bank{
-	width:120px;
-	height:120px;
+	width:110px;
+	height:110px;
 	display:inline-block;
-	border-radius:20px;
+	border-radius:15px;
 	border : 0px;
 }
 #tae-hr{
@@ -447,10 +447,10 @@ input::placeholder
 }
 
 .tae-bank-1{
-	 width:25px;
-	 height:25px;
+	 width:55px;
+	 height:55px;
 	 text-align:center;
-	 margin-top:10px;
+	 margin-top:16px;
 }
 .tae-piechart{
 	width: 900px; 
@@ -532,7 +532,8 @@ input::placeholder
 .tae-git-1 {
 	padding-left:20px;
 	overflow : scroll;
-	overflow-x: hidden;
+	/*overflow-x: hidden;*/
+	padding-top: 20px;
 }
 
 /* 스크롤바 설정*/

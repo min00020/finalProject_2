@@ -88,7 +88,7 @@
 																		<p class="tae-p-1">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
 																		<br>
 																		<div class="input-group mb-3" style="height:50px;">
-																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|정산가능포인트 ${#numbers.formatInteger(memberInfo.availableAccumPoint, 0, 'COMMA')} P|" aria-label="Recipient's username" aria-describedby="button-addon2">
+																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|원하는 환전 포인트를 입력하세요|" aria-label="Recipient's username" aria-describedby="button-addon2">
 																			<button class="btn btn-outline-secondary" id="accountApprove" type="button">정산요청</button>
 																		</div>
 																	</div>
@@ -290,10 +290,10 @@
 											      <div class="modal-body">
 											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
 														<div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
-												       		<button type="button" style="border:0;background-color:#fff;padding-left:20px;padding-top:10px;"
+												       		<button type="button" style="border:0;background-color:transparent;"
 												       		 th:onclick="choiceAccount([[${acc.accountNo}]])">
 												       			<img class="tae-bank-1" th:src="|commonResource/bankImage/${acc.bankName}.png|">
-													       		<p th:text="${acc.bankName}" style="float:left;padding-left:25px;">/</p>
+													       		<p th:text="${acc.bankName}" style="float:left;padding-left:12px;">/</p>
 															</button>											       		
 												       </div>												       
 											      </div>
@@ -471,7 +471,11 @@
 					</ul>
 					
 					
-					<h5 style="padding-left:40px;padding-top:30px;font-weight:bold;">가장 최근에 작성한 사이드프로젝트 TOP3</h5>
+					<h5 style="padding-left:40px;padding-top:30px;font-weight:bold;">최근 주최한 사이드프로젝트 TOP3🏆
+					<button type="button" class="btn btn-modal" id="tae-modal-btn" th:onclick="|location.href='/member/${session.member.memberNo}?pg=1&tp=2|">더보기
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+					stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+					</h5>
 					<div class="d-flex" style="margin-top:-20px;">
 						<div class="card" style="box-shadow: 9px 6px 10px 1px #d5d8df;border-radius:30px;width:285px;height:230px;margin-top:30px;margin-left:20px;"th:each="side:${sideList}">
 							<div class="card-body" id="card-1">
@@ -909,7 +913,7 @@ let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 	const memberno = [[${session.member.memberNo}]]
 	function goEmoShop(){
-		location.href = '/emoMain';
+		location.href = '/emoBuyList';
 	}
 	
 	
@@ -1089,7 +1093,7 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 	}
 	choiceAccountObj = accountObj
 			
-	$('#'+ accountObj).css("border", "1px solid skyblue");
+	$('#'+ accountObj).css("border", "1px solid #aebfec");
 			
 	}
 
