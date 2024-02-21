@@ -30,6 +30,7 @@ public class QuestionVO {
 	private String nickname;
 	
 	private String answerId;
+	private String answerNickname;
 	private String answerProfileImage;
 	private String answerMemberLevel;
 	

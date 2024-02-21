@@ -62,7 +62,7 @@
 					<div class="qna_box2">
 					   <img class="qna_profile" th:src="|/upload/profile/${questionInfo[0][0].profileImage}|" alt="profile">
 					</div>
-					<p class="m-0" th:text="${questionInfo[0][0].id}">cookie123</p>
+					<p class="m-0" th:text="${questionInfo[0][0].nickname}">cookie123</p>
 					<p class="m-0" th:text="${questionInfo[0][0].memberLevel}">silver</p>
 				</div>
 				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
@@ -364,7 +364,7 @@
 	                     <div class="qna_box2">
 	                        <img class="qna_profile" th:src="|/upload/profile/${AdoptQuestionVO.answerProfileImage}|" alt="profile">
 	                     </div>
-	                     <p class="m-0" th:text="${AdoptQuestionVO.answerId}">cookie123</p>
+	                     <p class="m-0" th:text="${AdoptQuestionVO.answerNickname}">cookie123</p>
 	                     <p class="m-0" th:text="${AdoptQuestionVO.answerMemberLevel}">silver</p>
 	                  </div>
 	                  <!-- 조회, 북마크, 추천, 덧글수 버튼 -->
@@ -523,7 +523,7 @@
 								<img class="qna_profile" th:if="${question.answerProfileImage} == null" th:src="|/commonResource/default_profile.jpg|" alt="profile">
 							  	<img class="qna_profile" th:unless="${question.answerProfileImage} == null" th:src="|/upload/profile/${question.answerProfileImage}|" alt="profile">
 							</div>
-							<p class="m-0" th:text="${question.answerId}">cookie123</p>
+							<p class="m-0" th:text="${question.answerNickname}">cookie123</p>
 							<p class="m-0" th:text="${question.answerMemberLevel}">silver</p>
 						</div>
 						<!-- 추천 버튼 -->
@@ -593,7 +593,6 @@
 			processData : false 	
 		})
 		.done(res => {
-			/* showSuccessAlert('등록성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -619,7 +618,6 @@
 			processData : false 	
 		})
 		.done(res => {
-			/* showSuccessAlert('수정성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -644,7 +642,6 @@
 			processData : false 	
 		})
 		.done(res => {
-			/* showSuccessAlert('채택성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -654,19 +651,17 @@
 	    })
 		
 	}
-	//댓글 폼 모달
+	
 	$("#replyBtn").click(function(e) {
 		$("#replyModal").slideToggle();	
 	}) 
 	
-	//추가질문폼 모달
  	$("#addQuestionBtn").click(function(e) {
 		$("#qnaAddModal").slideToggle();	
 	}) 
 	
 	//추가질문답변 작성
 	function sendAddAnswer(ano, answerWriter){
-		//추가질문답변 작성자 타입
 		//세션멤버 = 질문작성자 => J001 / 세션멤버 = 채택답변작성자 => J002
 		const member = [[${session.member}]];
 		if(member == null){
@@ -712,8 +707,6 @@
 	}
  	//추가질문답변 채택
  	function adoptAddAnswer(questionAddNo){
- 		console.log("test");
- 		console.log(questionAddNo);
 		const formData = new FormData();
 	
 		formData.append(csrfPara, csrfToken);
@@ -830,7 +823,6 @@ const editor = new toastui.Editor({
 
 </script>
 
-<!--/* 댓글 복사할 스크립트 태그 */-->
 <script th:inline="javascript">
 	const member = [[${session.member}]];
 	const memberNo = [[${session.member?.memberNo}]];
@@ -1084,4 +1076,3 @@ const editor = new toastui.Editor({
 		})
 	}
 </script>
-<!--/* 댓글 복사할 스크립트 태그 */-->
