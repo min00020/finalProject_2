@@ -22,8 +22,8 @@ public class SideVO {
 	private String status;
 	private int bno;
 	private int pk;
-	
-	
+	private int minute;
+	private int accumActivityPoint;
 	private String profileImage;
 	private String nickname;
 	

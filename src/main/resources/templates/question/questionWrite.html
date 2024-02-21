@@ -29,7 +29,7 @@
 						<p style="font-size:14px; margin-bottom:8px;">답변자에게 지급할 포인트 금액을 입력해주세요. </p>
 	                   	<div class="chae_input-container" style="width:100%;">
 						    <input id="point" name="point" type="text" th:field="*{point}" class="chae_form-control" style="color:#3e6ce3;">
-						    <button class="chae_pointBtn">전액사용</button>
+						    <button type="button" class="chae_pointBtn">전액사용</button>
 						</div>
 					</div>
 				</div>
@@ -115,10 +115,17 @@
 
 </script>
 <script th:inline="javascript">
+	const myPoint = [[${memberInfo.acoTotal}]] 
+	$("#point").on("change",function(e){
+		console.log(e.target.value);
+		if(e.target.value > myPoint){
+			showWarningAlert('','보유포인트를 확인해주세요');
+		}
+	})
+
 //질문 게시글 작성
 function sendQuestion(){
 	console.log('test',[[${session.member.memberNo}]]);
-	
 	
 	//유효성검사
 	const member = [[${session.member}]];

@@ -24,11 +24,13 @@
 		        s.tech_of_use,
 		        s.member_no,
 		        m.profile_image,
-		        m.nickname
-			FROM side_project_board s
-			JOIN member m ON s.member_no = m.member_no
-			WHERE s.publishing_status = #{status}
-	    	ORDER BY s.write_date desc
+		        m.nickname,
+		        m.accum_activity_point,
+		        ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+			 FROM side_project_board s
+			 JOIN member m ON s.member_no = m.member_no
+			 WHERE s.publishing_status = #{status}
+	    	 ORDER BY s.write_date desc
 	    	)B
     )A
 	<![CDATA[
@@ -220,5 +222,13 @@
 		FROM SIDE_PROJECT_BOARD
 		WHERE MEMBER_NO = #{memberNo}
 </select>
+
+
+<!-- 댓글수 증감-->
+<update id="updateReplyCnt" parameterType="int">
+	UPDATE SIDE_PROJECT_BOARD 
+	   SET REPLY_CNT = REPLY_CNT + 1 - #{value} 
+	 WHERE side_board_no = #{bno}
+</update>
 
 </mapper>
