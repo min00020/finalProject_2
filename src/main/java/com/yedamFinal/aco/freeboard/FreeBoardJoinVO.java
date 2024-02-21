@@ -17,6 +17,8 @@ public class FreeBoardJoinVO {
 	private int replyCnt;
 	private int accumActivityPoint;
 	private int minute;
+	private String profileImage;
+	
 	private int attachedFileNo;
 	private String serverFileName;
 	private String originFileName;

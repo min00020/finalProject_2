@@ -126,7 +126,12 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">회원조회</h1>
-			            <div class="dropdown" style="text-align: right">
+			            
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <div class="dropdown" style="text-align: right">
+                            <h6 class="m-0 font-weight-bold text-primary" style="float: left;">회원리스트</h6>
 						  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 						    탈퇴여부
 						  </button>
@@ -136,10 +141,6 @@
 						    <li><a class="dropdown-item" th:onclick="|location.href='/adminMember?leaveStatus=0&pageNo=1'|">미탈퇴</a></li>
 						  </ul>
 						</div>
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">회원리스트</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

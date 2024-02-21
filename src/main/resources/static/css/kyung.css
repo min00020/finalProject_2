@@ -199,6 +199,10 @@ header {
 	border: 1px solid #BDBDBD;
 	background-color: white;
 }
+/*메뉴 활성화*/
+.park_active {
+	color: #3e6ce3;
+}
 
 /*main template*/
 /* 프로필 이미지 원형 */
@@ -342,6 +346,11 @@ header {
 /* 	transform: translateX(100%); } 100 % { transform :translateX ( 0); }} */
 
 /*pointAsideMainCss*/
+
+.park_aside li {
+	font-weight: bold;
+	cursor: pointer
+}
 .park_pointAside {
 	border: 1px solid #BDBDBD;
 }

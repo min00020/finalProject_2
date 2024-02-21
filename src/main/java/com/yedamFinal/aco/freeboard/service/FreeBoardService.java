@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedamFinal.aco.freeboard.FreeBoardJoinVO;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
 import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.noticeboard.NoticeBoardVO2;
@@ -18,7 +19,7 @@ public interface FreeBoardService {
 	public List<FreeBoardVO> getFreeBoardAll(Model model,int pg);
 	
 	//단건조회
-	public FreeBoardVO getFreeBoard(int fboardNo, Model model);
+	public List<FreeBoardJoinVO> getFreeBoard(int fboardNo, Model model);
 	
 	//등록
 	public Map<String, Object> insertFreeBoard(FreeBoardVO freeBoardVO, MultipartFile[] files);

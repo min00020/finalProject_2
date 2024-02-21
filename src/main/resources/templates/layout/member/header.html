@@ -8,20 +8,20 @@
         </a>
         
             <ul class="list-unstyled d-flex gap-3 align-self-center ml-3">
-                <li onclick="location.href='/sideProjectList/Q001/?pageNo=1'">사이드 프로젝트</li>
-                <li onclick="location.href='/questionList?pageNo=1'">질문&답변</li>
-                <li onclick="location.href='/freeBoardList'">자유게시판</li>
-                <li>
-                	<div class="dropdown" id="drmenu">
-						<a style="font-weight:bold; text-decoration:none; color:black;" id="headerDrop" data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
+                <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/sideProjectList') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/sideInfo') ? 'park_active' : ''}" onclick="location.href='/sideProjectList/Q001/?pageNo=1'">사이드 프로젝트</li>
+                <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/questionList') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/questionInfo') ? 'park_active' : ''}" onclick="location.href='/questionList?pageNo=1'">질문&답변</li>
+				<li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/freeBoardList') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/freeBoardInfo') ? 'park_active' : ''}" onclick="location.href='/freeBoardList'">자유게시판</li>
+				<li>
+                	<div class="dropdown" id="drmenu" th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/noticeBoard') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/noticeInfo') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/qnaBoard') ? 'park_active' : ''}">
+						<a style="font-weight:bold; text-decoration:none;" id="headerDrop" data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
 						<ul id="headerDropDown" style="display:none;" class="dropdown-menu" aria-labelledby="headerDrop">
 					    	<li><a class="dropdown-item" href="/noticeBoard?pageNo=1">공지사항</a></li>
 					   		<li><a class="dropdown-item" href="/qnaBoard?pg=1">1:1 문의게시판</a></li>
 						</ul>
 					</div>
                 </li>
-                <li ><a href="/emoMain?pageNo=1" style="font-weight:bold; text-decoration:none; color:black;">이모티콘 상점</a></li>
-                 <li onclick="location.href='/point'">포인트 충전</li>
+                 <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/emoMain') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoDetail') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoBuyList') ? 'park_active' : ''}" onclick="location.href='/emoMain?pageNo=1'">이모티콘 상점</li>
+                 <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/point') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/accountConnect') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/insertAccountNo') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/acoMoneyInquiry') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/acoPointInquiry')  ? 'park_active' : ''}" onclick="location.href='/point'">포인트 충전</li>
             </ul>
             <div class="park_search-align-self-center">
              <input type="text" id="park_searchInput2" placeholder="검색어 입력" class="park_searchInput">
@@ -44,15 +44,7 @@
             </th:block>
             <th:block sec:authorize="isAuthenticated()"> 
                 <div class = "park_align-self-center d-flex gap-2">
-                          <div class="park_alert" style="width :45px; margin-top:13px;  ">
-                              <a href='/' class="position-relative">
-  								<img class="bell" src="/commonResource/bell.png" alt="bell" style="width:50%">
-  								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-   									 99+<span class="visually-hidden">unread messages</span>
-  								</span>
-							</a>
-                    
-               </div>
+   
                     <div class="mink_box"  th:if="${session.member.permission != 'ROLE_ADMIN'}">
                     	<a th:href="|/myPage|">
                     		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
@@ -87,29 +79,41 @@
     	})
     	
         // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
-        function toggleDarkMode() {
-            const body = document.body;
-            const sunIcon = document.querySelector('.sun-icon');
-            const moonIcon = document.querySelector('.moon-icon');
-            const logoImage = document.getElementById('logoImage');
-            const logoImage3 = document.getElementById('logoImage3');
-            // body 요소에 'dark-mode' 클래스가 있는지 확인하여 토글
-            body.classList.toggle('dark-mode');
-            // dark-mode일 때는 라이트 모드로, 그 반대일 때는 다크 모드로 설정
-            if (body.classList.contains('dark-mode')) {
-                body.classList.remove('light-mode');
-                moonIcon.classList.remove('hidden');
-                sunIcon.classList.add('hidden');
-                logoImage.src = "/commonResource/askcodeLogo_dark.png";
-                logoImage3.src = "/commonResource/askcodeLogo_dark.png";
-            } else {
-                body.classList.add('light-mode');
-                moonIcon.classList.add('hidden');
-                sunIcon.classList.remove('hidden');
-                logoImage.src = "/commonResource/askcodeLogo.png";
-                logoImage3.src = "/commonResource/askcodeLogo.png";
-            }
-        }
+      document.addEventListener('DOMContentLoaded', function() {
+    const darkModeStatus = localStorage.getItem('darkMode');
+    updateDarkMode(darkModeStatus === 'enabled');
+
+    document.querySelector('.park_dark-mode-toggle').addEventListener('click', function() {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        updateDarkMode(!isDarkMode);
+        localStorage.setItem('darkMode', !isDarkMode ? 'enabled' : 'disabled');
+    });
+});
+
+function updateDarkMode(enable) {
+    const body = document.body;
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+    const logoImage = document.getElementById('logoImage');
+    const footerLogo = document.getElementById('logoImage3');
+    // 로고 이미지 변경 처리
+    if (enable) {
+        body.classList.add('dark-mode');
+        body.classList.remove('light-mode');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+        logoImage.src = "/commonResource/askcodeLogo_dark.png";
+        footerLogo.src = "/commonResource/askcodeLogo_dark.png";
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+        logoImage.src = "/commonResource/askcodeLogo.png";
+        footerLogo.src = "/commonResource/askcodeLogo.png";
+    }
+}
+
     	
     	//검색
     	$('#park_searchInput2').on('keydown', function(e) {
@@ -137,3 +141,6 @@
         });
 
     </script>
+<style>
+
+</style>

@@ -208,7 +208,7 @@ public class FileServiceImpl implements FileService {
 	public Map<String,String> textEditorImage(MultipartFile image) {
 		Map<String,String> ret = new HashMap<String, String>();
 		
-		String uploadDir = Paths.get("C:", "upload", "texteditorimage").toString();
+		String uploadDir = textEditorImagePath;
 
 		if (image.isEmpty()) {
 	        return null;

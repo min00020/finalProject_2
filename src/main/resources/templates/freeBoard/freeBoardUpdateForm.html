@@ -17,13 +17,13 @@
 			</div>
 			<hr style="margin:0 auto; width:900px;">
 			<!-- 질문 작성폼 시작 -->
-			<form name="freeBoardUpdate">
+			<form name="freeBoardUpdate" >
 				<div style="width:900px; margin:0 auto; ">
 					<br>
 					<div>
 						<div>
 							<h6 style="font-weight : bold;">제목</h6>
-							<input th:field="${freeBoardInfo.title}" name="title" type="text" class="form-control" >
+							<input th:value="${freeBoardInfo[0].title}" name="title" type="text" class="form-control" >
 							<br>
 						</div>
 					
@@ -31,7 +31,7 @@
 <!-- 						<textarea name="content" class="form-control" style="height:300px;"></textarea> -->
 <!-- 						<br> -->
 					<label for="editor" style="font-weight:bold; margin-bottom:8px;">내용</label>
-						<div id="editor" name="editor" th:utext="${freeBoardInfo.content}"></div>
+						<div id="editor" name="editor" th:utext="${freeBoardInfo[0].content}"></div>
 						<br>
 					</div>
 				
@@ -184,7 +184,7 @@
 				})
 				$('#attachFile')[0].files = fileDataTransfer.files;
 			}	
-			var fboardNo = [[${freeBoardInfo.fboardNo}]];
+			var fboardNo = [[${freeBoardInfo[0].fboardNo}]];
 			// name만 달려있으면 모두 가져옴!
 			const formData = new FormData(document.freeBoardUpdate);
 			formData.append(csrfPara, csrfToken);
