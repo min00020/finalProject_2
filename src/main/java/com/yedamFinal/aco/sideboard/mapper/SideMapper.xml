@@ -24,11 +24,13 @@
 		        s.tech_of_use,
 		        s.member_no,
 		        m.profile_image,
-		        m.nickname
-			FROM side_project_board s
-			JOIN member m ON s.member_no = m.member_no
-			WHERE s.publishing_status = #{status}
-	    	ORDER BY s.write_date desc
+		        m.nickname,
+		        m.accum_activity_point,
+		        ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+			 FROM side_project_board s
+			 JOIN member m ON s.member_no = m.member_no
+			 WHERE s.publishing_status = #{status}
+	    	 ORDER BY s.write_date desc
 	    	)B
     )A
 	<![CDATA[

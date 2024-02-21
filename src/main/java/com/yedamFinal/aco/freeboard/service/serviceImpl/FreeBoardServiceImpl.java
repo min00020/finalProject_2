@@ -16,6 +16,7 @@ import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
+import com.yedamFinal.aco.freeboard.FreeBoardJoinVO;
 import com.yedamFinal.aco.freeboard.FreeBoardVO;
 import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
@@ -52,7 +53,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public FreeBoardVO getFreeBoard(int fboardNo, Model model) {
+	public List<FreeBoardJoinVO> getFreeBoard(int fboardNo, Model model) {
 		freeBoardMapper.updateFreeBoardViewCnt(fboardNo);
 		List<ReplyJoinVO> list = replyMapper.selectReply("N004", fboardNo);
 		Map<Integer, List<ReplyJoinVO>> groupByData = list.stream().collect(Collectors.groupingBy(ReplyJoinVO::getParentReplyNo));

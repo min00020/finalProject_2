@@ -23,12 +23,6 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.css" rel="stylesheet">
 </head>
@@ -194,7 +188,7 @@
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Content Column -->
-                        <div class="col-lg-12 mb-8">
+                        <div class="col-lg-12 mb-8" style="margin-top: 2.5rem">
 													                   
                          <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -209,7 +203,7 @@
                                             <th>내용</th>
                                             <th>작성일</th>
                                             <th>조회수</th>
-                                    		<th>
+                                    		<th style="width: 155px">
                                     		                            	<!-- 모달 -->
 		                    <div style="text-align: center;">
 		                     <button type="button" class="btn btn-primary"
@@ -238,11 +232,11 @@
 												<table>
 												<tr>
 												<th>제목</th>
-												<td><input type="text" name="title" id="ntitle"></td>	
+												<td><input type="text" name="title" id="ntitle" style="margin-left:10px; width: 350px;"></td>	
 												</tr>
 												<tr>
 												<th style="vertical-align: middle;">내용</th>
-												<td><textarea name="content" id="ncontent" style="height: 300px"></textarea></td>	
+												<td><textarea name="content" id="ncontent" style="margin-left:10px; width: 350px; height: 300px"></textarea></td>	
 												</tr>
 												</table>
 												</div>
@@ -281,7 +275,7 @@
 												  <div class="modal-dialog">
 												    <div class="modal-content">
 												      <div class="modal-header" style="margin: auto;">
-												        <h1 class="modal-title fs-5" id="exampleModalLabel">공지 게시글을 삭제 하시겠습니까?</h1>
+												        <h1 class="modal-title fs-5" id="exampleModalLabel">공지사항을 삭제 하시겠습니까?</h1>
 												      </div>
 												      <div class="modal-footer" style="margin: auto;">
 												        <button type="button" class="btn btn-danger" th:onclick="|location.href='/deleteNotice?noticeBoardNo=${notice.noticeBoardNo}'|">공지삭제</button>

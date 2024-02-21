@@ -120,7 +120,7 @@
 							<hr>
 							<div class="park_summary-item">
 
-								<span>현재 보유 애코머니 :</span> <span th:text='|${getAcoMoney} P|'></span>
+								<span>현재 보유 애코머니 :</span> <span th:text="| ${#numbers.formatInteger(getAcoMoney, 0, 'COMMA')} P|"></span>
 							</div>
 							<div class="park_summary-item">
 								<span>충전할 애코머니 :</span> <span class="park_am_input"></span>
@@ -131,7 +131,7 @@
 							<hr>
 							<div class="park_summary-item park_summary-total">
 								<span>충전후 애코머니 :</span> <span class="park_summary"
-									th:text='|${getAcoMoney} P|'></span>
+									th:text="| ${#numbers.formatInteger(getAcoMoney, 0, 'COMMA')} P|"></span>
 							</div>
 						</div>
 					</div>
@@ -222,9 +222,9 @@ $(document).ready(function() {
         $('.park_am_input').text(newAmount.toLocaleString() + ' P');
         
         
-        var currentAcomoney = parseInt($('.current_acomoney').text().replace(/,/g, '')) || 0;
+        var currentAcomoney = parseInt($('.park_summary').text().replace(/,/g, '')) || 0;
 
-  		var totalAcomoneyAfterCharge = currentAcomoney + newAmount;
+  		var totalAcomoneyAfterCharge = currentAcomoney + amountToAdd;
         
         // "충전 후 애코머니" 업데이트
         $('.park_summary').text(totalAcomoneyAfterCharge.toLocaleString() + ' P');
@@ -389,7 +389,7 @@ function submitPayment(){
 					  confirmButtonText: "확인",
 					}).then((result) => {
 					  if (result.value) {
-					    location.href = '/point';
+					    location.href = '/acoMoneyInquiry?cp=1&up=1';
 					  }
 					}); 
 					
@@ -467,9 +467,9 @@ const sum = $('.park_summary');
 	$('#park_amountInput').on('input', function(e) {
 		const inVal = Number(e.target.value.replaceAll(',',''));
 		if(inVal > 0){
-			money.text(inVal+' 원');
-			am.text(inVal+' P');
-			sum.text(inVal+[[${getAcoMoney}]]+ ' P')
+			money.text(inVal.toLocaleString()+' 원');
+			am.text(inVal.toLocaleString()+' P');
+			sum.text((inVal+[[${getAcoMoney}]]).toLocaleString()+ ' P')
 		}
 	})
 	
