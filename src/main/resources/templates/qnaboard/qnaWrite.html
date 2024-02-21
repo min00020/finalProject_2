@@ -59,8 +59,9 @@
 	let csrfToken = $('meta[name="csrf"]').attr("content");
 	const imageNoArray = [];
 	
+	let editor = null;
 	$(document).ready(function(){
-		const editor = new toastui.Editor({
+		editor = new toastui.Editor({
 		    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
 		    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
 		    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)

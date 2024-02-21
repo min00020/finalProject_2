@@ -740,8 +740,10 @@
 	const imageNoArray = [];
 	const imageNoArray2 = [];
 	
+	let editor = null;
+	let editor2 = null;
 	$(document).ready(function(){
-		const editor = new toastui.Editor({
+		editor = new toastui.Editor({
 		    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
 		    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
 		    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
@@ -779,7 +781,7 @@
 	        /* end of hooks */
 		});
 		
-		const editor2 = new toastui.Editor({
+		editor2 = new toastui.Editor({
 		    el: document.querySelector('#editor2'), // 에디터를 적용할 요소 (컨테이너)
 		    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
 		    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
@@ -816,7 +818,7 @@
 	        }
 	        /* end of hooks */
 		});
-	}
+	})
 	
 	
 	
