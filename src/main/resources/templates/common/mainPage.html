@@ -17,18 +17,19 @@
 	</div>
 	<div id="park_board">
 		<section class="park_child">
-			
-				<button class="park_S">
-					<span class="park_boardname">자유게시판</span>
+				<!-- 게시판명 -->
+				<button class="park_S" th:onclick="location.href='/freeBoardList'">
+					<span class="park_boardname" >자유게시판</span>
 				</button>
 				<section class="park_child2">
 				<div>
 					<ul class = "park_fb">
-						<li th:each="free, iterStat : ${getFreeBoardList}" th:if="${iterStat.index < 6}">
-							<span class="park_nickname">[[${free.nickname}]]
-							<span class="park_box">
-                          <img class="park_profile" th:src="|/upload/profile/${free.profileImage}|" alt="profile">
+						<li th:each="free : ${getFreeBoardMainPage}">
+						<span class="park_box">
+                          <img class="park_profile" th:onclick="|location.href='/member/${free.memberNo}?pg=1'|" th:src="|/upload/profile/${free.profileImage}|" alt="profile">
                         </span>
+							<span class="park_nickname" th:onclick="|location.href='/member/${free.memberNo}?pg=1'|">[[${free.nickname}]]
+							
                        
 							</span>
 							<span class="park_activityPoint"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${free.accumActivityPoint}]]
@@ -39,8 +40,8 @@
 								<span th:if="${free.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(free.minute / 518400.0)}) + '년 전'"></span>
 							</span><br>
 							
-							<span class="park_title" th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|" th:if="${#strings.length(free.title) > 33}" th:text="${#strings.substring(free.title, 0, 33)} + '...'"></span>
-								<span class="park_title" th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|" th:unless="${#strings.length(free.title) > 33}" th:text="${free.title}"></span>
+							<span class="park_title" th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|" th:if="${#strings.length(free.title) > 26}" th:text="${#strings.substring(free.title, 0, 26)} + '...'"></span>
+								<span class="park_title" th:onclick="|location.href='/freeBoardInfo/${free.fboardNo}'|" th:unless="${#strings.length(free.title) > 26}" th:text="${free.title}"></span>
 							<hr />
 							
 						</li>
@@ -51,24 +52,64 @@
 
 
 		<section class="park_child">
-			<button class="park_S">
+			<button class="park_S" th:onclick="location.href='/questionList?pageNo=1'" >
 				<span class="park_boardname">질문&답변</span>
 			</button>
+			<section class="park_child2">
+				<div>
+					<ul class = "park_fb">
+						<li th:each="question : ${getQuestionBoardMainPage}">
+							<span class="park_nickname" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|">[[${question.nickname}]]
+							<span class="park_box">
+                          <img class="park_profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|" th:src="|/upload/profile/${question.profileImage}|" alt="profile">
+                        </span>
+                       
+							</span>
+							<span class="park_activityPoint"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${question.accumActivityPoint}]]
+								<span th:if="${question.minute < 60}" th:text="' · ' + (${question.minute}) + '분 전'"></span>
+								<span th:if="${question.minute >= 60 && question.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(question.minute / 60.0)}) + '시간 전'"></span>
+								<span th:if="${question.minute >= 1440 && question.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(question.minute / 1440.0)}) + '일 전'"></span>
+								<span th:if="${question.minute >= 43200 && question.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(question.minute / 43200.0)}) + '달 전'"></span>
+								<span th:if="${question.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(question.minute / 518400.0)}) + '년 전'"></span>
+							</span><br>
+							
+							<span class="park_title" th:onclick="|location.href='/questionInfo/${question.questionBoardNo}'|" th:if="${#strings.length(question.title) > 33}" th:text="${#strings.substring(question.title, 0, 33)} + '...'"></span>
+								<span class="park_title" th:onclick="|location.href='/questionInfo/${question.questionBoardNo}'|" th:unless="${#strings.length(question.title) > 33}" th:text="${question.title}"></span>
+							<hr />
+							
+						</li>
+					</ul>
+				</div>
+			</section>
 		</section>
 		
 	</div>
 
 	<div id="park_board">
 		<section class="park_child">
-			<button class="park_S">
+			<button class="park_S" th:onclick="location.href='/sideProjectList/Q001/?pageNo=1'">
 				<span class="park_boardname">사이드 프로젝트</span>
 			</button>
 			<section class="park_child2">
 				<div>
 					<ul class = "park_fb">
-						<li th:each="rec : ${recList}">
-		
-							<span class="park_title"  th:text="${rec.title}" ></span>
+						<li th:each="side : ${getSideProjectBoardMainPage}">
+							<span class="park_nickname" th:onclick="|location.href='/member/${side.memberNo}?pg=1'|">[[${side.nickname}]]
+							<span class="park_box">
+                         <img class="park_profile" th:onclick="|location.href='/member/${side.memberNo}?pg=1'|" th:src="|/upload/profile/${side.profileImage}|" alt="profile">
+                      </span>
+                      
+							</span>
+							<span class="park_activityPoint"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${side.accumActivityPoint}]]
+								<span th:if="${side.minute < 60}" th:text="' · ' + (${side.minute}) + '분 전'"></span>
+								<span th:if="${side.minute >= 60 && side.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(side.minute / 60.0)}) + '시간 전'"></span>
+								<span th:if="${side.minute >= 1440 && side.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(side.minute / 1440.0)}) + '일 전'"></span>
+								<span th:if="${side.minute >= 43200 && side.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(side.minute / 43200.0)}) + '달 전'"></span>
+								<span th:if="${side.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(side.minute / 518400.0)}) + '년 전'"></span>
+							</span><br>
+							
+							<span class="park_title" th:onclick="|location.href='/sideInfo/${side.sideBoardNo}'|" th:if="${#strings.length(side.title) > 33}" th:text="${#strings.substring(side.title, 0, 33)} + '...'"></span>
+								<span class="park_title" th:onclick="|location.href='/sideInfo/${side.sideBoardNo}'|" th:unless="${#strings.length(side.title) > 33}" th:text="${side.title}"></span>
 							<hr />
 							
 						</li>
@@ -78,15 +119,29 @@
 		</section>
 
 		<section class="park_child">
-			<button class="park_S">
+			<button class="park_S" th:onclick="location.href='/noticeBoard?pageNo=1'">
 				<span class="park_boardname">공지사항</span>
 			</button>
 			<section class="park_child2">
 				<div>
 					<ul class = "park_fb">
-						<li th:each="notice: ${noticeList}">
-		
-							<span class="park_title"  th:text="${notice.title}" ></span>
+						<li th:each="notice: ${getNoticeBoardMainPage}">
+							<span class="park_nickname-admin" style="cursor:auto;">관리자
+							<span class="park_box">
+                          <img class="park_profile" style="cursor:auto;" th:src="|/upload/profile/${notice.profileImage}|" alt="profile">
+                        </span>
+                       
+							</span>
+							<span class="park_activityPoint">
+								<span th:if="${notice.minute < 60}" th:text="' · ' + (${notice.minute}) + '분 전'"></span>
+								<span th:if="${notice.minute >= 60 && notice.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(notice.minute / 60.0)}) + '시간 전'"></span>
+								<span th:if="${notice.minute >= 1440 && notice.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(notice.minute / 1440.0)}) + '일 전'"></span>
+								<span th:if="${notice.minute >= 43200 && notice.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(notice.minute / 43200.0)}) + '달 전'"></span>
+								<span th:if="${notice.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(notice.minute / 518400.0)}) + '년 전'"></span>
+							</span><br>
+							
+								<span class="park_title" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|" th:if="${#strings.length(notice.title) > 33}" th:text="${#strings.substring(notice.title, 0, 33)} + '...'"></span>
+								<span class="park_title" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|" th:unless="${#strings.length(notice.title) > 33}" th:text="${notice.title}"></span>
 							<hr />
 							
 						</li>
@@ -100,6 +155,12 @@
 
 </div>
 <style>
+ul li .park_profile, 
+ul li .park_nickname{
+cursor:pointer;
+}
+
+
 
 </style>
 

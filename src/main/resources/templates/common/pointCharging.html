@@ -41,7 +41,7 @@
 							<h3>내 출금 계좌</h3>
 							<hr>
 						</div>
-						<div th:each="account : ${getAccountList}">
+						<div th:each="account : ${getAccountList}" id="accountSelect2" th:onclick="choiceAccount([[${account.accountNo}]])">
 							<div class="park_account d-flex align-items-center"
 								th:data-accountname="${account.bankName}">
 								<img
@@ -192,6 +192,12 @@ const historyDate = new Date();
 const pointType = 'G001';
 const accountNo = '3020000010135';
 
+// 내가 선택한 계좌
+let myChoiceAccount = null;
+function choiceAccount(accountNo) {
+	myChoiceAccount = accountNo;
+}
+
 $(document).ready(function() {
     $('button[data-amount]').click(function() {
         // 버튼에서 금액 데이터를 가져옴
@@ -260,6 +266,13 @@ function submitPayment(){
 		
         return; 
 	}
+	
+	
+	if(myChoiceAccount == null){
+		showWarningAlert('계좌를 선택해주세요.');
+		return;
+	}
+	
 		
 	const isAgree = $('#termsAgree').prop('checked');
 	if(isAgree != true){

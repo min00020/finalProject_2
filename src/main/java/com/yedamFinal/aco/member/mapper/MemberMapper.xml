@@ -45,9 +45,8 @@
            END AS available_accum_point
     FROM member m
     WHERE member_no = #{memberNo}
-
-
 </select>
+
 <!-- 내이모티콘구매내역조회 -->
 <select id="selectMyemoticonList" resultType="com.yedamFinal.aco.myemoticon.MyEmoticonJoinVO">
 	SELECT 
@@ -99,13 +98,24 @@
 </select>
 <!-- 내가 질문한 리스트전체 페이지처리 -->
 <select id="selectQuestionList" resultType="com.yedamFinal.aco.questionboard.MyquestionVO">
-	 SELECT question_board_no,
-		    title,write_date,
-		    answer_cnt,
-	        member_no
-	FROM question_board
-	WHERE member_no= #{memberNo}
-	ORDER BY write_date desc
+	SELECT ROWNUM, A.*
+	 FROM
+	   (SELECT q.question_board_no,
+		       q.title,write_date,
+		       q.answer_cnt,
+	           q.member_no
+		FROM question_board q
+		ORDER BY q.write_date desc ) A
+	JOIN member B ON A.member_no = B.member_no
+	WHERE A.member_no= #{memberNo} and rownum <![CDATA[ <= ]]> 10
+	
+</select>
+<select id="selectQuestionCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM question_board
+    WHERE member_no = #{memberNo}
+
 </select>
 <!-- 활동점수 리스트 -->
 <select id="selectActivityList" resultType="com.yedamFinal.aco.activity.ActivityPointVO">
@@ -301,6 +311,34 @@ VALUES (activity_point_detail_seq.NEXTVAL,
 <update id="updateAccountInfo">
 	UPDATE MEMBER SET EMAIL = #{email}, NAME = #{name}, NICKNAME = #{nickname}, PROFILE_IMAGE = #{profileImageName}, TOPIC_HASHTAG = #{tag} WHERE MEMBER_NO = #{memberNo}
 </update>
+<!-- 정산요청 -->
+<update id="updatesettlementRequest" parameterType="SettlementVO">
+	UPDATE member
+    SET aco_point = aco_point - #{settlementReqPoint}
+    WHERE member_no = #{memberVO.memberNo}
+</update>
+<insert id="insertsettlementPoint" parameterType="SettlementVO">
+	INSERT INTO settlement(
+	                       settlement_no,
+	                       member_no,
+	                       settlement_req_point,
+	                       req_account,
+	                       req_account_name,
+	                       req_account_bankcode,
+	                       req_bankname,
+	                       process_status
+	                       )
+	VALUES (
+		    settlement_seq.NEXTVAL,
+	        #{memberNo},
+	        #{settlementReqPoint},
+	        #{reqAccount},
+	        #{reqAccountName},
+	        #{reqAccountBankcode},
+	        #{reqBankname},
+	        #{processStatus}
+	        )
+</insert>
 
 <select id="otherMemberStatInfo" resultType="MemberStatVO">
 	SELECT 

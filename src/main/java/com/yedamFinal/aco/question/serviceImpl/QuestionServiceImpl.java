@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.mapper.MemberMapper;
 import com.yedamFinal.aco.point.PointDetailVO;
 import com.yedamFinal.aco.point.mapper.PointMapper;
 import com.yedamFinal.aco.question.QuestionVO;
@@ -31,13 +33,16 @@ public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	private PointMapper pointMapper;
 	
+	@Autowired
+	private MemberMapper memberMapper;
+	
 	//질문글 리스트 조회
 	@Override
-	public List<QuestionVO> getQuestionList(Model model, int pageNo) {
-		var questionList = questionMapper.getQuestionList(pageNo);
+	public List<QuestionVO> getQuestionList(Model model, int pageNo, String search) {
+		var questionList = questionMapper.getQuestionList(pageNo, search);
 		PaginationDTO dto = null;
 		if(questionList.size() > 0) {
-			dto = new PaginationDTO(questionMapper.getQuestionCount(),pageNo,5);
+			dto = new PaginationDTO(questionMapper.getQuestionCount(search),pageNo,5);
 		}
 		
 		model.addAttribute("pageDTO", dto);
@@ -48,20 +53,18 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	//질문글 리스트 분류 조회
 	@Override
-	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic) {
-		var questionListTopic = questionMapper.getQuestionListSelect(pageNo, topic);
+	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic, String search) {
+		var questionListTopic = questionMapper.getQuestionListTopic(pageNo, topic, search);
 		PaginationDTO dto = null;
 		if(questionListTopic.size() > 0) {
-			dto = new PaginationDTO(questionMapper.getQuestionTopicCount(topic),pageNo,5);
+			dto = new PaginationDTO(questionMapper.getQuestionTopicCount(topic, search),pageNo,5);
 		}
 		
 		model.addAttribute("pageDTO", dto);
-		model.addAttribute("questionListTopic", questionListTopic);
+		model.addAttribute("questionList", questionListTopic);
 		
 		return null;
 	}
-	
-	
 
 	//단건조회
 	@Override
@@ -71,6 +74,16 @@ public class QuestionServiceImpl implements QuestionService{
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
+		
+		//북마크 조회
+		MybookmarkVO bookmarkvo= questionMapper.questionBookmarkInfo(memberNo, qno);
+		
+		if(bookmarkvo == null || bookmarkvo.getTitle() == null) {
+			model.addAttribute("isCheckBookmark", 0);
+		}
+		else {
+			model.addAttribute("isCheckBookmark", 1);
+		}
 		
 		//번호 boardNo 기준 > 0부터 시작하게 변경
 		Map<Integer, List<QuestionVO>> ret = new HashMap<Integer, List<QuestionVO>>();
@@ -137,6 +150,39 @@ public class QuestionServiceImpl implements QuestionService{
 		}
 		return ret;
 	}
+	
+
+	//질문글 단건조회 북마크
+	@Transactional
+	@Override
+	public Map<String, Object> updateBookmark(int qno, int memberNo) {
+		Map<String,Object> ret = new HashMap<String,Object>();
+		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
+
+		ret.put("result", "200");
+		if(result.size() <= 0) {
+			ret.put("result", "400");
+		}
+		else {
+			MybookmarkVO myBookmark = questionMapper.questionBookmarkInfo(memberNo, qno);
+			MybookmarkVO bookmarkvo = new MybookmarkVO();
+			//북마크 없는 경우 , 있는 경우
+			if(myBookmark == null || myBookmark.getTitle() == null) {
+				bookmarkvo.setMemberNo(memberNo);
+				bookmarkvo.setQuestionBoardNo(qno);
+				bookmarkvo.setRegistDate(new Date());
+				bookmarkvo.setTitle(result.get(0).getTitle());
+				questionMapper.insertBookmark(bookmarkvo);
+				questionMapper.updateBookmarkCnt(0, qno);
+			}
+			else {
+				questionMapper.updateBookmarkCnt(2, qno);
+				questionMapper.deleteBookmark(qno);
+			}
+		}
+		return ret;
+	}
+	
 	
 	//질문글작성
 	@Transactional
@@ -240,9 +286,24 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 	
 	//답변글 작성
+	@Transactional
 	@Override
-	public Map<String, Object> writeAnswer(QuestionVO vo) {
+	public Map<String, Object> writeAnswer(QuestionVO vo, MemberVO mvo) {
+		//활동점수+50 내역
+		QuestionActivityPointVO activityPointVO = new QuestionActivityPointVO();
+		
+		activityPointVO.setMemberNo(mvo.getMemberNo());
+		activityPointVO.setAccumActivityPoint(mvo.getAccumActivityPoint());
+		activityPointVO.setCurActivityPoint(mvo.getAvailableActivityPoint());
+		activityPointVO.setActivityPointType("C002");
+		activityPointVO.setActivityPointDate(new Date());
+		activityPointVO.setIncDecActivityPoint(50);
+		
+		questionMapper.updateActivityPoint(activityPointVO);
+		
+		//답변글 작성
 		Map<String,Object> ret = new HashMap<String,Object>();
+		
 		int insertId = questionMapper.insertAnswer(vo);
 		if(insertId <= 0) {
 			ret.put("result", "500");
@@ -251,7 +312,8 @@ public class QuestionServiceImpl implements QuestionService{
 			ret.put("result", "200");
 			//답변수+1
 			questionMapper.plusAnswerCnt(vo.getQuestionBoardNo());
-			//활동점수 지급
+			questionMapper.updateAnsWritePoint(mvo);
+			
 			
 		}
 		return ret;
@@ -273,10 +335,44 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 	
 	//답변글 채택
+	@Transactional
 	@Override
-	public int adoptAnswer(int ano) {
+	public int adoptAnswer(int ano, MemberVO mvo) {
+		//답변 채택
 		QuestionVO vo = questionMapper.selectAdoptAnswer(ano);
-		vo.getMemberNo();
+		
+		mvo.setMemberNo(vo.getMemberNo());
+		mvo = memberMapper.selectMemberInfo(mvo);
+		
+		mvo.setPoint(vo.getPoint());
+		
+		//활동점수 내역 업데이트
+		QuestionActivityPointVO activityPointVO = new QuestionActivityPointVO();
+		
+		activityPointVO.setMemberNo(mvo.getMemberNo());
+		activityPointVO.setAccumActivityPoint(mvo.getAccumActivityPoint());
+		activityPointVO.setCurActivityPoint(mvo.getAvailableActivityPoint());
+		activityPointVO.setActivityPointType("C003");
+		activityPointVO.setActivityPointDate(new Date());
+		activityPointVO.setIncDecActivityPoint(20);
+		
+		questionMapper.updateActivityPoint(activityPointVO);
+
+		//포인트 내역 업데이트
+		PointDetailVO pointVO = new PointDetailVO();
+		pointVO.setMemberNo(mvo.getMemberNo());
+		pointVO.setLatestAcoMoney(mvo.getAcoMoney());
+		pointVO.setLatestAcoPoint(mvo.getAcoPoint());
+		pointVO.setLatestTotalPoints(mvo.getAcoMoney() + mvo.getAcoPoint());
+		pointVO.setHistoryDate(new Date());
+		pointVO.setHistoryType("F004");
+		pointVO.setPointType("G002"); //에코포인트 G002
+		pointVO.setIncDecPoint(mvo.getPoint());
+				
+		pointMapper.insertAcoMoneyHistory(pointVO);
+		
+		//활동점수, 포인트 지급
+		questionMapper.updateAdoptPoint(mvo);
 		
 		return questionMapper.adoptAnswer(ano);
 	}
@@ -293,5 +389,10 @@ public class QuestionServiceImpl implements QuestionService{
 			ret.put("result", "200");
 		}
 		return ret;
+	}
+	//추가질문답변 채택
+	@Override
+	public int adoptAddAnswer(int questionAddNo) {
+		return questionMapper.adoptAddAnswer(questionAddNo);
 	}
 }

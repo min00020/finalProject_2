@@ -12,11 +12,13 @@
     <title>Ask Code 관리자 페이지</title>
 	<!-- 제이쿼리 -->
 		<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	
 	<!-- sweetAlert2 -->
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.all.min.js"></script>
       <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.4/dist/sweetalert2.min.css" rel="stylesheet">
       <script type="text/javascript" th:src="@{/js/commonMethod.js}"></script>
-      <!-- sweetAlert2 -->
+    <!-- sweetAlert2 -->
+	
 	<!-- 부트스트랩 -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -122,24 +124,12 @@
 		    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:15%">
 						</a>
 					</div>
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">관리자</span>
-                                <!-- <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg"> -->
-                            </a>
-                        </li>
-                    </ul>
+                   <form action="/logout" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button class="btn btn-secondary" type="submit">Logout</button>
+                    </form>
                 </nav>
                 <!-- End of Topbar -->
 
@@ -219,7 +209,6 @@
                                             <th>내용</th>
                                             <th>작성일</th>
                                             <th>조회수</th>
-                                            <th>추천수</th>
                                     		<th>
                                     		                            	<!-- 모달 -->
 		                    <div style="text-align: center;">
@@ -252,8 +241,8 @@
 												<td><input type="text" name="title" id="ntitle"></td>	
 												</tr>
 												<tr>
-												<th>내용</th>
-												<td><textarea name="content" id="ncontent"></textarea></td>	
+												<th style="vertical-align: middle;">내용</th>
+												<td><textarea name="content" id="ncontent" style="height: 300px"></textarea></td>	
 												</tr>
 												</table>
 												</div>
@@ -276,12 +265,11 @@
                                     </thead>
                                    
                                     <tbody>
-                                        <tr th:each="notice : ${adminNotice}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|">
-                                            <td th:text="${notice.title}"></td>
-                                            <td th:text="${notice.content}"></td>
-                                            <td th:text="${#dates.format(notice.writeDate, 'yyyy/MM/dd')}"></td>
+                                        <tr th:each="notice : ${adminNotice}">
+                                            <td th:text="${notice.title}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|"></td>
+                                            <td th:text="${notice.content}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|"></td>
+                                            <td th:text="${#dates.format(notice.writeDate, 'yyyy/MM/dd')}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|"></td>
                                             <td th:text="${notice.viewCnt}"></td>
-                                            <td th:text="${notice.recommendCnt}"></td>
                                             <td><div style="text-align: center">
                                                                                        <!-- Button trigger modal -->
 												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal1${notice.noticeBoardNo}|">
@@ -366,8 +354,8 @@
 			content.focus();
 			return;
 		}
-		document.insertForm.submit();
-		showSuccessAlert('공지등록이 완료 되었습니다.');
+		showSuccessAlert('공지등록이 완료 되었습니다.','1초 후 창이 닫힙니다.');
+		setTimeout("document.insertForm.submit()", 1000);
 	}
 </script>
 </html>

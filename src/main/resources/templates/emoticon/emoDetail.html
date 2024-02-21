@@ -24,11 +24,11 @@
 		                     		</button>
                                 </div>
                                  <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" th:unless = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0" >
-                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#AddNotice"  style="text-decoration: none; color: white;"
-                                    disabled="disabled">
-		                        		구매불가
+                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3"  style="text-decoration: none; color: white;"
+                                    onclick="location.href='/point'">
+		                        		충전하러가기
 		                     		</button>
-		                     		<p style="color: red">현재 보유 포인트(+머니) = [[${user.acoPoint}]](+[[${user.acoMoney}]])</p>
+		                     		<p style="color: red; text-align: center;">현재 보유 포인트(+머니)는 [[${user.acoPoint}]](+[[${user.acoMoney}]])  입니다. <br>충전이 필요합니다.</p>
 		                     		</div>
                                 <!-- Modal -->
 			                  <div class="modal fade" id=AddNotice tabindex="-1" role="dialog"
@@ -100,11 +100,17 @@
 </section>
 </div>
 <script th:inline="javascript">
-//var user = [[${user}]]
-//var emoDetail = [[${emoDetail}]]
  	function buyEmo(){
-		document.buyForm.submit();
- 		showSuccessAlert('구매 완료');
-		//location.href=`/buyEmo?memberNo=${user.memberNo}&acoPoint=${user.acoPoint}&acoMoney=${user.acoMoney}&emoPrice=${emoDetail.emoPrice}&emoNo=${emoDetail.emoNo}&emoName=${emoDetail.emoName}`
+	var emoDetail = [[${emoDetail}]]
+	var emoBuyList = [[${emoBuyList}]]
+		for(let i =0; i < emoBuyList.length; i++){
+			console.log(emoBuyList[i].emoNo)
+			if(emoDetail.emoNo == emoBuyList[i].emoNo){
+				showWarningAlert('이미 구매한 이모티콘입니다.');
+				return;
+			}
+		}
+		showSuccessAlert('구매 완료','1초 후 구매내역으로 이동합니다.');
+		setTimeout("document.buyForm.submit()", 1000);
 	} 
 </script>

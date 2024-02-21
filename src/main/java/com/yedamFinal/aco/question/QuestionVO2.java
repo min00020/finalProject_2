@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode
-public class QuestionVO {
+public class QuestionVO2 {
 	//questionBoard
 	private int questionBoardNo;
 	private int memberNo;
@@ -16,7 +16,7 @@ public class QuestionVO {
 	private String title;
 	private String tag;
 	private String contents;
-	private Date writeDate;
+	private String writeDate;
 	private int viewCnt;
 	private int recommendCnt;
 	private int bookmarkCnt;
@@ -27,7 +27,6 @@ public class QuestionVO {
 	private String id;
 	private String profileImage;
 	private String memberLevel;
-	private String nickname;
 	
 	private String answerId;
 	private String answerProfileImage;
@@ -38,7 +37,7 @@ public class QuestionVO {
 	private int answerBoardNo;
 	private String answerTitle;
 	private String answerContents;
-	private Date answerWriteDate;
+	private String answerWriteDate;
 	private int answerViewCnt;
 	private int answerRecommendCnt;
 	private String answerAdoptStatus;
@@ -50,9 +49,11 @@ public class QuestionVO {
 	private String addWriterType;
 	private Date addWriteDate;
 	private String addStatus;
-	private String addAdoptStatus;
-	
-	
 	
 	private int pk;
+	
+	//메인페이지용
+	private String nickname;
+	private int minute;
+	private int accumActivityPoint;
 }

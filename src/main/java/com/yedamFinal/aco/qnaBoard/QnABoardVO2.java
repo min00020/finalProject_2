@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class QnABoardVO {
+public class QnABoardVO2 {
 	private int qnaBoardNo;
 	private int memberNo;
 	private String title;
@@ -16,9 +16,10 @@ public class QnABoardVO {
 	private String answerState;
 	private int viewCnt;
 	private String nickname;
+
 	
 	private int pk;
+	
 	//메인페이지용
 	private int minute;
-	private int accumActivityPoint;
 }

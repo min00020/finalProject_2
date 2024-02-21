@@ -3,13 +3,16 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedamFinal.aco.noticeboard.mapper.NoticeBoardMapper">
 	<select id="getAdNoticeList" resultType="NoticeBoardVO">
-	 SELECT *
+	 SELECT C.*
     FROM (
         SELECT  
             ROWNUM AS RN,
+            B.* FROM(
+            SELECT
             NOTICE_BOARD_NO, TITLE, CONTENT, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT 
             FROM NOTICE_BOARD
-				ORDER BY NOTICE_BOARD_NO DESC)
+				ORDER BY WRITE_DATE DESC)B
+				)C
    <![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10   
     ]]>  
@@ -23,4 +26,27 @@
 	SELECT * FROM NOTICE_BOARD
 	WHERE NOTICE_BOARD_NO=#{noticeBoardNo}
 </select>
+<update id="plusViewCnt">
+	UPDATE NOTICE_BOARD SET VIEW_CNT
+    = VIEW_CNT + 1
+    WHERE NOTICE_BOARD_NO = #{boardNo}
+</update>
+<select id="searchNoticeBoard" resultType="NoticeBoardVO">
+		SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
+    SELECT  
+            NOTICE_BOARD_NO, TITLE, CONTENT, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT 
+            FROM NOTICE_BOARD
+            WHERE TITLE LIKE '%'||#{search}||'%'
+				ORDER BY WRITE_DATE DESC) C ) A
+     <![CDATA[
+   		WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo} * 10)
+	]]>	
+	</select>
+	
+<select id="searchNoticeBoardCnt" resultType="int">
+	SELECT 
+		COUNT(*) AS CNT
+		FROM NOTICE_BOARD
+		WHERE TITLE LIKE '%'||#{search}||'%'
+	</select>
 </mapper>
