@@ -85,7 +85,6 @@ public class SideController {
         // 사이드프로젝트 게시글 협업중 상태일때 정보(깃허브 레포지토리, 이슈리스트, 커밋리스트)
         if(memberVO != null && vo.getPublishingStatus().equals("Q002")) {
         	Map<String, Object> list = gitService.getGitHubRepositoryInfo(memberVO.getGitToken(),vo.getGitAddress());
-        	model.addAttribute("gitrepo",list);
         	model.addAttribute("issueDTO", list.get("issueList"));
         	model.addAttribute("commitDTO", list.get("commitList"));
         }

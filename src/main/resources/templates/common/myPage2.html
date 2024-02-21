@@ -290,10 +290,10 @@
 											      <div class="modal-body">
 											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
 														<div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
-												       		<button type="button" style="border:0;background-color:#fff;padding-left:20px;padding-top:10px;"
+												       		<button type="button" style="border:0;background-color:transparent;"
 												       		 th:onclick="choiceAccount([[${acc.accountNo}]])">
 												       			<img class="tae-bank-1" th:src="|commonResource/bankImage/${acc.bankName}.png|">
-													       		<p th:text="${acc.bankName}" style="float:left;padding-left:25px;">/</p>
+													       		<p th:text="${acc.bankName}" style="float:left;padding-left:12px;">/</p>
 															</button>											       		
 												       </div>												       
 											      </div>
