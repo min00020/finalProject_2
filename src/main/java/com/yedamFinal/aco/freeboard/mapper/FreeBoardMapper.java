@@ -57,4 +57,6 @@ public interface FreeBoardMapper {
 	public List<MainTotalVO> getMainTotalSearch(@Param("search") String search,@Param("pg") int pg);
 	public int getMainTotalSearchCnt(String search);
 	
+	//댓글수 업데이트
+	public int updateReplyCnt(int value, int fboardNo);
 }

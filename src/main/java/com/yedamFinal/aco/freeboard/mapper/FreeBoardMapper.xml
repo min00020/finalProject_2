@@ -379,7 +379,12 @@ SELECT SUM(CNT) AS TOTAL_CNT FROM (
 		
 	</select>
 	
-	
+	<!-- 댓글수 업데이트 -->
+	<update id="updateReplyCnt" parameterType="int">
+		UPDATE FREE_BOARD 
+		   SET REPLY_CNT = REPLY_CNT + 1 - #{value} 
+		 WHERE FBOARD_NO = #{fboardNo}
+	</update>
 	
 
 </mapper>

@@ -44,7 +44,6 @@ import com.yedamFinal.aco.member.UserDetailVO;
 * 
 **/
 @Controller
-@PropertySource("classpath:config.properties")
 public class FreeBoardController {
 	
 	@Autowired
@@ -134,8 +133,8 @@ public class FreeBoardController {
 	//수정 - 별도 페이지
 	@GetMapping("/freeBoardUpdate/{fboardNo}")
 	public String freeBoardUpdateForm(@PathVariable("fboardNo") int fboardNo, Model model) {
-		List<FreeBoardJoinVO> findVO = freeBoardService.getFreeBoard(fboardNo, model);
-		model.addAttribute("freeBoardInfo", findVO);
+		List<FreeBoardJoinVO> freeBoardList = freeBoardService.getFreeBoard(fboardNo, model);
+		model.addAttribute("freeBoardInfo", freeBoardList);
 		return "freeBoard/freeBoardUpdateForm";
 	}
 	

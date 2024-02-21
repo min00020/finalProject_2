@@ -43,26 +43,21 @@
 					
 
 				</div>
-				<div th:if ="${freeBoardInfo[0].memberNo} == ${session.member?.memberNo}" id="qna_deleteBtn" class="col-3" style = "padding-right : 0px;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
-					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo[0].writeDate, 'yyyy-MM-dd HH:mm')}"></p>
-					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo[0].fboardNo}'|">수정</button>
-					<button class="btn" style ="background-color : #848484; color:white" th:onclick="delFreeBoard([[${freeBoardInfo[0].fboardNo}]])">삭제</button>
-				</div>
+
 
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
 			
 			<hr>
-			<div class="qna_contents"> <!-- 질문 내용 -->
+		<div class="qna_contents"> <!-- 질문 내용 -->
 				<p th:utext="${freeBoardInfo[0].content}"></p>
 				
 			</div>
-			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
-				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
-				<div id="qna_iconAll"> 
+			
+				<div id="qna_iconAll" style="margin-bottom:10px;"> 
 					<span>					
 						<img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye">
 					</span>
-					<span th:text="${freeBoardInfo.viewCnt}"></span>
+					<span th:text="${freeBoardInfo[0].viewCnt}"></span>
 <!-- 알림 -->
 <!-- 					<span>					 -->
 <!-- 						<img class="qna_icon" src="/commonResource/icon/best.png" alt="best"> -->
@@ -71,17 +66,26 @@
 				</div>
 			</div>
 			
-			
-			<div class="p-3" style="background-color:#aebfec">
-				<div class="clearfix">
-					<span style="float:left">첨부파일 리스트</span>
-					<span th:if="${freeBoardInfo[0].originFileName == null}" style="float:right; font-size:1rem;" id="attached_toggleButton" class="mink_li_highlight">목록확인</span>
-					<span th:unless="${freeBoardInfo[0].originFileName == null}" style="float:right; font-size:1rem;" id="attached_toggleButton" class="mink_li_highlight">목록확인([[${freeBoardInfo.size}]])</span>
+				<div th:if ="${freeBoardInfo[0].memberNo} == ${session.member?.memberNo}" id="qna_deleteBtn2"  style = "padding-right : 0px; text-align: right;"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+					<p style="color:#3e6ce3" th:text="${#dates.format(freeBoardInfo[0].writeDate, 'yyyy-MM-dd HH:mm')}"></p>
+					<button class="btn" style ="background-color : #3e6ce3; color:white" th:onclick="|location.href='/freeBoardUpdate/${freeBoardInfo[0].fboardNo}'|">수정</button>
+					<button class="btn" style ="background-color : #848484; color:white" th:onclick="delFreeBoard([[${freeBoardInfo[0].fboardNo}]])">삭제</button>
 				</div>
-				<div id="attached_content" class="mt-1">
+			
+			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
+				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
+
+			
+			
+			<div th:if="${freeBoardInfo[0].attachedFileNo} > 0" style="border:1px solid #BDBDBD">	
+				<div class="park_attatch" style = "text-align : right;">
+					<span style="float:left; content-justify : right;">첨부파일 리스트 ([[${freeBoardInfo.size}]])</span>
+
+				</div>
+				<div class="row" style = "text-align : right;">
 					<ul class="list-unstyled" style="margin:0;">
 						<li th:each="file : ${freeBoardInfo}">
-							<button class="btn" th:text="${file.originFileName}" style="color:#007BFF;" th:onclick="|location.href='/attachFile/${file.attachedFileNo}'|"></button>
+							<button class="btn" th:text="${file.originFileName}" style="color:#007BFF; text-decoration : underline;" th:onclick="|location.href='/attachFile/${file.attachedFileNo}'|"></button>
 						</li>
 					</ul>
 				</div>
@@ -146,7 +150,7 @@
 								<div>
 									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
 									<!--/* 댓글신고는 댓글내용만 있고, 댓글 삭제하지않았으며 자기자신이 단 댓글이 아닌경우에만 뜬다. */-->
-									<button th:if="${reply.value[0].parentDelete} == null and ${reply.value[0].parentComment} != null and ${reply.value[0].parentMemberNo} != ${session.member.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<button th:if="${reply.value[0].parentDelete} == null and ${reply.value[0].parentComment} != null and ${reply.value[0].parentMemberNo} != ${session.member?.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
 									<!-- Modal -->
 			                  		<div class="modal fade" th:id="|reportModal${reply.key}|" tabindex="-1" role="dialog"
 			                     		aria-labelledby="AddReportLabel" aria-hidden="true">
@@ -162,7 +166,7 @@
 			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
 			                           				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
 			                           				<input type="hidden" name="reportee" th:value="${reply.value[0].parentMemberNo}">
-			                           				<input type="hidden" name="boardNo" th:value="${freeBoardInfo.fboardNo}">
+			                           				<input type="hidden" name="boardNo" th:value="${freeBoardInfo[0].fboardNo}">
 			                           				<input type="hidden" name="replyContent" th:value="${reply.value[0].parentComment}">
 			                           				<input type="hidden" name="boardType" th:value="N004">
 													<div>
@@ -314,7 +318,7 @@
 									</div>
 									<div>
 										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-										<button th:if="${innerReply.childDelete} == null and ${innerReply.childComment} != null and ${innerReply.childMemberNo} != ${session.member.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${innerReply.childReplyNo}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+										<button th:if="${innerReply.childDelete} == null and ${innerReply.childComment} != null and ${innerReply.childMemberNo} != ${session.member?.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${innerReply.childReplyNo}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
 										<!-- Modal -->
 			                  			<div class="modal fade" th:id="|reportModal${innerReply.childReplyNo}|" tabindex="-1" role="dialog"
 			                    			aria-labelledby="AddReportLabel" aria-hidden="true">
@@ -330,7 +334,7 @@
 			                    		   				<form name="reportForm" action="/insertReport" method="post" th:id="${innerReply.childReplyNo}"> 	
 			                    		   				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
 			                    		   				<input type="hidden" name="reportee" th:value="${innerReply.childMemberNo}">
-			                    		   				<input type="hidden" name="boardNo" th:value="${freeBoardInfo.fboardNo}">
+			                    		   				<input type="hidden" name="boardNo" th:value="${freeBoardInfo[0].fboardNo}">
 			                    		   				<input type="hidden" name="replyContent" th:value="${innerReply.childComment}">
 			                    		   				<input type="hidden" name="boardType" th:value="N005">
 														<div>
@@ -444,13 +448,15 @@
 
 <!--/* 댓글 복사할 스크립트 태그 */-->
 <script th:inline="javascript">
-	const freeBoardNo = [[${freeBoardInfo.fboardNo}]]
+
+
+	const freeBoardNo = [[${freeBoardInfo[0].fboardNo}]]
 	const member = [[${session.member}]]
 	let memberNo = 0;
 	if(member != null) {
 		memberNo = member.memberNo;
 	}
-	const writerMemberNo = [[${freeBoardInfo.memberNo}]]
+	const writerMemberNo = [[${freeBoardInfo[0].memberNo}]]
 	
 	const csrfPara = $('meta[name="csrfPara"]').attr("content");
 	const csrfToken = $('meta[name="csrf"]').attr("content");
