@@ -98,8 +98,8 @@
    
    <section class="d-flex justify-content-between common-width">
       <th:block th:if="${main} == 1">
-         <aside style="width:15%;">
-            <img id="sidebanner" src="/commonResource/sidebanner.png" alt="sidebanner" style="width:90%; cursor:pointer;" onclick="location.href='/sideProjectList/Q001/?pageNo=1'">
+         <aside style="width:15%;" class="park_sidebanner">
+            <img src="/commonResource/sidebanner.png" alt="sidebanner" style="width:90%; cursor:pointer;" onclick="location.href='/sideProjectList/Q001/?pageNo=1'">
             <section class = "park_rank">
             <h5>실시간 랭킹 <span class="park_more"> +더보기</span></h5>
                <hr style="margin:5;">
@@ -127,7 +127,7 @@
       
          </section>
          
-         <aside style="width:15%;">
+         <aside style="width:15%;" class="park_sidebanner">
             <img id="sidebanner2" src="/commonResource/sidebanner2.png" alt="sidebanner2" style="width:90%; margin-left:20px; cursor:pointer;" onclick="location.href='/emoMain?pageNo=1'">
             <img id="sidebanner3" src="/commonResource/sidebanner3.png" alt="sidebanner3" style="width:90%; margin-left:20px; margin-top : 100px; cursor:pointer;" onclick="location.href='/createAccountForm'">
          </aside>

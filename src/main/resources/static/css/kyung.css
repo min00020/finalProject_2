@@ -1,5 +1,22 @@
 @charset "UTF-8";
 
+.park_sidebanner {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 20px;
+  height: 200px; /* 사이드 배너의 높이 */
+  width: 200px; /* 사이드 배너의 너비 */
+ 
+}
+.park_sidebanner2 {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 20px;
+  height: 200px; /* 사이드 배너의 높이 */
+  width: 200px; /* 사이드 배너의 너비 */
+ 
+}
+
 * {
 	font-family: 'Noto Sans KR', sans-serif;
 	/* 	font-family: 'Gowun Dodum', sans-serif; */
@@ -290,7 +307,7 @@ header {
 
 .park_title {
 	font-weight: 600;
-	margin-left : 20px;
+/* 	margin-left : 20px; */
 }
 
 .park_S {
