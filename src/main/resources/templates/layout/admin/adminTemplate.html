@@ -188,7 +188,7 @@
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Content Column -->
-                        <div class="col-lg-12 mb-8">
+                        <div class="col-lg-12 mb-8" style="margin-top: 2.5rem">
 													                   
                          <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -203,7 +203,7 @@
                                             <th>내용</th>
                                             <th>작성일</th>
                                             <th>조회수</th>
-                                    		<th>
+                                    		<th style="width: 155px">
                                     		                            	<!-- 모달 -->
 		                    <div style="text-align: center;">
 		                     <button type="button" class="btn btn-primary"
@@ -232,11 +232,11 @@
 												<table>
 												<tr>
 												<th>제목</th>
-												<td><input type="text" name="title" id="ntitle"></td>	
+												<td><input type="text" name="title" id="ntitle" style="margin-left:10px; width: 350px;"></td>	
 												</tr>
 												<tr>
 												<th style="vertical-align: middle;">내용</th>
-												<td><textarea name="content" id="ncontent" style="height: 300px"></textarea></td>	
+												<td><textarea name="content" id="ncontent" style="margin-left:10px; width: 350px; height: 300px"></textarea></td>	
 												</tr>
 												</table>
 												</div>
@@ -275,7 +275,7 @@
 												  <div class="modal-dialog">
 												    <div class="modal-content">
 												      <div class="modal-header" style="margin: auto;">
-												        <h1 class="modal-title fs-5" id="exampleModalLabel">공지 게시글을 삭제 하시겠습니까?</h1>
+												        <h1 class="modal-title fs-5" id="exampleModalLabel">공지사항을 삭제 하시겠습니까?</h1>
 												      </div>
 												      <div class="modal-footer" style="margin: auto;">
 												        <button type="button" class="btn btn-danger" th:onclick="|location.href='/deleteNotice?noticeBoardNo=${notice.noticeBoardNo}'|">공지삭제</button>
