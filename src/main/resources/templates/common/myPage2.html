@@ -521,7 +521,7 @@
 														</button>
 													<div id="tabcontent"></div>
 
-												<div class="scroll type3" style="overflow-y: scroll; height: 600px; overflow-x: hidden;padding-top: 40px;">
+												<div class="scroll type3" style="height: 500px;padding-top: 40px;">
 													<table class="table">
 														<thead>
 															<tr style="border-top: 1px;border-top-style: double;">
@@ -594,8 +594,8 @@
 													<p style="margin-bottom: 30px;">※책갈피 아이콘을 해제시 책갈피 목록에서
 														삭제됩니다.</p>
 													
-													<div class="d-flex" style="margin-top:-20px;">
-														<div class="card" style="box-shadow: 9px 6px 10px 1px #d5d8df;border-radius:30px;width:285px;height:230px;margin-top:30px;margin-left:20px;"th:each="bml2:${bookmarkList2}" th:id="|bookMarkDiv${bml2.questionBoardNo}|">
+													<!-- <div class="d-flex" style="margin-top:-20px;"> -->
+														<div class="card" style="box-shadow: 9px 6px 10px 1px #d5d8df;border-radius:30px;width:285px;height:230px;margin-top:30px;margin-left:20px;float:left;"th:each="bml2:${bookmarkList2}" th:id="|bookMarkDiv${bml2.questionBoardNo}|">
 															<div class="card-body" id="card-1">
 																<ul class="tab-ul-2" style="width:280px;">
 																	<li style="width:250px;">
@@ -612,7 +612,7 @@
 																</ul>
 															</div>
 														</div>
-													</div>
+													<!-- </div> -->
 												</div>
 											</div>
 

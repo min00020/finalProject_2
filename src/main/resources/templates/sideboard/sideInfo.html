@@ -346,7 +346,7 @@
 					<h3 style="padding-top:10px;padding-left:20px;margin-bottom:20px;font-weight: bold;">ISSUE</h3>
 					<div class="card" id="tae-card-3">
 						<ul class="tae-git-1">
-							<li class="tae-git-2" th:each="issue : ${issueDTO}">[[${issue.issueTitle}]]
+							<li class="tae-git-2" th:each="issue : ${issueDTO}" th:onclick="gotoIssuePage([[${issue.issueUrl}]])">[[${issue.issueTitle}]]
 							<span style="float: right;margin-top:10px;"><img th:src="|/commonResource/icon/reply.png|" style="width:25px;height:25px;opacity:70%;">
 							[[${issue.commentCnt}]]</span>
 							<br>
@@ -399,7 +399,6 @@
 	</div>	
 </div>
 <script type="text/javascript" th:inline="javascript">
-
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 
@@ -713,6 +712,12 @@ function goToGitHub(){
 	 var url = "https://github.com/" + gitAddress;
 	 window.location.href = url;
 }
+
+function gotoIssuePage(url) {
+	window.open(url, "_blank");
+}
+
+
  
  
 </script>
