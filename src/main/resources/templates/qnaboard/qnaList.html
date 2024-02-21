@@ -52,14 +52,21 @@
          <hr style="margin-bottom:30px">
          <div id="questionList"  class="row" th:each="qna : ${qnaInfo.qnaList}">
 			<div id="title" class="col-10">
-				<div id="member" style="height:40px;">
-					<div class="qna_box">
-						<img class="qna_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile" th:onclick="|location.href='/member/${session.member.memberNo}'|">
-					</div>
-					<p>[[${qna.nickname}]]</p>
+				<div id="park_member" style="height:40px;">
+					<span class="park_box_free">
+						<img class="park_profile_free" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile" th:onclick="|location.href='/member/${session.member.memberNo}?pg=1'|">
+					</span>
+					<span class="park_nickname_free" th:onclick="|location.href='/member/${session.member.memberNo}?pg=1'|">[[${qna.nickname}]]</span>
+					<span  style="font-weight :; " class="park_activityPoint_free"><span class= "park_dot"> · </span><img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${qna.accumActivityPoint}]]
+								<span class= "park_dot" th:if="${qna.minute < 60}" th:text="' · ' + (${qna.minute}) + '분 전'"></span>
+								<span class= "park_dot" th:if="${qna.minute >= 60 && qna.minute < 1440}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 60.0)}) + '시간 전'"></span>
+								<span class= "park_dot" th:if="${qna.minute >= 1440 && qna.minute < 43200}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 1440.0)}) + '일 전'"></span>
+								<span class= "park_dot" th:if="${qna.minute >= 43200 && qna.minute < 518400}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 43200.0)}) + '달 전'"></span>
+								<span class= "park_dot" th:if="${qna.minute > 518400}" th:text="' · ' + (${T(java.lang.Math).round(qna.minute / 518400.0)}) + '년 전'"></span>
+					</span><br>
 				</div>
-				<div id="titleTag">
-					<a class="mink_li_highlight" th:href="|/qnaBoard/${qna.qnaBoardNo}|">[[${qna.title}]]</a>
+				<div id="titleTag" class="park_title">
+					<h4 class="mink_li_highlight" style="text-align:left;" th:onclick="|location.href='/qnaBoard/${qna.qnaBoardNo}'|">[[${qna.title}]]</h4>
 				</div>
 			</div>
 			<div class="col-1" style="text-align:center; margin:auto;">
