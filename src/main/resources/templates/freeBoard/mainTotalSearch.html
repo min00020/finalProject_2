@@ -131,6 +131,7 @@
 <script th:inline="javascript">
 
 $('#searchInput').on('keydown', function(e) {
+	
 	if (e.keyCode === 13) {
 	const searchValue = $('#searchInput').val();
 	if(searchValue == '') {
