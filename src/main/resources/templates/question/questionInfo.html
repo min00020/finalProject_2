@@ -407,7 +407,7 @@
 									<p class="m-1" th:text="${question.addContents}">추가로 질문할 게 있는데 </p>
 									<span class="m-1" th:text="${#dates.format(question.addWriteDate, 'yyyy.MM.dd')}" style="font-size: 15px; color:#76767e;">2023.01.27</span>
 									<span style="float:right;" th:if="${loginId == questionInfo[0][0].id} and ${question.addWriterType == 'J002'} and ${question.addAdoptStatus != 'S002'}">
-									<img src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
+									<img th:onclick="adoptAddAnswer([[${question.questionAddNo}]])" src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
 										<a th:onclick="adoptAddAnswer([[${question.questionAddNo}]])" style="color:#3e6ce3;font-weight:bold;">채택</a>
 									</span>
 								</div>
