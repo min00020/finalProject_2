@@ -17,11 +17,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 	
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.css" rel="stylesheet">
@@ -338,49 +334,42 @@ function settleOn(settlementNo, settlementReqPoint, sendAll){
 		console.log(res);
 		let url = '';
 		let settleUpdateObj = {};
-		if(typeof sendAll != 'undefined' && sendAll != null) {
-			url = '/updateAllSettlementStatus';
-		}
-		else {
-			settleUpdateObj = {
-				settlementNo : settlementNo
-			};
-				
-			url = '/updateSettlementStatus';
-		}
+		
 		settleUpdateObj[csrfPara] = csrfToken;
 		
-		$.ajax(url, {
-			type : 'post',
-			data : settleUpdateObj,
-			beforeSend : function(xhr){
-				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
-			},
-		})
-		.done(res => {
-			if(res.result == '200'){
-				if(typeof sendAll == 'undefined') {
-					Swal.fire({
-						  title: '정산이 완료되었습니다.',
-						  text: '',
-						  icon: 'success',
-						  confirmButtonClass: "btn-danger",
-						  confirmButtonText: "확인",
-						}).then((result) => {
-						  if (result.value != null) {
-							  window.location.href = "/adminSettle?pageNo=1";
-						  }
-						});	
+		if(typeof sendAll == 'undefined' || sendAll == null) {
+			$.ajax(url, {
+				type : 'post',
+				data : settleUpdateObj,
+				beforeSend : function(xhr){
+					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+				},
+			})
+			.done(res => {
+				if(res.result == '200'){
+					if(typeof sendAll == 'undefined') {
+						Swal.fire({
+							  title: '정산이 완료되었습니다.',
+							  text: '',
+							  icon: 'success',
+							  confirmButtonClass: "btn-danger",
+							  confirmButtonText: "확인",
+							}).then((result) => {
+							  if (result.value != null) {
+								  window.location.href = "/adminSettle?pageNo=1";
+							  }
+							});	
+					}
+				}else{
+					showFailAlert('에러가 발생했습니다.')
 				}
-			}else{
-				showFailAlert('에러가 발생했습니다.')
-			}
-		}).fail(err=>{
-			console.log(err);
-			showFailAlert('정산 실패')
-		});
+			}).fail(err=>{
+				console.log(err);
+				showFailAlert('정산 실패')
+			});
+		}
+		
 	})
-	
 	
 }//submit end
 
@@ -390,17 +379,36 @@ function settleOnAll(){
 		settleOn(settleAll[i].settlementNo, settleAll[i].settlementReqPoint, '1');
 	}
 	
-	Swal.fire({
-		  title: '일괄 정산이 완료되었습니다.',
-		  text: '',
-		  icon: 'success',
-		  confirmButtonClass: "btn-danger",
-		  confirmButtonText: "확인",
-		}).then((result) => {
-		  if (result.value != null) {
-			  window.location.href = "/adminSettle?pageNo=1";
-		  }
-	});	
+	let settleUpdateObj = {};
+	settleUpdateObj[csrfPara] = csrfToken;
+	
+	$.ajax('/updateAllSettlementStatus', {
+		type : 'post',
+		data : settleUpdateObj,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res => {
+		if(res.result == '200'){
+			Swal.fire({
+				  title: '일괄 정산이 완료되었습니다.',
+				  text: '',
+				  icon: 'success',
+				  confirmButtonClass: "btn-danger",
+				  confirmButtonText: "확인",
+				}).then((result) => {
+				  if (result.value != null) {
+					  window.location.href = "/adminSettle?pageNo=1";
+				  }
+			});	
+		}else{
+			showFailAlert('에러가 발생했습니다.')
+		}
+	}).fail(err=>{
+		console.log(err);
+		showFailAlert('정산 실패')
+	});
 }
 function getFormatDate(date){
 	var year = date.getFullYear();              //yyyy

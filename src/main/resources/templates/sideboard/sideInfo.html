@@ -2,6 +2,10 @@
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="@{layout/member/mainTemplate.html}"
 	layout:fragment="content">
+	<div id="qna_banner">
+			<h3>사이드프로젝트</h3>
+			<p style="color:#76767e">사이드 프로젝트를 작성 & 참여해보세요</p>
+	</div>
 	<!-- header tab -->
 	<div class="publishingStatus">
 		<hr id="tae-hr">
@@ -29,8 +33,7 @@
 					<p style="font-weight:bold;">[[${sideInfo.projectOutline}]]</p>
 					<br>
 					<p style="color:#979da9;float:left;">기간 | [[${sideInfo.devPeriod}]]일  모집인원 [[${sideInfo.recruitPersonnel}]]명</p>
-				    <span>
-					<p style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</p></span> 
+				    <span style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</span> 
 					<br>
 					<th:block>
 						<div class="tae-side-btn1" style="margin-top:20px;">
@@ -49,6 +52,7 @@
 				<p style="font-weight:bold;" th:utext="${sideInfo.content}"></p>
 				</div>	
 				<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}" th:text="${sideInfo.gitAddress}"></a></p>
+				<hr id="tae-hr">
 	</div>
 	<!--/* 댓글영역 */-->
 				<div class="w-100 mb-3 clearfix">
@@ -70,12 +74,14 @@
         									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       									</div>
       									<div class="modal-body">
+      									<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 				<div class="row">
 					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
 					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
 					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            					</div>
 					        					</div>
+					    					</div>
 					    					</div>
       									</div>
       									<div class="modal-footer">
@@ -95,16 +101,66 @@
 								<div>
 									<!--/* 프로필이미지가 null이라면 */-->
 									<div class="qna_box">
-										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-									</div>
-									<div class="qna_box">
-										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" />
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
 									</div>
 									<span>[[${reply.value[0].parentNickname}]]</span>
 								</div>
 								<div>
 									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-									<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<!--/* 댓글신고는 댓글내용만 있고, 댓글 삭제하지않았으며 자기자신이 단 댓글이 아닌경우에만 뜬다. */-->
+									<button th:if="${reply.value[0].parentDelete} == null and ${reply.value[0].parentComment} != null and ${reply.value[0].parentMemberNo} != ${session.member.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<!-- Modal -->
+			                  		<div class="modal fade" th:id="|reportModal${reply.key}|" tabindex="-1" role="dialog"
+			                     		aria-labelledby="AddReportLabel" aria-hidden="true">
+			                     		<div class="modal-dialog modal-s" role="document">
+			                        		<div class="modal-content">
+			                           			<div class="modal-header">
+			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
+			                              			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+			                                 			<span aria-hidden="true">&times;</span>
+			                              			</button>
+			                           			</div>
+			                           			<div class="modal-body">
+			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
+			                           				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+			                           				<input type="hidden" name="reportee" th:value="${reply.value[0].parentMemberNo}">
+			                           				<input type="hidden" name="boardNo" th:value="${sideInfo.sideBoardNo}">
+			                           				<input type="hidden" name="replyContent" th:value="${reply.value[0].parentComment}">
+			                           				<input type="hidden" name="boardType" th:value="N005">
+													<div>
+														<table>
+															<tr>
+																<th>신고종류</th>
+																<td>
+																	<select name="reportType" id="reportType">
+													  					<option th:value="null">--신고종류를 선택해주세요--</option>
+													  					<option th:value="A001">홍보</option>
+													  					<option th:value="A002">도배</option>
+													  					<option th:value="A003">불법정보</option>
+													  					<option th:value="A004">욕설</option>
+													  					<option th:value="A005">개인정보노출</option>
+													  					<option th:value="A006">기타</option>
+																	</select>
+																</td>
+															</tr>
+															<tr>
+																<th>신고사유</th>
+																<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+															</tr>
+														</table>
+													</div>
+												</form>
+			                           			</div>
+			                           		<div class="modal-footer">
+			                              		<button type="button" class="btn btn-primary" th:onclick="insertReport([[${reply.key}]])">등록</button>
+			                              		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                           		</div>
+			                        	</div>
+			                     	</div>
+			                     <hr>
+			                  </div>
+                  				<!-- 모달 끝 -->
 								</div>
 							</div>
 							<!--/*댓글 내용구간  */-->
@@ -188,12 +244,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
 					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							 </div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -212,16 +270,65 @@
 								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
 									<div>
 										<div class="qna_box">
-											└<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-										</div>
-										<div class="qna_box">
-											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" />
+											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
+											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
 										</div>
 										<span>[[${innerReply.childNickname}]]</span>
 									</div>
 									<div>
 										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+										<button th:if="${innerReply.childDelete} == null and ${innerReply.childComment} != null and ${innerReply.childMemberNo} != ${session.member.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${innerReply.childReplyNo}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+										<!-- Modal -->
+			                  			<div class="modal fade" th:id="|reportModal${innerReply.childReplyNo}|" tabindex="-1" role="dialog"
+			                    			aria-labelledby="AddReportLabel" aria-hidden="true">
+			                    			<div class="modal-dialog modal-s" role="document">
+			                    				<div class="modal-content">
+			                    		   			<div class="modal-header">
+			                    		      			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
+			                    		      			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+			                    		         			<span aria-hidden="true">&times;</span>
+			                    		      			</button>
+			                    		   			</div>
+			                    		   			<div class="modal-body">
+			                    		   				<form name="reportForm" action="/insertReport" method="post" th:id="${innerReply.childReplyNo}"> 	
+			                    		   				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+			                    		   				<input type="hidden" name="reportee" th:value="${innerReply.childMemberNo}">
+			                    		   				<input type="hidden" name="boardNo" th:value="${sideInfo.sideBoardNo}">
+			                    		   				<input type="hidden" name="replyContent" th:value="${innerReply.childComment}">
+			                    		   				<input type="hidden" name="boardType" th:value="N005">
+														<div>
+															<table>
+																<tr>
+																	<th>신고종류</th>
+																	<td>
+																		<select name="reportType" id="reportType">
+														  					<option th:value="null">--신고종류를 선택해주세요--</option>
+														  					<option th:value="A001">홍보</option>
+														  					<option th:value="A002">도배</option>
+														  					<option th:value="A003">불법정보</option>
+														  					<option th:value="A004">욕설</option>
+														  					<option th:value="A005">개인정보노출</option>
+														  					<option th:value="A006">기타</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr>
+																	<th>신고사유</th>
+																	<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+																</tr>
+															</table>
+														</div>
+													</form>
+			                    		   			</div>
+			                    		   		<div class="modal-footer">
+			                    		      		<button type="button" class="btn btn-primary" th:onclick="insertReport([[${innerReply.childReplyNo}]])">등록</button>
+			                    		      		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                    		   		</div>
+			                    			</div>
+			                    		</div>
+			                     	<hr id="tae-hr">
+			                  	</div>
+                  				<!-- 모달 끝 -->
 									</div>
 								</div>
 								<!--/*댓글 내용구간  */-->
@@ -295,7 +402,7 @@
 	<!-- 협업중일때 깃 -->
 	<th:block  th:unless="${sideInfo.publishingStatus} == 'Q001'">
 		<!-- contents -->
-	<div class="conetents">
+	<div class="conetents" style="height: 250px;">
 		<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
 			<h6 class="tae-side-h6-1">모집중</h6>
 		</th:block>
@@ -307,8 +414,7 @@
 			<p style="font-weight:bold;">[[${sideInfo.projectOutline}]]</p>
 			<br>
 			<p style="color:#979da9;float:left;">기간 | [[${sideInfo.devPeriod}]]일  모집인원 [[${sideInfo.recruitPersonnel}]]명</p>
-		    <span>
-			<p style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</p></span> 
+		    <span style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</span> 
 			<br>
 				<th:block th:if="${isCheckMember} == 1">
 					<div class="tae-side-btn1" style="margin-top:20px;">
@@ -318,50 +424,46 @@
 						</div>
 					</div>
 				</th:block>
-				<hr id="tae-hr">
-			<div style="height:900px;">
+			<hr id="tae-hr">
+		</div>
+					<div style="height:800px;margin-left:-30px;padding-top: 50px;margin-left:200px;" class="clearfix">
 				<!-- repository -->
-				<div>
-					<img style="width:200px;" alt="" th:src="|/commonResource/taefolder/githublogo.png|">
-					<h1 style="font-weight:bold;">Repository</h1>
-					<div style="border:1px solid black;opacity:25%;width:900px;height:200px;border-radius:20px;margin-left:20px;margin-top:20px;">
-					</div>
+				<img style="width:200px;padding-left:30px;" alt="" th:src="|/commonResource/taefolder/githublogo.png|">
+				<h3 style="font-weight:bold;padding-left: 30px;">Repository</h3>
+				<div style="border:1px solid #ccc;width:900px;height:100px;border-radius:20px;margin-left:20px;margin-top:20px;">
+					<h5 style="padding-top:20px;padding-left:20px;color:black;"><a style="text-decoration:none;color:#6c757d;" href="#" onclick="goToGitHub()">https://github.com/[[${sideInfo.gitAddress}]]</a></h5>
 				</div>
+			
 				<!-- github 커밋 리스트 -->
-				<div class="" style="float: left;">
-				<h3 style="padding-top:10px;padding-left:20px;margin-bottom:20px;font-weight: bold;">COMMIT
-				</h3>
+				<div style="float: left;margin-top: 20px;">
+					<h3 style="padding-top:10px;padding-left:20px;margin-bottom:20px;font-weight: bold;">COMMIT</h3>
 					<div class="card" id="tae-card-3">
-							<ul class="tae-git-1">
-								<li class="tae-git-2" th:each="commit : ${commitDTO}"> 
-								    [[${commit.commitMessage}]]
-									<span class="tae-ul-list" th:text="${#dates.format(commit.commitDate, 'yyyy-MM-dd')}">[[${commit.commitDate}]]</span>
-									<hr>
-								</li>
-							</ul>
+						<ul class="tae-git-1">
+							<li class="tae-git-2" th:each="commit : ${commitDTO}"  th:onclick="goToCommitList([[${commit.commitUrl}]])">[[${commit.commitMessage}]] 
+							<span class="tae-ul-list" style="color:#6c757d;font-size:14px;" th:text="${#dates.format(commit.commitDate, 'yyyy-MM-dd')}">[[${commit.commitDate}]]</span>
+							<hr>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- github 이슈 리스트 -->
-				<div style="float: left;margin-top:20px;">
-				<h3 style="padding-top:10px;padding-left:20px;margin-bottom:20px;font-weight: bold;">ISSUE
-				</h3>
+				<div style="float: left;margin-top: 20px;">
+					<h3 style="padding-top:10px;padding-left:20px;margin-bottom:20px;font-weight: bold;">ISSUE</h3>
 					<div class="card" id="tae-card-3">
-							<ul class="tae-git-1">
-								<li class="tae-git-2" th:each="issue : ${issueDTO}">[[${issue.issueTitle}]]
-									<span class="tae-ul-list" th:text="${#dates.format(issue.issueDate, 'yyyy-MM-dd')}">[[${issue.issueDate}]]</span>
-									<br>
-									<p class="tae-ul-list" >[[${issue.commentCnt}]]</p>
-									<hr>
-								</li>
-							</ul>
-						
+						<ul class="tae-git-1">
+							<li class="tae-git-2" th:each="issue : ${issueDTO}" th:onclick="gotoIssuePage([[${issue.issueUrl}]])">[[${issue.issueTitle}]]
+							<span style="float: right;margin-top:10px;"><img th:src="|/commonResource/icon/reply.png|" style="width:25px;height:25px;opacity:70%;">
+							[[${issue.commentCnt}]]</span>
+							<br>
+							<p style="font-size:14px;" th:text="${#dates.format(issue.issueDate, 'yyyy-MM-dd')}">[[${issue.issueDate}]]</p>
+							
+							<hr>
+							</li>
+						</ul>
 					</div>
 					<div class="addgitIssue">
 						<!-- Button trigger modal -->
-						<button type="button" class="tae-btn-text-white" data-bs-toggle="modal" data-bs-target="#IssueModal">
-						 새 이슈 등록
-						</button>
-						
+						<button type="button" class="tae-btn-text-white" data-bs-toggle="modal" data-bs-target="#IssueModal">새 이슈 등록</button>
 						<!-- Modal -->
 						<div class="modal fade" id="IssueModal" tabindex="-1" aria-labelledby="IssueModalLabel" aria-hidden="true">
 						  <div class="modal-dialog">
@@ -370,12 +472,12 @@
 						        <h1 class="modal-title fs-5" id="IssueModalLabel" style="font-weight:bold;">이슈 등록</h1>
 						      </div>
 						      <div class="modal-body">
-						         <div class="mb-3" style="margin-top:16px;">
+						        <div class="mb-3" style="margin-top:16px;">
 							   		 <label for="tags" class="col-sm-2 col-form-label" >Add a title</label>
 							   		 <div class="col-sm-10">
 										<input name='title' style="width:380px;" class="tae-form-control2" th:placeholder='Title'>    
 							  		 </div>
-							   </div>
+								</div>
 							   
 							   <div class="mb-3">
 						  			<label for="exampleFormControlTextarea1" class="tae-form-label col-sm-2 col-form-label">Add description</label>
@@ -392,14 +494,13 @@
 						</div>
 						<!-- 모달끝 -->
 					</div>
-				</div>
+				</div>				
 			</div>
-			<hr>
-		</div>	
+			<hr id
 		<!--/* 댓글영역 */-->
 				<div class="w-100 mb-3 clearfix">
 					<div>
-						<div class="justify-content-center">
+						<div class="d-flex justify-content-center">
 							<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
 						</div>
 						<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
@@ -416,12 +517,14 @@
         									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       									</div>
       									<div class="modal-body">
+      									<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 				<div class="row">
 					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
 					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
 					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            					</div>
 					        					</div>
+					    					</div>
 					    					</div>
       									</div>
       									<div class="modal-footer">
@@ -441,16 +544,66 @@
 								<div>
 									<!--/* 프로필이미지가 null이라면 */-->
 									<div class="qna_box">
-										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-									</div>
-									<div class="qna_box">
-										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" />
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
 									</div>
 									<span>[[${reply.value[0].parentNickname}]]</span>
 								</div>
 								<div>
 									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-									<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<!--/* 댓글신고는 댓글내용만 있고, 댓글 삭제하지않았으며 자기자신이 단 댓글이 아닌경우에만 뜬다. */-->
+									<button th:if="${reply.value[0].parentDelete} == null and ${reply.value[0].parentComment} != null and ${reply.value[0].parentMemberNo} != ${session.member.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<!-- Modal -->
+			                  		<div class="modal fade" th:id="|reportModal${reply.key}|" tabindex="-1" role="dialog"
+			                     		aria-labelledby="AddReportLabel" aria-hidden="true">
+			                     		<div class="modal-dialog modal-s" role="document">
+			                        		<div class="modal-content">
+			                           			<div class="modal-header">
+			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
+			                              			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+			                                 			<span aria-hidden="true">&times;</span>
+			                              			</button>
+			                           			</div>
+			                           			<div class="modal-body">
+			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
+			                           				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+			                           				<input type="hidden" name="reportee" th:value="${reply.value[0].parentMemberNo}">
+			                           				<input type="hidden" name="boardNo" th:value="${sideInfo.sideBoardNo}">
+			                           				<input type="hidden" name="replyContent" th:value="${reply.value[0].parentComment}">
+			                           				<input type="hidden" name="boardType" th:value="N005">
+													<div>
+														<table>
+															<tr>
+																<th>신고종류</th>
+																<td>
+																	<select name="reportType" id="reportType">
+													  					<option th:value="null">--신고종류를 선택해주세요--</option>
+													  					<option th:value="A001">홍보</option>
+													  					<option th:value="A002">도배</option>
+													  					<option th:value="A003">불법정보</option>
+													  					<option th:value="A004">욕설</option>
+													  					<option th:value="A005">개인정보노출</option>
+													  					<option th:value="A006">기타</option>
+																	</select>
+																</td>
+															</tr>
+															<tr>
+																<th>신고사유</th>
+																<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+															</tr>
+														</table>
+													</div>
+												</form>
+			                           			</div>
+			                           		<div class="modal-footer">
+			                              		<button type="button" class="btn btn-primary" th:onclick="insertReport([[${reply.key}]])">등록</button>
+			                              		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                           		</div>
+			                        	</div>
+			                     	</div>
+			                     <hr id="tae-hr">
+			                  </div>
+                  				<!-- 모달 끝 -->
 								</div>
 							</div>
 							<!--/*댓글 내용구간  */-->
@@ -534,12 +687,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
 					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							 </div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -558,16 +713,65 @@
 								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
 									<div>
 										<div class="qna_box">
-											└<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" />
-										</div>
-										<div class="qna_box">
-											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" />
+											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
+											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
 										</div>
 										<span>[[${innerReply.childNickname}]]</span>
 									</div>
 									<div>
 										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-										<button type="button" class="btn mb-1"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+										<button th:if="${innerReply.childDelete} == null and ${innerReply.childComment} != null and ${innerReply.childMemberNo} != ${session.member.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${innerReply.childReplyNo}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+										<!-- Modal -->
+			                  			<div class="modal fade" th:id="|reportModal${innerReply.childReplyNo}|" tabindex="-1" role="dialog"
+			                    			aria-labelledby="AddReportLabel" aria-hidden="true">
+			                    			<div class="modal-dialog modal-s" role="document">
+			                    				<div class="modal-content">
+			                    		   			<div class="modal-header">
+			                    		      			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
+			                    		      			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+			                    		         			<span aria-hidden="true">&times;</span>
+			                    		      			</button>
+			                    		   			</div>
+			                    		   			<div class="modal-body">
+			                    		   				<form name="reportForm" action="/insertReport" method="post" th:id="${innerReply.childReplyNo}"> 	
+			                    		   				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+			                    		   				<input type="hidden" name="reportee" th:value="${innerReply.childMemberNo}">
+			                    		   				<input type="hidden" name="boardNo" th:value="${sideInfo.sideBoardNo}">
+			                    		   				<input type="hidden" name="replyContent" th:value="${innerReply.childComment}">
+			                    		   				<input type="hidden" name="boardType" th:value="N005">
+														<div>
+															<table>
+																<tr>
+																	<th>신고종류</th>
+																	<td>
+																		<select name="reportType" id="reportType">
+														  					<option th:value="null">--신고종류를 선택해주세요--</option>
+														  					<option th:value="A001">홍보</option>
+														  					<option th:value="A002">도배</option>
+														  					<option th:value="A003">불법정보</option>
+														  					<option th:value="A004">욕설</option>
+														  					<option th:value="A005">개인정보노출</option>
+														  					<option th:value="A006">기타</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr>
+																	<th>신고사유</th>
+																	<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+																</tr>
+															</table>
+														</div>
+													</form>
+			                    		   			</div>
+			                    		   		<div class="modal-footer">
+			                    		      		<button type="button" class="btn btn-primary" th:onclick="insertReport([[${innerReply.childReplyNo}]])">등록</button>
+			                    		      		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                    		   		</div>
+			                    			</div>
+			                    		</div>
+			                     	<hr>
+			                  	</div>
+                  				<!-- 모달 끝 -->
 									</div>
 								</div>
 								<!--/*댓글 내용구간  */-->
@@ -638,9 +842,7 @@
 				</div>
 				<!--/* 댓글영역 끗 */-->
 </div>
-
 <script type="text/javascript" th:inline="javascript">
-
 let csrfPara = $('meta[name="csrfPara"]').attr("content");
 let csrfToken = $('meta[name="csrf"]').attr("content");
 
@@ -949,4 +1151,41 @@ $(document).ready(function(){
 	});
 });
 
+function goToGitHub(){
+	 var gitAddress = [[${sideInfo.gitAddress}]]
+	 var url = "https://github.com/" + gitAddress;
+	 window.location.href = url;
+}
+
+function gotoIssuePage(url) {
+	window.open(url, "_blank");
+}
+function goToCommitList(url){
+	window.open(url, "_blank");
+}
+
+//harang
+function insertReport(replyNo){
+	const formData = new FormData($('#' + replyNo)[0]);
+	
+	$.ajax('/insertReport', {
+		type: "POST",
+		data: formData,
+		contentType : false,
+		processData : false,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+		},
+	})
+	.done(res => {
+		showSuccessAlert("해당 댓글이 신고되었습니다.");
+		document.location.href = document.location.href;
+	})
+	.fail(err => {
+		showFailAlert("실패. 다시시도해주세요.");
+		console.log(err);
+	})
+}
+ 
+ 
 </script>
