@@ -1,33 +1,35 @@
 <div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:th="http://www.thymeleaf.org"
-	>
+	xmlns:th="http://www.thymeleaf.org">
 
-	
-		<aside style="width: 100%;">
-			<div class="park_pointAside">
-				<ul class = "park_aside"  style = "margin-bottom : 0px;">
-					<li><h2 >포인트 센터</h2></li>
-					<hr>
-					<li th:classappend="${#httpServletRequest.getRequestURI() == '/acoPointInquiry' ? 'park_active' : ''}" onclick="location.href='/acoPointInquiry?ap=1&up=1'" style = "margin-top : 30px">에코포인트 조회</li><br>
-					<li style = "font-weight : bold;" th:classappend="${#httpServletRequest.getRequestURI() == '/acoMoneyInquiry' ? 'park_active' : ''}" onclick="location.href='/acoMoneyInquiry?cp=1&up=1'">에코머니 조회</li><br>
-					<li th:classappend="${#httpServletRequest.getRequestURI() == '/point' ? 'park_active' : ''}" style = "font-weight : bold; margin-bottom : -10px;" onclick="location.href='/point'" >에코머니 충전</li><br>
 
-					
-				</ul>
-			</div>
-		</aside>
-		<section></section>
-	
+	<aside style="width: 100%;">
+		<div class="park_pointAside">
+			<ul class="park_aside" style="margin-bottom: 0px;">
+				<li><h2>포인트 센터</h2></li>
+				<hr>
+				<li
+					th:classappend="${#httpServletRequest.getRequestURI() == '/point' ? 'park_active' : ''}"
+					onclick="location.href='/point'"
+					style="margin-top: 30px">에코머니 충전</li>
+				<br>
+				<li style="font-weight: bold;"
+					th:classappend="${#httpServletRequest.getRequestURI() == '/acoMoneyInquiry' ? 'park_active' : ''}"
+					onclick="location.href='/acoMoneyInquiry?cp=1&up=1'">에코머니 조회</li>
+				<br>
+				<li
+					th:classappend="${#httpServletRequest.getRequestURI() == '/acoPointInquiry' ? 'park_active' : ''}"
+					style="font-weight: bold; margin-bottom: -10px;"
+					onclick="location.href='/acoPointInquiry?ap=1&up=1'">에코포인트 조회</li>
+				<br>
+
+
+			</ul>
+		</div>
+	</aside>
+	<section></section>
+
 </div>
 <style>
-.park_active {
-  color: #3e6ce3; /* 이 색상은 예시입니다. 원하는 푸른색 코드로 변경하십시오. */
-}
-.park_aside li{
-font-weight : bold; 
-cursor : pointer
-}
-
 
 
 </style>

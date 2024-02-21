@@ -16,16 +16,19 @@
 					class="min_searchImg"
 					style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">
 			</div>
+				
 		</div>
-		<hr>
+	<hr style="width : 1100px; margin-left:10px;">
 
 
 		<div style="display: flex; justify-content: space-between;">
 			<button type="button" class="btn btn-secondary dropdown-toggle" style="visibility:hidden;"
 				data-bs-toggle="dropdown" aria-expanded="false" th:text="최신순"></button>
+			
 			<button type="button" class="btn text-white"
 				style="background-color: #3e6ce3;"
 				onclick="location.href='/freeBoardForm'">게시글 작성</button>
+				
 		</div>
 		<!-- start of question -->
 		<div class="container">
@@ -35,7 +38,7 @@
 				<hr style="margin-bottom: 30px">
 				<div id="freeBoardList" class="row"
 					th:each="free : ${getFreeBoardList}">
-					<div id="title" class="col-8">
+					<div id="title" class="col-9">
 						<div id="park_member" style="height: 40px;">
 								<span class="park_box_free">
                           			<img class="park_profile_free" th:onclick="|location.href='/member/${free.memberNo}?pg=1'|" th:src="|/upload/profile/${free.profileImage}|" alt="profile">
@@ -58,18 +61,16 @@
 
 				</div>
 			</div>
-		<div class="col-1" style="text-align: center; margin: auto;">
+				<div class="inqueryAndComment row col-2" style = "margin-left : 80px; padding:0px;">
+					<div class="col-5" style="text-align: center; margin: auto; padding:0px; margin-right : 10px">
 						<h6 th:text="${free.viewCnt}"></h6>
 						<h6>조회</h6>
 					</div>
-					<div class="col-1" style="text-align: center; margin: auto;">
+					<div class="col-6" style="text-align: center; margin: auto; padding:0px; margin-right : 0px; margin-left : 0px  ">
 						<h6 th:text="${free.replyCnt}"></h6>
 						<h6>댓글</h6>
 					</div>
-					<div class="col-1" style="text-align: center; margin: auto;">
-						<h6 th:text="${free.recommendCnt}"></h6>
-						<h6>추천</h6>
-					</div>
+				</div>
 					<hr style="margin-top: 30px; margin-bottom: 30px;">
 				</div>
 				<!-- end of postList -->

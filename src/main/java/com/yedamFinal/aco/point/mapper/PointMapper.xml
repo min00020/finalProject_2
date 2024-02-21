@@ -132,18 +132,20 @@
 <!-- 		 ORDER BY A.HISTORY_DATE DESC -->
 		SELECT *		FROM (		SELECT			ROWNUM AS RN,			C.*			FROM (
 		
-				SELECT
+                SELECT
 					A.ACCOUNT_NO,
 					A.POINT_TYPE,
 					A.HISTORY_DATE,
 					A.INC_DEC_POINT,
-					B.BANK_NAME,
-					A.latest_ACO_MONEY
+					A.latest_ACO_MONEY,
+					C.BANK_NAME
+      
 					
 				FROM POINT_DETAIL A 
-				JOIN ACCOUNT B ON A.account_no = B.account_no
-				
-				WHERE A.MEMBER_NO = #{memberNo}
+				 JOIN MEMBER B ON A.member_no = B.member_no 
+                 JOIN ACCOUNT C ON A.ACCOUNT_NO = C.ACCOUNT_NO
+    
+				WHERE C.MEMBER_NO = 46
 		 		  AND POINT_TYPE = 'G001'
 		 		  AND INC_DEC_POINT <![CDATA[>]]> 0
 		 		  
