@@ -8,23 +8,24 @@
 	<select id="getQuestionList" resultType="QuestionVO">
 	  SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
 	  
-	                SELECT m.id, 
-	                	m.profile_image,
-	                    q.QUESTION_BOARD_NO,
-	                    q.MEMBER_NO,
-	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
-	                    q.POINT,
-	                    q.TITLE,
-	                    q.TAG,
-	                    q.CONTENTS,
-	                    q.WRITE_DATE,
-	                    q.VIEW_CNT,
-	                    q.RECOMMEND_CNT,
-	                    q.BOOKMARK_CNT,
-	                    q.ANSWER_CNT
-	            FROM QUESTION_BOARD q
-	            JOIN MEMBER m
-	            ON q.MEMBER_NO = m.MEMBER_NO
+	                SELECT m.id,
+	                	   m.nickname,
+	                	   m.profile_image,
+ 	                       q.QUESTION_BOARD_NO,
+	                       q.MEMBER_NO,
+	                       SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+	                       q.POINT,
+	                       q.TITLE,
+	                       q.TAG,
+	                       q.CONTENTS,
+	                       q.WRITE_DATE,
+	                       q.VIEW_CNT,
+	                       q.RECOMMEND_CNT,
+	                       q.BOOKMARK_CNT,
+	                       q.ANSWER_CNT
+	                 FROM QUESTION_BOARD q
+	                 JOIN MEMBER m
+	           		   ON q.MEMBER_NO = m.MEMBER_NO
 	         <if test='search != null'>
 	            WHERE UPPER(q.TITLE) LIKE '%' || UPPER(#{search}) || '%'
 	         </if>
@@ -50,6 +51,7 @@
 	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
 			SELECT m.id, 
 				   m.profile_image,
+				   m.nickname,
 			       q.QUESTION_BOARD_NO,
 			       q.MEMBER_NO,
 			       q.TOPIC,
@@ -168,8 +170,10 @@
 	<!-- 질문글,답변글 단건조회 -->
 	<select id="getQuestionInfo" resultType="QuestionVO">	
 		SELECT m.ID, 
+			   m.nickname, 
 			   m.PROFILE_IMAGE,SUBCODE_TO_NAME(m.MEMBER_LEVEL) as member_level,
-		 	   m2.ID as answer_id , 
+		 	   m2.ID as answer_id,
+		 	   m2.nickname as answer_nickname,  
 		 	   m2.PROFILE_IMAGE as answer_profile_image,
 		 	   SUBCODE_TO_NAME(m2.MEMBER_LEVEL) as answer_member_level,
 		 	   
