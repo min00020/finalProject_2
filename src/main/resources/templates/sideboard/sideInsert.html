@@ -45,18 +45,19 @@
 		  </div>
 		  
 		   <div class="row mb-3" style="margin-top:16px;">
-		   		 <label for="inputPassword3" class="tae-form-label col-sm-2 col-form-label" >깃주소</label>
+		   		 <label for="inputPassword3" class="tae-form-label col-sm-2 col-form-label" >GitHub repository 주소</label>
 		   		 <div class="col-sm-10">
 		    	  <input type="text" class="tae-form-control2" id="gitAddress">
+		    	  <p style="color:hsla(220,30%,1%,.4); margin-right:16.5rem;">/{깃허브id}/{repository이름}로 적어주세요 ex)/user1/project/</p>
 		  		 </div>
 		   </div>
 		   
 		   <div class="row mb-3" style="margin-top:16px;">
-		   		 <label for="tags" class="tae-form-label col-sm-2 col-form-label" >사용기술</label>
+		   		 <label for="techOfUse" class="tae-form-label col-sm-2 col-form-label" >사용기술</label>
 		   		 <div class="col-sm-10">
-					<input name='tags' class="tae-form-control2" placeholder='태그추가' data-blacklist='.NET,PHP' id="tags">    
+					<input name='techOfUse' class="tae-form-control2" placeholder='태그추가' data-blacklist='.NET,PHP' id="techOfUse">    
 					<button class="small-rounded default-color" style="margin-left:0.3rem; visibility: hidden;">인증하기</button>
-					<p style="color:hsla(220,30%,1%,.4); margin-right:16.5rem;" class="d-flex justify-content-center">최대 5개까지 등록가능</p>
+					<p style="color:hsla(220,30%,1%,.4); margin-right:16.5rem;">최대 5개까지 등록가능</p>
 		  		 </div>
 		   </div>
 		   
@@ -86,7 +87,7 @@
 	<h3 class="tae-side-title">사이드 프로젝트 게시글수정</h3>
 	<br>
 	<!-- 입력 -->
-	<form class="row g-3" id="sideProjectForm">
+	<form class="row g-3" id="modifyForm" th:object="${sideInfo}">
 		  <div class="row mb-3">
 		   	<label for="inputEmail3" class="tae-form-label col-sm-2 col-form-label">프로젝트 제목</label>
 		   		<div class="col-sm-10">
@@ -116,18 +117,19 @@
 		  </div>
 		  
 		   <div class="row mb-3" style="margin-top:16px;">
-		   		 <label for="inputPassword3" class="tae-form-label col-sm-2 col-form-label" >깃주소</label>
+		   		 <label for="inputPassword3" class="tae-form-label col-sm-2 col-form-label" >GitHub repository 주소</label>
 		   		 <div class="col-sm-10">
 		    	  <input type="text" class="tae-form-control2" id="gitAddress" th:value="${sideInfo.gitAddress}">
+		    	  <p style="color:hsla(220,30%,1%,.4); margin-right:16.5rem;">/{userid}/{repository이름}로 적어주세요 ex)/user1/project/</p>
 		  		 </div>
 		   </div>
 		   
 		   <div class="row mb-3" style="margin-top:16px;">
-		   		 <label for="tags" class="tae-form-label col-sm-2 col-form-label" >사용기술</label>
+		   		 <label for="techOfUse" class="tae-form-label col-sm-2 col-form-label" >사용기술</label>
 		   		 <div class="col-sm-10">
-					<input name='tags' class="tae-form-control2" placeholder='태그추가' data-blacklist='.NET,PHP' id="tags"  th:value="${sideInfo.techOfUse}">    
+					<input  class="tae-form-control2" placeholder='태그추가' data-blacklist='.NET,PHP' th:field="*{techOfUse}">    
 					<button class="small-rounded default-color" style="margin-left:0.3rem; visibility: hidden;">인증하기</button>
-					<p style="color:hsla(220,30%,1%,.4); margin-right:16.5rem;" class="d-flex justify-content-center">최대 5개까지 등록가능</p>
+					<p style="color:hsla(220,30%,1%,.4); margin-right:16.5rem;">최대 5개까지 등록가능</p>
 		  		 </div>
 		   </div>
 		   
@@ -135,7 +137,7 @@
 	  		<!-- <label for="exampleFormControlTextarea1" class="tae-form-label col-sm-2 col-form-label">프로젝트 소개</label>
 	  		<textarea class="form-control" id="content" rows="8" >[[${sideInfo.content}]]</textarea> -->
 	  		<label for="editor" style="font-weight:bold; margin-bottom:8px;">프로젝트 소개</label>
-			<div id="editor" name="editor">[[${sideInfo.content}]]</div>
+			<div id="editor" name="editor" th:utext="${sideInfo.content}"></div>
 			<br>
 		   </div>
 		  	<div class="col-12">
@@ -193,7 +195,7 @@
 
 	let dbTagList = [[${tagList}]];
 		//tagify
-		var inputElm = document.querySelector('input[name=tags]');
+		var inputElm = document.querySelector('input[name=techOfUse]');
 		
 		let insertTagList = [];
 		// 나중에 바꿔치기해야함.
@@ -306,6 +308,23 @@
 			}
 			insertTagList.push(e.detail.data.value); // 데이터 추가하기.
 		}
+	const bno = [[${bno}]]
+	if(bno != null) {
+		setTimeout(function() {
+			let myTagStr = null; 
+			const sideInfo = [[${sideInfo}]];
+			if(sideInfo != null)
+				myTagStr = sideInfo.techOfUse;
+			
+			if(typeof myTagStr != 'undefined' && myTagStr != null) {
+				const myTagList = myTagStr.split(',');
+				myTagList.forEach(obj => {
+					tagify.addTags(obj);
+				});
+			}
+		}, 500);
+	}
+		
 	const memberNo = [[${session.member.memberNo}]];
 	const writer = [[${session.member.nickname}]];
 	const status = 'Q001';
@@ -318,8 +337,8 @@
 	        let recruitPersonnel = $('#recruitPersonnel').val();
 	        let devPeriod = $('#devPeriod').val();
 	        let gitAddress = $('#gitAddress').val();
-	        let techOfUse = $('#tags').val();
-	        let content = $('#content').val();
+	        let techOfUse = insertTagList.join(',');
+	        let content = editor.getHTML();
 
 	        let obj = {
 	        	memberNo : memberNo,
@@ -352,15 +371,16 @@
 	});
 	//게시글 수정
 	$(document).ready(function(){
-	$('#modifyBoard').submit(function(event) {
+	$('#modifyForm').submit(function(event) {
         event.preventDefault();
         let title = $('#title').val();
         let projectOutline = $('#projectOutline').val();
         let recruitPersonnel = $('#recruitPersonnel').val();
         let devPeriod = $('#devPeriod').val();
         let gitAddress = $('#gitAddress').val();
-        let techOfUse = $('#tags').val();
-        let content = $('#content').val();
+        let techOfUse = $('#techOfUse').val();
+        let content = editor.getHTML();
+        let bno = [[${bno}]]
 
         let obj = {
         	memberNo : memberNo,
@@ -372,18 +392,19 @@
             gitAddress: gitAddress,
             techOfUse: techOfUse,
             content: content,
-            writer : writer
+            writer : writer,
+            bno : bno
             
         };
         obj[csrfPara] = csrfToken;
         
-        $.ajax('/updateAjax', {
+        $.ajax(`/updateAjax/${bno}`, {
             type: "POST",
             data: obj
         }).done(result => {
     		console.log('등록 성공', result);
     		showSuccessAlert('정상적으로 수정되었습니다.');
-    		window.location.href = '/sideInfo/' + result.vo.pk;
+    		window.location.href = '/sideInfo/' + bno;
         })
         .fail(err => {
         	console.log(err);

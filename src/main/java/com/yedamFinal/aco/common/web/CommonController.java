@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Git;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedamFinal.aco.common.AttachedFileVO;
 import com.yedamFinal.aco.common.ReportVO;
 import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
+import com.yedamFinal.aco.common.serviceImpl.GitHubServiceImpl;
 import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
@@ -186,6 +188,7 @@ public class CommonController {
 		return fileService.textEditorImage(image);
 	}
 	
+	//tae 깃허브 연동
 	@PostMapping("/insertReport")
 	@ResponseBody
 	public int insertReportProcess(ReportVO reportVO) {

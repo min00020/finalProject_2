@@ -18,4 +18,7 @@ public class QnABoardVO {
 	private String nickname;
 	
 	private int pk;
+	//메인페이지용
+	private int minute;
+	private int accumActivityPoint;
 }

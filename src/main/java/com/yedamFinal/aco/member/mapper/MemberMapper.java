@@ -12,10 +12,12 @@ import com.yedamFinal.aco.member.FindAccountEmailLinkVO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
 import com.yedamFinal.aco.member.MemberStatVO;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.member.SettlementVO;
 import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
+import com.yedamFinal.aco.sideboard.SideVO;
 
 public interface MemberMapper {
 	// 회원 정보 단건조회
@@ -30,12 +32,14 @@ public interface MemberMapper {
 	public List<MyquestionVO> selectMyqList(MemberVO memberVO);
 	//작성한 질문글 모달 리스트
 	public List<MyquestionVO> selectQuestionList(MemberVO memberVO);
-	//사이드 프로젝트 모달 리스트 --> 옮겨야함
-	//public List<SideVo> selectSideProjectList(MemberVO memberVO);
+	public int selectQuestionCnt(MemberVO memberVO);
+	
 	//포인트 사용내역
 	public List<PointDetailJoinVO> selectPointDetailList(MemberVO memberVO);
 	//활동점수 내역
 	public List<ActivityPointVO> selectActivityList(MemberVO memberVO);
+	//참여한 사이드프로젝트 목록조회
+	public List<SideVO> selectParticipateList(SideVO sideVO);
 	
 	public int insertPointDetail(PointDetailJoinVO pointVO);
 	public int insertActivityDetail(ActivityPointVO activityVO);
@@ -67,5 +71,7 @@ public interface MemberMapper {
 	
 	public int updateAccountInfo(AccountChangeDTO dto);
 	
+	public int updatesettlementRequest(@Param(value="settlementReqPoint") int settlementReqPoint, @Param(value="memberVO") MemberVO memberVO);
+	public int insertsettlementPoint(SettlementVO settleVO);
 	public MemberStatVO otherMemberStatInfo(int memNo);
 }

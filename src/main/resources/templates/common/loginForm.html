@@ -78,7 +78,7 @@
 			<div class="my-3 center">
 				<label for="password" style="margin-left:27rem;" class="w-50">비밀번호</label>
 				<div class="mt-1 d-flex justify-content-center">
-					<input id="password" type="password" class="px-3 py-2 rounded" style="width:33%;" name="password" autoComplete="off">
+					<input id="password" type="password" class="px-3 py-2 rounded" style="width:33%;" name="password" autoComplete="off" onkeypress="loginRequestByKeyPress(event)" />
 				</div>
 			</div>
 		</div>
@@ -87,7 +87,7 @@
 		</div>
 		<div style="margin-top:3rem;">
 			<div class="my-3 d-flex justify-content-center">
-				<button id="btn" class="px-3 py-2 rounded" style="width:33%; background-color:#3e6ce3; color:white;" type="button" onclick="loginRequest()" onkeydown="loginRequest()">로그인</button>
+				<button id="btn" class="px-3 py-2 rounded" style="width:33%; background-color:#3e6ce3; color:white;" type="button" onclick="loginRequest()">로그인</button>
 			</div>
 			<div class="my-3 d-flex justify-content-center">
 				<p>아직 회원이 아니신가요? <a href="/createAccountForm">회원가입</a></p>
@@ -143,6 +143,11 @@
 			})
 		}
 		
+		function loginRequestByKeyPress(e) {
+			if(e.keyCode == 13) {
+				loginRequest();
+			}
+		}
 	</script>
 </body>
 </html>
