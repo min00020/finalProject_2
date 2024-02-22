@@ -553,7 +553,8 @@
 								</div>
 								<!-- 모달 끝 -->
 								<ul class="tab-ul-3">
-									<li th:each="myq:${myQuestionList}">[[ ${myq.title} ]]
+									<li th:each="myq:${myQuestionList}" >
+									<span th:text="${#strings.abbreviate(myq.title,10)}"></span>
 										<span  class="tae-ul-list" th:text="${#dates.format(myq.writeDate, 'yyyy-MM-dd')}">[[${myq.writeDate}]] </span>
 										<hr>
 									</li>
@@ -601,7 +602,7 @@
 																		<p style="font-size:15px;color:#979da9;">질답형 게시판</p>
 																		<br>
 																			<h6 style="padding-bottom: 80px; margin-right:10px;height:10px;text-align:center;font-weight:bold;overflow:hidden;text-overflow:ellipsis;
-																			">"[[${bml2.title} ]]"</h6>
+																			" >"[[${bml2.title} ]]"</h6>
 																			<span style="margin-top:30px;color:#979da9;" th:text="${#dates.format(bml2.registDate, 'yyyy-MM-dd')}">작성일자 : [[${bml2.registDate}]]</span>
 																				<button type="button" id="deleteBookamrk" style="background-color: #fff; border: 0px; float: right;"
 																				th:onclick="delMark([[${bml2.questionBoardNo}]])">
@@ -624,7 +625,8 @@
 								</div>
 								<!-- 모달 끝 -->
 								<ul class="tab-ul-3">
-									<li th:each="bml:${bmarkList}">[[ ${bml.title} ]]
+									<li th:each="bml:${bmarkList}">
+									<span th:text="${#strings.abbreviate(bml.title,10)}"></span>
 										<span class="tae-ul-list" th:text="${#dates.format(bml.registDate, 'yyyy-MM-dd')}">[[${bml.registDate}]] </span>
 										<hr>
 									</li>
