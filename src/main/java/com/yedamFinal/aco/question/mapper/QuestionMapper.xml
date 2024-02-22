@@ -10,6 +10,7 @@
 	  
 	                SELECT m.id,
 	                	   m.nickname,
+	                	   m.ACCUM_ACTIVITY_POINT,
 	                	   m.profile_image,
  	                       q.QUESTION_BOARD_NO,
 	                       q.MEMBER_NO,
@@ -52,6 +53,7 @@
 			SELECT m.id, 
 				   m.profile_image,
 				   m.nickname,
+				   m.ACCUM_ACTIVITY_POINT,
 			       q.QUESTION_BOARD_NO,
 			       q.MEMBER_NO,
 			       q.TOPIC,
