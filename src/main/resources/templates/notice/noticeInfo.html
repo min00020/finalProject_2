@@ -26,8 +26,7 @@
 				</div>
 			</div><!-- 질문글 제목 / 신고삭제 끝-->
 			<div class="qna_contents"> <!-- 질문 내용 -->
-				<h6 th:text="${noticeInfo.content}" style="font-size: 20px"></h6>
-				
+				<h6 th:text="${noticeInfo.content}" style="font-size: 20px" id="ncontent"></h6>
 			</div>
 			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
 				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
@@ -64,7 +63,7 @@
       									<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 				<div class="row">
 					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
+					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            					</div>
 					        					</div>
@@ -191,12 +190,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      											<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							</div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -231,7 +232,7 @@
       												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
@@ -356,12 +357,14 @@
         												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       												</div>
       												<div class="modal-body">
+      												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 							<div class="row">
 						        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])">
+					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 						                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            								</div>
 					        								</div>
+					    								</div>
 					    								</div>
       												</div>
       												<div class="modal-footer">
@@ -387,8 +390,11 @@
 
 <!--/* 댓글 복사할 스크립트 태그 */-->
 <script th:inline="javascript">
-
-
+	//enter => <br>
+	var text = document.getElementById("ncontent").innerHTML;
+	text = text.replace(/(\n|\r\n)/g, '<br>')
+	document.getElementById("ncontent").innerHTML = text;
+	
 	const noticeBoardNo = [[${noticeInfo.noticeBoardNo}]]
 	const member = [[${session.member}]]
 	let memberNo = null;
