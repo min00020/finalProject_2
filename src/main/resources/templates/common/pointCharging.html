@@ -17,13 +17,14 @@
 				<div
 					style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
 					<div class="park_chargePointSelect">
-						<div class="park_input-container">
-							<label for="park_amountInput"></label> <input type="text"
-								name="park_amountInput" id="park_amountInput"
-								placeholder="충전할 금액을 입력해 주세요" oninput="formatNumber(this)" />
+						<div class="park_input-container" style="position: relative;">
+							<label for="park_amountInput"></label> 
+							<input type="text"
+								name="park_amountInput" id="park_amountInput" placeholder="충전할 금액을 입력해 주세요" oninput="formatNumber(this)" />		
+								<img id = "park_clearAmount" style="position : absolute;  height : 35px; margin-top:15px; margin-left : -50px; cursor:pointer;" src="commonResource/xx.png">			
 						</div>
-
 						<hr style="margin-top: 0;">
+
 						<p
 							style="text-align: right; color: #808080; font-size: small; margin-top: -10px;">
 							일일 최대 충전 한도 : 1,000,000 원<br>최소 충전금액 : 1,000 원
@@ -106,8 +107,9 @@
 									이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여 회사와 회원의
 									권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br> 이 약관은 회사명(이하 "회사")와 이용
 									고객(이하 "회원") 간에 회사의 서비스 이용과 관련하여 회사와 회원의 권리, 의무 및 책임사항을 규정함을
-									목적으로 합니다.<br> 이 약관은 회사명(이하 "회사")와 이용 고객(이하 "회원") 간에 회사의
-									서비스 이용과 관련하여 회사와 회원의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+									목적으로 합니다.<br>
+									제1조 (약관의 적용) <br>오픈뱅킹공동업무를 기반으로 이용기관이 개발한 핀테크 서비스를 통해 본인명의 계좌에서 자금을 출금하고자 하는 개인(이하 “사용자”라 한다)과 신한투자증권 주식회사(이하 “회사”라 한다)에 대하여 이 약관을 적용합니다.  제2조 (용어의 정의)<br> ① “오픈뱅킹공동업무”란 이용기관이 핀테크 서비스를 용이하게 개발하고, 제공할 수 있도록 금융권에서 공동으로 구축하여 운영하는 표준화된 오픈API 플랫폼에 대한 제반 업무를 말합니다. ② “이용기관”이란 금융결제원과 오픈뱅킹공동업무 이용계약을 체결하고 이용승인을 받은 기업 을 말합니다. 여기에는 회사를 제외한 금융기관도 포함됩니다. ③ “출금이체”란 이용기관이 사용자의 회사 예탁금계좌에서 출금하여 이용기관의 수납 모계좌로 집금하는 업무를 말합니다. ④ “오픈뱅킹중계센터”란 오픈뱅킹공동업무 시스템을 구축하고 운영하며, 회사와 이용기관을 서로 중계하는 곳으로 금융결제원이 운영합니다. ⑤ “자동이체정보 통합관리시스템”이란 자동이체 등록내역 및 동의자료를 통합 보관 및 관리하고 사용자가 자동이체 등록내역을 조회, 변경 할 수 있는 기능을 제공하는 금융기관이 공동 개발한 시스템을 말합니다.  제3조 (출금이체 신청)<br> ① 사용자가 본인명의 계좌에 대한 출금이체를 실행하기 위해서는 이용기관 또는 오픈뱅킹중계센터가 제공하는 웹페이지 또는 앱에서 출금이체 신청을 하며, 관련 정보는 해당 금융기관으로 전달됩니다.  ② 사용자는 출금이체 신청시 전자금융거래법 제15조 제1항 및 시행령 제10조에 따라 계좌 단위로 서면(전자서명이 있는 전자문서 포함), ARS 녹취 등에 의하여 출금이체에 대한 동의를 하여야 합니다. ③ 사용자는 거래지시와 처리결과가 일치하는지 여부를 확인하여야 합니다. 일치하지 않는 경우에는 이를 즉시 회사에 통지하여야 합니다.  ④ 회사는 개인정보보호법 및 신용정보의 이용 및 보호에 관한 법률 등에서 정한 바에 따라 사용자의 정보를 관리하여야 하며, 이에 대한 세부적인 내용은 회사의 개인정보처리(취급) 방
+침에 정한 								바에 의합니다. 회사는 개인정보처리(취급) 방침에 대한 세부내용을 홈페이지에 게시하여 사용자가 확인할 수 있도록 합니다. 
 								</p>
 								<!-- ... -->
 							</div>
@@ -522,5 +524,14 @@ const sum = $('.park_summary');
 		    });
 		  }
 		}
+	
+	$('#park_clearAmount').click(function() {
+	    $('#park_amountInput').val('');
+	    $('.park_money_input').text('');
+	    $('.park_am_input').text('');
+	    var currentAcomoney = acoMoney;
+	    $('.park_summary').text(currentAcomoney.toLocaleString() + ' P');
+	});
+
 
 </script>
