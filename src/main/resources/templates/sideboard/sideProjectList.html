@@ -24,10 +24,10 @@
 		<div class="sidebanner" th:onclick="goWriting()" style="text-align: center;">
 			<div class="recbanner">
 				<th:block th:if="${status} == 'Q001'">
-					<img id="bannerImage" style="cursor:pointer;" th:src="@{/commonResource/taefolder/sidebanner2.png}" alt="side">
+					<img id="bannerImage" th:src="@{/commonResource/taefolder/sidebanner2.png}" alt="side">
 				</th:block>
 	        	<th:block th:unless="${status} == 'Q001'">
-					<img id="bannerImage" style="cursor:pointer;" th:src="@{/commonResource/taefolder/sidebanner1.png}" alt="side">
+					<img id="bannerImage" th:src="@{/commonResource/taefolder/sidebanner1.png}" alt="side">
 				</th:block>
 				<hr id="tae-hr">	
 			</div>
