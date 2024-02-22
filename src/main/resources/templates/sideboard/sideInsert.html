@@ -368,7 +368,7 @@
 	        }).done(result => {
 	        	showSuccessAlert('작성한 글이 정상적으로 등록되었습니다.');
 	    		setTimeout(() => window.location.href = '/sideInfo/' + result.vo.pk
-	    		, 3000);
+	    		, 1000);
 	    		
 	    		
 	        })
@@ -413,7 +413,7 @@
         }).done(result => {
     		showSuccessAlert('정상적으로 수정되었습니다.');
     		setTimeout(() => window.location.href = '/sideInfo/' + bno
-    	    		, 3000);
+    	    		, 1000);
         })
         .fail(err => {
         	console.log(err);

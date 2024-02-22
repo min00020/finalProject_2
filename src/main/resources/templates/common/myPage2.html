@@ -1200,7 +1200,7 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
 				}
 			}).done(result =>{
-				showSuccessAlert('환전 요청이 전달되었습니다.');
+				showSuccessAlert('정산 요청이 전달되었습니다.');
 				function dateFormat(date) {
 					let dateFormat2 = date.getFullYear() +
 						'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
