@@ -164,9 +164,6 @@
 			                        		<div class="modal-content">
 			                           			<div class="modal-header">
 			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
-			                              			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-			                                 			<span aria-hidden="true">&times;</span>
-			                              			</button>
 			                           			</div>
 			                           			<div class="modal-body">
 			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
@@ -332,9 +329,6 @@
 			                    				<div class="modal-content">
 			                    		   			<div class="modal-header">
 			                    		      			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
-			                    		      			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-			                    		         			<span aria-hidden="true">&times;</span>
-			                    		      			</button>
 			                    		   			</div>
 			                    		   			<div class="modal-body">
 			                    		   				<form name="reportForm" action="/insertReport" method="post" th:id="${innerReply.childReplyNo}"> 	
@@ -931,6 +925,10 @@
 	}
 	//harang
 	function insertReport(replyNo){
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
 		const formData = new FormData($('#' + replyNo)[0]);
 		
 		$.ajax('/insertReport', {
