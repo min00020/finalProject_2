@@ -67,6 +67,7 @@ SELECT C.*
                 r.BOARD_NO,
                 r.REPLY_CONTENT,
                 r.REPORTEE,
+                o.BAN_TYPE,
                 o.NAME as reportee_name
             FROM REPORT r
             JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
@@ -321,7 +322,7 @@ SELECT C.*
 						<when test="leaveStatus.equals('Leave')">WHERE LEAVE_DATE IS NOT NULL</when>
 	    				<otherwise>WHERE LEAVE_DATE IS NULL</otherwise>
 					</choose>
-					ORDER BY MEMBER_NO)B
+					ORDER BY MEMBER_NO DESC)B
 					)C
 				<![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
@@ -350,12 +351,14 @@ SELECT C.*
             B.* FROM(
             SELECT
 	            r.REPORT_TYPE,
+	            r.REPORT_NO,
 				r.REPORT_CONTENT,
 				m.NAME as reporter_name,
 				r.REPORT_DATE,
 				r.REPORT_STATE,
 				r.BOARD_TYPE,
 				r.BOARD_NO,
+				r.REPLY_CONTENT,
 				o.NAME as reportee_name
 					FROM REPORT r
 					JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
