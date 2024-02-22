@@ -21,20 +21,23 @@
 	</div>
 	<th:block th:if="${sideInfo.publishingStatus} == 'Q001'">
 		<!-- contents -->
-	<div class="conetents">
+	<div class="contents">
+				<h3 style="font-weight:900;padding-left: 20px;">[프로젝트명] [[ ${sideInfo.title }]]</h3>
 				<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
-				<h6 class="tae-side-h6-1">모집중</h6>
+				<h5 class="tae-side-h6-1" style="padding-left: 20px;">모집중</h5>
 				</th:block>
 				<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'" >
-				<h6 class="tae-side-h6-2">협업중</h6>
+				<h5 class="tae-side-h6-2" style="padding-left: 20px;">협업중</h5>
 				</th:block>
-					<h5 style="font-weight:bolder;">[[ ${sideInfo.title }]]</h5>
+				<div class="qna_box" style="margin-left:30px;">
+					<img th:if="${sideInfo.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${sideInfo.memberNo}?pg=1'|">
+					<img th:unless="${sideInfo.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${sideInfo.profileImage}|" alt="profile" th:onclick="|location.href='/member/${sideInfo.memberNo}?pg=1'|">
+				</div>
+					<p style="padding-left:20px;" th:text="${sideInfo.writer}"></p>
 					<br>
-					<p style="font-weight:bold;">[[${sideInfo.projectOutline}]]</p>
+					<p style="font-weight:bold;color:#646464;padding-left:20px;">📅 기간 | [[${sideInfo.devPeriod}]]일  🙋‍♀️ 모집인원 ‍[[${sideInfo.recruitPersonnel}]]명</p>
 					<br>
-					<p style="color:#979da9;float:left;">기간 | [[${sideInfo.devPeriod}]]일  모집인원 [[${sideInfo.recruitPersonnel}]]명</p>
-				    <span style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</span> 
-					<br>
+				    <p style="font-weight:bold;color:#646464;padding-left:20px;margin-top: -25px;">👀 조회수 [[ ${sideInfo.viewCnt} ]]회  💬 댓글수 [[ ${sideInfo.replyCnt} ]]개</p> 
 					<th:block>
 						<div class="tae-side-btn1" style="margin-top:20px;">
 							<th:block th:if="${isCheckMember} == 1 and ${sideInfo.publishingStatus} == 'Q001'">
@@ -46,12 +49,12 @@
 							</th:block>
 						</div>
 					</th:block>
+				<h5 style="font-weight:bold;padding-left: 20px;">프로그램 소개</h5>
 				<hr id="tae-hr">
 				<div class="container" id="tae-container-5">
-				<h5 style="font-weight:bold;">프로그램 소개</h5>
 				<p style="font-weight:bold;" th:utext="${sideInfo.content}"></p>
 				</div>	
-				<p style="font-weight:bold;">작성자 깃 보러가기 💻 <a class="tae-gitaddress" th:href="@{sideInfo.gitAddress}" th:text="${sideInfo.gitAddress}"></a></p>
+				<p style="font-weight:bold;">작성자 깃 구경하러가기 💻 <a class="tae-gitaddress" onclick="goToGitHub()">https://github.com/[[${sideInfo.gitAddress}]]</a></p>
 				<hr id="tae-hr">
 	</div>
 	<!--/* 댓글영역 */-->
@@ -396,19 +399,24 @@
 	<!-- 협업중일때 깃 -->
 	<th:block  th:unless="${sideInfo.publishingStatus} == 'Q001'">
 		<!-- contents -->
-	<div class="conetents" style="height: 250px;">
-		<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
-			<h6 class="tae-side-h6-1">모집중</h6>
-		</th:block>
-		<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'" >
-			<h6 class="tae-side-h6-2">협업중</h6>
-		</th:block>
-			<h5 style="font-weight:bolder;">[[ ${sideInfo.title }]]</h5>
-			<br>
-			<p style="font-weight:bold;">[[${sideInfo.projectOutline}]]</p>
-			<br>
-			<p style="color:#979da9;float:left;">기간 | [[${sideInfo.devPeriod}]]일  모집인원 [[${sideInfo.recruitPersonnel}]]명</p>
-		    <span style="color:#979da9;margin-top:-10px;float:right;">조회수 [[ ${sideInfo.viewCnt} ]]회  댓글수 [[ ${sideInfo.replyCnt} ]]개</span> 
+	<div class="contents">
+		<h3 style="font-weight:900;padding-left: 20px;">[프로젝트명] [[ ${sideInfo.title }]]</h3>
+				<th:block th:if="${sideInfo.publishingStatus} == 'Q001'" >
+				<h5 class="tae-side-h6-1" style="padding-left: 20px;">모집중</h5>
+				</th:block>
+				<th:block th:unless="${sideInfo.publishingStatus} == 'Q001'" >
+				<h5 class="tae-side-h6-2" style="padding-left: 20px;">협업중</h5>
+				</th:block>
+				<div class="qna_box" style="margin-left:30px;">
+					<img th:if="${sideInfo.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${sideInfo.memberNo}?pg=1'|">
+					<img th:unless="${sideInfo.profileImage} == null" class="qna_profile" th:src="|/upload/profile/${sideInfo.profileImage}|" alt="profile" th:onclick="|location.href='/member/${sideInfo.memberNo}?pg=1'|">
+				</div>
+				<p style="padding-left:20px;" th:text="${sideInfo.writer}"></p>
+					<br>
+					<p style="font-weight:bold;color:#646464;padding-left:20px;">📅 기간 | [[${sideInfo.devPeriod}]]일  🙋‍♀️ 모집인원 ‍[[${sideInfo.recruitPersonnel}]]명</p>
+					<br>
+				    <p style="font-weight:bold;color:#646464;padding-left:20px;margin-top: -25px;">👀 조회수 [[ ${sideInfo.viewCnt} ]]회  💬 댓글수 [[ ${sideInfo.replyCnt} ]]개</p> 
+					<br>
 			<br>
 				<th:block th:if="${isCheckMember} == 1">
 					<div class="tae-side-btn1" style="margin-top:20px;">
@@ -490,7 +498,7 @@
 					</div>
 				</div>				
 			</div>
-			<hr id
+			<hr id="tae-hr">
 		<!--/* 댓글영역 */-->
 				<div class="w-100 mb-3 clearfix">
 					<div>
@@ -856,6 +864,7 @@ function sendIssue(){
 	.done(res => {
 		if(res.result == "200") {
 			showSuccessAlert("이슈 등록에 성공했습니다.");
+			window.location.reload();
 		}
 		else {
 			showFailAlert('이슈 등록에 실패하였습니다.');
@@ -1131,7 +1140,9 @@ $(document).ready(function(){
 		}).done(result => {
 			console.log(result);
 			showSuccessAlert("게시글이 삭제되었습니다.");
-			window.location.href="/sideProjectList/Q001/?pageNo=1";
+			setTimeout(() => window.location.href="/sideProjectList/Q001/?pageNo=1"
+    	    		, 3000);
+			
 		}).fail(err => {
 			console.log(err);
 			showWarningAlert("삭제 실패하였습니다.");
@@ -1142,7 +1153,7 @@ $(document).ready(function(){
 function goToGitHub(){
 	 var gitAddress = [[${sideInfo.gitAddress}]]
 	 var url = "https://github.com/" + gitAddress;
-	 window.location.href = url;
+	 window.open(url, "_blank");
 }
 
 function gotoIssuePage(url) {
