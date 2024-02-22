@@ -146,4 +146,17 @@ public class GitHubServiceImpl implements GitHubService {
 			}
 			return map;
 	}
+
+	@Override
+	public boolean checkExpireGitAccessToken(String accessToken) {
+		// TODO Auto-generated method stub
+		try {
+			GitHub github = new GitHubBuilder().withOAuthToken(accessToken).build();
+			github.getMyself();
+		}
+		catch(Exception e) {
+			return true;
+		}
+		return false;
+	}
 }
