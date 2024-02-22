@@ -59,8 +59,6 @@ public class QuestionController {
 	*/
 	@GetMapping("/questionList")
 	public String getquestionBoard(@RequestParam int pageNo, String topic, Model model, String search) {
-		/* log.info("uuuuuuuuuuuuuuuu"); */
-		
 		if(topic == null) {
 			questionService.getQuestionList(model, Integer.valueOf(pageNo),search);
 		}
