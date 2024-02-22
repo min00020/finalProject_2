@@ -14,6 +14,7 @@ import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.common.service.ReplyService;
 import com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper;
 import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.noticeboard.mapper.NoticeBoardMapper;
 import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.sideboard.mapper.SideMapper;
 
@@ -31,6 +32,9 @@ public class ReplyServiceImpl implements ReplyService {
 	
 	@Autowired
 	private FreeBoardMapper freeMapper;
+	
+	@Autowired
+	private NoticeBoardMapper noticeBoardMapper;
 	
 	@Override
 	public Map<String, Object> postReply(String boardType, String boardNo, String replyBody, String isEmoticon, String replyPno, MemberVO memVo) {
@@ -74,6 +78,9 @@ public class ReplyServiceImpl implements ReplyService {
 		else if(boardType.equals("N004")) {
 			freeMapper.updateReplyCnt(0, Integer.valueOf(boardNo));
 		}
+		else if(boardType.equals("N003")) {
+			noticeBoardMapper.updateReplyCnt(0, Integer.valueOf(boardNo));
+		}
 		
 		return ret;
 	}
@@ -106,6 +113,10 @@ public class ReplyServiceImpl implements ReplyService {
 		else if(replyVO.getBoardType().equals("N004")){
 			freeMapper.updateReplyCnt(2, Integer.valueOf(replyVO.getBoardNo()));
 		
+		}
+		else if(replyVO.getBoardType().equals("N003")){
+			noticeBoardMapper.updateReplyCnt(2, Integer.valueOf(replyVO.getBoardNo()));
+			
 		}
 		return ret;
 	}

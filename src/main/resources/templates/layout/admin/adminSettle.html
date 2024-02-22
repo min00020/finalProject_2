@@ -224,45 +224,30 @@
                 <span class="sr-only">Previous</span>
             </a>
             </th:block>
-        	<th:block th:if="${processStatus == '1'}">
-        		<a class="page-link" th:href="|/adminSettle?processStatus=1&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+        	<th:block th:unless="${processStatus == null}">
+        		<a class="page-link" th:href="|/adminSettle?processStatus=${processStatus}&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
-        	</th:block>
-        	<th:block th:if="${processStatus == '0'}">
-        		<a class="page-link" th:href="|/adminSettle?processStatus=0&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        	</th:block>
+            </th:block>
         </li>
         <li th:class="${pageNo == pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(pageDTO.startPage, pageDTO.endPage)}">
         	<th:block th:if="${processStatus == null}">
         		<a class="page-link" th:href="|/adminSettle?pageNo=${pageNo}|">[[${pageNo}]]</a>
         	</th:block>
-        	<th:block th:if="${processStatus == '1'}">
-        		<a class="page-link" th:href="|/adminSettle?processStatus=1&pageNo=${pageNo}|">[[${pageNo}]]</a>
-        	</th:block>
-        	<th:block th:if="${processStatus == '0'}">
-        		<a class="page-link" th:href="|/adminSettle?processStatus=0&pageNo=${pageNo}|">[[${pageNo}]]</a>
+        	<th:block th:unless="${processStatus == null}">
+        		<a class="page-link" th:href="|/adminSettle?processStatus=${processStatus}&pageNo=${pageNo}|">[[${pageNo}]]</a>
         	</th:block>
         </li>
         <li class="page-item">
-        	<th:block th:if="${processStatuss == null}">
+        	<th:block th:if="${processStatus == null}">
             <a class="page-link" th:href="|/adminSettle?pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>
             </th:block>
-        	<th:block th:if="${processStatus == '1'}">
-            <a class="page-link" th:href="|/adminSettle?processStatus=1&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-            </th:block>
-        	<th:block th:if="${processStatus == '0'}">
-            <a class="page-link" th:href="|/adminSettle?processStatus=0&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+        	<th:block th:unless="${processStatus == null}">
+            <a class="page-link" th:href="|/adminSettle?processStatus=${processStatus}&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>
@@ -333,8 +318,10 @@ function settleOn(settlementNo, settlementReqPoint, sendAll){
 	})
 	.done(res =>{
 		console.log(res);
-		let url = '';
-		let settleUpdateObj = {};
+		let url = '/updateSettlementStatus';
+		let settleUpdateObj = {
+			settlementNo : settlementNo
+		};
 		
 		settleUpdateObj[csrfPara] = csrfToken;
 		
