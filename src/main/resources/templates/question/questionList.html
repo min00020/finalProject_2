@@ -22,25 +22,25 @@
 		               <tr>
 		                  <td>
 			                  <span class="QNAtag"># spring</span>
-			                  <span class="QNAno">300</span>
+			                  <span class="QNAno">125</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
 			                  <span class="QNAtag"># springboot</span>
-			                  <span class="QNAno">200</span>
+			                  <span class="QNAno">102</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
 			                  <span class="QNAtag"># java</span>
-			                  <span class="QNAno">90</span>
+			                  <span class="QNAno">95</span>
 		                  </td>
 		               </tr>
 		               <tr>
 		                  <td>
 			                  <span class="QNAtag"># node.js</span>
-			                  <span class="QNAno">50</span>
+			                  <span class="QNAno">52</span>
 		                  </td>
 		               </tr>
 		               <tr>
@@ -53,7 +53,7 @@
 	            </section>
 				
 				<section class = "QNArank">
-					<h5>실시간 랭킹 <span class="QNAmore"> +더보기</span></h5>
+					<h5>활동점수 랭킹 <span class="QNAmore"> +더보기</span></h5>
 		            <hr>
 		            <table class="QNAsidemenu">
 		               <tr>
@@ -98,11 +98,11 @@
 			<div>
 				<div class="btn-group">
 					  <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-					    추천순
+					    최신순
 					  </button>
 					  <ul class="dropdown-menu">
-					    <li><a class="dropdown-item" href="#">추천순</a></li>
 					    <li><a class="dropdown-item" href="#">최신순</a></li>
+					    <li><a class="dropdown-item" href="#">추천순</a></li>
 					    <li><a class="dropdown-item" href="#">답변순</a></li>
 					    <li><a class="dropdown-item" href="#">조회순</a></li>
 					  </ul>
@@ -128,14 +128,15 @@
 						<!-- <p th:text="${question.nickname}">cookie123</p> --> 
 						<span>
 							<span th:text="${question.nickname}">cookie123</span> 
-							<span style="font-size: small;"><img id="thunder" src="/commonResource/thunder.png" alt="acti">3500점 </span>
+							<span style="font-size: small;"><img id="thunder" th:text="${question.accumActivityPoint}" src="/commonResource/thunder.png" alt="acti"></span>
 						</span>
 						
 					</div>
 				  	<div id="titleTag">
 					    <h4 th:text="${question.title}" th:onclick="|location.href='/questionInfo/${question.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
 					    <p style="color:blue; margin-bottom:0;" th:text="${question.tag}">#node.js #mysql</p>
-						<span class= "park_dot" style="margin:0;" th:text="${question.writeDate}" >2024.01.01</span>
+						<span class= "park_dot" style="margin:0;" th:text="${#dates.format(question.writeDate, 'yyyy.MM.dd')}" >2024.01.01</span>
+						
 				 	</div>
 				 	
 						
