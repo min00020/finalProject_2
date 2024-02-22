@@ -376,7 +376,7 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 		emailBodyBuilder.append("<p>비밀번호 변경을 원하시면 아래 링크를 통해 변경하실 수 있습니다.</p>");
 		emailBodyBuilder.append("<p>(비밀번호 변경 링크의 유효시간은 10분입니다.)</p>");
 		emailBodyBuilder.append("<div style='margin-top:20px;'>");
-		emailBodyBuilder.append("<a href='http://localhost/changePassword?key=" + randomAccessKey
+		emailBodyBuilder.append("<a href='http://askcode.shop/changePassword?key=" + randomAccessKey
 				+ "' style='background-color:#3e6ce3; color:white; padding-left:50px; padding-right:50px; padding-top:10px; padding-bottom:10px;'"
 				+ ">비밀번호 변경하기 ></a>");
 		emailBodyBuilder.append("</div>");
