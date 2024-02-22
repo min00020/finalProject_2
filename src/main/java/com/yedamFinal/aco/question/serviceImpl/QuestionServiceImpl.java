@@ -77,19 +77,20 @@ public class QuestionServiceImpl implements QuestionService{
 	public Map<Integer, List<QuestionVO>> getQuestionInfo(int qno, Model model, int memberNo) {
 		//조회수 +1
 		questionMapper.updateQuestionViewCnt(qno);
+		
+		//북마크 조회
+				MybookmarkVO bookmarkvo= questionMapper.questionBookmarkInfo(memberNo, qno);
+				
+				if(bookmarkvo == null || bookmarkvo.getTitle() == null) {
+					model.addAttribute("isCheckBookmark", 0);
+				}
+				else {
+					model.addAttribute("isCheckBookmark", 1);
+				}
+				
 		List<QuestionVO> result = questionMapper.getQuestionInfo(qno);
 		Map<Integer, List<QuestionVO>> questionMap 
 			= result.stream().collect(Collectors.groupingBy(QuestionVO::getAnswerBoardNo));
-		
-		//북마크 조회
-		MybookmarkVO bookmarkvo= questionMapper.questionBookmarkInfo(memberNo, qno);
-		
-		if(bookmarkvo == null || bookmarkvo.getTitle() == null) {
-			model.addAttribute("isCheckBookmark", 0);
-		}
-		else {
-			model.addAttribute("isCheckBookmark", 1);
-		}
 		
 		//번호 boardNo 기준 > 0부터 시작하게 변경
 		Map<Integer, List<QuestionVO>> ret = new HashMap<Integer, List<QuestionVO>>();
