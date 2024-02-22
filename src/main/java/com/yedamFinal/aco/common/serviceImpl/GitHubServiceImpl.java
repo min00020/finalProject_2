@@ -73,7 +73,7 @@ public class GitHubServiceImpl implements GitHubService {
 		reqBodyContent.put("client_id", gitClientId);
 		reqBodyContent.put("client_secret", gitClientSecretId);
 		reqBodyContent.put("code", tempGitCode);
-		reqBodyContent.put("redirect_uri", "http://localhost/gitLinkPage"); // 이거 나중에 고쳐야함.
+		reqBodyContent.put("redirect_uri", "http://askcode.shop/gitLinkPage"); // 이거 나중에 고쳐야함.
 		
 		// TODO Auto-generated method stub
 		String apiUrl = "https://github.com/login/oauth/access_token";
@@ -145,5 +145,18 @@ public class GitHubServiceImpl implements GitHubService {
 				map.put("result", "500");
 			}
 			return map;
+	}
+
+	@Override
+	public boolean checkExpireGitAccessToken(String accessToken) {
+		// TODO Auto-generated method stub
+		try {
+			GitHub github = new GitHubBuilder().withOAuthToken(accessToken).build();
+			github.getMyself();
+		}
+		catch(Exception e) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -170,11 +170,11 @@
 												</div>
 												<div class="modal-body">
 													<div class="d-flex" style="hegiht:600px;">
-														<div class="activity-image" style="width:350px;hegiht:700px;padding-left:30px;margin-top:-20px;">
-															<img th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|" style="width:250px;margin-top:20px;padding:left:50px;">
-															<h4 style="text-align:center;font-weight:bold;">내 등급</h4>
+														<div class="activity-image" style="width:350px;hegiht:700px;padding-left:100px;margin-top:-20px;">
+															<img th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|" style="width:210px;margin-top:20px;margin-left:20px;padding-top: 30px;">
+															<h4 style="text-align:center;font-weight:bold;padding-top:20px;">내 등급</h4>
 														</div>
-														<div class="grade" style="hegiht:700px;padding-left:80px;margin-top: -20px;">
+														<div class="grade" style="hegiht:700px;padding-left:150px;margin-top: -20px;">
 															<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
 																<div class="grade">
 																	<div class="gradeinfo" style="float:left;">
@@ -233,17 +233,16 @@
 													<div id="activityList">
 															<div>
 																<h4 class="tae-h4-3">내 활동 내역</h4><hr>
-																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
-																		<li class="activity1" th:each="acp:${activityList}">
-																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증가되었습니다.|"></span>
-																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
-																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
-																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점  |"></span>
-																		<br>
-																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
-																		<hr>
+																	<ul id="accumList2" class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity2" th:each="acp:${activityList}">
+																			<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증가되었습니다.|"></span>
+																			<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.|"></span>
+																			<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
+																			<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점|"></span>
+																			<br>
+																			<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
+																			<hr>
 																		</li>
-																		
 																	</ul>
 																
 															</div>
@@ -481,7 +480,7 @@
 						<div class="card" style="box-shadow: 9px 6px 10px 1px #d5d8df;border-radius:30px;width:285px;height:230px;margin-top:30px;margin-left:20px;"th:each="side:${sideList}">
 							<div class="card-body" id="card-1">
 								<ul class="tab-ul-2">
-									<li>
+									<li style="margin-top: -10px;">
 										<p style="font-size:15px;color:#979da9;">프로젝트명 | [[${side.title}]]</p>
 										<br>
 											<h6 style="padding-bottom: 80px;height:10px;text-align:center;font-weight:bold;overflow:hidden;text-overflow:ellipsis;
@@ -964,6 +963,21 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 				const accumList = $('#accumList');
 				accumList.prepend(liString);
 				
+				const liString2 = `
+									<li class="activity2">
+										<span style="font-weight:bold;font-size:large;">포인트 전환으로 인하여 활동점수가 차감되었습니다.</span>
+										<span class="decrease-point">- ${commaIncDecPoint}점</span>
+										<br>
+										<span class="tae_date">${toDate}</span>
+										<hr>
+									</li>`;
+					
+				$('#activityMypage').val('');
+				
+				const accumList2 = $('#accumList2');
+				accumList2.prepend(liString2);
+				$('#accumPointMypage').val('');
+				
 				$('#pointMypage').text(commaTotalPoint);
 				$('#totalPointMypage').text(commaTotalPoint);
 				$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
@@ -1055,7 +1069,7 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 				const liString = `
 									<li class="activity1">
 										<span style="font-weight:bold;font-size:large;">정산 요청</span>
-										<span class="decrease-point">-${accPoint}P</span>
+										<span class="decrease-point">- ${accPoint}P</span>
 										<br>
 										<span class="tae_date">${toDate}</span>
 										<hr>
@@ -1066,6 +1080,8 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 				
 				const accumList = $('#accumList');
 				accumList.prepend(liString);
+				
+				$('#accumPointMypage').val('');
 				
 				$('#pointMypage').text(commaTotalPoint);
 				$('#totalPointMypage').text(commaTotalPoint);

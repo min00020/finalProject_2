@@ -135,7 +135,12 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">신고관리</h1>
-              			<div class="dropdown" style="text-align: right">
+              			
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <div class="dropdown" style="text-align: right">
+                            <h6 class="m-0 font-weight-bold text-primary" style="float: left;">신고내역</h6>
 						  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 						    처리상태
 						  </button>
@@ -146,10 +151,6 @@
 						    <li><a class="dropdown-item" th:onclick="|location.href='/adminReport?reportStatus=B003&pageNo=1'|">반려</a></li>
 						  </ul>
 						</div>
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">신고내역</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -163,7 +164,7 @@
                                             <th>신고댓글</th>
                                             <th>신고일</th>
                                             <th>처리상태</th>
-                                            <th></th>
+                                            <th style="width: 115px"></th>
                                         </tr>
                                     </thead>
                                    
@@ -174,7 +175,7 @@
                                             <td th:text="도배" th:if="${reports.reportType == 'A002'}"></td>
                                             <td th:text="불법정보" th:if="${reports.reportType == 'A003'}"></td>
                                             <td th:text="욕설" th:if="${reports.reportType == 'A004'}"></td>
-                                            <td th:text="개인정보 노출" th:if="${reports.reportType == 'A005'}"></td>
+                                            <td th:text="개인정보노출" th:if="${reports.reportType == 'A005'}"></td>
                                             <td th:text="기타" th:if="${reports.reportType == 'A006'}"></td>
                                             <td th:text="${reports.reportContent}"></td>
                                             <td th:text="${reports.reporteeName}"></td>
@@ -316,7 +317,7 @@ function updateReportI(reportNo, reportee){
 					  confirmButtonText: "확인",
 					}).then((result) => {
 					  if (result.value != null) {
-						  window.location.href = "/adminReport?pageNo=1";
+						  window.location.href = "/adminReport?reportStatus=B002&pageNo=1";
 					  }
 					});	
 		}else{
@@ -346,7 +347,7 @@ function updateReportB(reportNo){
 					  confirmButtonText: "확인",
 					}).then((result) => {
 					  if (result.value != null) {
-						  window.location.href = "/adminReport?pageNo=1";
+						  window.location.href = "/adminReport?reportStatus=B003&pageNo=1";
 					  }
 					});	
 		}else{

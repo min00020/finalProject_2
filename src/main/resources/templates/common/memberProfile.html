@@ -6,7 +6,7 @@
 	style="margin:0 auto;"	  
 >	
 
-	<div class="min-rounded p-4" style="border: 1px solid hsla(220,9%,46%,.3); width:1200px;">
+	<div class="min-rounded p-4" style="border: 1px solid hsla(220,9%,46%,.3); width:1100px;">
 		<div class="d-flex justify-content-between px-5">
 			<div>
 				<div class="qna_box3">
@@ -14,7 +14,7 @@
 					<img class="qna_profile" th:unless="${member.profileImage} == null" th:src="|/upload/profile/${member.profileImage}|" />
 				</div>
 				<div class="d-flex gap-4">
-					<h2 class="ms-3 mt-3">[[${member.nickname}]]</h2>
+					<h3 class="ms-3 mt-3">[[${member.nickname}]]</h3>
 					<button type="button" class="text-white btn mt-3" style="background-color:#80a9e8; height:40px; width:400px; visibility:hidden;">팔로우</button>
 				</div>
 				<div class="d-flex ps-2 pt-1">
@@ -32,36 +32,37 @@
 					</div>
 				</div>
 			</div>
-			<div class="pt-3">
-				<div class="d-flex gap-5">
-					<h4 style="color:#BDBDBD">전체답변</h4>
-					<h4 style="color:#BDBDBD">채택답변</h4>
-					<h4 style="color:#BDBDBD">채택률</h4>
-				</div>
-				<div class="d-flex gap-5 justify-content-between pt-2">
-					<h5 style="color:#3e6ce3" class="ms-4"><b>[[${mapResult.stat?.allCnt}]]건</b></h5>
-					<h5 style="color:#3e6ce3" class="ms-2"><b>[[${mapResult.stat?.adoptCnt}]]건</b></h5>
-					<h5 style="color:#3e6ce3" class="me-1"><b>[[${mapResult.stat?.percent}]]%</b></h5>
-				</div>
+			<div class="col-1" style="text-align:center; margin:auto;">
+			 	<h6>전체답변</h6>
+			 	<h5 style="color:#3e6ce3; font-weight:bold;">[[${mapResult.stat?.allCnt}]]건</h5>
+			</div>
+			<div class="col-1" style="text-align:center; margin:auto;">
+			 	<h6>채택답변</h6>
+			 	<h5 style="color:#3e6ce3; font-weight:bold;">[[${mapResult.stat?.adoptCnt}]]건</h5>  
+			</div>
+			<div class="col-1" style="text-align:center; margin:auto;">
+			 	<h6>채택률</h6>
+			 	<h5 style="color:#3e6ce3; font-weight:bold;">[[${mapResult.stat?.percent}]]%</h5>
 			</div>
 		</div>
 	</div>
 	
 	<div class="mt-5">
-		<a th:if="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>질문</b></a>
-		<a th:unless="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">질문</a>
-		<a th:if="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>답변</b></a>
-		<a th:unless="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">답변</a>
-		<a th:if="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:30px;"><b>사이드 프로젝트</b></a>
-		<a th:unless="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:black; font-size:30px;">사이드 프로젝트</a>
+		<a th:if="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:25px; font-weight: bolder;"><b>질문</b></a>
+		<a th:unless="${tp} == null" th:href="|/member/${member.memberNo}?pg=1|" class="ms-5" style="text-decoration:none; color:black; font-size:25px; font-weight: bolder;">질문</a>
+		<a th:if="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:25px; font-weight: bolder;"><b>답변</b></a>
+		<a th:unless="${tp} == '1'" th:href="|/member/${member.memberNo}?pg=1&tp=1|" class="ms-5" style="text-decoration:none; color:black; font-size:25px; font-weight: bolder;">답변</a>
+		<a th:if="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:#3e6ce3; font-size:25px; font-weight: bolder;"><b>사이드 프로젝트</b></a>
+		<a th:unless="${tp} == '2'" th:href="|/member/${member.memberNo}?pg=1&tp=2|" class="ms-5" style="text-decoration:none; color:black; font-size:25px; font-weight: bolder;">사이드 프로젝트</a>
 		<hr>
 	</div>
 	<div>
 		<!--/* 질문 리스트 */-->
 		<!-- img에 th:onclick="|location.href='/member/회원번호'|" 꼭달아야함. -->
 		<th:block th:if="${mapResult.questionList} != null">
-			<div id="questionList"  class="row" th:each="question : ${mapResult.questionList}">
-				<div id="title" class="col-8">
+			<br>
+			<div id="profileList"  class="row" th:each="question : ${mapResult.questionList}">
+				<div id="title" class="col-9">
 					<div id="member" style="height:40px;">
 						<div class="qna_box">
 						    <img th:if="${question.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|">
@@ -77,6 +78,10 @@
 				<div class="col-1" style="text-align:center; margin:auto;">
 				 	<h6 th:text="${question.viewCnt}">2</h6>
 				 	<h6>조회</h6>
+				</div>
+				<div class="col-1" style="text-align:center; margin:auto;">
+				 	<h6 th:text="${question.bookmarkCnt}">5</h6>
+				 	<h6>북마크</h6>  
 				</div>
 				<div id="answercnt" class="col-1" style="text-align:center; margin:auto;">
 				 	<h6 class="QNAcnt" th:text="${question.answerCnt}">10</h6>
@@ -110,9 +115,10 @@
 		</th:block>
 		
 		<!--/* 답변 리스트 */-->
+		<br>
 		<th:block th:if="${mapResult.answerList} != null">
-			<div id="questionList"  class="row" th:each="answer : ${mapResult.answerList}">
-				<div id="title" class="col-8">
+			<div id="profileList" class="row" th:each="answer : ${mapResult.answerList}">
+				<div id="title" class="col-9">
 					<div id="member" style="height:40px;">
 						<div class="qna_box">
 						    <img th:if="${answer.profileImage} == null" class="qna_profile" src="/commonResource/default_profile.jpg" alt="profile" th:onclick="|location.href='/member/${answer.memberNo}?pg=1'|">
@@ -159,7 +165,7 @@
 		</th:block>
 	
 		<th:block th:if="${mapResult.sideList} != null">
-			<div class="recList_1 clearfix" style="width:1200px;" th:each="rec:${mapResult.sideList}">
+			<div class="recList_1 clearfix" th:each="rec:${mapResult.sideList}" >
 				<h6 th:if="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#009630">모집중</h6>
 				<h6 th:unless="${rec.publishingStatus} == 'Q001'" style="padding-left:5px;font-weight:bold;color:#0C5FEC">협업중</h6>
 				<div class="qna_box">

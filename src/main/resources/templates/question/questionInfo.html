@@ -62,7 +62,7 @@
 					<div class="qna_box2">
 					   <img class="qna_profile" th:src="|/upload/profile/${questionInfo[0][0].profileImage}|" alt="profile">
 					</div>
-					<p class="m-0" th:text="${questionInfo[0][0].id}">cookie123</p>
+					<p class="m-0" th:text="${questionInfo[0][0].nickname}">cookie123</p>
 					<p class="m-0" th:text="${questionInfo[0][0].memberLevel}">silver</p>
 				</div>
 				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
@@ -146,9 +146,6 @@
 			                        		<div class="modal-content">
 			                           			<div class="modal-header">
 			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
-			                              			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-			                                 			<span aria-hidden="true">&times;</span>
-			                              			</button>
 			                           			</div>
 			                           			<div class="modal-body">
 			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
@@ -162,7 +159,7 @@
 															<tr>
 																<th>신고종류</th>
 																<td>
-																	<select name="reportType" id="reportType">
+																	<select name="reportType" id="reportType" style="margin-left:10px; width: 380px;">
 													  					<option th:value="null">--신고종류를 선택해주세요--</option>
 													  					<option th:value="A001">홍보</option>
 													  					<option th:value="A002">도배</option>
@@ -175,7 +172,7 @@
 															</tr>
 															<tr>
 																<th>신고사유</th>
-																<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+																<td><textarea name="reportContent" id="reportContent" style="margin-left:10px; width: 380px; height: 211px"></textarea></td>	
 															</tr>
 														</table>
 													</div>
@@ -364,7 +361,7 @@
 	                     <div class="qna_box2">
 	                        <img class="qna_profile" th:src="|/upload/profile/${AdoptQuestionVO.answerProfileImage}|" alt="profile">
 	                     </div>
-	                     <p class="m-0" th:text="${AdoptQuestionVO.answerId}">cookie123</p>
+	                     <p class="m-0" th:text="${AdoptQuestionVO.answerNickname}">cookie123</p>
 	                     <p class="m-0" th:text="${AdoptQuestionVO.answerMemberLevel}">silver</p>
 	                  </div>
 	                  <!-- 조회, 북마크, 추천, 덧글수 버튼 -->
@@ -523,7 +520,7 @@
 								<img class="qna_profile" th:if="${question.answerProfileImage} == null" th:src="|/commonResource/default_profile.jpg|" alt="profile">
 							  	<img class="qna_profile" th:unless="${question.answerProfileImage} == null" th:src="|/upload/profile/${question.answerProfileImage}|" alt="profile">
 							</div>
-							<p class="m-0" th:text="${question.answerId}">cookie123</p>
+							<p class="m-0" th:text="${question.answerNickname}">cookie123</p>
 							<p class="m-0" th:text="${question.answerMemberLevel}">silver</p>
 						</div>
 						<!-- 추천 버튼 -->
@@ -593,7 +590,6 @@
 			processData : false 	
 		})
 		.done(res => {
-			/* showSuccessAlert('등록성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -619,7 +615,6 @@
 			processData : false 	
 		})
 		.done(res => {
-			/* showSuccessAlert('수정성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -644,7 +639,6 @@
 			processData : false 	
 		})
 		.done(res => {
-			/* showSuccessAlert('채택성공'); */
 	    	window.location.href = "/questionInfo/"+ bno;
 			console.log(res);
 	    })
@@ -654,19 +648,17 @@
 	    })
 		
 	}
-	//댓글 폼 모달
+	
 	$("#replyBtn").click(function(e) {
 		$("#replyModal").slideToggle();	
 	}) 
 	
-	//추가질문폼 모달
  	$("#addQuestionBtn").click(function(e) {
 		$("#qnaAddModal").slideToggle();	
 	}) 
 	
 	//추가질문답변 작성
 	function sendAddAnswer(ano, answerWriter){
-		//추가질문답변 작성자 타입
 		//세션멤버 = 질문작성자 => J001 / 세션멤버 = 채택답변작성자 => J002
 		const member = [[${session.member}]];
 		if(member == null){
@@ -712,8 +704,6 @@
 	}
  	//추가질문답변 채택
  	function adoptAddAnswer(questionAddNo){
- 		console.log("test");
- 		console.log(questionAddNo);
 		const formData = new FormData();
 	
 		formData.append(csrfPara, csrfToken);
@@ -789,48 +779,50 @@
 <!-- text editor -->
 <script>
 const imageNoArray = [];
+let editor = null;
+$(document).ready(function(){
+	editor = new toastui.Editor({
+	    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
+	    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+	    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+	    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+	    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
+	    /* start of hooks */
+	    hooks: {
+	        async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+	            try {
+	                //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+	                const formData = new FormData();
+	                formData.append(csrfPara, csrfToken);
+	                formData.append('image', blob);
 
-const editor = new toastui.Editor({
-    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
-    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
-    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
-    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
-    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
-    /* start of hooks */
-    hooks: {
-        async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
-            try {
-                //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
-                const formData = new FormData();
-                formData.append(csrfPara, csrfToken);
-                formData.append('image', blob);
+	                // 2. FileApiController - uploadEditorImage 메서드 호출
+	                const response = await fetch('/texteditorimage', {
+	                    method : 'POST',
+	                    body : formData,
+	                });
 
-                // 2. FileApiController - uploadEditorImage 메서드 호출
-                const response = await fetch('/texteditorimage', {
-                    method : 'POST',
-                    body : formData,
-                });
+	                // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+	                const res = await response.json();
+	                console.log('서버에 저장된 파일명 : ', res);
 
-                // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
-                const res = await response.json();
-                console.log('서버에 저장된 파일명 : ', res);
+	                // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+	                const imageUrl = res.imageUrl;
+	                imageNoArray.push(res.imageNo);
+	                callback(imageUrl, 'image alt attribute');
 
-                // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
-                const imageUrl = res.imageUrl;
-                imageNoArray.push(res.imageNo);
-                callback(imageUrl, 'image alt attribute');
+	            } catch (error) {
+	                console.error('업로드 실패 : ', error);
+	            }
+	        }
+	    }
+	    /* end of hooks */
+	});
+})
 
-            } catch (error) {
-                console.error('업로드 실패 : ', error);
-            }
-        }
-    }
-    /* end of hooks */
-});
 
 </script>
 
-<!--/* 댓글 복사할 스크립트 태그 */-->
 <script th:inline="javascript">
 	const member = [[${session.member}]];
 	const memberNo = [[${session.member?.memberNo}]];
@@ -1063,6 +1055,10 @@ const editor = new toastui.Editor({
 	}
 	
 	function insertReport(replyNo){
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
 		const formData = new FormData($('#' + replyNo)[0]);
 		
 		$.ajax('/insertReport', {
@@ -1075,8 +1071,17 @@ const editor = new toastui.Editor({
 			},
 		})
 		.done(res => {
-			showSuccessAlert("해당 댓글이 신고되었습니다.");
-			document.location.href = document.location.href;
+				Swal.fire({
+					  title: "해당 댓글이 신고되었습니다.",
+					  text: '',
+					  icon: 'success',
+					  confirmButtonClass: "btn-danger",
+					  confirmButtonText: "확인",
+					}).then((result) => {
+					  if (result.value != null) {
+						  window.location.href = document.location.href;
+					  }
+					});	
 		})
 		.fail(err => {
 			showFailAlert("실패. 다시시도해주세요.");
@@ -1084,4 +1089,3 @@ const editor = new toastui.Editor({
 		})
 	}
 </script>
-<!--/* 댓글 복사할 스크립트 태그 */-->
