@@ -11,7 +11,7 @@
 						<!-- 프사 -->
 						<div class="box-1">
 							<th:block th:if="${memberInfo.profileImage} == null">
-								<img class="tae-profile-1" th:src="commonResource/default_profile.jpg"
+								<img class="tae-profile-1  mx-auto d-block" th:src="|commonResource/default_profile.jpg|"
 									 alt="profile">
 							</th:block>
 							<th:block th:unless="${memberInfo.profileImage} == null">
