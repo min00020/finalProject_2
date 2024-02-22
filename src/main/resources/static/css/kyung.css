@@ -1,5 +1,24 @@
 @charset "UTF-8";
 
+
+
+.park_sidebanner {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 20px;
+  height: 200px; /* 사이드 배너의 높이 */
+  width: 200px; /* 사이드 배너의 너비 */
+ 
+}
+.park_sidebanner2 {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 20px;
+  height: 200px; /* 사이드 배너의 높이 */
+  width: 200px; /* 사이드 배너의 너비 */
+ 
+}
+
 * {
 	font-family: 'Noto Sans KR', sans-serif;
 	/* 	font-family: 'Gowun Dodum', sans-serif; */
@@ -21,7 +40,7 @@ body.dark-mode footer p {
 }
 
 body.dark-mode .text-muted {
-	color: #fff; /* 흰색으로 변경하거나 다른 원하는 색상으로 지정하세요 */
+	color: #fff; 
 }
 
 body.dark-mode {
@@ -81,6 +100,7 @@ body.light-mode {
 }
 
 .park_login-button {
+	background-color:#fff;
 	color: #808080;
 	border : 0.5px solid black;
 	border-color : hsla(220,9%,46%,.3);
@@ -145,6 +165,14 @@ header {
 .dark-mode .park_searchInput {
 	background-color: #BDBDBD;
 	color: #fff;
+}
+.dark-mode .park_login-button{
+	background-color: #BDBDBD;
+	color:#fff;
+	
+}
+.dark-mode input::placeholder {
+  color: #fff;
 }
 
 .park_navbar li:hover {
@@ -290,7 +318,7 @@ header {
 
 .park_title {
 	font-weight: 600;
-	margin-left : 20px;
+/* 	margin-left : 20px; */
 }
 
 .park_S {
@@ -552,6 +580,44 @@ justify-content: center;
 	outline: none;
 	border-color: #3e6ce3;
 	box-shadow: 0 0 5px rgba(62, 108, 227, 0.5);
+}
+
+.coin {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  background-image: url('/commonResource/coin.png'); /* 동전 이미지 경로 */
+  background-size: cover;
+  z-index: 1000;
+}
+
+@keyframes scatter {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(500px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-coin {
+  animation: scatter 3s ease-out forwards;
+}
+
+@keyframes scatter-1 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(100px, 400px) rotate(720deg); opacity: 0; }
+}
+
+@keyframes scatter-2 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-100px, 400px) rotate(-720deg); opacity: 0; }
+}
+
+@keyframes scatter-3 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(0px, 500px) rotate(360deg); opacity: 0; }
 }
 
 /*pointChargingCss End*/

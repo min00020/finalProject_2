@@ -28,6 +28,7 @@ public class QuestionVO {
 	private String profileImage;
 	private String memberLevel;
 	private String nickname;
+	private String accumActivityPoint;
 	
 	private String answerId;
 	private String answerNickname;
