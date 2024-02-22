@@ -1,6 +1,7 @@
 package com.yedamFinal.aco.noticeboard.service.Impl;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -8,26 +9,21 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.yedamFinal.aco.admin.AdminMainVO;
-import com.yedamFinal.aco.admin.mapper.AdminMapper;
 import com.yedamFinal.aco.common.PaginationDTO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
-import com.yedamFinal.aco.common.serviceImpl.FileServiceImpl;
-import com.yedamFinal.aco.common.serviceImpl.ReplyServiceImpl;
-import com.yedamFinal.aco.member.MemberVO;
+import com.yedamFinal.aco.common.mapper.ReplyMapper;
 import com.yedamFinal.aco.noticeboard.NoticeBoardVO;
 import com.yedamFinal.aco.noticeboard.mapper.NoticeBoardMapper;
 import com.yedamFinal.aco.noticeboard.service.NoticeBoardService;
-import com.yedamFinal.aco.qnaBoard.QnABoardVO;
-import com.yedamFinal.aco.qnaBoard.mapper.QnABoardMapper;
-import com.yedamFinal.aco.qnaBoard.service.QnABoardService;
 
 @Service
 public class NoticeBoardServiceImpl implements NoticeBoardService {
 	@Autowired
 	NoticeBoardMapper noticeBoardMapper;
+	
+	@Autowired
+	private ReplyMapper replyMapper;
 	
 	@Override
 	public  Map<String,Object> getAdNoticeList(int pageNo) {
@@ -44,8 +40,21 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 	}
 
 	@Override
-	public NoticeBoardVO getNoticeInfo(NoticeBoardVO noticeBoardVO) {
+	public NoticeBoardVO getNoticeInfo(NoticeBoardVO noticeBoardVO, Model model) {
 		noticeBoardMapper.plusViewCnt(noticeBoardVO.getNoticeBoardNo());
+		int nBoardNo = noticeBoardVO.getNoticeBoardNo();
+		List<ReplyJoinVO> list = replyMapper.selectReply("N003", nBoardNo);
+		Map<Integer, List<ReplyJoinVO>> groupByData = list.stream().collect(Collectors.groupingBy(ReplyJoinVO::getParentReplyNo));
+		groupByData = groupByData.entrySet().stream()
+		        .sorted(Map.Entry.comparingByKey())
+		        .collect(Collectors.toMap(
+		                Map.Entry::getKey,
+		                Map.Entry::getValue,
+		                (a, b) -> { throw new AssertionError(); },
+		                LinkedHashMap::new
+		        ));
+
+		model.addAttribute("replyList", groupByData);
 		return noticeBoardMapper.getNoticeInfo(noticeBoardVO);
 	}
 

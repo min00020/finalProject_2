@@ -42,7 +42,7 @@ public class NoticeBoardController {
 	 */
 	@GetMapping("/noticeInfo")
 	public String getNoticeInfo(NoticeBoardVO noticeBoardVO, Model model) {
-		NoticeBoardVO noticeInfo = noticeBoardService.getNoticeInfo(noticeBoardVO);
+		NoticeBoardVO noticeInfo = noticeBoardService.getNoticeInfo(noticeBoardVO, model);
 		model.addAttribute("noticeInfo", noticeInfo);
 		return "notice/noticeInfo";
 	}
