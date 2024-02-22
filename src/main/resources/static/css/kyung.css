@@ -40,7 +40,7 @@ body.dark-mode footer p {
 }
 
 body.dark-mode .text-muted {
-	color: #fff; /* 흰색으로 변경하거나 다른 원하는 색상으로 지정하세요 */
+	color: #fff; 
 }
 
 body.dark-mode {
@@ -100,6 +100,7 @@ body.light-mode {
 }
 
 .park_login-button {
+	background-color:#fff;
 	color: #808080;
 	border : 0.5px solid black;
 	border-color : hsla(220,9%,46%,.3);
@@ -164,6 +165,14 @@ header {
 .dark-mode .park_searchInput {
 	background-color: #BDBDBD;
 	color: #fff;
+}
+.dark-mode .park_login-button{
+	background-color: #BDBDBD;
+	color:#fff;
+	
+}
+.dark-mode input::placeholder {
+  color: #fff;
 }
 
 .park_navbar li:hover {

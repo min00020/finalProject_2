@@ -4,7 +4,7 @@
 	layout:decorate="@{layout/member/mainTemplate.html}"
 	layout:fragment="content"
 >
-<section>
+<section style = "margin-left : 180px;">
 	<div id="qna_banner">
 		<h3>자유게시판</h3>
 		<p style="color:#76767e">일상, 잡담, 유머 등 어떤 주제든 자유롭게 게시글을 작성할 수 있습니다.</p>
@@ -17,9 +17,9 @@
 			<div class="d-flex">
 				<div id="park_member" style="height: 40px;">
 					<span class="park_box_free">
-						<img class="park_profile_free" th:onclick="|location.href='/member/${freeBoardInfo[0].memberNo}'|" th:src="|/upload/profile/${freeBoardInfo[0].profileImage}|" alt="profile">
+						<img class="park_profile_free" th:onclick="|location.href='/member/${freeBoardInfo[0].memberNo}?pg=1'|" th:src="|/upload/profile/${freeBoardInfo[0].profileImage}|" alt="profile">
                     </span>
-                    <span class="park_nickname_free" th:onclick="|location.href='/member/${freeBoardInfo[0].memberNo}'|" style="font-weight : bold;">[[${freeBoardInfo[0].nickname}]]
+                    <span class="park_nickname_free" th:onclick="|location.href='/member/${freeBoardInfo[0].memberNo}?pg=1'|" style="font-weight : bold;">[[${freeBoardInfo[0].nickname}]]
                	</span>
                	<span  style="font-weight :; " class="park_activityPoint_free"> · <img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${freeBoardInfo[0].accumActivityPoint}]]
 								<span th:if="${freeBoardInfo[0].minute < 60}" th:text="' · ' + (${freeBoardInfo[0].minute}) + '분 전'"></span>
@@ -142,10 +142,10 @@
 								<div>
 									<!--/* 프로필이미지가 null이라면 */-->
 									<div class="qna_box">
-										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
-										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}?pg=1'|" />
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}?pg=1'|" />
 									</div>
-									<span>[[${reply.value[0].parentNickname}]]</span>
+									<span class="park_nickname_free" style = "cursor:pointer;"th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}?pg=1'|">[[${reply.value[0].parentNickname}]]</span>
 								</div>
 								<div>
 									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
@@ -311,10 +311,10 @@
 								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
 									<div>
 										<div class="qna_box">
-											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
-											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
+											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}?pg=1'|" />
+											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}?pg=1'|" />
 										</div>
-										<span>[[${innerReply.childNickname}]]</span>
+										<span class="park_nickname_free" th:onclick="|location.href='/member/${innerReply.childMemberNo}?pg=1'|">[[${innerReply.childNickname}]]</span>
 									</div>
 									<div>
 										<small th:text="${#dates.format(innerReply.childWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
@@ -336,7 +336,7 @@
 			                    		   				<input type="hidden" name="reportee" th:value="${innerReply.childMemberNo}">
 			                    		   				<input type="hidden" name="boardNo" th:value="${freeBoardInfo[0].fboardNo}">
 			                    		   				<input type="hidden" name="replyContent" th:value="${innerReply.childComment}">
-			                    		   				<input type="hidden" name="boardType" th:value="N005">
+			                    		   				<input type="hidden" name="boardType" th:value="N004">
 														<div>
 															<table>
 																<tr>
@@ -592,7 +592,7 @@
 			return;
 		}
 		
-		const boardType = 'N005';
+		const boardType = 'N004';
 		// 이모티콘 등록이란 의미.
 		if(typeof emoticonImgName != "undefined") {
 			object = {
