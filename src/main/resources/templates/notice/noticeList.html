@@ -31,12 +31,16 @@
 					</div>
 				  	<div id="titleTag" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|">
 					    <h4 th:text="${notice.title}" style="text-align: left;"></h4>
-					    <p style="color:blue" th:text="${notice.writeDate}"></p>
+					    <p style="color:blue; font-weight: bold;" th:text="${notice.writeDate}"></p>
 				 	</div>
 			 	</div>
 				<div class="col-1" style="text-align:center; margin-bottom:auto; margin-left: auto; margin-top: auto;">
 				 	<h6 th:text="${notice.viewCnt}"></h6>
 				 	<h6>조회</h6>
+				</div>
+				<div class="col-1" style="text-align:center; margin-bottom:auto;  margin-top: auto;">
+				 	<h6 th:text="${notice.recommendCnt}"></h6>
+				 	<h6>댓글</h6>
 				</div>
 				<hr style="margin-top:30px; margin-bottom:30px;">
 			</div>

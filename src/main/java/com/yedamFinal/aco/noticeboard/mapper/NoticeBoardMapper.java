@@ -14,6 +14,8 @@ public interface NoticeBoardMapper {
 	
 	//조회수
 	public int plusViewCnt(int boardNo);
+	//덧글수 +1 -1
+	public int updateReplyCnt(@Param(value="value") int value, @Param(value="noticeBoardNo")  int boardNo);
 	//검색
 	public List<AdminMainVO> searchNoticeBoard(@Param("pageNo") int pageNo, @Param("search") String search);
 	public int searchNoticeBoardCnt(String search);

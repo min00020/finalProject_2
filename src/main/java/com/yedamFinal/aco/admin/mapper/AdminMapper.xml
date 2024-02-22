@@ -279,9 +279,6 @@ SELECT C.*
 
 <!-- 공지등록 --> 
 <insert id="insertNotice">
-		<selectKey keyProperty="noticeBoardNo" order="BEFORE"	resultType="int">
-			select nvl(max(NOTICE_BOARD_NO),0)+1 from NOTICE_BOARD
-		</selectKey>
 		INSERT INTO
 		NOTICE_BOARD (
 					NOTICE_BOARD_NO
@@ -289,13 +286,15 @@ SELECT C.*
 					,TITLE
 					,CONTENT
 					,VIEW_CNT
+					,RECOMMEND_CNT
 					,WRITE_DATE
 		)
 		VALUES (
-					#{noticeBoardNo}
+					NOTICE_BOARD_SEQ.NEXTVAL
 					,50
 					,#{title}
 					,#{content}
+					,0
 					,0
 					,SYSDATE
 		)
