@@ -75,7 +75,6 @@
 	background-color: #aebfec;
 }
 #tae-container-5{
-	height:600px;
 }
 #myTabContent{
 	height: 850px;
@@ -233,6 +232,10 @@ input::placeholder
 	list-style-type: none;
 	margin-bottom: -7px;
 }
+.activity2{
+	list-style-type: none;
+	margin-bottom: -7px;
+}
 .increase-point{
 	font-weight : bold;
 	color: red;
@@ -364,6 +367,11 @@ input::placeholder
 	 width: 55px;
 }
 #accumList{
+     overflow-y: scroll; 
+	 height: 300px; 
+	 overflow-x: hidden;
+}
+#accumList2{
      overflow-y: scroll; 
 	 height: 300px; 
 	 overflow-x: hidden;

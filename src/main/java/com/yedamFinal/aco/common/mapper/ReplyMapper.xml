@@ -52,8 +52,8 @@
                 B.EMOTICON AS child_emoticon,
                 B.DELETE_DATE AS child_delete
     		FROM REPLY A
-    		LEFT JOIN REPLY B ON A.reply_no = B.reply_pno AND A.board_type = #{type}
-    		WHERE A.board_no = #{bno} AND A.reply_pno IS NULL
+    		LEFT JOIN REPLY B ON A.reply_no = B.reply_pno 
+    		WHERE A.board_no = #{bno} AND A.reply_pno IS NULL AND A.board_type = #{type}
     		ORDER BY parent_write_date asc, child_WRITE_date asc
 	</select>
 	
