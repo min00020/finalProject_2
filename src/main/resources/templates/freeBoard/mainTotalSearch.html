@@ -26,9 +26,9 @@
 					<div id="title" class="col-8">
 						<div id="park_member" style="height: 40px;">
 								<span class="park_box_free">
-                          			<img class="park_profile_free" th:onclick="|location.href='/member/${total.memberNo}'|" th:src="|/upload/profile/${total.profileImage}|" alt="profile">
+                          			<img class="park_profile_free" th:onclick="|location.href='/member/${total.memberNo}?pg=1'|" th:src="|/upload/profile/${total.profileImage}|" alt="profile">
                        			</span>
-								<span class="park_nickname_free" th:onclick="|location.href='/member/${total.memberNo}'|" style="font-weight : bold;">[[${total.nickname}]]</span>
+								<span class="park_nickname_free" th:onclick="|location.href='/member/${total.memberNo}?pg=1'|" style="font-weight : bold;">[[${total.nickname}]]</span>
 
 							<span  style="font-weight :; " class="park_activityPoint_free"><span class= "park_dot"> · </span><img id="thunder" src="/commonResource/thunder.png" alt="acti">[[${total.accumActivityPoint}]]
 								<span class= "park_dot" th:if="${total.minute < 60}" th:text="' · ' + (${total.minute}) + '분 전'"></span>
