@@ -25,11 +25,12 @@
 					<div style="width:48%;">
 						<label for="point" style="font-weight:bold;">포인트</label>
 						<span style="margin-left:5px; font-size:12px;">보유 </span>
-						<span th:text="${memberInfo.acoTotal}+'원'" style="font-size:12px;color:#3e6ce3; font-weight:bold;">1000원</span>
+						<span th:text="${#numbers.formatInteger(memberInfo.acoTotal, 3, 'COMMA') + '원'}" style="font-size:12px;color:#3e6ce3; font-weight:bold;">1000원</span>
 						<p style="font-size:14px; margin-bottom:8px;">답변자에게 지급할 포인트 금액을 입력해주세요. </p>
 	                   	<div class="chae_input-container" style="width:100%;">
 						    <input id="point" name="point" type="text" th:field="*{point}" class="chae_form-control" style="color:#3e6ce3;">
-						    <button type="button" class="chae_pointBtn">전액사용</button>
+<!-- 						     <input id="point" name="point" type="text" th:field="*{#numbers.formatInteger(point, 3, 'COMMA') + '원'}" class="chae_form-control" style="color:#3e6ce3;">
+ -->						    <button type="button" id="totalPointBtn" class="chae_pointBtn" onclick="useTotalPoint()">전액사용</button>
 						</div>
 					</div>
 				</div>
@@ -75,121 +76,132 @@
 
 	const imageNoArray = [];
 	
-	const editor = new toastui.Editor({
-	    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
-	    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
-	    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
-	    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
-	    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
-	    /* start of hooks */
-        hooks: {
-            async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
-                try {
-                    //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
-                    const formData = new FormData();
-                    formData.append(csrfPara, csrfToken);
-                    formData.append('image', blob);
+	let editor = null;
+	$(document).ready(function(){
+		editor = new toastui.Editor({
+		    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
+		    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+		    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+		    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+		    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
+		    /* start of hooks */
+	        hooks: {
+	            async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+	                try {
+	                    //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+	                    const formData = new FormData();
+	                    formData.append(csrfPara, csrfToken);
+	                    formData.append('image', blob);
 
-                    // 2. FileApiController - uploadEditorImage 메서드 호출
-                    const response = await fetch('/texteditorimage', {
-                        method : 'POST',
-                        body : formData,
-                    });
+	                    // 2. FileApiController - uploadEditorImage 메서드 호출
+	                    const response = await fetch('/texteditorimage', {
+	                        method : 'POST',
+	                        body : formData,
+	                    });
 
-                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
-                    const res = await response.json();
-                    console.log('서버에 저장된 파일명 : ', res);
+	                    // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+	                    const res = await response.json();
+	                    console.log('서버에 저장된 파일명 : ', res);
 
-                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
-                    const imageUrl = res.imageUrl;
-                    imageNoArray.push(res.imageNo);
-                    callback(imageUrl, 'image alt attribute');
+	                    // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+	                    const imageUrl = res.imageUrl;
+	                    imageNoArray.push(res.imageNo);
+	                    callback(imageUrl, 'image alt attribute');
 
-                } catch (error) {
-                    console.error('업로드 실패 : ', error);
-                }
-            }
-        }
-        /* end of hooks */
-	});
+	                } catch (error) {
+	                    console.error('업로드 실패 : ', error);
+	                }
+	            }
+	        }
+	        /* end of hooks */
+		});
+	})
+	
 
 </script>
 <script th:inline="javascript">
-	const myPoint = [[${memberInfo.acoTotal}]] 
+	const myPoint = [[${memberInfo.acoTotal}]];
+	
 	$("#point").on("change",function(e){
 		console.log(e.target.value);
 		if(e.target.value > myPoint){
 			showWarningAlert('','보유포인트를 확인해주세요');
 		}
 	})
-
-//질문 게시글 작성
-function sendQuestion(){
-	console.log('test',[[${session.member.memberNo}]]);
 	
-	//유효성검사
-	const member = [[${session.member}]];
-	if(member == null){
-			showWarningAlert('로그인을 해주세요');
-			return;
+	function useTotalPoint(){
+		$("#point").attr("value", myPoint);
 	}
 	
-	const formData = new FormData(document.questionWrite);
-	formData.delete('tag');
-	formData.append(csrfPara, csrfToken);
-	formData.append("memberNo", member.memberNo);
-	formData.append("contents", editor.getHTML());
-	formData.append("tag", insertTagList.join(","));
-	
-	$.ajax('/questionWrite', {
-		type : "POST",
-		data : formData,
-		contentType : false,
-		processData : false 	
-	})
-	.done(res => {
-		/*showSuccessAlert('등록성공'); */
-		window.location.href = "/questionInfo/"+ res.bno;
+	//질문 게시글 작성
+	function sendQuestion(){
+		const member = [[${session.member}]];
+		if(member == null){
+			showWarningAlert('로그인을 해주세요');
+			return;
+		}
 		
-		console.log(res);
-    })
-    .fail(err => {
-    	console.log(err);
-    	showWarningAlert('등록실패');
-    })
+		/* 
+		if(editor.getHTML() == '\'<p><br></p>\''){
+			showWarningAlert('내용을 입력해주세요');
+			return;
+		} */
+		
+		const formData = new FormData(document.questionWrite);
+		formData.delete('tag');
+		formData.append(csrfPara, csrfToken);
+		formData.append("memberNo", member.memberNo);
+		formData.append("contents", editor.getHTML());
+		formData.append("tag", insertTagList.join(","));
+		
+		$.ajax('/questionWrite', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+			/*showSuccessAlert('등록성공'); */
+			window.location.href = "/questionInfo/"+ res.bno;
+			
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('등록실패');
+	    })
+	}
 	
-}
-
-//질문 게시글 수정
-function sendQuestionModify(){
-	let bno = [[${questionVO.questionBoardNo}]];
+	//질문 게시글 수정
+	function sendQuestionModify(){
+		let bno = [[${questionVO.questionBoardNo}]];
+		
+		const formData = new FormData(document.questionWrite);
+		formData.delete('tag');
+		formData.append(csrfPara, csrfToken);
+		formData.append("questionBoardNo", bno);
+		formData.append("memberNo", [[${session.member.memberNo}]]);
+		formData.append("contents", editor.getHTML());
+		formData.append("tag", insertTagList.join(","));
+		
+		
+		$.ajax('/questionModify', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+	/* 		showSuccessAlert('수정성공'); */
+			window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('수정실패');
+	    })
 	
-	const formData = new FormData(document.questionWrite);
-	formData.delete('tag');
-	formData.append(csrfPara, csrfToken);
-	formData.append("questionBoardNo", bno);
-	formData.append("memberNo", [[${session.member.memberNo}]]);
-	formData.append("contents", editor.getHTML());
-	formData.append("tag", insertTagList.join(","));
-	
-	
-	$.ajax('/questionModify', {
-		type : "POST",
-		data : formData,
-		contentType : false,
-		processData : false 	
-	})
-	.done(res => {
-/* 		showSuccessAlert('수정성공'); */
-		window.location.href = "/questionInfo/"+ bno;
-		console.log(res);
-    })
-    .fail(err => {
-    	console.log(err);
-    	showWarningAlert('수정실패');
-    })
-
-}
+	}
 
 </script>
 

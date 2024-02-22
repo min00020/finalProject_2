@@ -7,7 +7,7 @@
 <section>
 	<div id="qna_banner">
 		<h3>질문&답변</h3>
-		<p>좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
+		<p style="color:#76767e">좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
 	</div>
 	<!-- start of question -->
 	<div class="container">
@@ -80,9 +80,12 @@
 		<div class="questionBoard" style="width:1100px;">
 			<!-- 상단 선택 메뉴 -->
 			<ul id="qna_topic" class="list-unstyled d-flex gap-3 align-self-center ml-3">
-	             <li onclick="location.href='/questionList/?pageNo=1'">전체</li>
-	             <li onclick="location.href='/questionList/?pageNo=1&topic=H001'">기술</li>
-	             <li onclick="location.href='/questionList/?pageNo=1&topic=H002'">사이드 프로젝트</li>
+	             <li onclick="location.href='/questionList/?pageNo=1'" th:if="${topic} == null" style="text-decoration:none;color:#3e6ce3;">전체</li>
+	             <li onclick="location.href='/questionList/?pageNo=1'" th:unless="${topic} == null" style="text-decoration:none;color:black;">전체</li>
+	             <li onclick="location.href='/questionList/?pageNo=1&topic=H001'" th:if="${topic} == 'H001'" style="text-decoration:none;color:#3e6ce3;">기술</li>
+	             <li onclick="location.href='/questionList/?pageNo=1&topic=H001'" th:unless="${topic} == 'H001'" style="text-decoration:none;color:black;">기술</li>
+	             <li onclick="location.href='/questionList/?pageNo=1&topic=H002'" th:if="${topic} == 'H002'" style="text-decoration:none;color:#3e6ce3;">사이드 프로젝트</li>
+	             <li onclick="location.href='/questionList/?pageNo=1&topic=H002'" th:unless="${topic} == 'H002'" style="text-decoration:none;color:black;">사이드 프로젝트</li>
 	             <li id="search" style="margin-left: auto;">
 	             	<div class="min_search-align-self-center" >
 			  			<input type="text" id="searchInput" th:value="${search != null} ? ${search} : ''" placeholder="검색어 입력" class="min_searchInput">
@@ -122,12 +125,20 @@
 						<div class="qna_box">
 						  	<img class="qna_profile" th:onclick="|location.href='/member/${question.memberNo}?pg=1'|" th:src="|/upload/profile/${question.profileImage}|" alt="profile">
 						</div>
-						<p th:text="${question.id}">cookie123</p>
+						<!-- <p th:text="${question.nickname}">cookie123</p> --> 
+						<span>
+							<span th:text="${question.nickname}">cookie123</span> 
+							<span style="font-size: small;"><img id="thunder" src="/commonResource/thunder.png" alt="acti">3500점 </span>
+						</span>
+						
 					</div>
 				  	<div id="titleTag">
 					    <h4 th:text="${question.title}" th:onclick="|location.href='/questionInfo/${question.questionBoardNo}'|">node.js에 대한 질문이 있습니다.</h4>
-					    <p style="color:blue" th:text="${question.tag}">#node.js #mysql</p>
+					    <p style="color:blue; margin-bottom:0;" th:text="${question.tag}">#node.js #mysql</p>
+						<span class= "park_dot" style="margin:0;" th:text="${question.writeDate}" >2024.01.01</span>
 				 	</div>
+				 	
+						
 			 	</div>
 				<div class="col-1" style="text-align:center; margin:auto;">
 				 	<h6 th:text="${question.viewCnt}">2</h6>
@@ -135,7 +146,7 @@
 				</div>
 				<div class="col-1" style="text-align:center; margin:auto;">
 				 	<h6 th:text="${question.bookmarkCnt}">5</h6>
-				 	<h6>북마크</h6>  
+				 	<h6>북마크</h6>
 				</div>
 				<div id="answercnt" class="col-1" style="text-align:center; margin:auto;">
 				 	<h6 class="QNAcnt" th:text="${question.answerCnt}">10</h6>
