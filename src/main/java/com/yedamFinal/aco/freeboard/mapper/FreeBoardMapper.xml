@@ -278,7 +278,7 @@
 	        A.member_no,
             nickname,
             ACCUM_ACTIVITY_POINT,
-            B.profile_image
+            B.profile_image,
 	        ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
 	FROM side_project_board A
     JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
