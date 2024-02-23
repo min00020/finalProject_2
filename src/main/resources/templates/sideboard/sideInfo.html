@@ -54,7 +54,7 @@
 				<div class="container" id="tae-container-5">
 				<p style="font-weight:bold;" th:utext="${sideInfo.content}"></p>
 				</div>	
-				<p style="font-weight:bold;">작성자 깃 구경하러가기 💻 <a class="tae-gitaddress" onclick="goToGitHub()">https://github.com/[[${sideInfo.gitAddress}]]</a></p>
+				<p style="font-weight:bold;">작성자 깃 구경하러가기 💻 <a class="tae-gitaddress" style="cursor:pointer;" onclick="goToGitHub()">https://github.com/[[${sideInfo.gitAddress}]]</a></p>
 				<hr id="tae-hr">
 	</div>
 	<!--/* 댓글영역 */-->
@@ -1141,7 +1141,7 @@ $(document).ready(function(){
 			console.log(result);
 			showSuccessAlert("게시글이 삭제되었습니다.");
 			setTimeout(() => window.location.href="/sideProjectList/Q001/?pageNo=1"
-    	    		, 3000);
+    	    		, 1000);
 			
 		}).fail(err => {
 			console.log(err);
