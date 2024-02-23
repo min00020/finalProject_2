@@ -75,7 +75,7 @@ public class GitHubServiceImpl implements GitHubService {
 		reqBodyContent.put("client_id", gitClientId);
 		reqBodyContent.put("client_secret", gitClientSecretId);
 		reqBodyContent.put("code", tempGitCode);
-		reqBodyContent.put("redirect_uri", gitRedirectUrl); // 이거 나중에 고쳐야함.
+		reqBodyContent.put("redirect_uri", gitRedirectUrl); 
 		
 		// TODO Auto-generated method stub
 		String apiUrl = "https://github.com/login/oauth/access_token";
