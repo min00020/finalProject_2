@@ -148,8 +148,8 @@
 								<div>
 									<!--/* 프로필이미지가 null이라면 */-->
 									<div class="qna_box">
-										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
-										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}?pg=1'|" />
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}?pg=1'|" />
 									</div>
 									<span>[[${reply.value[0].parentNickname}]]</span>
 								</div>
@@ -316,8 +316,8 @@
 								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
 									<div>
 										<div class="qna_box">
-											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
-											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
+											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}?pg=1'|" />
+											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}?pg=1'|" />
 										</div>
 										<span>[[${innerReply.childNickname}]]</span>
 									</div>
