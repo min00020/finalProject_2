@@ -4,7 +4,7 @@
 	layout:decorate="@{layout/member/mainTemplate.html}"
 	layout:fragment="content">
 
-<section style="width: 1344px">
+<section>
 	<div id="qna_banner">
 			<h3>이모티콘 상점</h3>
 			<p style="color:#76767e">포인트로 이모티콘을 구매해보세요</p>
@@ -17,8 +17,8 @@
     <div class="row" style="justify-content:space-between;">
         <div class="col-lg-6 mb-4" style="width: 30%; cursor: pointer;" th:each="emo : ${emoList}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|">
             <div class="card h-100">
-                <a href="#"><img class="card-img-top" th:src="@{${emo.emoPath+emo.emoFirstimg}}" alt=""></a>
-                <div class="card-body" >
+                <img class="card-img-top" th:src="@{${emo.emoPath+emo.emoFirstimg}}" alt="" style="height: 380px">
+                <div class="card-body" style="border-top: 1px solid lightgray;">
                     <h4 class="card-title" th:text="${emo.emoName}" style="text-align: center">
                         <a href="emoDetail?emoNo=${emo.emoNo}"></a>
                     </h4>
