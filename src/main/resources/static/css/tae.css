@@ -63,6 +63,7 @@
     background-color: #f9f9f9;
     flex: 0 0 calc(50% - 20px); /* 너비를 50%로 설정하고 여백을 뺀 값으로 지정 */
     max-width: calc(50% - 20px); /* 최대 너비 설정 */
+    float: inline-start;
 }
 
 
