@@ -113,18 +113,19 @@ public class MemberController {
 
 	//메인페이지 통합검색
 	@GetMapping("/mainTotalSearch")
-	public String getMainTotalSearch(Model model, @RequestParam String search, @RequestParam int pg) {
+	public String getMainTotalSearch(Model model, @RequestParam String search, @RequestParam(value = "searchType", required = false, defaultValue = "title") String searchType, @RequestParam int pg) {
 		
 		List<MainTotalVO> ret = null;
 		 // 검색창 입력의 경우.
 		if(search == null)
     	   return "/";
        else {
-       		ret = freeBoardService.getMainTotalSearch(model,search,pg);
+       		ret = freeBoardService.getMainTotalSearch(model,search,searchType,pg);
        		model.addAttribute("search",search); // 해당 search키워드로 페이징해야함.
+       		model.addAttribute("searchType",searchType);
         }
        
-        int ret2=freeBoardService.getMainTotalSearchCnt(search);
+        int ret2=freeBoardService.getMainTotalSearchCnt(search,searchType);
 		model.addAttribute("getMainTotalSearch", ret);
 		model.addAttribute("totalCnt",ret2);
 		return "freeBoard/mainTotalSearch";

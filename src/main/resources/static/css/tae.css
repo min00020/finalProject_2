@@ -248,6 +248,9 @@ input::placeholder
 	padding-top:14px;
 	float:right;
 }
+.sidebanner{
+	cursor:pointer;
+}
 .tae_date{
 	color:#979da9;
 }

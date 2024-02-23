@@ -27,13 +27,13 @@
 						<tbody>
 							<tr align="center" th:each="buyList : ${emoBuyList}">
 								<td style="vertical-align : middle">
-								<img alt=""  th:src="@{${buyList.emoPath+buyList.emoFirstimg}}" style="width: 100px">
+								<img alt=""  th:src="@{${buyList.emoPath+buyList.emoFirstimg}}" style="width: 100px;  cursor: pointer;" th:onclick="|location.href='/emoDetail?emoNo=${buyList.emoNo}'|">
                                 </td>
-                                <td style="vertical-align : middle" th:text="${buyList.emoName}"  th:onclick="|location.href='/emoDetail?emoNo=${buyList.emoNo}'|">    
+                                <td style="vertical-align : middle; cursor: pointer;" th:text="${buyList.emoName}"  th:onclick="|location.href='/emoDetail?emoNo=${buyList.emoNo}'|">    
 								<p><span></span></p>
                                 </td>                   
-								<td style="vertical-align : middle" th:text="${buyList.emoPrice}"><p><span></span></p></td>
-								<td style="vertical-align : middle" th:text="${buyList.emoBuydate}"><p><span></span></p></td>
+								<td style="vertical-align : middle; cursor: pointer;" th:text="${buyList.emoPrice}" th:onclick="|location.href='/emoDetail?emoNo=${buyList.emoNo}'|"><p><span></span></p></td>
+								<td style="vertical-align : middle; cursor: pointer;" th:text="${buyList.emoBuydate}" th:onclick="|location.href='/emoDetail?emoNo=${buyList.emoNo}'|"><p><span></span></p></td>
 								 <td style="text-align: center; vertical-align: middle;"><div>
                                                                                        <!-- Button trigger modal -->
 												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal${buyList.emoNo}|">

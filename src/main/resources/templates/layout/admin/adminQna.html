@@ -159,7 +159,7 @@
                                     </thead>
                                    
                                     <tbody>
-                                        <tr th:each="qna : ${adminQna}" th:onclick="|location.href='/qnaBoard/${qna.qnaBoardNo}'|">
+                                        <tr th:each="qna : ${adminQna}" th:onclick="|location.href='/qnaBoard/${qna.qnaBoardNo}'|" style="cursor: pointer;">
                                             <td th:text="${qna.qnaName}"></td>
                                             <td th:text="${qna.title}"></td>
                                             <td th:text="${#dates.format(qna.writeDate, 'yyyy/MM/dd')}"></td>

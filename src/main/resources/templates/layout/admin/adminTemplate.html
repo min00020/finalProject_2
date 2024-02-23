@@ -260,10 +260,10 @@
                                    
                                     <tbody>
                                         <tr th:each="notice : ${adminNotice}">
-                                            <td th:text="${notice.title}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|"></td>
-                                            <td th:text="${#dates.format(notice.writeDate, 'yyyy/MM/dd')}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|"></td>
-                                            <td th:text="${notice.viewCnt}"></td>
-                                            <td th:text="${notice.recommendCnt}"></td>
+                                            <td th:text="${notice.title}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|" style="cursor: pointer;"></td>
+                                            <td th:text="${#dates.format(notice.writeDate, 'yyyy/MM/dd')}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|" style="cursor: pointer;"></td>
+                                            <td th:text="${notice.viewCnt}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|" style="cursor: pointer;"></td>
+                                            <td th:text="${notice.recommendCnt}" th:onclick="|location.href='/noticeInfo?noticeBoardNo=${notice.noticeBoardNo}'|" style="cursor: pointer;"></td>
                                             <td><div style="text-align: center">
                                                                                        <!-- Button trigger modal -->
 												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal1${notice.noticeBoardNo}|">

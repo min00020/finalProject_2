@@ -54,7 +54,7 @@
 				<div class="container" id="tae-container-5">
 				<p style="font-weight:bold;" th:utext="${sideInfo.content}"></p>
 				</div>	
-				<p style="font-weight:bold;">작성자 깃 구경하러가기 💻 <a class="tae-gitaddress" onclick="goToGitHub()">https://github.com/[[${sideInfo.gitAddress}]]</a></p>
+				<p style="font-weight:bold;">작성자 깃 구경하러가기 💻 <a class="tae-gitaddress" style="cursor:pointer;" onclick="goToGitHub()">https://github.com/[[${sideInfo.gitAddress}]]</a></p>
 				<hr id="tae-hr">
 	</div>
 	<!--/* 댓글영역 */-->
@@ -80,7 +80,7 @@
       									<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 				<div class="row">
 					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
+					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            					</div>
 					        					</div>
@@ -207,12 +207,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      											<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							</div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -247,7 +249,7 @@
       												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
@@ -372,12 +374,14 @@
         												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       												</div>
       												<div class="modal-body">
+      												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 							<div class="row">
 						        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])">
+					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 						                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            								</div>
 					        								</div>
+					    								</div>
 					    								</div>
       												</div>
       												<div class="modal-footer">
@@ -522,7 +526,7 @@
       									<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 				<div class="row">
 					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
+					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            					</div>
 					        					</div>
@@ -649,12 +653,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      											<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							</div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -689,7 +695,7 @@
       												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
@@ -814,12 +820,14 @@
         												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       												</div>
       												<div class="modal-body">
+      												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 							<div class="row">
 						        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])">
+					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 						                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            								</div>
 					        								</div>
+					    								</div>
 					    								</div>
       												</div>
       												<div class="modal-footer">
@@ -1141,7 +1149,7 @@ $(document).ready(function(){
 			console.log(result);
 			showSuccessAlert("게시글이 삭제되었습니다.");
 			setTimeout(() => window.location.href="/sideProjectList/Q001/?pageNo=1"
-    	    		, 3000);
+    	    		, 1000);
 			
 		}).fail(err => {
 			console.log(err);
