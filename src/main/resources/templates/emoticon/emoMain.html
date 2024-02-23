@@ -13,7 +13,7 @@
                     <a class="btn btn-primary" th:onclick="|location.href='/emoBuyList'|">내 구매목록</a>
        </div>
 <!-- Page Content -->
-<div class="hacontainer" style="width: 1100px">
+<div class="hacontainer" style="width: 1100px; margin-left: 100px">
     <div class="row">
         <div class="col-lg-6 mb-4" style="width: 30%; cursor: pointer;" th:each="emo : ${emoList}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|">
             <div class="card h-100">
@@ -31,7 +31,7 @@
 
                                  <!-- Pagination -->
  <th:block th:if="${pageDTO != null}">
-    <ul class="pagination justify-content-end">
+    <ul class="pagination justify-content-center" style="justify-content: center;">
         <li class="page-item" th:if="${pageDTO.prev}">
             <a class="page-link" th:href="|/emoMain?pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
