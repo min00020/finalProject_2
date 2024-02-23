@@ -84,7 +84,7 @@ public class GitHubServiceImpl implements GitHubService {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(BodyInserters.fromValue(reqBodyContent))
                 .retrieve()
-                .bodyToMono(String.class).block();
+                .bodyToMono(String.class).block(); // 동기처리
 		
 		return getQueryMap(response); 
 	}
@@ -148,7 +148,7 @@ public class GitHubServiceImpl implements GitHubService {
 			}
 			return map;
 	}
-
+	
 	@Override
 	public boolean checkExpireGitAccessToken(String accessToken) {
 		// TODO Auto-generated method stub
