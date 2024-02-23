@@ -15,7 +15,7 @@
 <!-- Page Content -->
 <div class="hacontainer">
     <div class="row" style="justify-content:space-between;">
-        <div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${emoList}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|">
+        <div class="col-lg-6 mb-4" style="width: 30%; cursor: pointer;" th:each="emo : ${emoList}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|">
             <div class="card h-100">
                 <a href="#"><img class="card-img-top" th:src="@{${emo.emoPath+emo.emoFirstimg}}" alt=""></a>
                 <div class="card-body" >
