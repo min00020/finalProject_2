@@ -479,14 +479,15 @@
 					<div class="d-flex" style="margin-top:-20px;">
 						<div class="card" style="box-shadow: 9px 6px 10px 1px #d5d8df;border-radius:30px;width:285px;height:230px;margin-top:30px;margin-left:20px;"th:each="side:${sideList}">
 							<div class="card-body" id="card-1">
-								<ul class="tab-ul-2">
-									<li style="margin-top: -10px;">
-										<p style="font-size:15px;color:#979da9;">프로젝트명 | [[${side.title}]]</p>
+								<ul class="tab-ul-2" style="margin-top:10px;">
+									<li style="margin-top:-10px;" class="clearfix">
+										<p style="font-size:15px;color:#3a3a3a;"> 프로젝트명 |<span style="padding-left:10px;" th:text="${#strings.abbreviate(side.title,10)}"></span></p>
 										<br>
-											<h6 style="padding-bottom: 80px;height:10px;text-align:center;font-weight:bold;overflow:hidden;text-overflow:ellipsis;
-											">"[[${side.projectOutline}]]"</h6>
-											<span style="margin-top:30px;color:#979da9;">개발기간 : [[${side.devPeriod}]]</span>
-											<span style="color:#979da9;">모집인원 : [[${side.recruitPersonnel}]]</span>
+											
+											<div style="height: 40px;margin-top:20px;">
+												<h6 style="text-align:center;font-weight:bold;overflow:hidden;text-overflow:ellipsis;" th:text="|${#strings.abbreviate(side.projectOutline,20)}|">"[[${side.projectOutline}]]"</h6>
+											</div>
+												<p style="margin-top:30px;color:#3a3a3a;margin-bottom:30px;">개발기간 : [[${side.devPeriod}]] 모집인원 : [[${side.recruitPersonnel}]]</p>
 									</li>
 								</ul>
 							</div>
