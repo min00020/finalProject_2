@@ -31,15 +31,15 @@
                 <!-- 다크 모드/라이트 모드 토글 버튼 추가 -->
                 <div class="park_dark-mode-toggle" onclick="toggleDarkMode()">
                     <div class="park_sun-moon-container">
-                        <i class="fas fa-sun sun-icon"></i><i class="fas fa-moon moon-icon"></i>
+                        <img class="fas fa-sun sun-icon" src="commonResource/sun.png" style="height : 30px;"><img class="fas fa-moon moon-icon" src="commonResource/moon3.png" style="height : 30px;">
                     </div>
                 </div>
                 
             </div>
             <th:block sec:authorize="isAnonymous()">
                 <div class="park_align-self-center">
-                    <button class="park_login-button" onclick="location.href='/loginForm'">로그인</button>
-                    <button class="park_signup-button" onclick="location.href='/createAccountForm'">회원가입</button>
+                    <button class="park_login-button" onclick="location.href='/loginForm'" style="font-weight : bold" >로그인</button>
+                    <button class="park_signup-button" onclick="location.href='/createAccountForm'" style="font-weight : bold">회원가입</button>
                 </div>
             </th:block>
             <th:block sec:authorize="isAuthenticated()"> 
@@ -57,7 +57,7 @@
                     </div> 
                     <form action="/logout" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button class="park_logout-button" type="submit">로그아웃</button>
+                        <button class="park_logout-button" type="submit" style="font-weight : bold">로그아웃</button>
                     </form>
                 </div>
             </th:block> 
@@ -79,40 +79,66 @@
     	})
     	
         // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
-      document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
+    // 페이지 로드 시 다크 모드 상태 확인 및 적용
     const darkModeStatus = localStorage.getItem('darkMode');
-    updateDarkMode(darkModeStatus === 'enabled');
+    updateDarkMode(darkModeStatus === 'enabled', false); // 초기 로드 시 애니메이션 적용 X
 
     document.querySelector('.park_dark-mode-toggle').addEventListener('click', function() {
         const isDarkMode = document.body.classList.contains('dark-mode');
-        updateDarkMode(!isDarkMode);
-        localStorage.setItem('darkMode', !isDarkMode ? 'enabled' : 'disabled');
+        updateDarkMode(!isDarkMode, true); // 토글 시 애니메이션 적용 O
     });
 });
 
-function updateDarkMode(enable) {
+function updateDarkMode(enable, animate) {
     const body = document.body;
     const sunIcon = document.querySelector('.sun-icon');
     const moonIcon = document.querySelector('.moon-icon');
-    const logoImage = document.getElementById('logoImage');
-    const footerLogo = document.getElementById('logoImage3');
-    // 로고 이미지 변경 처리
+	 const logoImage = document.getElementById('logoImage');
+	    const footerLogo = document.getElementById('logoImage3');
+
     if (enable) {
         body.classList.add('dark-mode');
         body.classList.remove('light-mode');
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
         logoImage.src = "/commonResource/askcodeLogo_dark.png";
         footerLogo.src = "/commonResource/askcodeLogo_dark.png";
+        
     } else {
         body.classList.remove('dark-mode');
         body.classList.add('light-mode');
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
         logoImage.src = "/commonResource/askcodeLogo.png";
         footerLogo.src = "/commonResource/askcodeLogo.png";
     }
+
+    // localStorage에 다크 모드 상태 저장
+    localStorage.setItem('darkMode', enable ? 'enabled' : 'disabled');
+
+    // 애니메이션 적용 여부 확인
+    if (animate) {
+        applyAnimation(sunIcon, moonIcon);
+    }
 }
+
+function applyAnimation(sunIcon, moonIcon) {
+    sunIcon.classList.add('rotate-animation');
+    moonIcon.classList.add('rotate-animation');
+
+    // 애니메이션 종료 후 클래스 제거
+    const removeAnimation = () => {
+        sunIcon.classList.remove('rotate-animation');
+        moonIcon.classList.remove('rotate-animation');
+        sunIcon.removeEventListener('animationend', removeAnimation);
+        moonIcon.removeEventListener('animationend', removeAnimation);
+    };
+
+    sunIcon.addEventListener('animationend', removeAnimation);
+    moonIcon.addEventListener('animationend', removeAnimation);
+}
+
 
     	
     	//검색
@@ -142,5 +168,16 @@ function updateDarkMode(enable) {
 
     </script>
 <style>
+@keyframes rotateSunMoon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.rotate-animation {
+  animation: rotateSunMoon 0.5s linear;
+}
 
 </style>
