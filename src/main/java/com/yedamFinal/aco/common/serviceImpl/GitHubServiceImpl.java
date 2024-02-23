@@ -31,6 +31,8 @@ public class GitHubServiceImpl implements GitHubService {
 	@Value("${github.oauth.client.secret.id}")
 	private String gitClientSecretId;
 	
+	private String gitRedirectUrl = "http://askcode.shop/gitLinkPage";
+	
 	// Github OAuth는 refreshToken발급이 안돼서 DB에 저장된 accessToken 사용에 실패한 경우 git연동 Link로 redirect를 유도해야함.
 	
 	
@@ -73,7 +75,7 @@ public class GitHubServiceImpl implements GitHubService {
 		reqBodyContent.put("client_id", gitClientId);
 		reqBodyContent.put("client_secret", gitClientSecretId);
 		reqBodyContent.put("code", tempGitCode);
-		reqBodyContent.put("redirect_uri", "http://askcode.shop/gitLinkPage"); // 이거 나중에 고쳐야함.
+		reqBodyContent.put("redirect_uri", gitRedirectUrl); // 이거 나중에 고쳐야함.
 		
 		// TODO Auto-generated method stub
 		String apiUrl = "https://github.com/login/oauth/access_token";
