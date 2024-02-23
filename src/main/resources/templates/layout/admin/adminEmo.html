@@ -237,10 +237,10 @@
                                    
                                     <tbody>
                                         <tr th:each="emo : ${adminEmo}">
-                                            <td th:text="${emo.emoName}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|"></td>
-                                            <td th:text="${emo.emoDesc}"></td>
-                                            <td th:text="${emo.emoPrice}"></td>
-                                            <td th:text="${emo.emoticonState}"></td>
+                                            <td th:text="${emo.emoName}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|" style="cursor: pointer;"></td>
+                                            <td th:text="${emo.emoDesc}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|" style="cursor: pointer;"></td>
+                                            <td th:text="${emo.emoPrice}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|" style="cursor: pointer;"></td>
+                                            <td th:text="${emo.emoticonState}" th:onclick="|location.href='/emoDetail?emoNo=${emo.emoNo}'|" style="cursor: pointer;"></td>
                                             <td><div style="text-align: center">
                                             <!-- Button trigger modal -->
 												<button type="button" class="btn btn-danger" data-bs-toggle="modal" th:if="${emo.emoticonState == '판매중'}" th:data-bs-target="|#exampleModal1${emo.emoNo}|">
