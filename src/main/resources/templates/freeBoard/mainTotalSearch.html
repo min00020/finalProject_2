@@ -12,7 +12,20 @@
 
 
 		<div style="display: flex; justify-content: space-between;">
-			<h6>검색결과 : 총 [[${totalCnt}]]개</h6>
+			    <h6 style="margin-top : 10px; "th:text="${searchType == 'title' ? '제목 검색결과 : 총 ' : searchType == 'nickname' ? '닉네임 검색결과 : 총 ' : searchType == 'content' ? '내용 검색결과 : 총 ' : '검색결과 : 총 '} + ${totalCnt} + '개'"></h6>
+							<div style="position: relative;">
+						<select id="searchType" class="" style="width: auto; border:1px solid #BDBDBD; display: inline-block; padding: 6.5px; border-radius: 10px;">
+						    <option value="title" th:selected="${searchType == 'title'}">제목</option>
+						    <option value="content" th:selected="${searchType == 'content'}">내용</option>
+						    <option value="nickname" th:selected="${searchType == 'nickname'}">닉네임</option>
+						</select>
+
+						<input type="text" id="searchInput" th:value="${search != null} ? ${search} : ''" placeholder="검색어 입력" class="min_searchInput"
+							style="width: 150px;"> <img
+							src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
+							class="min_searchImg"
+							style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">
+					</div>
 		</div>
 <!-- 		<div class = "freeBoard" th:if=""></div> -->
 		<!-- start of question -->
@@ -56,21 +69,29 @@
 
 					</div>
 			</div>
-		<div class="col-1" style="text-align: center; margin: auto; margin-right:15px;">
-						<h6 th:text="${total.viewCnt}"></h6>
-						<h6>조회수</h6>
+				<div class="col-1" style="text-align: center; margin: auto; margin-right:15px;">
+					<h6 th:text="${total.viewCnt}"></h6>
+								<h6>조회수</h6>
+							</div>
+							<hr style="margin-top: 30px; margin-bottom: 30px;">
+						</div>
+								<div style="display: flex; justify-content: flex-end;">
+					<div style="position: relative;">
+						<select id="searchType" class="" style="width: auto; border:1px solid #BDBDBD; display: inline-block; padding: 6.5px; border-radius: 10px;">
+						    <option value="title" th:selected="${searchType == 'title'}">제목</option>
+						    <option value="content" th:selected="${searchType == 'content'}">내용</option>
+						    <option value="nickname" th:selected="${searchType == 'nickname'}">닉네임</option>
+						</select>
+
+						<input type="text" id="searchInput2" th:value="${search != null} ? ${search} : ''" placeholder="검색어 입력" class="min_searchInput"
+							style="width: 150px;"> <img
+							src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
+							class="min_searchImg"
+							style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">
 					</div>
-					<hr style="margin-top: 30px; margin-bottom: 30px;">
 				</div>
-						<div style="display: flex; justify-content: flex-end;">
-			<div style="position: relative;">
-				<input type="text" id="searchInput" th:value="${search != null} ? ${search} : ''" placeholder="검색어 입력" class="min_searchInput"
-					style="width: 150px;"> <img
-					src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
-					class="min_searchImg"
-					style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">
-			</div>
-		</div>
+		
+	
 				<!-- end of postList -->
 				<!-- Pagination -->
 				<th:block th:if="${pageDTO != null}">
@@ -78,7 +99,7 @@
 						<li class="page-item" th:if="${pageDTO.prev}">
 						
 							<th:block th:if="${search != null}"> <!--/* 검색한 경우  */-->
-								<a class="page-link" th:href="|/mainTotalSearch?pg=${pageDTO.curPage-1}&search=${search}|" aria-label="Previous"> 
+								<a class="page-link" th:href="|/mainTotalSearch?pg=${pageDTO.curPage-1}&search=${search}&searchType=${searchType}|" aria-label="Previous"> 
 									<span aria-hidden="true">&laquo;</span>
 									<span class="sr-only">Previous</span>
 								</a>
@@ -97,7 +118,7 @@
 						<li th:class="${pg == pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pg : ${#numbers.sequence(pageDTO.startPage, pageDTO.endPage)}">
 							
 							<th:block th:if="${search != null}"> 
-								<a class="page-link" th:href="|/mainTotalSearch?pg=${pg}&search=${search}|">[[${pg}]]</a>
+								<a class="page-link" th:href="|/mainTotalSearch?pg=${pg}&search=${search}&searchType=${searchType}|">[[${pg}]]</a>
 							</th:block>	
 							
 							<th:block th:unless="${search != null}">
@@ -109,7 +130,7 @@
 						<li class="page-item">
 						
 							<th:block th:if="${search != null}"> 
-								<a class="page-link" th:href="|/mainTotalSearch?pg=${pageDTO.curPage+1}&search=${search}|" aria-label="Next" th:if="${pageDTO.next}"> 
+								<a class="page-link" th:href="|/mainTotalSearch?pg=${pageDTO.curPage+1}&search=${search}&searchType=${searchType}|" aria-label="Next" th:if="${pageDTO.next}"> 
 									<span aria-hidden="true">&raquo;</span> <span class="sr-only">Next</span>
 								</a>
 							</th:block>	
@@ -131,20 +152,36 @@
 <script th:inline="javascript">
 
 $('#searchInput').on('keydown', function(e) {
-	
 	if (e.keyCode === 13) {
-	const searchValue = $('#searchInput').val();
-	if(searchValue == '') {
+		e.preventDefault();
+	const search = $('#searchInput').val();
+	const searchType = $('#searchType').val();
+	if(search == '') {
 		showFailAlert("검색어를 입력해 주세요.");
 		return;
 		}
-	window.location.href = "/mainTotalSearch?pg=1&search=" + $('#searchInput').val();
+	window.location.href = `/mainTotalSearch?pg=1&search=${search}&searchType=${searchType}`;
 	}
-
-		
-	});
+  });
+  
+$('#searchInput2').on('keydown', function(e) {
+	if (e.keyCode === 13) {
+		e.preventDefault();
+	const search = $('#searchInput2').val();
+	const searchType = $('#searchType').val();
+	if(search == '') {
+		showFailAlert("검색어를 입력해 주세요.");
+		return;
+		}
+	window.location.href = `/mainTotalSearch?pg=1&search=${search}&searchType=${searchType}`;
+	}
+  });
 	
+	
+
+
 </script>
+	
 <style>
 .park_boardType{
 margin-left : 10px;

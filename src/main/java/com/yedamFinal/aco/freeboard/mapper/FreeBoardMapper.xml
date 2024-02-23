@@ -306,7 +306,13 @@ SELECT *
                     
      	 FROM FREE_BOARD A 
          JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
-      	 WHERE TITLE LIKE '%'||#{search}||'%'
+      	 WHERE 
+      	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENT
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
+      	 
          UNION ALL
       	 
       SELECT 'S',
@@ -322,7 +328,14 @@ SELECT *
                     
       	 FROM SIDE_PROJECT_BOARD A 
          JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
-     	 WHERE TITLE LIKE '%'||#{search}||'%'
+     	 WHERE 
+
+		   	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENT
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
+         
      	 UNION ALL
          
                SELECT 'Q',
@@ -338,7 +351,12 @@ SELECT *
                     
       	 FROM QUESTION_BOARD A 
          JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
-     	 WHERE TITLE LIKE '%'||#{search}||'%'
+     	 WHERE    	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENTS
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
+         
      	 UNION ALL
      	 
       SELECT 'N',
@@ -354,7 +372,12 @@ SELECT *
                     
       	 FROM NOTICE_BOARD A 
          JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
-      	 WHERE TITLE LIKE '%'||#{search}||'%'
+
+      	 WHERE    	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENT
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
       	 )C)
 
       	<![CDATA[
@@ -366,16 +389,39 @@ SELECT *
 	
 	<select id="getMainTotalSearchCnt" resultType="int">
 	
-SELECT SUM(CNT) AS TOTAL_CNT FROM (
-    SELECT COUNT(*) AS CNT FROM FREE_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
-    UNION ALL
-    SELECT COUNT(*) FROM NOTICE_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
-    UNION ALL
-    SELECT COUNT(*) FROM SIDE_PROJECT_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
-    UNION ALL
-    SELECT COUNT(*) FROM QUESTION_BOARD WHERE TITLE LIKE '%'||#{search}||'%'
-)
-
+ SELECT SUM(CNT) AS TOTAL_CNT FROM (
+        SELECT COUNT(*) AS CNT FROM FREE_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+        CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENT
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+        UNION ALL
+        SELECT COUNT(*) FROM NOTICE_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+        CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENT
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+        UNION ALL
+        SELECT COUNT(*) FROM SIDE_PROJECT_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+        CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENT
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+        UNION ALL
+        SELECT COUNT(*) FROM QUESTION_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+     CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENTS
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+    )
 		
 	</select>
 	
