@@ -67,8 +67,7 @@ public class PointServiceImpl implements PointService {
 
 	@Override
 	@Transactional
-	public Map<String, Object> updateAcoMoneyAndInsertPointDetail(int acoMoney,
-			PointDetailVO pointDetailVO) {
+	public Map<String, Object> updateAcoMoneyAndInsertPointDetail(int acoMoney, PointDetailVO pointDetailVO) {
 		Map<String, Object> ret = new HashMap<>();
 		int updateId = pointMapper.updateAcoMoney(acoMoney, pointDetailVO.getMemberNo());
 		if (updateId <= 0) {
@@ -77,7 +76,6 @@ public class PointServiceImpl implements PointService {
 			ret.put("result", "200");
 			ret.put("acoMoney", acoMoney);
 		}
-
 		int insertId = pointMapper.insertAcoMoneyHistory(pointDetailVO);
 		if (insertId <= 0) {
 			ret.put("result", "500");

@@ -124,7 +124,7 @@
       									<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 				<div class="row">
 					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
+					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])" style="cursor: pointer;" >
 					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            					</div>
 					        					</div>
@@ -148,8 +148,8 @@
 								<div>
 									<!--/* 프로필이미지가 null이라면 */-->
 									<div class="qna_box">
-										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
-										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}?pg=1'|" />
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}?pg=1'|" />
 									</div>
 									<span>[[${reply.value[0].parentNickname}]]</span>
 								</div>
@@ -164,9 +164,6 @@
 			                        		<div class="modal-content">
 			                           			<div class="modal-header">
 			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
-			                              			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-			                                 			<span aria-hidden="true">&times;</span>
-			                              			</button>
 			                           			</div>
 			                           			<div class="modal-body">
 			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
@@ -180,7 +177,7 @@
 															<tr>
 																<th>신고종류</th>
 																<td>
-																	<select name="reportType" id="reportType">
+																	<select name="reportType" id="reportType" style="margin-left:10px; width: 380px;">
 													  					<option th:value="null">--신고종류를 선택해주세요--</option>
 													  					<option th:value="A001">홍보</option>
 													  					<option th:value="A002">도배</option>
@@ -193,7 +190,7 @@
 															</tr>
 															<tr>
 																<th>신고사유</th>
-																<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+																<td><textarea name="reportContent" id="reportContent" style="margin-left:10px; width: 380px; height: 211px"></textarea></td>	
 															</tr>
 														</table>
 													</div>
@@ -254,12 +251,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      											<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							</div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -294,7 +293,7 @@
       												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
@@ -317,8 +316,8 @@
 								<div class="mx-5 d-flex justify-content-between" style="width:90%;">
 									<div>
 										<div class="qna_box">
-											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
-											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}'|" />
+											<img th:if="${innerReply.childImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}?pg=1'|" />
+											<img th:unless="${innerReply.childImage} == null" class="qna_profile" th:src="|/upload/profile/${innerReply.childImage}|" alt="profile" th:onclick="|location.href='/member/${innerReply.childMemberNo}?pg=1'|" />
 										</div>
 										<span>[[${innerReply.childNickname}]]</span>
 									</div>
@@ -332,9 +331,6 @@
 			                    				<div class="modal-content">
 			                    		   			<div class="modal-header">
 			                    		      			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
-			                    		      			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-			                    		         			<span aria-hidden="true">&times;</span>
-			                    		      			</button>
 			                    		   			</div>
 			                    		   			<div class="modal-body">
 			                    		   				<form name="reportForm" action="/insertReport" method="post" th:id="${innerReply.childReplyNo}"> 	
@@ -422,12 +418,14 @@
         												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       												</div>
       												<div class="modal-body">
+      												<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 							<div class="row">
 						        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])">
+					            								<div class="card h-100" th:onclick="modifyReply([[${innerReply.childReplyNo}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 						                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            								</div>
 					        								</div>
+					    								</div>
 					    								</div>
       												</div>
       												<div class="modal-footer">
@@ -931,6 +929,10 @@
 	}
 	//harang
 	function insertReport(replyNo){
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
 		const formData = new FormData($('#' + replyNo)[0]);
 		
 		$.ajax('/insertReport', {

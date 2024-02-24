@@ -40,7 +40,7 @@
 				</div>
 				<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
 						<div th:if="${loginId == questionInfo[0][0].id}">
-							<span id="questionModify">수정</span><span>삭제</span>
+							<span id="questionModify">수정</span><span th:if="${isAdopt} != true">삭제</span>
 						</div>
 						<span th:unless="${loginId == questionInfo[0][0].id}">신고</span>
 						<p th:text="${#dates.format(questionInfo[0][0].writeDate, 'yyyy.MM.dd')}"></p>
@@ -146,9 +146,6 @@
 			                        		<div class="modal-content">
 			                           			<div class="modal-header">
 			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
-			                              			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-			                                 			<span aria-hidden="true">&times;</span>
-			                              			</button>
 			                           			</div>
 			                           			<div class="modal-body">
 			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
@@ -162,7 +159,7 @@
 															<tr>
 																<th>신고종류</th>
 																<td>
-																	<select name="reportType" id="reportType">
+																	<select name="reportType" id="reportType" style="margin-left:10px; width: 380px;">
 													  					<option th:value="null">--신고종류를 선택해주세요--</option>
 													  					<option th:value="A001">홍보</option>
 													  					<option th:value="A002">도배</option>
@@ -175,7 +172,7 @@
 															</tr>
 															<tr>
 																<th>신고사유</th>
-																<td><textarea name="reportContent" id="reportContent" style="width: 211px; height: 211px"></textarea></td>	
+																<td><textarea name="reportContent" id="reportContent" style="margin-left:10px; width: 380px; height: 211px"></textarea></td>	
 															</tr>
 														</table>
 													</div>
@@ -235,12 +232,14 @@
         											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       											</div>
       											<div class="modal-body">
+      											<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
         					 						<div class="row">
 					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
-					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
 					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
 					            							</div>
 					        							</div>
+					    							</div>
 					    							</div>
       											</div>
       											<div class="modal-footer">
@@ -495,16 +494,21 @@
 								<div>
 									<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
 											--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-											  th:if="${isAdopt == false and loginId == questionInfo[0][0].id}"
+											  th:if="${loginId == questionInfo[0][0].id} and ${isAdopt == false}"
 											 th:onclick="adoptAnswer([[${question.answerBoardNo}]])">
 										답변 채택하기
+									</button>
+									<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+											--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+											  th:if="${loginId != questionInfo[0][0].id} and ${isAdopt == false}">
+										채택 대기중
 									</button>
 									<h4 style="font-weight:bold" th:text="${question.answerTitle}">질문에 대한 답변입니다.</h4>
 								</div>
 							</div>
 						</div>
 						<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
-							<div th:if="${loginId == question.answerId}">
+							<div th:if="${loginId == question.answerId} and ${isAdopt != true} ">
 								<span id="answerModifyBtn" onclick="openModifyView()">수정</span>
 								<span>삭제</span>
 							</div>
@@ -1058,6 +1062,10 @@ $(document).ready(function(){
 	}
 	
 	function insertReport(replyNo){
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
 		const formData = new FormData($('#' + replyNo)[0]);
 		
 		$.ajax('/insertReport', {
@@ -1070,8 +1078,17 @@ $(document).ready(function(){
 			},
 		})
 		.done(res => {
-			showSuccessAlert("해당 댓글이 신고되었습니다.");
-			document.location.href = document.location.href;
+				Swal.fire({
+					  title: "해당 댓글이 신고되었습니다.",
+					  text: '',
+					  icon: 'success',
+					  confirmButtonClass: "btn-danger",
+					  confirmButtonText: "확인",
+					}).then((result) => {
+					  if (result.value != null) {
+						  window.location.href = document.location.href;
+					  }
+					});	
 		})
 		.fail(err => {
 			showFailAlert("실패. 다시시도해주세요.");

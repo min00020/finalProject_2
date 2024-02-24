@@ -20,14 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import com.yedamFinal.aco.freeboard.FreeBoardVO;
-import com.yedamFinal.aco.freeboard.MainTotalVO;
-import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.activity.ActivityPointVO;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.common.ReplyJoinVO;
 import com.yedamFinal.aco.common.service.SessionUtil;
+import com.yedamFinal.aco.freeboard.MainTotalVO;
 import com.yedamFinal.aco.freeboard.service.FreeBoardService;
 import com.yedamFinal.aco.member.AccountChangeDTO;
 import com.yedamFinal.aco.member.MemberQuestionChartVO;
@@ -39,6 +36,7 @@ import com.yedamFinal.aco.myemoticon.MyemoticonVO;
 import com.yedamFinal.aco.noticeboard.service.NoticeBoardService;
 import com.yedamFinal.aco.point.AccountVO;
 import com.yedamFinal.aco.point.PointDetailJoinVO;
+import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.questionboard.MyquestionVO;
 import com.yedamFinal.aco.sideboard.service.SideService;
 
@@ -62,6 +60,8 @@ public class MemberController {
 	private SideService sideService;
 	@Autowired
 	private NoticeBoardService noticeBoardService;
+	@Autowired
+	private QuestionMapper questionMapper;
 
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
@@ -87,6 +87,9 @@ public class MemberController {
 	 */
 	@GetMapping("/")
 	public String getMainPageForm(Model model) {
+		var mainRanking = questionMapper.mainRanking();
+		model.addAttribute("mainRanking", mainRanking);
+		
 		model.addAttribute("main", "1");
 		
 		//메인-자유게시판 글 표시
@@ -113,18 +116,19 @@ public class MemberController {
 
 	//메인페이지 통합검색
 	@GetMapping("/mainTotalSearch")
-	public String getMainTotalSearch(Model model, @RequestParam String search, @RequestParam int pg) {
+	public String getMainTotalSearch(Model model, @RequestParam String search, @RequestParam(value = "searchType", required = false, defaultValue = "title") String searchType, @RequestParam int pg) {
 		
 		List<MainTotalVO> ret = null;
 		 // 검색창 입력의 경우.
 		if(search == null)
     	   return "/";
        else {
-       		ret = freeBoardService.getMainTotalSearch(model,search,pg);
+       		ret = freeBoardService.getMainTotalSearch(model,search,searchType,pg);
        		model.addAttribute("search",search); // 해당 search키워드로 페이징해야함.
+       		model.addAttribute("searchType",searchType);
         }
        
-        int ret2=freeBoardService.getMainTotalSearchCnt(search);
+        int ret2=freeBoardService.getMainTotalSearchCnt(search,searchType);
 		model.addAttribute("getMainTotalSearch", ret);
 		model.addAttribute("totalCnt",ret2);
 		return "freeBoard/mainTotalSearch";

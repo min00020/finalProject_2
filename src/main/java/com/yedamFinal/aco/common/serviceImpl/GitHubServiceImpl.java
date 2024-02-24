@@ -23,13 +23,18 @@ import com.yedamFinal.aco.common.GitCommitDTO;
 import com.yedamFinal.aco.common.GitIssueDTO;
 import com.yedamFinal.aco.common.service.GitHubService;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class GitHubServiceImpl implements GitHubService {
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
 	
 	@Value("${github.oauth.client.secret.id}")
 	private String gitClientSecretId;
+	
+	private String gitRedirectUrl = "http://askcode.shop/gitLinkPage";
 	
 	// Github OAuth는 refreshToken발급이 안돼서 DB에 저장된 accessToken 사용에 실패한 경우 git연동 Link로 redirect를 유도해야함.
 	
@@ -73,7 +78,7 @@ public class GitHubServiceImpl implements GitHubService {
 		reqBodyContent.put("client_id", gitClientId);
 		reqBodyContent.put("client_secret", gitClientSecretId);
 		reqBodyContent.put("code", tempGitCode);
-		reqBodyContent.put("redirect_uri", "http://askcode.shop/gitLinkPage"); // 이거 나중에 고쳐야함.
+		reqBodyContent.put("redirect_uri", gitRedirectUrl); 
 		
 		// TODO Auto-generated method stub
 		String apiUrl = "https://github.com/login/oauth/access_token";
@@ -82,7 +87,7 @@ public class GitHubServiceImpl implements GitHubService {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(BodyInserters.fromValue(reqBodyContent))
                 .retrieve()
-                .bodyToMono(String.class).block();
+                .bodyToMono(String.class).block(); // 동기처리
 		
 		return getQueryMap(response); 
 	}
@@ -123,6 +128,9 @@ public class GitHubServiceImpl implements GitHubService {
             result.put("commitList", myGitCommitDTOList);
             
         } catch (IOException e) {
+        	System.out.println(e);
+        	log.error("getGitHubRepositoryInfo  : {}", e.getMessage());
+        	log.error("getGitHubRepositoryInfo2 : {}", e.getMessage());
         }	
 		
 		return result;
@@ -145,5 +153,18 @@ public class GitHubServiceImpl implements GitHubService {
 				map.put("result", "500");
 			}
 			return map;
+	}
+	
+	@Override
+	public boolean checkExpireGitAccessToken(String accessToken) {
+		// TODO Auto-generated method stub
+		try {
+			GitHub github = new GitHubBuilder().withOAuthToken(accessToken).build();
+			github.getMyself();
+		}
+		catch(Exception e) {
+			return true;
+		}
+		return false;
 	}
 }

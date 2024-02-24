@@ -67,6 +67,7 @@ SELECT C.*
                 r.BOARD_NO,
                 r.REPLY_CONTENT,
                 r.REPORTEE,
+                o.BAN_TYPE,
                 o.NAME as reportee_name
             FROM REPORT r
             JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
@@ -270,17 +271,11 @@ SELECT C.*
 <select id="getAdCntList" resultType="AdminMainVO">
 	SELECT COUNT(CASE WHEN REPORT_STATE = 'B001' THEN 1 END)AS SCOUNT FROM REPORT UNION ALL
     SELECT COUNT(CASE WHEN ANSWER_STATE = 'P001' THEN 1 END) FROM QNA_BOARD UNION ALL
-    SELECT COUNT(CASE WHEN PROCESS_STATUS = 'O001' THEN 1 END) FROM SETTLEMENT UNION ALL
-    SELECT ROUND(COUNT(CASE WHEN REPORT_STATE != 'B001' THEN 1 END) / COUNT(REPORT_STATE)*100) FROM REPORT UNION ALL
-    SELECT ROUND(COUNT(CASE WHEN ANSWER_STATE != 'P001' THEN 1 END) / COUNT(ANSWER_STATE)*100) FROM QNA_BOARD UNION ALL
-    SELECT ROUND(COUNT(CASE WHEN PROCESS_STATUS != 'O001' THEN 1 END) / COUNT(PROCESS_STATUS)*100) FROM SETTLEMENT
+    SELECT COUNT(CASE WHEN PROCESS_STATUS = 'O001' THEN 1 END) FROM SETTLEMENT
 </select>
 
 <!-- 공지등록 --> 
 <insert id="insertNotice">
-		<selectKey keyProperty="noticeBoardNo" order="BEFORE"	resultType="int">
-			select nvl(max(NOTICE_BOARD_NO),0)+1 from NOTICE_BOARD
-		</selectKey>
 		INSERT INTO
 		NOTICE_BOARD (
 					NOTICE_BOARD_NO
@@ -288,13 +283,15 @@ SELECT C.*
 					,TITLE
 					,CONTENT
 					,VIEW_CNT
+					,RECOMMEND_CNT
 					,WRITE_DATE
 		)
 		VALUES (
-					#{noticeBoardNo}
+					NOTICE_BOARD_SEQ.NEXTVAL
 					,50
 					,#{title}
 					,#{content}
+					,0
 					,0
 					,SYSDATE
 		)
@@ -321,7 +318,7 @@ SELECT C.*
 						<when test="leaveStatus.equals('Leave')">WHERE LEAVE_DATE IS NOT NULL</when>
 	    				<otherwise>WHERE LEAVE_DATE IS NULL</otherwise>
 					</choose>
-					ORDER BY MEMBER_NO)B
+					ORDER BY MEMBER_NO DESC)B
 					)C
 				<![CDATA[
     WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
@@ -350,12 +347,14 @@ SELECT C.*
             B.* FROM(
             SELECT
 	            r.REPORT_TYPE,
+	            r.REPORT_NO,
 				r.REPORT_CONTENT,
 				m.NAME as reporter_name,
 				r.REPORT_DATE,
 				r.REPORT_STATE,
 				r.BOARD_TYPE,
 				r.BOARD_NO,
+				r.REPLY_CONTENT,
 				o.NAME as reportee_name
 					FROM REPORT r
 					JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
@@ -530,11 +529,11 @@ WITH DATA AS (
   FROM 
     QUESTION_BOARD
     			<choose>
-						<when test='date =="0"'>WHERE WRITE_DATE BETWEEN  to_char(sysdate,'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('1'.toString())">WHERE WRITE_DATE BETWEEN  to_char(sysdate-7,'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('2'.toString())">WHERE WRITE_DATE BETWEEN  to_char(add_months(sysdate,-1),'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('3'.toString())">WHERE WRITE_DATE BETWEEN  to_char(add_months(sysdate,-3),'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('4'.toString())">WHERE WRITE_DATE BETWEEN  to_char(add_months(sysdate,-6),'YYYYMMDD') AND SYSDATE</when>
+						<when test='date =="0"'>WHERE WRITE_DATE BETWEEN  sysdate AND SYSDATE</when>
+						<when test="date.equals('1'.toString())">WHERE WRITE_DATE BETWEEN  sysdate-7 AND SYSDATE</when>
+						<when test="date.equals('2'.toString())">WHERE WRITE_DATE BETWEEN  add_months(sysdate,-1) AND SYSDATE</when>
+						<when test="date.equals('3'.toString())">WHERE WRITE_DATE BETWEEN  add_months(sysdate,-3) AND SYSDATE</when>
+						<when test="date.equals('4'.toString())">WHERE WRITE_DATE BETWEEN  add_months(sysdate,-6) AND SYSDATE</when>
 				</choose> 
 ),
 <![CDATA[
@@ -564,11 +563,11 @@ ORDER BY SPLIT_VALUE
 	COUNT(*) AS CNT 
 	FROM MY_EMOTICON
 				<choose>
-						<when test="date.equals('0'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(sysdate,'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('1'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(sysdate-7,'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('2'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(add_months(sysdate,-1),'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('3'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(add_months(sysdate,-3),'YYYYMMDD') AND SYSDATE</when>
-						<when test="date.equals('4'.toString())">WHERE EMO_BUYDATE BETWEEN  to_char(add_months(sysdate,-6),'YYYYMMDD') AND SYSDATE</when>
+						<when test="date.equals('0'.toString())">WHERE EMO_BUYDATE BETWEEN  sysdate AND SYSDATE</when>
+						<when test="date.equals('1'.toString())">WHERE EMO_BUYDATE BETWEEN  sysdate-7 AND SYSDATE</when>
+						<when test="date.equals('2'.toString())">WHERE EMO_BUYDATE BETWEEN  add_months(sysdate,-1) AND SYSDATE</when>
+						<when test="date.equals('3'.toString())">WHERE EMO_BUYDATE BETWEEN  add_months(sysdate,-3) AND SYSDATE</when>
+						<when test="date.equals('4'.toString())">WHERE EMO_BUYDATE BETWEEN  add_months(sysdate,-6) AND SYSDATE</when>
 				</choose> 
 	GROUP BY EMO_NAME
 </select>
@@ -579,7 +578,7 @@ WITH DATA AS (
     ROW_NUMBER() OVER (ORDER BY TAG) AS ID
   FROM 
     QUESTION_BOARD
-    			WHERE WRITE_DATE BETWEEN #{sday} AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+    			WHERE WRITE_DATE BETWEEN TO_DATE(#{sday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') 
 ),
 <![CDATA[
 SPLIT_DATA AS (
@@ -607,7 +606,7 @@ ORDER BY SPLIT_VALUE
 	EMO_NAME, 
 	COUNT(*) AS CNT 
 	FROM MY_EMOTICON
-				WHERE EMO_BUYDATE BETWEEN #{sday} AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+				WHERE EMO_BUYDATE BETWEEN TO_DATE(#{sday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
 	GROUP BY EMO_NAME
 </select>
 <update id="buyEmo">
