@@ -118,7 +118,7 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 					<div style="text-align: center;">
 						<a href="/" style="width:15%">
-		    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:15%">
+		    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:11%">
 						</a>
 					</div>
 
@@ -317,7 +317,7 @@ function updateReportI(reportNo, reportee){
 					  confirmButtonText: "확인",
 					}).then((result) => {
 					  if (result.value != null) {
-						  window.location.href = "/adminReport?pageNo=1";
+						  window.location.href = "/adminReport?reportStatus=B002&pageNo=1";
 					  }
 					});	
 		}else{
@@ -347,7 +347,7 @@ function updateReportB(reportNo){
 					  confirmButtonText: "확인",
 					}).then((result) => {
 					  if (result.value != null) {
-						  window.location.href = "/adminReport?pageNo=1";
+						  window.location.href = "/adminReport?reportStatus=B003&pageNo=1";
 					  }
 					});	
 		}else{

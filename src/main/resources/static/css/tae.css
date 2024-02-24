@@ -63,6 +63,7 @@
     background-color: #f9f9f9;
     flex: 0 0 calc(50% - 20px); /* 너비를 50%로 설정하고 여백을 뺀 값으로 지정 */
     max-width: calc(50% - 20px); /* 최대 너비 설정 */
+    float: inline-start;
 }
 
 
@@ -75,7 +76,6 @@
 	background-color: #aebfec;
 }
 #tae-container-5{
-	height:600px;
 }
 #myTabContent{
 	height: 850px;
@@ -233,6 +233,10 @@ input::placeholder
 	list-style-type: none;
 	margin-bottom: -7px;
 }
+.activity2{
+	list-style-type: none;
+	margin-bottom: -7px;
+}
 .increase-point{
 	font-weight : bold;
 	color: red;
@@ -244,6 +248,9 @@ input::placeholder
 	color: blue;
 	padding-top:14px;
 	float:right;
+}
+.sidebanner{
+	cursor:pointer;
 }
 .tae_date{
 	color:#979da9;
@@ -364,6 +371,11 @@ input::placeholder
 	 width: 55px;
 }
 #accumList{
+     overflow-y: scroll; 
+	 height: 300px; 
+	 overflow-x: hidden;
+}
+#accumList2{
      overflow-y: scroll; 
 	 height: 300px; 
 	 overflow-x: hidden;

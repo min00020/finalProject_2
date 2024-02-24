@@ -54,8 +54,8 @@ public interface FreeBoardMapper {
 	public List<SideVO2> getSideProjectBoardMainPage();
 	
 	//메인페이지 검색
-	public List<MainTotalVO> getMainTotalSearch(@Param("search") String search,@Param("pg") int pg);
-	public int getMainTotalSearchCnt(String search);
+	public List<MainTotalVO> getMainTotalSearch(@Param("search") String search,@Param("searchType") String searchType,@Param("pg") int pg);
+	public int getMainTotalSearchCnt(String search,String searchType);
 	
 	//댓글수 업데이트
 	public int updateReplyCnt(int value, int fboardNo);

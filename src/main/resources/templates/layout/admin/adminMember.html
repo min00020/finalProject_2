@@ -108,7 +108,7 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 					<div style="text-align: center;">
 						<a href="/" style="width:15%">
-		    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:15%">
+		    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:11%">
 						</a>
 					</div>
 
@@ -181,14 +181,8 @@
 						                <span class="sr-only">Previous</span>
 						            </a>
 						            </th:block>
-						        	<th:block th:if="${leaveStatus == '1'}">
-						            <a class="page-link" th:href="|/adminMember?leaveStatus=1&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
-						                <span aria-hidden="true">&laquo;</span>
-						                <span class="sr-only">Previous</span>
-						            </a>
-						            </th:block>
-						        	<th:block th:if="${leaveStatus == '0'}">
-						            <a class="page-link" th:href="|/adminMember?leaveStatus=0&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+						        	<th:block th:unless="${leaveStatus == null}">
+						            <a class="page-link" th:href="|/adminMember?leaveStatus=${leaveStatus}&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
 						                <span aria-hidden="true">&laquo;</span>
 						                <span class="sr-only">Previous</span>
 						            </a>
@@ -198,11 +192,8 @@
 						        	<th:block th:if="${leaveStatus == null}">
 						        		<a class="page-link" th:href="|/adminMember?pageNo=${pageNo}|">[[${pageNo}]]</a>
 						        	</th:block>
-						        	<th:block th:if="${leaveStatus == '1'}">
-						        		<a class="page-link" th:href="|/adminMember?leaveStatus=1&pageNo=${pageNo}|">[[${pageNo}]]</a>
-						        	</th:block>
-						        	<th:block th:if="${leaveStatus == '0'}">
-						        		<a class="page-link" th:href="|/adminMember?leaveStatus=0&pageNo=${pageNo}|">[[${pageNo}]]</a>
+						        	<th:block th:unless="${leaveStatus == null}">
+						        		<a class="page-link" th:href="|/adminMember?leaveStatus=${leaveStatus}&pageNo=${pageNo}|">[[${pageNo}]]</a>
 						        	</th:block>
 						        </li>
 						        <li class="page-item">
@@ -212,14 +203,8 @@
 						                <span class="sr-only">Next</span>
 						            </a>
 						            </th:block>
-						        	<th:block th:if="${leaveStatus == '1'}">
-						            <a class="page-link" th:href="|/adminMember?leaveStatus=1&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
-						                <span aria-hidden="true">&raquo;</span>
-						                <span class="sr-only">Next</span>
-						            </a>
-						            </th:block>
-						        	<th:block th:if="${leaveStatus == '0'}">
-						            <a class="page-link" th:href="|/adminMember?leaveStatus=0&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+						        	<th:block th:unless="${leaveStatus == null}">
+						            <a class="page-link" th:href="|/adminMember?leaveStatus=${leaveStatus}&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
 						                <span aria-hidden="true">&raquo;</span>
 						                <span class="sr-only">Next</span>
 						            </a>

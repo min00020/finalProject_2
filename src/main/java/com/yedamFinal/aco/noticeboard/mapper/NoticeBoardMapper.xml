@@ -31,6 +31,12 @@
     = VIEW_CNT + 1
     WHERE NOTICE_BOARD_NO = #{boardNo}
 </update>
+<!-- 댓글 / 댓글수 증감-->
+	<update id="updateReplyCnt" parameterType="int">
+		UPDATE NOTICE_BOARD 
+		   SET RECOMMEND_CNT = RECOMMEND_CNT + 1 - #{value} 
+		 WHERE NOTICE_BOARD_NO=#{noticeBoardNo}
+	</update>
 <select id="searchNoticeBoard" resultType="NoticeBoardVO">
 		SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
     SELECT  

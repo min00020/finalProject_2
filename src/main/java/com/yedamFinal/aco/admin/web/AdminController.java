@@ -250,8 +250,9 @@ public class AdminController {
 	 * @return
 	 */
 	@PostMapping("/deleteEmo")
-	public String deleteEmoProcess(AdminEmoVO adminEmoVO) {
+	public String deleteEmoProcess(HttpServletRequest request, AdminEmoVO adminEmoVO) {
 		adminService.deleteEmo(adminEmoVO);
+		request.getSession().setAttribute("myEmoList", adminService.getMyEmoList(adminEmoVO.getMemberNo()));
 		return "redirect:emoBuyList";
 	}
 	

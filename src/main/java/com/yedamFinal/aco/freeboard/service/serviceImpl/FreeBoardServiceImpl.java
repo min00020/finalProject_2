@@ -155,21 +155,21 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public List<MainTotalVO> getMainTotalSearch(Model model,String search, int pg) {
+	public List<MainTotalVO> getMainTotalSearch(Model model,String search, String searchType, int pg) {
 		
-		var searchMainTotalList = freeBoardMapper.getMainTotalSearch(search, pg);
+		var searchMainTotalList = freeBoardMapper.getMainTotalSearch(search,searchType, pg);
 		PaginationDTO dto = null;
 		if(searchMainTotalList.size() > 0) {
-			dto = new PaginationDTO(freeBoardMapper.getMainTotalSearchCnt(search), pg, 10);
+			dto = new PaginationDTO(freeBoardMapper.getMainTotalSearchCnt(search,searchType), pg, 10);
 		}
 		model.addAttribute("pageDTO", dto);
 
-		return freeBoardMapper.getMainTotalSearch(search, pg);
+		return freeBoardMapper.getMainTotalSearch(search,searchType, pg);
 	}
 
 	@Override
-	public int getMainTotalSearchCnt(String search) {
-		return freeBoardMapper.getMainTotalSearchCnt(search);
+	public int getMainTotalSearchCnt(String search,String searchType) {
+		return freeBoardMapper.getMainTotalSearchCnt(search,searchType);
 	}
 	
 

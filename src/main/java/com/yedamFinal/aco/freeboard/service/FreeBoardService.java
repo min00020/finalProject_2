@@ -46,8 +46,8 @@ public interface FreeBoardService {
 	public List<SideVO2> getSideProjectBoardMainPage();
 	
 	//메인통합검색
-	public List<MainTotalVO> getMainTotalSearch(Model model, String search,int pg);
+	public List<MainTotalVO> getMainTotalSearch(Model model, String search,String searchType,int pg);
 	
 	//메인통합검색 개수
-	public int getMainTotalSearchCnt(String search);
+	public int getMainTotalSearchCnt(String search,String searchType);
 }

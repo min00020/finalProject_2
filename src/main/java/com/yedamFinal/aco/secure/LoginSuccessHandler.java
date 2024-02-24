@@ -22,10 +22,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yedamFinal.aco.admin.mapper.AdminMapper;
+import com.yedamFinal.aco.common.service.GitHubService;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.mapper.MemberMapper;
-import com.yedamFinal.aco.member.service.MemberService;
 
 //form요청이아닌 ajax요청으로 하기위해
 @Component
@@ -39,6 +39,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Autowired
 	private AdminMapper adminMapper;
+	
+	@Autowired
+	private GitHubService gitService;
     
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -90,17 +93,23 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         Map<String, Object> ret = new HashMap<>();
         if(!vo.getPermission().equals("ROLE_ADMIN")) {
         	if(vo.getGitToken() != null) {
-        		SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+        		// 깃토큰 만료 확인
+        		if(gitService.checkExpireGitAccessToken(vo.getGitToken())) {
+        			ret.put("result", "/gitLinkPage?id=" + vo.getId());
+        		}
+        		else {
+        			SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
 
-                if (savedRequest != null) {
-                    String redirectUrl = savedRequest.getRedirectUrl();
-                    // "http://"
-                    redirectUrl = redirectUrl.replace("http://", "");
-                    redirectUrl = redirectUrl.substring(redirectUrl.indexOf("/"));
-                    ret.put("result", redirectUrl);
-                } else {
-                	ret.put("result", "/");
-                }
+                    if (savedRequest != null) {
+                        String redirectUrl = savedRequest.getRedirectUrl();
+                        // "http://"
+                        redirectUrl = redirectUrl.replace("http://", "");
+                        redirectUrl = redirectUrl.substring(redirectUrl.indexOf("/"));
+                        ret.put("result", redirectUrl);
+                    } else {
+                    	ret.put("result", "/");
+                    }
+        		}
         	}
         	else {
         		ret.put("result", "/gitLinkPage?id=" + vo.getId());
