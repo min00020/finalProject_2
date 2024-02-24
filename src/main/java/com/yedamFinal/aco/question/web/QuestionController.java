@@ -18,7 +18,6 @@ import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.question.QuestionVO;
-import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.question.service.QuestionService;
 
 import lombok.extern.log4j.Log4j2;
@@ -52,7 +51,7 @@ public class QuestionController {
 	private MemberService memberService;
 	
     /**
-    * 질문글과 답변글 전체조회
+    * 질문글 전체조회
     * @param pageNo 
     * @param model 
 	* @return question/questionList

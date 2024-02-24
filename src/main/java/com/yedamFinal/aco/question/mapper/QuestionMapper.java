@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.yedamFinal.aco.bookmark.MybookmarkVO;
 import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.question.QuestionVO;
+import com.yedamFinal.aco.question.RankingVO;
 import com.yedamFinal.aco.question.web.QuestionActivityPointVO;
 
 public interface QuestionMapper {
@@ -60,6 +61,7 @@ public interface QuestionMapper {
 	public int insertQuestionAdd(QuestionVO questionVO);
 	public int adoptAddAnswer(int questionAddNo);
 
+	public List<RankingVO> mainRanking();
 	
 	/*전민교*/
 	

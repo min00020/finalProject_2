@@ -355,7 +355,6 @@
 		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
 	</update>
 	
-	
 	<!-- 1-1.답변글 작성 -->
 	<insert id="insertAnswer" parameterType="QuestionVO">
 		INSERT INTO ANSWER_BOARD (
@@ -425,6 +424,7 @@
 		   JOIN QUESTION_BOARD q ON a.QUESTION_BOARD_NO = q.QUESTION_BOARD_NO
 		  WHERE ANSWER_BOARD_NO = #{ano}
 	</select>
+
 	<!-- 답변글 채택 포인트 지급 -->
 	<update id="updateAdoptPoint" parameterType="int">
 		UPDATE MEMBER
@@ -459,5 +459,19 @@
    		   SET ADOPT_STATUS = 'S002'
  		 WHERE QUESTION_ADD_NO = #{questionAddNo}
 	</update>
+	
+	<select id="mainRanking" parameterType="int">
+   		SELECT ROWNUM, A.* FROM(
+		    SELECT RANK() OVER (ORDER BY ACTIVITY_POINT DESC) as RANK,
+					   MEMBER_NO,
+					   NICKNAME,
+					   ACTIVITY_POINT,
+					   PROFILE_IMAGE
+				  FROM RANK
+				  ORDER BY RANK
+		    ) A
+ 		WHERE ROWNUM <![CDATA[ <= ]]> 5
+	</select>
+	
 	
 </mapper>

@@ -44,7 +44,7 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	//질문글 리스트 조회
 	@Override
-	public List<QuestionVO> getQuestionList(Model model, int pageNo, String search) {
+	public void getQuestionList(Model model, int pageNo, String search) {
 		var questionList = questionMapper.getQuestionList(pageNo, search);
 		PaginationDTO dto = null;
 		if(questionList.size() > 0) {
@@ -54,12 +54,14 @@ public class QuestionServiceImpl implements QuestionService{
 		model.addAttribute("pageDTO", dto);
 		model.addAttribute("questionList", questionList);
 		
-		return null;
+		var mainRanking = questionMapper.mainRanking();
+		model.addAttribute("mainRanking", mainRanking);
+		
 	}
 	
 	//질문글 리스트 분류 조회
 	@Override
-	public List<QuestionVO> getQuestionListTopic(Model model, int pageNo, String topic, String search) {
+	public void getQuestionListTopic(Model model, int pageNo, String topic, String search) {
 		var questionListTopic = questionMapper.getQuestionListTopic(pageNo, topic, search);
 		PaginationDTO dto = null;
 		if(questionListTopic.size() > 0) {
@@ -68,8 +70,6 @@ public class QuestionServiceImpl implements QuestionService{
 		
 		model.addAttribute("pageDTO", dto);
 		model.addAttribute("questionList", questionListTopic);
-		
-		return null;
 	}
 
 	//단건조회
