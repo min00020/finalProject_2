@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class RankingVO {
+	private int rank;
 	private int memberNo;
 	private String nickname;
 	private int activityPoint;

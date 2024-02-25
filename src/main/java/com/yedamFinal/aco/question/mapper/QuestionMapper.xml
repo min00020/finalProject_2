@@ -473,5 +473,13 @@
  		WHERE ROWNUM <![CDATA[ <= ]]> 5
 	</select>
 	
+	<select id="accumRanking" parameterType="int">
+		SELECT NICKNAME, 
+			   PROFILE_IMAGE, 
+			   SUBCODE_TO_NAME(MEMBER_LEVEL) AS MEMBER_LEVEL, 
+			   ACCUM_ACTIVITY_POINT
+		  FROM MEMBER
+      ORDER BY ACCUM_ACTIVITY_POINT DESC;
+	</select>
 	
 </mapper>

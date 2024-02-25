@@ -18,6 +18,7 @@ import com.yedamFinal.aco.member.MemberVO;
 import com.yedamFinal.aco.member.UserDetailVO;
 import com.yedamFinal.aco.member.service.MemberService;
 import com.yedamFinal.aco.question.QuestionVO;
+import com.yedamFinal.aco.question.mapper.QuestionMapper;
 import com.yedamFinal.aco.question.service.QuestionService;
 
 import lombok.extern.log4j.Log4j2;
@@ -49,6 +50,9 @@ public class QuestionController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private QuestionMapper questionMapper;
 	
     /**
     * 질문글 전체조회
@@ -268,6 +272,13 @@ public class QuestionController {
 	@ResponseBody
 	public int adoptAddAnswer(int questionAddNo){
 		return questionService.adoptAddAnswer(questionAddNo);
+	}
+	
+	@GetMapping("/ranking")
+	public String ranking(Model model) {
+		var mainRanking = questionMapper.mainRanking();
+		model.addAttribute("mainRanking", mainRanking);
+		return "question/ranking";
 	}
 	
 }

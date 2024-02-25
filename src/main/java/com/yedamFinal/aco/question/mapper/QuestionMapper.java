@@ -62,6 +62,7 @@ public interface QuestionMapper {
 	public int adoptAddAnswer(int questionAddNo);
 
 	public List<RankingVO> mainRanking();
+	public List<RankingVO> accumRanking();
 	
 	/*전민교*/
 	
