@@ -49,7 +49,7 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Service
 public class MemberServiceImpl implements MemberService, UserDetailsService {
-	private int test = 1;
+	private int test = 0;
 
 	@Autowired
 	private MemberMapper memberMapper;
