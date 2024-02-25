@@ -73,6 +73,8 @@ public class SideController {
                                         Model model) {
 		MemberVO memberVO = SessionUtil.getSession();
 		
+		memberVO = memberService.getMemberInfo(memberVO);
+		
 		//사이드프로젝트 게시글 조회
         sideService.getSideInfoAndReplyList(bno,model);
         
