@@ -100,6 +100,7 @@
       <th:block th:if="${main} == 1">
          <aside style="width:15%;" class="park_sidebanner">
             <img src="/commonResource/sidebanner.png" alt="sidebanner" style="width:90%; cursor:pointer;" onclick="location.href='/sideProjectList/Q001/?pageNo=1'">
+<!--             <img src="/commonResource/sc.png" alt="sc" style="width:90%; cursor:pointer; margin-top : 75px;" onclick="location.href='/point'"> -->
             <section class = "QNArank" th:if="${mainRanking} != null">
 					<h5>실시간 랭킹 <span class="QNAmore"> +더보기</span></h5>
 		            <hr>
@@ -115,10 +116,7 @@
 		               </tr>
 		             </table>
 	          </section>
-            <img src="/commonResource/sc.png" alt="sc" style="width:90%; cursor:pointer; margin-top : 75px;" onclick="location.href='/point'">
-            
-            
-            
+            <img src="/commonResource/sc.png" alt="sc" style="width:90%; cursor:pointer; margin-top : 75px;" onclick="location.href='/point'">            
          </aside>
          <section layout:fragment="content" id="mainBody" style="width:70%">
       
