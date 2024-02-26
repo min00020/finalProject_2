@@ -186,6 +186,7 @@ public class SideController {
 	 @ResponseBody
 	 public Map<String, Object> insertGitIssue(@RequestParam String title,@RequestParam String body,@RequestParam int bno){
 		 MemberVO vo = SessionUtil.getSession();
+		 vo = memberService.getMemberInfo(vo);
 		 
 		 SideVO sideVO = sideService.getSideInfo(bno);
 		 
