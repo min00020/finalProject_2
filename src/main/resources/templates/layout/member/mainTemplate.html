@@ -100,28 +100,21 @@
       <th:block th:if="${main} == 1">
          <aside style="width:15%;" class="park_sidebanner">
             <img src="/commonResource/sidebanner.png" alt="sidebanner" style="width:90%; cursor:pointer;" onclick="location.href='/sideProjectList/Q001/?pageNo=1'">
-            <section class = "park_rank">
-            <h5>실시간 랭킹 <span class="park_more"> +더보기</span></h5>
-               <hr style="margin:5;">
-               <table class="park_sidemenu">
-                  <tr>
-                     <td>
-                        <span class="park_box">
-                          <img class="park_profile" src="/commonResource/mann.png" alt="profile">
-                        </span>
-                        <span class="park_name" >user01</span><span class="park_no">300</span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>
-                        <span class="park_box">
-                          <img class="park_profile" src="/commonResource/mann2.png" alt="profile">
-                        </span>
-                        <span class="park_name">user0111</span><span class="park_no">20</span>
-                     </td>
-                  </tr>
-                </table>  
-            </section>
+            <section class = "QNArank" th:if="${mainRanking} != null">
+					<h5>실시간 랭킹 <span class="QNAmore"> +더보기</span></h5>
+		            <hr>
+		            <table class="QNAsidemenu" th:each = "ranking : ${mainRanking}">
+		               <tr>
+		                  <td>
+			                  <span class="qna_box">
+					     			<img class="qna_profile" th:src="|/upload/profile/${ranking.profileImage}|" alt="profile">
+			                  </span>
+			                  <span class="QNAname" th:text="${ranking.nickname}">user01</span>
+			                  <span class="QNAno" th:text="${ranking.activityPoint}">300</span>
+		                  </td>
+		               </tr>
+		             </table>
+	          </section>
             <img src="/commonResource/sc.png" alt="sc" style="width:90%; cursor:pointer; margin-top : 75px;" onclick="location.href='/point'">
             
             

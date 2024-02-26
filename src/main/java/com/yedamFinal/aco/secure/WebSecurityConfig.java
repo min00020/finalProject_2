@@ -99,6 +99,7 @@ public class WebSecurityConfig {
 		permitAllUrl.add("/questionInfo/**");
 		permitAllUrl.add("/questionList/**");
 		permitAllUrl.add("/questionWrite");
+		permitAllUrl.add("/ranking");
 	}
 	
 	private void insertPermitAllUrlByHa() {
