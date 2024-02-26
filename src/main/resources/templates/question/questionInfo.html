@@ -307,7 +307,7 @@
 						 	<img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
 						</div>
 						<div class="min_align_bottom">
-							<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님 답변해주세요!</h6>
+							<h6 class="m-1" style="font-weight : bold;">[[${session.member?.nickname}]]님 답변해주세요!</h6>
 							<p class="m-0" style="font-size:13px;color:#989daa;"> 답변하시면 활동점수 50점을 드립니다.</p>
 						</div>
 					</div>
@@ -459,7 +459,7 @@
 								   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
 								</div>
 								<div class="min_align_bottom">
-									<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님의 답변 수정하기</h6>
+									<h6 class="m-1" style="font-weight : bold;">[[${session.member?.nickname}]]님의 답변 수정하기</h6>
 									<p class="m-0" style="font-size:13px;color:#989daa;"> 답변이 채택되면 활동점수 20점을 드립니다.</p>
 								</div>
 							</div>
