@@ -19,4 +19,5 @@ public class AdminReportVO {
 	private String replyContent;
 	private String reporterName;
 	private String reporteeName;
+	private String banType;
 }

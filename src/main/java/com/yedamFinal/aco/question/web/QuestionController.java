@@ -51,8 +51,11 @@ public class QuestionController {
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private QuestionMapper questionMapper;
+	
     /**
-    * 질문글과 답변글 전체조회
+    * 질문글 전체조회
     * @param pageNo 
     * @param model 
 	* @return question/questionList
@@ -269,6 +272,13 @@ public class QuestionController {
 	@ResponseBody
 	public int adoptAddAnswer(int questionAddNo){
 		return questionService.adoptAddAnswer(questionAddNo);
+	}
+	
+	@GetMapping("/ranking")
+	public String ranking(Model model) {
+		var mainRanking = questionMapper.mainRanking();
+		model.addAttribute("mainRanking", mainRanking);
+		return "question/ranking";
 	}
 	
 }

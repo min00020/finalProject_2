@@ -11,7 +11,7 @@
 						<!-- 프사 -->
 						<div class="box-1">
 							<th:block th:if="${memberInfo.profileImage} == null">
-								<img class="tae-profile-1" th:src="commonResource/default_profile.jpg"
+								<img class="tae-profile-1  mx-auto d-block" th:src="|commonResource/default_profile.jpg|"
 									 alt="profile">
 							</th:block>
 							<th:block th:unless="${memberInfo.profileImage} == null">
@@ -232,17 +232,16 @@
 													<div id="activityList">
 															<div>
 																<h4 class="tae-h4-3">내 활동 내역</h4><hr>
-																	<ul class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
-																		<li class="activity1" th:each="acp:${activityList}">
-																		<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증가되었습니다.|"></span>
-																		<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.  |"></span>
-																		<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
-																		<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점  |"></span>
-																		<br>
-																		<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
-																		<hr>
+																	<ul id="accumList2" class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity2" th:each="acp:${activityList}">
+																			<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증가되었습니다.|"></span>
+																			<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.|"></span>
+																			<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
+																			<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점|"></span>
+																			<br>
+																			<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
+																			<hr>
 																		</li>
-																		
 																	</ul>
 																
 															</div>
@@ -554,7 +553,8 @@
 								</div>
 								<!-- 모달 끝 -->
 								<ul class="tab-ul-3">
-									<li th:each="myq:${myQuestionList}">[[ ${myq.title} ]]
+									<li th:each="myq:${myQuestionList}" >
+									<span th:text="${#strings.abbreviate(myq.title,10)}"></span>
 										<span  class="tae-ul-list" th:text="${#dates.format(myq.writeDate, 'yyyy-MM-dd')}">[[${myq.writeDate}]] </span>
 										<hr>
 									</li>
@@ -602,7 +602,7 @@
 																		<p style="font-size:15px;color:#979da9;">질답형 게시판</p>
 																		<br>
 																			<h6 style="padding-bottom: 80px; margin-right:10px;height:10px;text-align:center;font-weight:bold;overflow:hidden;text-overflow:ellipsis;
-																			">"[[${bml2.title} ]]"</h6>
+																			" >"[[${bml2.title} ]]"</h6>
 																			<span style="margin-top:30px;color:#979da9;" th:text="${#dates.format(bml2.registDate, 'yyyy-MM-dd')}">작성일자 : [[${bml2.registDate}]]</span>
 																				<button type="button" id="deleteBookamrk" style="background-color: #fff; border: 0px; float: right;"
 																				th:onclick="delMark([[${bml2.questionBoardNo}]])">
@@ -625,7 +625,8 @@
 								</div>
 								<!-- 모달 끝 -->
 								<ul class="tab-ul-3">
-									<li th:each="bml:${bmarkList}">[[ ${bml.title} ]]
+									<li th:each="bml:${bmarkList}">
+									<span th:text="${#strings.abbreviate(bml.title,10)}"></span>
 										<span class="tae-ul-list" th:text="${#dates.format(bml.registDate, 'yyyy-MM-dd')}">[[${bml.registDate}]] </span>
 										<hr>
 									</li>
@@ -1107,9 +1108,23 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 				
 				$('#activityMypage').val('');
 				
-				
 				const accumList = $('#accumList');
 				accumList.prepend(liString);
+				
+				const liString2 = `
+					<li class="activity2">
+						<span style="font-weight:bold;font-size:large;">포인트 전환으로 인하여 활동점수가 차감되었습니다.</span>
+						<span class="decrease-point">- ${commaIncDecPoint}점</span>
+						<br>
+						<span class="tae_date">${toDate}</span>
+						<hr>
+					</li>`;
+	
+				$('#activityMypage').val('');
+
+				const accumList2 = $('#accumList2');
+				accumList2.prepend(liString2);
+				$('#accumPointMypage').val('');
 				
 				$('#pointMypage').text(commaTotalPoint);
 				$('#totalPointMypage').text(commaTotalPoint);
@@ -1185,7 +1200,7 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
 				}
 			}).done(result =>{
-				showSuccessAlert('환전 요청이 전달되었습니다.');
+				showSuccessAlert('정산 요청이 전달되었습니다.');
 				function dateFormat(date) {
 					let dateFormat2 = date.getFullYear() +
 						'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
@@ -1213,6 +1228,7 @@ let csrfToken = $('meta[name="csrf"]').attr("content");
 				
 				const accumList = $('#accumList');
 				accumList.prepend(liString);
+				$('#accumPointMypage').val('');
 				
 				$('#pointMypage').text(commaTotalPoint);
 				$('#totalPointMypage').text(commaTotalPoint);

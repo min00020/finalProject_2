@@ -109,22 +109,24 @@
 
 <!-- 게시글 단건조회 가져오기 -->
 <select id="selectSideInfo" parameterType="int" resultType="SideVO">
-	SELECT side_board_no, 
-	       publishing_status, 
-	       title, 
-	       content, 
-	       project_outline,
-	       writer, 
-	       write_date, 
-	       recruit_personnel, 
-	       dev_period, 
-	       git_address, 
-	       view_cnt,
-	       reply_cnt,
-	       tech_of_use,
-	       member_no
-	FROM side_project_board
-	WHERE side_board_no= #{bno}
+	SELECT a.side_board_no, 
+	       a.publishing_status, 
+	       a.title, 
+	       a.content, 
+	       a.project_outline,
+	       a.writer, 
+	       a.write_date, 
+	       a.recruit_personnel, 
+	       a.dev_period, 
+	       a.git_address, 
+	       a.view_cnt,
+	       a.reply_cnt,
+	       a.tech_of_use,
+	       a.member_no,
+	       b.profile_image
+	FROM side_project_board a
+	JOIN member b ON a.member_no = b.member_no
+	WHERE a.side_board_no= #{bno}
 </select>
 
 <update id="updateStatus" parameterType="SideVO">
