@@ -3,6 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	layout:decorate="@{layout/member/mainTemplate.html}"
 	layout:fragment="content"
+	style="margin:0 auto;"
 >
 <section>
 	<div id="qna_banner">
@@ -51,25 +52,17 @@
 		               </tr>
 		             </table>
 	            </section>
-				
-				<section class = "QNArank">
-					<h5>활동점수 랭킹 <span class="QNAmore"> +더보기</span></h5>
+				<section class = "QNArank" th:if="${mainRanking} != null">
+					<h5>실시간 랭킹 <span class="QNAmore"> +더보기</span></h5>
 		            <hr>
-		            <table class="QNAsidemenu">
+		            <table class="QNAsidemenu" th:each = "ranking : ${mainRanking}">
 		               <tr>
 		                  <td>
 			                  <span class="qna_box">
-					     			<img class="qna_profile" src="/commonResource/cookie.png" alt="profile">
+					     			<img class="qna_profile" th:src="|/upload/profile/${ranking.profileImage}|" alt="profile">
 			                  </span>
-			                  <span class="QNAname">user01</span><span class="QNAno">300</span>
-		                  </td>
-		               </tr>
-		         	   <tr>
-		                  <td>
-			                  <span class="qna_box">
-					     			<img class="qna_profile" src="/commonResource/cookie.png" alt="profile">
-			                  </span>
-			                  <span class="QNAname">cookie123</span><span class="QNAno">20</span>
+			                  <span class="QNAname" th:text="${ranking.nickname}">user01</span>
+			                  <span class="QNAno" th:text="${ranking.activityPoint}">300</span>
 		                  </td>
 		               </tr>
 		             </table>
@@ -231,6 +224,7 @@
 <script th:inline="javascript">
 /* const test = [[${questionList}]]
 const test2 = [[${loginId}]] */
+const test = [[${mainRanking}]];
 	
 const topic = [[${topic}]];
 

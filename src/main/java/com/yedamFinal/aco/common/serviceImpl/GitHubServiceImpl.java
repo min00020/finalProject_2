@@ -23,7 +23,10 @@ import com.yedamFinal.aco.common.GitCommitDTO;
 import com.yedamFinal.aco.common.GitIssueDTO;
 import com.yedamFinal.aco.common.service.GitHubService;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class GitHubServiceImpl implements GitHubService {
 	@Value("${github.oauth.client.id}")
 	private String gitClientId;
@@ -125,6 +128,9 @@ public class GitHubServiceImpl implements GitHubService {
             result.put("commitList", myGitCommitDTOList);
             
         } catch (IOException e) {
+        	System.out.println(e);
+        	log.error("getGitHubRepositoryInfo  : {}", e.getMessage());
+        	log.error("getGitHubRepositoryInfo2 : {}", e.getMessage());
         }	
 		
 		return result;
