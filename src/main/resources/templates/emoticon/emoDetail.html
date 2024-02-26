@@ -20,7 +20,7 @@
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" th:if = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0">
                                     <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#AddNotice"  style="text-decoration: none; color: white;"
                                     >
-		                        		구매가능
+		                        		구매하기
 		                     		</button>
                                 </div>
                                  <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" th:unless = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0" >
@@ -87,7 +87,7 @@
 				<a class="btn btn-primary" href="/emoMain?pageNo=1">목록으로</a>
              </div>
         </div>
-        
+        <a>이모티콘 출처 : freepik</a>
         <form action="buyEmo" method="post" name="buyForm">
         <input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
         <input type="hidden" name="memberNo" th:value="${user.memberNo}">
