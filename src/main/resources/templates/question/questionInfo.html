@@ -494,15 +494,15 @@
 								<div>
 									<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
 											--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-											  th:if="${loginId == questionInfo[0][0].id}"
+											  th:if="${loginId == questionInfo[0][0].id} and ${isAdopt == false}"
 											 th:onclick="adoptAnswer([[${question.answerBoardNo}]])">
 										답변 채택하기
 									</button>
-									<!-- <button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+									<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
 											--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-											  th:unless="${loginId == questionInfo[0][0].id}">
+											  th:if="${loginId != questionInfo[0][0].id} and ${isAdopt == false}">
 										채택 대기중
-									</button> -->
+									</button>
 									<h4 style="font-weight:bold" th:text="${question.answerTitle}">질문에 대한 답변입니다.</h4>
 								</div>
 							</div>
