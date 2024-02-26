@@ -132,14 +132,6 @@
                         <div class="card-header py-3">
                         <div class="dropdown" style="text-align: right">
                             <h6 class="m-0 font-weight-bold text-primary" style="float: left;">회원리스트</h6>
-						  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-						    탈퇴여부
-						  </button>
-						  <ul class="dropdown-menu">
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminMember?pageNo=1'|">전체</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminMember?leaveStatus=1&pageNo=1'|">탈퇴</a></li>
-						    <li><a class="dropdown-item" th:onclick="|location.href='/adminMember?leaveStatus=0&pageNo=1'|">미탈퇴</a></li>
-						  </ul>
 						</div>
                         </div>
                         <div class="card-body">
@@ -153,7 +145,6 @@
                                             <th>연락처</th>
                                             <th>누적활동점수</th>
                                             <th>포인트</th>
-                                            <th>탈퇴여부</th>
                                         </tr>
                                     </thead>
                                    
@@ -165,8 +156,6 @@
                                             <td th:text="${members.phoneNum}"></td>
                                             <td th:text="${members.accumActivityPoint}"></td>
                                             <td th:text="${members.acoMoney + members.acoPoint}"></td>
-                                            <td th:text="YES" th:if="${members.leaveDate != null}"></td>
-                                            <td th:text="NO" th:unless="${members.leaveDate != null}"></td>
                                         </tr>
                                     </tbody>
                                 </table>
