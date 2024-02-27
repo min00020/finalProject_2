@@ -20,8 +20,10 @@
 						</ul>
 					</div>
                 </li>
-                 <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/emoMain') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoDetail') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoBuyList') ? 'park_active' : ''}" onclick="location.href='/emoMain?pageNo=1'">이모티콘 상점</li>
+                
+                
                  <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/point') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/accountConnect') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/insertAccountNo') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/acoMoneyInquiry') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/acoPointInquiry')  ? 'park_active' : ''}" onclick="location.href='/point'">포인트 충전</li>
+          		  <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/emoMain') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoDetail') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoBuyList') ? 'park_active' : ''}" onclick="location.href='/emoMain?pageNo=1'">이모티콘 상점</li>
             </ul>
             <div class="park_search-align-self-center">
              <input type="text" id="park_searchInput2" placeholder="검색어 입력" class="park_searchInput">
