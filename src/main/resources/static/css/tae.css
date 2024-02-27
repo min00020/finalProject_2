@@ -1,1 +1,586 @@
 @charset "UTF-8";
+
+/* 프로필 이미지 원형 */
+.box-1 {
+	width: 160px;
+	height: 160px;
+	overflow: hidden;
+	float: center;
+	margin: 10px;
+	border-radius: 50%;
+	position: relative;
+}
+
+.box-2 {
+	width: 25px;
+	height: 25px;
+	overflow: hidden;
+	float: center;
+	margin: 10px;
+	border-radius: 50%;
+	position: relative;
+}
+
+.tae-profile-1 {
+	width: 100%;
+	width: 100%; 
+	height: 100%;
+	height: auto;
+	object-fit: cover;
+	object-position: center top;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.tab-ul {
+	list-style: none;
+	text-align: center;
+	/* display:inline-block; */
+	padding: 10px;
+	margin: 0px;
+}
+.tab-ul-2 {
+	list-style: none;
+	/* text-align: center; */
+	/* display:inline-block; */
+	padding: 10px;
+	margin: 0px;
+    display: flex; /* 요소를 가로로 배치하기 위해 Flexbox 사용 */
+    flex-wrap: wrap; /* 요소가 너비를 초과하면 다음 줄로 넘어가도록 설정 */
+}
+.tab-ul-3 {
+	list-style: none;
+	padding: 10px;
+	margin: 0px;
+}
+.tab-ul li {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: #f9f9f9;
+    flex: 0 0 calc(50% - 20px); /* 너비를 50%로 설정하고 여백을 뺀 값으로 지정 */
+    max-width: calc(50% - 20px); /* 최대 너비 설정 */
+    float: inline-start;
+}
+
+
+
+
+#tae-container-1 {
+	height: 950px;
+}
+#tae-container-3 {
+	background-color: #aebfec;
+}
+#tae-container-5{
+}
+#myTabContent{
+	height: 850px;
+}
+#myTabContent-2{
+	height: 900px;
+	
+}
+.btn btn-modal {
+	padding-bottom: 0px;
+}
+
+.tae_hidden {
+	display: none;
+}
+
+.tae-box1 {
+	display: inline-block;
+	margin-left:5px;
+}
+
+#tae-box2 {
+	display: inline-block;
+	width: 125px;
+	margin-left:40px;
+}
+
+.tae-container2 {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.tae_container1 {
+	background-color: #fffff;
+	border-radius: 20px;
+}
+#tae-container4{
+	margin-top:180px;
+}
+
+#myTabContent {
+	width: 1000px;
+	background-color: #fffff;
+	margin-top: 20px;
+	margin-left: -10px;
+	padding-left: 30px;
+	float: right;
+	border-radius:30px;
+}
+
+#myTab {
+	margin-top: 20px;
+	margin-left:80px;
+}
+
+.nav-item {
+	border: 0px;
+}
+
+/* 스크롤바 설정*/
+.type2::-webkit-scrollbar {
+	width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+.type2::-webkit-scrollbar-thumb {
+	height: 17%;
+	background-color: rgba(97, 160, 235, 0.51);
+	border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+.type2::-webkit-scrollbar-track {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+/* 스크롤바 설정*/
+.type3::-webkit-scrollbar {
+	width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+.type3::-webkit-scrollbar-thumb {
+	height: 17%;
+	background-color: rgba(97, 160, 235, 0.51);
+	border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+.type3::-webkit-scrollbar-track {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+
+#tae-tb: link {
+  color: pink;
+	text-decoration: none;
+}
+
+#tae-tb:visited {
+	color: black;
+	text-decoration: none;
+}
+.hidden{
+	display : none;
+}
+#tae-tb:hover {
+	color: 979da9;
+	text-decoration: underline;
+}
+
+#tae-tb:active {
+	color: green;
+	text-decoration: none;
+}
+.point-image{
+	width: 30%;
+    float: left;
+    box-sizing: border-box;
+}
+.point-acc{
+	width: 70%;
+    float: right;
+    box-sizing: border-box;
+}
+.tae-form-control{
+	height: 50px;
+	width: 600px;
+	background-color: bdcde4;
+}
+input::placeholder 
+{
+	color:#979da9;
+}
+.gradeimage{
+	width:50px;
+}
+.gradeinfo{
+	float:left;
+}
+.gradecontent{
+	display:inline-block;
+	padding-left:20px;
+}
+.grade-h5{
+	font-weight:bold;
+	padding-top:9px;
+	font-size:15px;
+}
+.grade-p{
+	margin-top:-30px;
+	color:#979da9;
+    font-size:14px;
+	
+}
+.activity1{
+	list-style-type: none;
+	margin-bottom: -7px;
+}
+.activity2{
+	list-style-type: none;
+	margin-bottom: -7px;
+}
+.increase-point{
+	font-weight : bold;
+	color: red;
+	padding-top:14px;
+	float:right;
+}
+.decrease-point{
+	font-weight : bold;
+	color: blue;
+	padding-top:14px;
+	float:right;
+}
+.sidebanner{
+	cursor:pointer;
+}
+.tae_date{
+	color:#979da9;
+}
+.bank{
+	width:110px;
+	height:110px;
+	display:inline-block;
+	border-radius:15px;
+	border : 0px;
+}
+#tae-hr{
+	width:1325px;
+}
+#a-1{
+	margin-left: 30px;
+	text-decoration: none;
+	font-weight:bold;
+	color:#000;
+}
+#a-2{
+	margin-left: 30px;
+	text-decoration: none;
+	font-weight:bold;
+	color:#979da9;
+}
+.tae-side-h6-1{
+     padding-left:5px;
+	 font-weight:bold;
+	 color:#009630;
+}
+.tae-side-h6-2{
+	padding-left:5px;
+	font-weight:bold;
+	color:#0C5FEC;
+}
+.tae-side-title{
+	font-weight:bolder;
+	margin:20px;
+}
+.tae-card-text{
+	font-weight: bold;
+}
+.tae-gradeImage{
+	width: 30px;
+}
+.tae-card-container{
+	width: 270px; 
+	height: 400px; 
+	margin-top: 30px; 
+	margin-left: 15px;
+}
+.tae-h5-1{
+	padding-top: 30px; 
+	padding-bottom: 30px; 
+	font-weight: bold;
+	text-align: center;
+}
+#tae-row{
+	width: auto; 
+	height: auto; 
+	overflow: visible;
+}
+#tae-container3{
+	width: 270px; 
+	height: 470px; 
+	margin-top: 30px; 
+	margin-left: 15px;
+	border-radius: 25px;
+}
+.tae-container4{
+	background-color: #aebfec; 
+	border-radius: 20px;
+	padding: 16px 10px 10px 5px;
+	margin-bottom: 10px;
+	margin-top:20px;
+}
+.tae-aside{
+	width: 100%; 
+	background-color: #aebfec;
+}
+#tae-section{
+	float:left;
+}
+#tae-card{
+	text-align: center; 
+	width: 270px; 
+	margin: 15px;
+	height: 350px;
+    margin-top: 20px;
+    border-radius: 25px;
+}
+#tae-sum-h5{
+	padding-top: 30px; 
+	padding-bottom: 30px; 
+	font-weight: bold; 
+	text-align: center;
+}
+.tae-box1 col-1{
+	margin-left:5px;
+	width: 50px;
+}
+.img1{
+	background-color:#fff;
+	border-radius:30px;
+	width: 50px; 
+	height: auto;
+}
+
+#pointMypage{
+	 color:#3e6ce3;
+	 font-weight:bold;
+}
+.tae-h6{
+	font-weight: bold;
+}
+#tae-col-1{
+	 width: 55px;
+}
+#accumList{
+     overflow-y: scroll; 
+	 height: 300px; 
+	 overflow-x: hidden;
+}
+#accumList2{
+     overflow-y: scroll; 
+	 height: 300px; 
+	 overflow-x: hidden;
+}
+#changepoint{
+	 font-weight:bold;
+	 background-color:#80a9e8;
+	 color:#fff;
+	 border:none;
+}
+
+
+#accountApprove{
+	font-weight:bold;
+	 background-color:#80a9e8;
+	 color:#fff;
+	 border:none;
+}
+.tae-p-1{
+	margin-bottom:-8px;
+	color:#3e6ce3;
+	margin-top:-30px;
+}
+#accumPointMypage{
+	 text-align:right;
+	 font-weight:bold;
+	 border:#ced9ea;
+	 background-color: beige;
+	 border-radius: 10px;
+	 padding-right:20px;
+}
+#activityMypage{
+	 text-align:right;
+	 font-weight:bold;
+	 border:#ced9ea;
+	 background-color: beige;
+	 border-radius: 10px;
+	 padding-right:20px;
+}
+.tae-h4-1{
+	font-weight:bold;
+	padding-left:60px;
+}
+#totalPointMypage{
+	 font-weight:bold;
+	 padding-left:120px;
+	 color:#2e54b7;
+}
+.point-acc-1{
+	 width:750px;
+	 hegiht:450px;
+	 margin-top:40px;
+}
+
+.tae-h4-2{
+	 font-weight:bold;
+}
+.tae-h4-3{
+	padding-left:30px;
+	font-weight:bold;
+}
+#tae-card-2{
+	width: 437px; 
+	height: 277px; 
+	float: left; 
+	margin-top: 30px; 
+	margin-left: 20px; 
+	overflow: visible;
+}
+#tae-card-3{
+	width: 437px; 
+	height: 260px; 
+	margin-top: 30px; 
+	margin-left: 20px; 
+	overflow: visible;
+}
+#tae-card-1{
+	width: 437px; 
+	height: 277px;
+	border-radius:30px;
+}
+#tae-card-4{
+	width: auto; 
+	border: 0px;
+}
+
+.tae-bank-1{
+	 width:55px;
+	 height:55px;
+	 text-align:center;
+	 margin-top:16px;
+}
+.tae-piechart{
+	width: 900px; 
+	height: 500px;
+}
+#tae-profile-tab{
+	text-decoration:none;
+	color:#fff;
+	background-color:#aebfec;
+	
+}
+#tae-profile-tab-2{
+	text-decoration:none;
+	color:#fff;
+	background-color:#aebfec;
+}
+#tae-modal-btn{
+	text-decoration: none; 
+	color: #979da9;
+}
+.tae-ul-list{
+	float: inline-end;
+}
+.tae-ul-list-2{
+	/* height: 300px; 
+	overflow-x: hidden;*/
+	float: inline-end;
+	
+}
+#tae-insertReply{
+	background-color:#0C5FEC;
+	float:right;
+}
+.tae-gitaddress{
+	text-decoration:none;
+	color:black;
+}
+#tae-inputside{
+	text-align:right;
+}
+.tae-form-label{
+	font-weight:bold;
+	padding-bottom:10px;
+}
+.tae-form-control2 {
+	width: 600px;
+	height: 55px;
+	padding-right: 40px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box; 
+	padding-left:10px;
+}
+.tae-form-control3 {
+	width: 400px;
+	height: 55px;
+	padding-right: 40px;
+	border: 1px solid #ccc;
+	border-radius: 4px; 
+	box-sizing: border-box; 
+	text-align:right;
+}
+.sidetextarea{
+	overflow: scroll;
+}
+.gitCommit{
+	border-radius:20px;
+	border:1px solid black;
+}
+.tae-git-3{
+	
+}
+.tae-git-2{
+	list-style-type:none;
+	width: 390px;
+	
+}
+
+.tae-git-1 {
+	padding-left:20px;
+	overflow : scroll;
+	/*overflow-x: hidden;*/
+	padding-top: 20px;
+}
+
+/* 스크롤바 설정*/
+.tae-git-1::-webkit-scrollbar {
+	width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+.tae-git-1::-webkit-scrollbar-thumb {
+	height: 17%;
+	background-color: rgba(97, 160, 235, 0.51);
+	border-radius: 10px;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+.tae-git-1::-webkit-scrollbar-track {
+	background-color: rgba(255, 255, 255, 0.5);
+}
+.tae-btn-text-white{
+	background-color: darkseagreen;
+	color:#fff;
+	font-size:16px;
+	height:38px;
+	width:105px;
+	margin-top: 15px;
+	float: right;
+	margin-left:15px;
+	bs-btn-padding-y: .25rem;
+	bs-btn-padding-x: .5rem;
+	bs-btn-font-size: .75rem;
+	border: 0px solid #fff;
+	border-radius:5px;
+	
+}

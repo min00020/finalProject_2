@@ -1,0 +1,116 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{layout/member/mainTemplate.html}"
+	layout:fragment="content">
+
+<section style="width: 1100px;margin-left: 150px">
+	<div id="qna_banner">
+			<h3>이모티콘 상점</h3>
+			<p style="color:#76767e">포인트로 이모티콘을 구매해보세요</p>
+		</div>
+		<div class="row gx-5 align-items-center justify-content-center">
+                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+                        <img class="img-fluid rounded-3 my-5" th:src="@{${emoDetail.emoPath+emoDetail.emoFirstimg}}" alt="...">
+                        </div>
+                        <div class="col-lg-8 col-xl-7 col-xxl-6">
+                            <div class="my-5 text-center text-xl-start">
+                                <h1 class="display-5 fw-bolder text-black mb-2" th:text="${emoDetail.emoName}"></h1>
+                                <p class="lead fw-normal text-black-50 mb-4" th:text="${emoDetail.emoDesc}"></p>
+                                <p class="lead fw-normal" style="color: red" th:text="${emoDetail.emoPrice}+포인트"></p>
+                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" th:if = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0">
+                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#AddNotice"  style="text-decoration: none; color: white;"
+                                    >
+		                        		구매하기
+		                     		</button>
+                                </div>
+                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" th:unless = "${user.acoPoint + user.acoMoney - emoDetail.emoPrice} >= 0" >
+                                    <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3"  style="text-decoration: none; color: white;"
+                                    onclick="location.href='/point'">
+		                        		충전하러가기
+		                     		</button>
+		                     		<p style="color: red; text-align: center;">현재 보유 포인트(+머니)는 [[${user.acoPoint}]](+[[${user.acoMoney}]])  입니다. <br>충전이 필요합니다.</p>
+		                     		</div>
+                                <!-- Modal -->
+			                  <div class="modal fade" id=AddNotice tabindex="-1" role="dialog"
+			                     aria-labelledby="AddNoticeLabel" aria-hidden="true">
+			                     <div class="modal-dialog modal-m" role="document">
+			                        <div class="modal-content">
+			                           <div class="modal-header" style="margin: auto;">
+			                              <h4 class="modal-title" id="AddNoticeLabel"
+			                                 style="font-weight: bold;">이모티콘을 구매하시겠습니까?</h4>
+			                           </div>
+			                            <div class="modal-body" style="width: 500px">
+			                            <div style="text-align: center;">
+			                            <table style="width: 100%" >
+			                            	<tbody>
+											<tr>
+												<th>현재 보유 에코포인트</th>
+												<td th:text="${user.acoPoint}"></td>
+											</tr>		                            
+											<tr>	
+												<th>현재 보유 에코머니</th>
+												<td th:text="${user.acoMoney}"></td>
+											</tr>												
+											<tr style="border-top: 1px solid #dee2e6">
+												<th>구매 후 포인트(+머니)</th>
+												<td style="color: red" th:text="${user.acoPoint + user.acoMoney - emoDetail.emoPrice}"></td>
+											</tr>
+											</tbody>		                            
+			                            </table>
+			                            </div>
+			                            </div>
+			                           <div class="modal-footer" style="margin: auto;">
+			                              <button type="button" class="btn btn-primary" 
+			                              onclick="buyEmo()">구매</button>
+			                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                           </div>
+			                        </div>
+			                     </div>
+			                     <hr>
+			                  </div>
+                  <!-- 모달 끝 -->
+                            </div>
+                        </div>
+                    </div>
+        <div class="container px-4 px-lg-5">
+           
+            <!-- Call to Action-->
+            <div class="card text-white bg-secondary my-5 py-4 text-center">
+                <div class="card-body"><p class="text-white m-0">이모티콘을 구매해서 댓글에 써보세요!</p></div>
+            </div>
+            <!-- Content Row-->
+			<div style="text-align: center;">
+			<img class="img-fluid rounded mb-4 mb-lg-0" th:src="@{${emoDetail.emoPath+emoDetail.emoInnerimg}}" alt="..." />
+			</div>
+			<br>
+			 <div style="text-align: center;">
+				<a class="btn btn-primary" href="/emoMain?pageNo=1">목록으로</a>
+             </div>
+        </div>
+        <a>이모티콘 출처 : freepik</a>
+        <form action="buyEmo" method="post" name="buyForm">
+        <input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+        <input type="hidden" name="memberNo" th:value="${user.memberNo}">
+        <input type="hidden" name="acoPoint" th:value="${user.acoPoint}">
+        <input type="hidden" name="acoMoney" th:value="${user.acoMoney}">
+        <input type="hidden" name="emoPrice" th:value="${emoDetail.emoPrice}">
+        <input type="hidden" name="emoNo" th:value="${emoDetail.emoNo}">
+        <input type="hidden" name="emoName" th:value="${emoDetail.emoName}">
+        </form>
+</section>
+</div>
+<script th:inline="javascript">
+ 	function buyEmo(){
+	var emoDetail = [[${emoDetail}]]
+	var emoBuyList = [[${emoBuyList}]]
+		for(let i =0; i < emoBuyList.length; i++){
+			console.log(emoBuyList[i].emoNo)
+			if(emoDetail.emoNo == emoBuyList[i].emoNo){
+				showWarningAlert('이미 구매한 이모티콘입니다.');
+				return;
+			}
+		}
+		showSuccessAlert('구매 완료','1초 후 구매내역으로 이동합니다.');
+		setTimeout("document.buyForm.submit()", 1000);
+	} 
+</script>

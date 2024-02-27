@@ -1,0 +1,1098 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{layout/member/mainTemplate.html}"
+	layout:fragment="content"
+	style="margin:0 auto;"
+>
+<section>
+	<div id="qna_banner">
+		<h3>질문&답변</h3>
+		<p style="color:#76767e">좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
+	</div>
+	<hr>
+	<div class="container" style="width:1100px;">
+		<!--/* 질문글 */-->
+		<div class="questionInfo">
+			<div class="row" id="questionInfo2"><!-- 질문글 제목 / 신고삭제 -->
+				<div id="questionTitle" class="col-9">  <!-- 사이드 태그 / 질문제목, 포인트 -->
+					<h1 class="qna_logo" style="margin-bottom:8px;">Q</h1>
+					<div class="qna_title">
+						<div>
+							<button th:if="${questionInfo[0][0].topic == 'H001'}"
+								type="button" class="btn" 
+								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+								기술
+							</button>
+							<button th:if="${questionInfo[0][0].topic == 'H002'}"
+								type="button" class="btn" 
+								style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px;margin-bottom:5px;
+									  --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+								사이드프로젝트
+							</button>
+							<h4 th:text="${questionInfo[0][0].title}" style="font-weight:bold">Node.js에 관련된 질문이 있습니다.</h4>
+						</div>
+					</div>
+					<div class="qna_second_line" th:if="${questionInfo[0][0].point} != 0">
+						<p class="qna_blueBtn" th:text="${questionInfo[0][0].point}">1000</p>
+					</div>
+				</div>
+				<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+						<div th:if="${loginId == questionInfo[0][0].id}">
+							<span id="questionModify">수정</span><span th:if="${isAdopt} != true">삭제</span>
+						</div>
+						<span th:unless="${loginId == questionInfo[0][0].id}">신고</span>
+						<p th:text="${#dates.format(questionInfo[0][0].writeDate, 'yyyy.MM.dd')}"></p>
+				</div>
+			</div><!-- 질문글 제목 / 신고삭제 끝-->
+			<div class="qna_contents" > <!-- 질문 내용 -->
+				<p th:utext="${questionInfo[0][0].contents}">node.js를 이해하기 위해 질문드립니다.
+					블로그 같은 곳에서 node.js에 대해서 공부 하다보니, 개념이 이해가 안 되는데,
+					
+					1. 일종의 javascript를 돌리기 위한 일종의 서버라고 이해하면 되죠?
+					
+					2.Node.js가 나오기 전까지는 자바스크립트가 브라우저의 동작을 제어하는데 사용되었고 브라우저에서만 실행할 수 있다는데,
+					  여기서 말하는 브라우저 바깥에서 자바 스크립트를 어떤 상황에서 쓴다는 말인가요?
+				</p>
+				<p style="color:blue" th:text="${questionInfo[0][0].tag}">#node.js #mysql</p>
+			</div>
+			<div id="question_bottom" class="row"> <!-- 작성자 프로필 -->
+				<div id="member" class="col-8" style="height:40px;" th:onclick="|location.href='/member/${questionInfo[0][0].memberNo}?pg=1'|">
+					<div class="qna_box2">
+					   <img class="qna_profile" th:src="|/upload/profile/${questionInfo[0][0].profileImage}|" alt="profile">
+					</div>
+					<p class="m-0" th:text="${questionInfo[0][0].nickname}">cookie123</p>
+					<p class="m-0" th:text="${questionInfo[0][0].memberLevel}">silver</p>
+				</div>
+				<!-- 조회, 북마크, 추천, 덧글수 버튼 -->
+				<div id="qna_iconAll" class="col-3"> 
+					<span><img class="qna_icon" src="/commonResource/icon/eye.png" alt="eye"></span>
+					<span th:text="${questionInfo[0][0].viewCnt}">10</span>
+					<span>
+						<img class="qna_icon" id="bookmarkImage" src="/commonResource/icon/bookmark.png" alt="bookmark" th:if="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+						<img class="qna_icon" id="bookmarkImage" src="/commonResource/icon/bookmark2.png" alt="bookmark" th:unless="${isCheckBookmark == 0}" th:onclick="bookmarkBtn()">
+					</span>
+					<span id="bookmarkCnt" th:text="${questionInfo[0][0].bookmarkCnt}">13</span>
+					<!-- <span><img class="qna_icon" src="/commonResource/icon/best.png" alt="best"></span>
+					<span th:text="${questionInfo[0][0].recommendCnt}">9</span> -->
+					<span id="replyBtn"><img class="qna_icon" src="/commonResource/icon/reply.png" alt="reply"></span>
+					<span th:text="${questionInfo[0][0].replyCnt}">7</span>
+				</div>
+				
+			</div>
+			<hr>	
+			<!-- 댓글 -->
+			<div id="replyModal" style="display:none;">  
+					<!--/* 댓글영역 */-->
+					<div>
+						<div class="d-flex justify-content-center">
+							<textarea id="commentInput" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+						</div>
+						<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+							<button class="btn" type="button" style="color:white; background-color:#3e6ce3" onclick="registReply()">댓글등록</button>
+							<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" data-bs-target="#emoModal">이모티콘 등록</button>
+						</div>
+						<!--/* 댓글등록 이모티콘 모달 시작 */-->
+						<th:block th:if="${session.myEmoList} != null">
+							<div class="modal fade" id="emoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  								<div class="modal-dialog">
+    								<div class="modal-content">
+      									<div class="modal-header">
+        									<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      									</div>
+      									<div class="modal-body">
+      									<div style="overflow: scroll; height: 250px; overflow-x: hidden;">
+        					 				<div class="row">
+					        					<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            					<div class="card h-100" th:onclick="registReply([[${emo.emoUseimg}]])">
+					                					<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            					</div>
+					        					</div>
+					    					</div>
+					    					</div>
+      									</div>
+      									<div class="modal-footer">
+      									</div>
+    								</div>
+  								</div>
+							</div>
+							<!--/* 댓글등록 이모티콘 모달 끝 */-->
+						</th:block>
+					</div>
+					<br>
+					<!--/*댓글 반복구간  */-->
+					<div class="mt-1 w-100 mb-3" th:each="reply : ${replyList}">
+						<div>
+							<!--/*댓글(부모) 헤더구간  */-->
+							<div class="mx-5 d-flex justify-content-between" style="width:90%;">
+								<div>
+									<!--/* 프로필이미지가 null이라면 */-->
+									<div class="qna_box">
+										<img th:if="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/commonResource/default_profile.jpg|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
+										<img th:unless="${reply.value[0].parentImage} == null" class="qna_profile" th:src="|/upload/profile/${reply.value[0].parentImage}|" alt="profile" th:onclick="|location.href='/member/${reply.value[0].parentMemberNo}'|" />
+									</div>
+									<span>[[${reply.value[0].parentNickname}]]</span>
+								</div>
+								<div>
+									<small th:text="${#dates.format(reply.value[0].parentWriteDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+									<!--/* 댓글신고는 댓글내용만 있고, 댓글 삭제하지않았으며 자기자신이 단 댓글이 아닌경우에만 뜬다. */-->
+									<button th:if="${reply.value[0].parentDelete} == null and ${reply.value[0].parentComment} != null and ${reply.value[0].parentMemberNo} != ${session.member?.memberNo}" type="button" class="btn mb-1" data-bs-toggle="modal" th:data-bs-target="|#reportModal${reply.key}|"><img style="width:25px;" th:src="|/commonResource/icon/alert.png|" alt="alert"/></button>
+									<!-- Modal -->
+			                  		<div class="modal fade" th:id="|reportModal${reply.key}|" tabindex="-1" role="dialog"
+			                     		aria-labelledby="AddReportLabel" aria-hidden="true">
+			                     		<div class="modal-dialog modal-s" role="document">
+			                        		<div class="modal-content">
+			                           			<div class="modal-header">
+			                              			<h4 class="modal-title" id="AddReportLabel" style="font-weight: bold;">신고 요청</h4>
+			                           			</div>
+			                           			<div class="modal-body">
+			                           				<form name="reportForm" action="/insertReport" method="post" th:id="${reply.key}"> 	
+			                           				<input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>
+			                           				<input type="hidden" name="reportee" th:value="${reply.value[0].parentMemberNo}">
+			                           				<input type="hidden" name="boardNo" th:value="${questionInfo[0][0].questionBoardNo}">
+			                           				<input type="hidden" name="replyContent" th:value="${reply.value[0].parentComment}">
+			                           				<input type="hidden" name="boardType" th:value="N001">
+													<div>
+														<table>
+															<tr>
+																<th>신고종류</th>
+																<td>
+																	<select name="reportType" id="reportType" style="margin-left:10px; width: 380px;">
+													  					<option th:value="null">--신고종류를 선택해주세요--</option>
+													  					<option th:value="A001">홍보</option>
+													  					<option th:value="A002">도배</option>
+													  					<option th:value="A003">불법정보</option>
+													  					<option th:value="A004">욕설</option>
+													  					<option th:value="A005">개인정보노출</option>
+													  					<option th:value="A006">기타</option>
+																	</select>
+																</td>
+															</tr>
+															<tr>
+																<th>신고사유</th>
+																<td><textarea name="reportContent" id="reportContent" style="margin-left:10px; width: 380px; height: 211px"></textarea></td>	
+															</tr>
+														</table>
+													</div>
+												</form>
+			                           			</div>
+			                           		<div class="modal-footer">
+			                              		<button type="button" class="btn btn-primary" th:onclick="insertReport([[${reply.key}]])">등록</button>
+			                              		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+			                           		</div>
+			                        	</div>
+			                     	</div>
+			                     <hr>
+			                  </div>
+                  				<!-- 모달 끝 -->
+								</div>
+							</div>
+							<!--/*댓글 내용구간  */-->
+							<div style="width:90%; margin-left:93px;">
+								<!-- /* 삭제된 댓글인 경우 */ -->
+								<th:block th:if="${reply.value[0].parentDelete} != null">
+									<p style="margin-bottom:0px; color:red;"><b>삭제된 댓글 입니다.</b></p>
+								</th:block>
+								<th:block th:unless="${reply.value[0].parentDelete} != null">
+									<th:block th:if="${reply.value[0].parentComment} != null">
+										<p style="margin-bottom:0px;">[[${reply.value[0].parentComment}]]</p>
+									</th:block>
+									<th:block th:unless="${reply.value[0].parentComment} != null">
+										<img style="width:100px;" th:src="|/upload/emoticon/${#strings.substring(reply.value[0].parentEmoticon, 0,#strings.indexOf(reply.value[0].parentEmoticon,'_'))}/${reply.value[0].parentEmoticon}|" />
+									</th:block>
+								</th:block>
+							
+								
+							</div>
+							<div style="width:90%; margin-left:80px; margin-top:10px;"> 
+								<!--/* 댓글 수정/삭제 */-->
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:onclick="delReply([[${reply.key}]])">삭제</button>
+								<button th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" type="button" class="btn" th:id="|modifyBtn${reply.key}|" th:onclick="|openModifyTextarea('modifyCommentDiv${reply.key}','modifyBtn${reply.key}')|">수정</button>
+							</div>
+							
+							<!--/* 댓글 수정 영역 */-->
+							<div style="display:none;" th:if="${session.member} != null and ${session.member.memberNo} == ${reply.value[0].parentMemberNo} and ${reply.value[0].parentDelete} == null" 
+								th:id="|modifyCommentDiv${reply.key}|">
+								<div class="d-flex justify-content-center">
+									<textarea th:id="|modifyTextarea${reply.key}|" rows="5" class="mt-4" placeholder="댓글 수정" style="width:90%;">[[${reply.value[0].parentComment}]]</textarea>
+								</div>
+								<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+									<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|modifyReply(${reply.key})|">댓글 수정</button>
+									<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#modEmoModal${reply.key}|">이모티콘 등록</button>
+								</div>
+								<!--/* 댓글 수정 이모티콘 모달 시작 */-->
+								<th:block th:if="${session.myEmoList} != null">
+									<div class="modal fade" th:id="|modEmoModal${reply.key}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  										<div class="modal-dialog">
+    										<div class="modal-content">
+      											<div class="modal-header">
+        											<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      											</div>
+      											<div class="modal-body">
+      											<div style="overflow: scroll; height: 280px; overflow-x: hidden;">
+        					 						<div class="row">
+					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            							<div class="card h-100" th:onclick="modifyReply([[${reply.key}]],[[${emo.emoUseimg}]])" style="cursor: pointer;">
+					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            							</div>
+					        							</div>
+					    							</div>
+					    							</div>
+      											</div>
+      											<div class="modal-footer">
+      											</div>
+    										</div>
+  										</div>
+									</div>
+								</th:block>
+								<!--/* 댓글 수정 이모티콘 모달 끝 */-->	
+							</div>
+							<!--/* 댓글 수정 영역 끗 */-->
+							
+							<!--/* 답글영역 */-->
+							<div style="display:none;" th:id="|nestedComment${reply.key}|">
+								<div class="d-flex justify-content-center">
+									<textarea th:id="|nestedTextarea${reply.key}|" rows="5" class="mt-4" placeholder="여러분의 생각을 댓글로 자유롭게 표현해주세요." style="width:90%;"></textarea>
+								</div>
+								<div class="d-flex justify-content-end my-2 gap-1" style="width:95%;">
+									<button class="btn" type="button" style="color:white; background-color:#3e6ce3" th:onclick="|registNestedReply(${reply.key})|">답글등록</button>
+									<button class="btn" type="button" style="color:white; background-color:#80a9e8" data-bs-toggle="modal" th:data-bs-target="|#emoModal${reply.key}|">이모티콘 등록</button>
+								</div>
+								<!--/* 답글등록 이모티콘 모달 시작 */-->
+								<th:block th:if="${session.myEmoList} != null">
+									<div class="modal fade" th:id="|emoModal${reply.key}|" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  										<div class="modal-dialog">
+    										<div class="modal-content">
+      											<div class="modal-header">
+        											<h1 class="modal-title fs-5" id="exampleModalLabel">이모티콘 선택</h1>
+        											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      											</div>
+      											<div class="modal-body">
+      												<div style="overflow: scroll; height: 250px; overflow-x: hidden;">
+        					 						<div class="row">
+					        							<div class="col-lg-6 mb-4" style="width: 30%" th:each="emo : ${session.myEmoList}">
+					            							<div class="card h-100" th:onclick="registNestedReply([[${reply.key}]],[[${emo.emoUseimg}]])">
+					                							<img class="card-img-top" th:src="|/upload/emoticon/${emo.emoName}/${emo.emoUseimg}|" alt="">
+					            							</div>
+					        							</div>
+					    							 </div>
+					    							</div>
+      											</div>
+      											<div class="modal-footer">
+      											</div>
+    										</div>
+  										</div>
+									</div>
+									<!--/* 답글등록 이모티콘 모달 끝 */-->
+								</th:block>
+							</div>
+						</div>
+					</div>
+					<!--/*댓글 반복구간 끗 */-->
+	        </div>
+			<!--/* 댓글영역 끗 */-->
+		</div>
+		<!-- questionInfo 질문글 끝-->
+		 
+		<!-- 답변 작성폼 / 작성자 != 로그인유저 and 답변 단 적 없을 때-->
+	 	<th:block sec:authorize="isAuthenticated()" th:if="${loginId != questionInfo[0][0].id and writePost == false and AdoptQuestionVO == null}" >
+		 	<form name="answerWrite">
+			 	<div style="width:900px;margin: 0 auto;">
+					<div class="answer-top" style="height:80px;">
+						<div class="min_answerbox" >
+						 	<img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
+						</div>
+						<div class="min_align_bottom">
+							<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님 답변해주세요!</h6>
+							<p class="m-0" style="font-size:13px;color:#989daa;"> 답변하시면 활동점수 50점을 드립니다.</p>
+						</div>
+					</div>
+					<div>
+						<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
+						<input id="answerTitle" name="answerTitle" type="text" class="form-control" placeholder="제목을 입력해주세요">
+						<br>
+					
+						<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
+						<div id="editor" name="editor" style="height:300px;"></div>
+						<br>
+					</div>
+					<div style="float: right;margin-bottom:10px;">
+						<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+						<button type="button" class="btn text-white" style="background-color:#3e6ce3;" onclick="sendAnswer()">등록</button>
+					</div>
+					<br><br><br><hr>
+			 	</div>
+		 	</form>
+		</th:block>
+		<!-- 답변 작성폼 끝 -->
+		
+		<!-- 답변 리스트 시작 -->
+		<!-- 채택답변 -->
+		<div class="questionInfo" th:if="${isAdopt} == true">
+	      	<div>
+	            <div style="width:900px; margin:0 auto">
+	               <div class="row" id="questionInfo2">
+	                  <!--사이드 태그 / 질문제목, 포인트-->
+	                  <div id="questionTitle" class="col-9">  
+	                     <h1 class="qna_logo">A</h1>
+	                     <div class="qna_title">
+	                        <div>
+	                           <button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+	                                   --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+	                              질문자 채택
+	                           </button>
+	                           <h4 style="font-weight:bold" th:text="${AdoptQuestionVO.answerTitle}">질문에 대한 답변입니다.</h4>
+	                        </div>
+	                     </div>
+	                  </div>
+	                  <div id="qna_deleteBtn" class="col-2"> <!-- 신고 / 작성날짜 -->
+	                     <span th:unless="${loginId != AdoptQuestionVO.id}">신고</span>
+	                     <p th:text="${#dates.format(AdoptQuestionVO.answerWriteDate, 'yyyy.MM.dd')}" >2023.01.28</p>
+	                     
+	                  </div>
+	               </div>
+	               <!-- 질문글 제목 / 신고삭제 끝 -->
+	               <div class="qna_contents" th:utext="${AdoptQuestionVO.answerContents}">
+	                  <p>답변 내용입니다</p>
+	               </div>
+	               <div id="question_bottom" class="row"> <!--작성자 프로필 -->
+	                  <div id="member" class="col-7" style="height:40px;" th:onclick="|location.href='/member/${AdoptQuestionVO.answerMemberNo}?pg=1'|">
+	                     <div class="qna_box2">
+	                        <img class="qna_profile" th:src="|/upload/profile/${AdoptQuestionVO.answerProfileImage}|" alt="profile">
+	                     </div>
+	                     <p class="m-0" th:text="${AdoptQuestionVO.answerNickname}">cookie123</p>
+	                     <p class="m-0" th:text="${AdoptQuestionVO.answerMemberLevel}">silver</p>
+	                  </div>
+	                  <!-- 조회, 북마크, 추천, 덧글수 버튼 -->
+	                  <div id="qna_iconAll" class="col-3">
+	                     <!-- <span>               
+	                        <img class="qna_icon" src="/commonResource/icon/best.png" alt="best">
+	                     </span>
+	                     <span th:text="${AdoptQuestionVO.answerViewCnt}">9</span> -->
+	                     <button type="button" id="addQuestionBtn" class="btn text-white" 
+	                        th:if="${AdoptQuestionVO.answerAdoptStatus == 'I002' and loginId == questionInfo[0][0].id}"
+	                        style="background-color:#80a9e8;font-size:12px; margin-left:15px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+	                        추가질문하기
+	                     </button>
+	                  </div>
+	               </div>
+	               <hr>   
+	            </div>
+	            <!-- 추가질문답변 목록-->
+	            <div class="questionInfo" th:each="questionIdx : ${questionInfo}">
+	               <th:block th:each="question: ${questionIdx.value}">   
+	                	<div th:if="${question.addStatus == 'R002'}">
+							<div id="qna_add">
+								<!-- 질문자/작성자 구분 -->
+								<img th:if="${question.addWriterType == 'J001'}"
+									class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
+								<img th:unless="${question.addWriterType == 'J001'}" 
+									class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
+								<div class="qna_add_info">
+									<span th:if="${question.addWriterType == 'J001'}" 
+									class="m-1" style="font-weight:bold;">질문자의 추가질문</span>
+									<span th:unless="${question.addWriterType == 'J001'}"class="m-1" style="font-weight:bold;">
+										<button th:if="${question.addAdoptStatus == 'S002'}"
+												type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+			                                   --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+			                              질문자 채택
+			                           </button>
+										답변자의 추가답변
+									</span>
+									<!-- 추가질문답변 리스트 -->
+									<p class="m-1" th:text="${question.addContents}">추가로 질문할 게 있는데 </p>
+									<span class="m-1" th:text="${#dates.format(question.addWriteDate, 'yyyy.MM.dd')}" style="font-size: 15px; color:#76767e;">2023.01.27</span>
+									<span style="float:right;" th:if="${loginId == questionInfo[0][0].id} and ${question.addWriterType == 'J002'} and ${question.addAdoptStatus != 'S002'}">
+									<img th:onclick="adoptAddAnswer([[${question.questionAddNo}]])" src="/commonResource/icon/check.png" alt="profile" style="width:35px;" >
+										<a th:onclick="adoptAddAnswer([[${question.questionAddNo}]])" style="color:#3e6ce3;font-weight:bold;">채택</a>
+									</span>
+								</div>
+							</div>
+	               		</div>  
+	               </th:block> 
+	            </div>
+	            <!-- 추가질문답변 목록 끝 -->      
+	            <!-- 추가질문답변 등록칸 -->
+	            <div>
+	              <div>
+	              <!-- or currentWriterType == null -->
+	                <div id="qnaAddModal" th:if="${loginId == questionInfo[0][0].id and currentWriterType != 1 }">    
+		                <div id="qna_add">
+			                  <img class="qna_add_icon" src="/commonResource/add_question.png" alt="profile">
+			                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="답변자에게 추가로 질문을 남겨주세요!"></textarea>
+		                </div>      
+		                <div style="float: right;margin-bottom:10px;">
+		                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
+		               </div>   
+	                </div>
+	               
+	               <div id="qnaAddModal" th:if="${loginId == AdoptQuestionVO.answerId and currentWriterType == 1}">        
+		               <div id="qna_add">
+		                  <img class="qna_add_icon" src="/commonResource/add_answer.png" alt="profile">
+		                  <textarea class="form-control" id="qna_add_form" name="addForm" placeholder="질문자에게 추가로 답변을 남겨주세요!"></textarea>
+		               </div>      
+		               <div style="float: right;margin-bottom:10px;">
+		                  <button type="button" class="btn text-white" th:onclick="sendAddAnswer([[${AdoptQuestionVO.answerBoardNo}]], [[${AdoptQuestionVO.answerMemberNo}]])" style="background-color:#3e6ce3;margin-right:28px;">등록</button>
+		               </div> 
+	               </div>
+	               <br><br><br><hr>
+	               </div>
+	            </div>   
+	            <!-- 추가질문,답변 끝 -->
+	     	 </div>
+		</div>
+		<!-- 채택답변 끝 -->
+		
+		<!-- 미채택답변 리스트 -->
+		<!-- 1)답변 수정 -->
+		 <div class="questionInfo" th:each="questionIdx : ${questionInfo}">
+	        <th:block th:each="question: ${questionIdx.value}">   
+				<div style="display:none" th:if="${writePost} == true and ${session.member.memberNo} == ${question.answerMemberNo}" id="answerModifyForm">	
+					<form name="answerModify">
+					 	<div style="width:900px;margin: 0 auto;">
+							<div class="answer-top" style="height:80px;">
+								<div class="min_answerbox" >
+								   <img class="answer_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt="profile">
+								</div>
+								<div class="min_align_bottom">
+									<h6 class="m-1" style="font-weight : bold;">[[${loginId}]]님의 답변 수정하기</h6>
+									<p class="m-0" style="font-size:13px;color:#989daa;"> 답변이 채택되면 활동점수 20점을 드립니다.</p>
+								</div>
+							</div>
+							<div>
+								<label for="answerTitle" style="font-weight:bold; margin-bottom:8px;">제목</label>
+								<input id="answerTitle" name="answerTitle" type="text" th:value="${question.answerTitle}" class="form-control" placeholder="제목을 입력해주세요">
+								<br>
+							
+								<label for="editor" style="font-weight:bold; margin-bottom:8px;">답변 내용</label>
+								<div id="editor" name="editor" style="height:300px;" th:utext="${question.answerContents}"></div>
+								<br>
+							</div>
+							<div style="float: right;margin-bottom:10px;">
+								<button type="button" class="btn text-white" style="background-color:#989daa; margin:10px;">취소</button>
+								<button type="button" class="btn text-white" style="background-color:#3e6ce3;" th:onclick="sendAnswerModify([[${question.answerBoardNo}]], [[${question.answerMemberNo}]])">수정</button>
+							</div>
+							<br><br><br><hr>
+					 	</div>
+				 	</form>
+				</div>
+			</th:block>
+		</div>
+		<!-- 답변 수정 끝 -->
+		<!-- 2)미채택 답변 -->
+		<div class="questionInfo" th:each="questionIdx : ${questionInfo}">
+			<th:block th:each="question: ${questionIdx.value}">				
+				<div th:if="${question.answerAdoptStatus == 'I001'}">
+					<div class="row" id="questionInfo2">
+						<div id="questionTitle" class="col-9">  
+							<!--답변채택 / 질문제목, 포인트-->
+							<h1 class="qna_logo">A</h1>
+							<div class="qna_title">
+								<div>
+									<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+											--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+											  th:if="${loginId == questionInfo[0][0].id} and ${isAdopt == false}"
+											 th:onclick="adoptAnswer([[${question.answerBoardNo}]])">
+										답변 채택하기
+									</button>
+									<button type="button" class="btn" style="background-color:#e0e0e7; color:#3e6ce3; font-weight:bold; font-size:12px; margin-bottom:5px;
+											--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+											  th:if="${loginId != questionInfo[0][0].id} and ${isAdopt == false}">
+										채택 대기중
+									</button>
+									<h4 style="font-weight:bold" th:text="${question.answerTitle}">질문에 대한 답변입니다.</h4>
+								</div>
+							</div>
+						</div>
+						<div id="qna_deleteBtn" class="col-2"> <!-- 수정삭제 or 신고 / 작성날짜 -->
+							<div th:if="${loginId == question.answerId} and ${isAdopt != true} ">
+								<span id="answerModifyBtn" onclick="openModifyView()">수정</span>
+								<span>삭제</span>
+							</div>
+							<span th:unless="${loginId == question.answerId}">신고</span>
+							<p th:onclick="testBtn([[${question.answerBoardNo}]])" th:text="${#dates.format(question.answerWriteDate, 'yyyy.MM.dd')}">2023.01.28</p>
+						</div>
+					</div>
+					<!-- 질문글 제목 / 신고삭제 끝 -->
+					<!-- 답변글 본문 -->
+					<div class="qna_contents" th:utext="${question.answerContents}">
+						<p>답변 내용입니다</p>
+					</div>
+					<div id="question_bottom" class="row"> <!--작성자 프로필 -->
+						<div id="member" class="col-7" style="height:40px;" th:onclick="|location.href='/member/${question.answerMemberNo}?pg=1'|">
+							<div class="qna_box2">
+								<img class="qna_profile" th:if="${question.answerProfileImage} == null" th:src="|/commonResource/default_profile.jpg|" alt="profile">
+							  	<img class="qna_profile" th:unless="${question.answerProfileImage} == null" th:src="|/upload/profile/${question.answerProfileImage}|" alt="profile">
+							</div>
+							<p class="m-0" th:text="${question.answerNickname}">cookie123</p>
+							<p class="m-0" th:text="${question.answerMemberLevel}">silver</p>
+						</div>
+						<!-- 추천 버튼 -->
+						<!-- <div id="qna_iconAll" class="col-3">
+							<span><img class="qna_icon" src="/commonResource/icon/best.png" alt="best"></span>
+							<span th:text="${questionInfo[0][0].answerRecommendCnt}">9</span>
+						</div> -->
+						<!-- 조회, 북마크, 추천, 덧글수 버튼 끝-->
+					</div>
+					<!-- 답변글 본문 끝 -->
+					<hr>
+				</div> <!-- th:if 끝 -->
+			</th:block> 
+		</div>
+		<!-- 2)미채택답변, 리스트 끝 -->
+	</div>
+	<!-- end of container -->
+</section>
+</div>
+<script th:inline="javascript">
+	function openModifyView(){
+		if($('#answerModifyBtn').text() == "수정") {
+			$('#answerModifyBtn').text('수정닫기');
+			$('#answerModifyForm').css('display','block');
+		}
+		else {
+			$('#answerModifyBtn').text('수정');
+			$('#answerModifyForm').css('display','none');
+		}
+	}
+
+</script>
+<script th:inline="javascript">
+	 let test = [[${questionInfo}]];
+	 let test2 = Object.values(test)[0][1];
+	 let test3 = [[${writePost}]];
+	 let test4 = [[${AdoptQuestionVO}]];
+	 let test5 = [[${currentWriterType}]]
+	 
+	 let bno = [[${questionInfo[0][0].questionBoardNo}]]
+
+	 //질문글 수정폼 이동
+	 $(document).ready(function(){
+	 	$('#questionModify').click(function(){
+	 		window.location.href= "/questionWrite?bno=" + bno ;
+	 	})
+	 });
+	 
+	 //답변글 작성	 
+	let csrfPara = $('meta[name="csrfPara"]').attr("content");
+	let csrfToken = $('meta[name="csrf"]').attr("content");
+	
+	function sendAnswer(){
+		const member = [[${session.member}]];
+		
+		const formData = new FormData(document.answerWrite);
+	
+		formData.append(csrfPara, csrfToken);
+		formData.append("questionBoardNo", bno);
+		formData.append("answerMemberNo", member.memberNo);
+		formData.append("answerContents", editor.getHTML());
+		
+		$.ajax('/answerWrite', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('등록실패');
+	    })
+		
+	}
+	//답변글 수정  
+	function sendAnswerModify(answerBoardNo){
+		const formData = new FormData();
+	
+		formData.append(csrfPara, csrfToken);
+		formData.append("answerTitle", $('input[name="answerTitle"]').val());
+		formData.append("answerBoardNo", answerBoardNo);
+		formData.append("answerContents", editor.getHTML());
+		
+		$.ajax('/answerModify', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('수정실패');
+	    })
+		
+	}
+	
+	//답변 채택
+	function adoptAnswer(answerBoardNo){
+		const formData = new FormData();
+	
+		formData.append(csrfPara, csrfToken);
+		formData.append("ano", answerBoardNo);
+		
+		$.ajax('/answerAdopt', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('채택실패');
+	    })
+		
+	}
+	
+	$("#replyBtn").click(function(e) {
+		$("#replyModal").slideToggle();	
+	}) 
+	
+ 	$("#addQuestionBtn").click(function(e) {
+		$("#qnaAddModal").slideToggle();	
+	}) 
+	
+	//추가질문답변 작성
+	function sendAddAnswer(ano, answerWriter){
+		//세션멤버 = 질문작성자 => J001 / 세션멤버 = 채택답변작성자 => J002
+		const member = [[${session.member}]];
+		if(member == null){
+			return;
+		}
+		const sessionMember = member.memberNo;
+		const questionWriter = [[${questionInfo[0][0].memberNo}]];
+		
+		let addWriterType = null;
+		
+		if(sessionMember == questionWriter){
+			addWriterType = 'J001';
+		}
+		if(sessionMember == answerWriter){
+			addWriterType = 'J002';
+		}
+		
+		//글 작성
+		const formData = new FormData();
+		formData.append(csrfPara, csrfToken);
+		formData.append("answerBoardNo", ano);
+		formData.append("addContents", $('textarea[name="addForm"]').val());
+		formData.append("addWriterType", addWriterType);
+		
+		console.log(ano, $('textarea[name="addForm"]').val() , addWriterType);
+		
+		$.ajax('/questionAddWrite', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+			 /* showSuccessAlert('등록성공'); */
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('등록실패');
+	    })
+		
+	}
+ 	//추가질문답변 채택
+ 	function adoptAddAnswer(questionAddNo){
+		const formData = new FormData();
+	
+		formData.append(csrfPara, csrfToken);
+		formData.append("questionAddNo", questionAddNo);
+		
+		$.ajax('/answerAddAdopt', {
+			type : "POST",
+			data : formData,
+			contentType : false,
+			processData : false 	
+		})
+		.done(res => {
+			/* showSuccessAlert('채택성공'); */
+	    	window.location.href = "/questionInfo/"+ bno;
+			console.log(res);
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('채택실패');
+	    })
+		
+	}
+ 	
+
+	 
+	let isCheckBookmark = [[${isCheckBookmark}]]
+ 	
+ 	function bookmarkBtn(){
+ 		const member = [[${session.member}]];
+ 		
+ 		if(member == null){
+ 			showWarningAlert('로그인을 해주세요');
+ 			return;
+ 		}
+ 		
+ 		let object = {
+ 				qno : bno
+ 		};
+ 		
+ 		$.ajax('/bookmarkUpdate', {
+			type : "POST",
+			data : object,
+			beforeSend : function(xhr){
+	               xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+	        }
+		})
+		.done(res => {
+			if(res.result == "200"){
+				console.log(res);
+				$("#bookmarkCnt").text(res.bookmarkCnt);
+				if(isCheckBookmark == 0){
+					isCheckBookmark = 1;
+					$("#bookmarkImage").attr("src","/commonResource/icon/bookmark2.png");
+				}
+				else{
+					isCheckBookmark = 0;
+					$("#bookmarkImage").attr("src","/commonResource/icon/bookmark.png");
+				}
+	    		/* window.location.href = "/questionInfo/"+ bno; */
+			}
+			else{
+				showWarningAlert('북마크 실패');
+			}
+	    })
+	    .fail(err => {
+	    	console.log(err);
+	    	showWarningAlert('채택실패');
+	    })
+ 	}
+
+</script>
+
+<!-- text editor -->
+<script>
+const imageNoArray = [];
+let editor = null;
+$(document).ready(function(){
+	editor = new toastui.Editor({
+	    el: document.querySelector('#editor'), // 에디터를 적용할 요소 (컨테이너)
+	    height: '400px',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+	    initialEditType: 'WYSIWYG',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+	    initialValue: '',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+	    previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical)
+	    /* start of hooks */
+	    hooks: {
+	        async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+	            try {
+	                //1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+	                const formData = new FormData();
+	                formData.append(csrfPara, csrfToken);
+	                formData.append('image', blob);
+
+	                // 2. FileApiController - uploadEditorImage 메서드 호출
+	                const response = await fetch('/texteditorimage', {
+	                    method : 'POST',
+	                    body : formData,
+	                });
+
+	                // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+	                const res = await response.json();
+	                console.log('서버에 저장된 파일명 : ', res);
+
+	                // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+	                const imageUrl = res.imageUrl;
+	                imageNoArray.push(res.imageNo);
+	                callback(imageUrl, 'image alt attribute');
+
+	            } catch (error) {
+	                console.error('업로드 실패 : ', error);
+	            }
+	        }
+	    }
+	    /* end of hooks */
+	});
+})
+
+
+</script>
+
+<script th:inline="javascript">
+	const member = [[${session.member}]];
+	const memberNo = [[${session.member?.memberNo}]];
+	const questionBoardNo = [[${questionInfo[0][0].questionBoardNo}]];
+	
+	
+	function openModifyTextarea(divId, btnId) {
+		if($('#' + btnId).text() == "수정") {
+			$('#' + btnId).text('수정닫기');
+			$('#' + divId).css('display','block');
+		}
+		else {
+			$('#' + btnId).text('수정');
+			$('#' + divId).css('display','none');
+		}
+	}
+	
+	function delReply(replyNo) {
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
+		
+		const object = {
+			replyNo : replyNo
+		}
+		
+		$.ajax('/reply', {
+			type: "DELETE",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			if(res.result == "200") {
+				document.location.href = document.location.href;	
+			}
+			else {
+				showFailAlert('댓글 삭제에 실패했습니다.');
+			}
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+
+	function openNestedTextarea(btnId,commentId) {
+		if($('#' + btnId).text() == "답글달기") {
+			$('#' + btnId).text('답글닫기');
+			$('#' + commentId).css('display','block');
+		}
+		else {
+			$('#' + btnId).text('답글달기');
+			$('#' + commentId).css('display','none');
+		}
+	
+	}
+	
+	function modifyReply(replyNo, emoticonImgName) {
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
+		
+		if(typeof replyNo == "undefined" || replyNo == null) {
+			return;
+		}
+		
+		const boardType = 'N001';
+		
+		// 이모티콘 등록이란 의미.
+		if(typeof emoticonImgName != "undefined") {
+			object = {
+				replyNo : replyNo,
+				replyBody : emoticonImgName,
+				isEmoticon : "1",
+				replyPno : null
+			};	
+		}
+		else {
+			const comment = $('#modifyTextarea' + replyNo).val();
+			if(comment == null || comment == '') {
+				showWarningAlert('댓글을 입력해주세요.');
+				return;
+			}
+		
+			object = {
+				replyNo : replyNo,
+				replyBody : comment,
+				isEmoticon : "0",
+				replyPno : null
+			};	
+		}
+		
+		$.ajax('/reply', {
+			type: "PUT",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			if(res.result == "200")
+				document.location.href = document.location.href;
+			else
+				showFailAlert("댓글 수정에 실패했습니다.");
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+
+
+	function registReply(emoticonImgName) {
+		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
+	
+		let object = {
+			
+		}
+	
+		const boardType = 'N001';
+		
+
+		// 이모티콘 등록이란 의미.
+		if(typeof emoticonImgName != "undefined") {
+			// 이모티콘인지 체크?
+			object = {
+				boardType : boardType,
+				boardNo : questionBoardNo,
+				replyBody : emoticonImgName,
+				isEmoticon : "1",
+				replyPno : null
+			};	
+		}
+		else {
+			const comment = $('#commentInput').val();
+			if(comment == null || comment == '') {
+				showWarningAlert('댓글을 입력해주세요.');
+				return;
+			}
+			
+			object = {
+				boardType : boardType,
+				boardNo : questionBoardNo,
+				replyBody : comment,
+				isEmoticon : "0",
+				replyPno : null
+			};	
+		}
+	
+	
+		$.ajax('/reply', {
+			type: "POST",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;	
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+
+	function registNestedReply(replyPno,emoticonImgName) {
+		// 로그인했는지 항상 체크. 문의 게시판은 로그인 해야 진입가능하긴 하지만 그래도 체크해준다.
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
+	
+		let object = {
+				
+		}
+		
+		const boardType = 'N001';
+		
+		// 이모티콘 등록이란 의미.
+		if(typeof emoticonImgName != "undefined") {
+			object = {
+				boardType : boardType,
+				boardNo : questionBoardNo,
+				replyBody : emoticonImgName,
+				isEmoticon : "1",
+				replyPno : replyPno
+			};	
+		}
+		else {
+			const textareaId = '#nestedTextarea' + replyPno;
+			const text = $(textareaId).val();
+			if(text == null || text == '') {
+				showWarningAlert('댓글을 입력해주세요.');
+				return;
+			}
+		
+			// 이모티콘인지 체크?
+			object = {
+				boardType : boardType,
+				boardNo : questionBoardNo,
+				replyBody : text,
+				isEmoticon : "0",
+				replyPno : replyPno
+			};
+		}
+	
+		$.ajax('/reply', {
+			type: "POST",
+			data: object,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+			document.location.href = document.location.href;
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+	
+	function insertReport(replyNo){
+		if(typeof memberNo == "undefined" || memberNo == null) {
+			showFailAlert("로그인 후 진행해주세요.");
+			return;
+		}
+		const formData = new FormData($('#' + replyNo)[0]);
+		
+		$.ajax('/insertReport', {
+			type: "POST",
+			data: formData,
+			contentType : false,
+			processData : false,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+			},
+		})
+		.done(res => {
+				Swal.fire({
+					  title: "해당 댓글이 신고되었습니다.",
+					  text: '',
+					  icon: 'success',
+					  confirmButtonClass: "btn-danger",
+					  confirmButtonText: "확인",
+					}).then((result) => {
+					  if (result.value != null) {
+						  window.location.href = document.location.href;
+					  }
+					});	
+		})
+		.fail(err => {
+			showFailAlert("실패. 다시시도해주세요.");
+			console.log(err);
+		})
+	}
+</script>

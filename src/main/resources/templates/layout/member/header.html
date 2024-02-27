@@ -1,63 +1,185 @@
-
-    <div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
-        class="common-width">
-        <header>
-            <div class="navbar">
-               <a href="/" style="width:15%">
-    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:80%">
-				</a>
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+    class="common-width"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <header>
+        <div class="park_navbar">
+           <a href="/" style="width:15%">
+         <img id="logoImage" src="/commonResource/askcodeLogo.png" alt="logo" style="width:80%">
+        </a>
+        
+            <ul class="list-unstyled d-flex gap-3 align-self-center ml-3">
+                <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/sideProjectList') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/sideInfo') ? 'park_active' : ''}" onclick="location.href='/sideProjectList/Q001/?pageNo=1'">사이드 프로젝트</li>
+                <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/questionList') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/questionInfo') ? 'park_active' : ''}" onclick="location.href='/questionList?pageNo=1'">질문&답변</li>
+				<li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/freeBoardList') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/freeBoardInfo') ? 'park_active' : ''}" onclick="location.href='/freeBoardList'">자유게시판</li>
+				<li>
+                	<div class="dropdown" id="drmenu" th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/noticeBoard') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/noticeInfo') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/qnaBoard') ? 'park_active' : ''}">
+						<a style="font-weight:bold; text-decoration:none;" id="headerDrop" data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
+						<ul id="headerDropDown" style="display:none;" class="dropdown-menu" aria-labelledby="headerDrop">
+					    	<li><a class="dropdown-item" href="/noticeBoard?pageNo=1">공지사항</a></li>
+					   		<li><a class="dropdown-item" href="/qnaBoard?pg=1">1:1 문의게시판</a></li>
+						</ul>
+					</div>
+                </li>
                 
                 
-                <ul class="list-unstyled d-flex gap-3 align-self-center ml-3">
-                    <li>사이드 프로젝트</li>
-                    <li>질문&답변</li>
-                    <li>자유게시판</li>
-                    <li>고객센터</li>
-                    <li>이모티콘 상점</li>
-                    <li>포인트 충전</li>
-                </ul>
-                <div class="search-align-self-center">
-  					<input type="text" placeholder="검색어 입력" class="searchInput">
-  					<img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="searchImg">
-				</div>
-                <div class="align-self-center">
-                    <!-- 다크 모드/라이트 모드 토글 버튼 추가 -->
-                    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
-                        <div class="sun-moon-container">
-                            <i class="fas fa-sun sun-icon"></i><i class="fas fa-moon moon-icon"></i>
-                        </div>
+                 <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/point') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/accountConnect') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/insertAccountNo') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/acoMoneyInquiry') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/acoPointInquiry')  ? 'park_active' : ''}" onclick="location.href='/point'">포인트 충전</li>
+          		  <li th:classappend="${#strings.startsWith(#httpServletRequest.getRequestURI(), '/emoMain') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoDetail') || #strings.startsWith(#httpServletRequest.getRequestURI(), '/emoBuyList') ? 'park_active' : ''}" onclick="location.href='/emoMain?pageNo=1'">이모티콘 상점</li>
+            </ul>
+            <div class="park_search-align-self-center">
+             <input type="text" id="park_searchInput2" placeholder="검색어 입력" class="park_searchInput">
+             <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" class="park_searchImg" id="clickMain" style="cursor:pointer;">
+        </div>
+            <div class="park_align-self-center">
+                <!-- 다크 모드/라이트 모드 토글 버튼 추가 -->
+                <div class="park_dark-mode-toggle" onclick="toggleDarkMode()">
+                    <div class="park_sun-moon-container">
+                        <img class="fas fa-sun sun-icon" src="/commonResource/sun.png" style="height : 30px;"><img class="fas fa-moon moon-icon" src="/commonResource/moon3.png" style="height : 30px;">
                     </div>
                 </div>
-                <div class="align-self-center">
-                    <button class="login-button" onclick="location.href='/loginForm'">로그인</button>
-                    <button class="signup-button" onclick="location.href='/createAccountForm'">회원가입</button>
-                </div>
+                
             </div>
-        </header>
+            <th:block sec:authorize="isAnonymous()">
+                <div class="park_align-self-center">
+                    <button class="park_login-button" onclick="location.href='/loginForm'" style="font-weight : bold" >로그인</button>
+                    <button class="park_signup-button" onclick="location.href='/createAccountForm'" style="font-weight : bold">회원가입</button>
+                </div>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()"> 
+                <div class = "park_align-self-center d-flex gap-2">
+   
+                    <div class="mink_box"  th:if="${session.member.permission != 'ROLE_ADMIN'}">
+                    	<a th:href="|/myPage|">
+                    		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
+                    	</a>
+                    	</div>
+                    <div class="mink_box"   th:unless="${session.member.permission != 'ROLE_ADMIN'}">
+                    	<a th:href="|/admin|">
+                    		<img class="mink_profile" th:src="|/upload/profile/${session.member.profileImage}|" alt ="profile" />
+                    	</a>
+                    </div> 
+                    <form action="/logout" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button class="park_logout-button" type="submit" style="font-weight : bold">로그아웃</button>
+                    </form>
+                </div>
+            </th:block> 
+        </div>
+      
+    </header>
+ 
+    
+</div>
+<hr style = "margin-top : -15px;">
 
-        <script>
-            // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
-            function toggleDarkMode() {
-                const body = document.body;
-                const sunIcon = document.querySelector('.sun-icon');
-                const moonIcon = document.querySelector('.moon-icon');
-                const logoImage = document.getElementById('logoImage');
+<script>
+    	$('#drmenu').on('show.bs.dropdown', function(e) {
+    		$('#headerDropDown').css('display', 'block');
+    	})
+    	
+    	$('#drmenu').on('hidden.bs.dropdown', function(e) {
+    		$('#headerDropDown').css('display', 'none');
+    	})
+    	
+        // 토글 버튼을 클릭할 때마다 다크 모드/라이트 모드를 전환하는 함수
+ document.addEventListener('DOMContentLoaded', function() {
+    // 페이지 로드 시 다크 모드 상태 확인 및 적용
+    const darkModeStatus = localStorage.getItem('darkMode');
+    updateDarkMode(darkModeStatus === 'enabled', false); // 초기 로드 시 애니메이션 적용 X
 
-                // body 요소에 'dark-mode' 클래스가 있는지 확인하여 토글
-                body.classList.toggle('dark-mode');
+    document.querySelector('.park_dark-mode-toggle').addEventListener('click', function() {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        updateDarkMode(!isDarkMode, true); // 토글 시 애니메이션 적용 O
+    });
+});
 
-                // dark-mode일 때는 라이트 모드로, 그 반대일 때는 다크 모드로 설정
-                if (body.classList.contains('dark-mode')) {
-                    body.classList.remove('light-mode');
-                    moonIcon.classList.remove('hidden');
-                    sunIcon.classList.add('hidden');
-                    logoImage.src = "commonResource/askcodeLogo_dark.png";
-                } else {
-                    body.classList.add('light-mode');
-                    moonIcon.classList.add('hidden');
-                    sunIcon.classList.remove('hidden');
-                    logoImage.src = "commonResource/askcodeLogo.png";
-                }
+function updateDarkMode(enable, animate) {
+    const body = document.body;
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+	 const logoImage = document.getElementById('logoImage');
+	    const footerLogo = document.getElementById('logoImage3');
+
+    if (enable) {
+        body.classList.add('dark-mode');
+        body.classList.remove('light-mode');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+        logoImage.src = "/commonResource/askcodeLogo_dark.png";
+        footerLogo.src = "/commonResource/askcodeLogo_dark.png";
+        
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+        logoImage.src = "/commonResource/askcodeLogo.png";
+        footerLogo.src = "/commonResource/askcodeLogo.png";
+    }
+
+    // localStorage에 다크 모드 상태 저장
+    localStorage.setItem('darkMode', enable ? 'enabled' : 'disabled');
+
+    // 애니메이션 적용 여부 확인
+    if (animate) {
+        applyAnimation(sunIcon, moonIcon);
+    }
+}
+
+function applyAnimation(sunIcon, moonIcon) {
+    sunIcon.classList.add('rotate-animation');
+    moonIcon.classList.add('rotate-animation');
+
+    // 애니메이션 종료 후 클래스 제거
+    const removeAnimation = () => {
+        sunIcon.classList.remove('rotate-animation');
+        moonIcon.classList.remove('rotate-animation');
+        sunIcon.removeEventListener('animationend', removeAnimation);
+        moonIcon.removeEventListener('animationend', removeAnimation);
+    };
+
+    sunIcon.addEventListener('animationend', removeAnimation);
+    moonIcon.addEventListener('animationend', removeAnimation);
+}
+
+
+    	
+    	//검색
+    	$('#park_searchInput2').on('keydown', function(e) {
+			if (e.keyCode === 13) {
+				e.preventDefault();
+				const searchValue = $('#park_searchInput2').val();
+				if(typeof searchValue == 'undefined' || searchValue == '') {
+					showWarningAlert('검색어를 입력해주세요.');
+				}
+				else {
+					window.location.href = "/mainTotalSearch?pg=1&search=" + $('#park_searchInput2').val();	
+				}
+				
+			}
+		});
+    	
+    	//검색아이콘
+        $('#clickMain').click(function() {
+            const searchValue = $('#park_searchInput2').val();
+            if (searchValue.trim() === '') {
+            	showWarningAlert('검색어를 입력해주세요.'); 
+            } else {
+                window.location.href = "/mainTotalSearch?pg=1&search=" + encodeURIComponent(searchValue);
             }
-        </script>
-    </div>
+        });
+
+    </script>
+<style>
+@keyframes rotateSunMoon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.rotate-animation {
+  animation: rotateSunMoon 0.5s linear;
+}
+
+</style>

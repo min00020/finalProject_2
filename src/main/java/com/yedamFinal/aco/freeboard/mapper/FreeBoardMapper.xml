@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- <mapper namespace="com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper"> -->
+<!-- 	<select id="getSideBoard" resultType="FreeBoardVO"> -->
+<!-- 	SELECT SIDE_BOARD_NO, -->
+<!-- 		PUBLISHING_STATUS, -->
+<!-- 		TITLE, -->
+<!-- 		CONTENT, -->
+<!-- 		WRITER, -->
+<!-- 		WRITE_DATE, -->
+<!-- 		RECRUIT_PERSONNEL, -->
+<!-- 		DEV_PERIOD, -->
+<!-- 		GIT_ADDRESS, -->
+<!-- 		VIEW_CNT, -->
+<!-- 		REPLY_CNT, -->
+<!-- 		TECH_OF_USE, -->
+<!-- 		MEMBER_NO -->
+		
+<!-- 	FROM SIDE_PROJECT_BOARD -->
+<!-- 	WHERE ROWNUM <= 5 -->
+
+<!-- 	</select> -->
+<!-- </mapper> -->
+
+<!-- 전체조회 -->
+<mapper namespace="com.yedamFinal.aco.freeboard.mapper.FreeBoardMapper">
+<!-- 	<select id="getFreeBoardAll" resultType="FreeBoardVO"> -->
+<!-- 	SELECT FBOARD_NO, -->
+<!-- 			A.MEMBER_NO, -->
+<!-- 			TITLE, -->
+<!-- 			CONTENT, -->
+<!-- 			B.NICKNAME, -->
+<!-- 			WRITE_DATE, -->
+<!-- 			VIEW_CNT, -->
+<!-- 			RECOMMEND_CNT, -->
+<!-- 			REPLY_CNT, -->
+<!--             B.ACCUM_ACTIVITY_POINT, -->
+<!--             ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE, -->
+<!--             B.PROFILE_IMAGE -->
+<!-- 	FROM FREE_BOARD A -->
+<!-- 	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO -->
+	
+<!--     ORDER BY WRITE_DATE DESC -->
+
+<!-- 	</select> -->
+	
+	<select id="getFreeBoardAll" resultType="FreeBoardVO">
+	SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
+	
+	SELECT FBOARD_NO,
+			A.MEMBER_NO,
+			TITLE,
+			CONTENT,
+			B.NICKNAME,
+			WRITE_DATE,
+			VIEW_CNT,
+			RECOMMEND_CNT,
+			REPLY_CNT,
+            B.ACCUM_ACTIVITY_POINT,
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+            B.PROFILE_IMAGE
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO
+	
+    ORDER BY WRITE_DATE DESC
+    
+    ) C ) A
+    
+     <![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+	]]>	
+
+	</select>
+	
+	<select id="getFreeBoardAllCnt" resultType="int">
+	
+		SELECT COUNT(*) AS CNT
+		FROM FREE_BOARD
+		
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="getFreeBoard" parameterType="int" resultType="FreeBoardJoinVO">
+	SELECT 
+		   FBOARD_NO, 
+	       A.MEMBER_NO, 
+	       TITLE, 
+	       CONTENT, 
+	       B.NICKNAME,
+	       WRITE_DATE, 
+	       VIEW_CNT, 
+	       RECOMMEND_CNT,
+	       PROFILE_IMAGE,
+	       B.ACCUM_ACTIVITY_POINT,
+           ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+	       REPLY_CNT,
+	       C.ATTACHED_FILE_NO,
+    		C.SERVER_FILE_NAME,
+    		C.ORIGIN_FILE_NAME,
+    		C.FILE_PATH,
+    		C.REGISTER_DATE
+	       
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+	LEFT JOIN ATTACHED_FILE C ON A.FBOARD_NO = C.BOARD_NO AND C.BOARD_TYPE = 'N004'
+	WHERE FBOARD_NO= #{fboardNo}
+</select>
+
+<update id="updateviewCnt">
+	UPDATE FREE_BOARD 
+	   SET VIEW_CNT = VIEW_CNT + 1 
+	 WHERE FBOARD_NO = #{fboardNo}
+</update>
+
+<insert id="insertFreeBoard" parameterType="FreeBoardVO" useGeneratedKeys="false">
+	INSERT INTO FREE_BOARD(
+                       FBOARD_NO,
+                       MEMBER_NO,
+                       TITLE,
+                       CONTENT,
+                       NICKNAME,
+                       WRITE_DATE,
+                       VIEW_CNT,
+                       RECOMMEND_CNT,
+                       REPLY_CNT)
+		VALUES(
+					FREE_BOARD_SEQ.NEXTVAL,
+			        #{memberNo},
+			        #{title},
+			        #{content},
+			        #{nickname},
+			        SYSDATE,
+			        #{viewCnt},
+			        #{recommendCnt},
+			        #{replyCnt})
+        
+        <selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT FREE_BOARD_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
+</insert>
+
+	<update id="updateFreeBoardViewCnt" parameterType="int">
+	
+	     UPDATE FREE_BOARD
+   		    SET VIEW_CNT = VIEW_CNT+1
+     	  WHERE FBOARD_NO = #{fboardNo}
+     	  
+	</update>
+	
+	<update id="updateFreeBoard">
+	
+	  UPDATE FREE_BOARD
+   		  	  SET TITLE = #{title},
+   		    	CONTENT = #{content} 		    	
+        WHERE FBOARD_NO = #{fboardNo}
+     	  
+	</update>
+	
+	<delete id="deleteFreeBoard">
+	
+		DELETE 
+		FROM FREE_BOARD
+		WHERE FBOARD_NO = #{fboardNo}
+		
+	</delete>
+	
+	<select id="searchFreeBoard" resultType="FreeBoardVO">
+	
+	SELECT * FROM ( SELECT ROWNUM AS RN, C.* FROM(
+	
+	SELECT FBOARD_NO,
+			A.MEMBER_NO,
+			TITLE,
+			CONTENT,
+			B.NICKNAME,
+			WRITE_DATE,
+			VIEW_CNT,
+			RECOMMEND_CNT,
+			REPLY_CNT,
+            B.ACCUM_ACTIVITY_POINT,
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+            B.PROFILE_IMAGE
+	FROM FREE_BOARD A
+	LEFT JOIN MEMBER B    ON A.MEMBER_NO = B.MEMBER_NO
+	WHERE TITLE LIKE '%'||#{search}||'%'
+	
+    ORDER BY WRITE_DATE DESC
+    
+    ) C ) A
+    
+     <![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+	]]>	
+     
+	</select>
+	
+	<select id="searchFreeBoardCnt" resultType="int">
+	
+	SELECT 
+		COUNT(*) AS CNT
+		FROM FREE_BOARD
+		WHERE TITLE LIKE '%'||#{search}||'%'
+		
+	</select>
+	
+	
+	<!-- 메인페이지 게시판들 -->
+	
+	<!-- 메인페이지 자유게시판 글 불러오기 -->
+	<select id="getFreeBoardMainPage" resultType="FreeBoardVO">
+	SELECT * FROM (
+   		 SELECT FBOARD_NO,
+           A.MEMBER_NO,
+           TITLE,
+           CONTENT,
+           B.NICKNAME,
+           WRITE_DATE,
+           VIEW_CNT,
+           RECOMMEND_CNT,
+           REPLY_CNT,
+           B.ACCUM_ACTIVITY_POINT,
+           ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+           B.PROFILE_IMAGE
+   		 FROM FREE_BOARD A
+    	 LEFT JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+   		 ORDER BY WRITE_DATE DESC
+	)
+	WHERE ROWNUM <![CDATA[ <= ]]> 6 
+	</select>
+	
+	<!-- 메인페이지 공지사항 글 불러오기 -->
+	<select id="getNoticeBoardMainPage" resultType="NoticeBoardVO2">
+	 SELECT * FROM (
+ 		SELECT
+            NOTICE_BOARD_NO, 
+            TITLE, 
+            CONTENT, 
+            WRITE_DATE, 
+            VIEW_CNT, 
+            RECOMMEND_CNT,
+            ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+        FROM NOTICE_BOARD
+		ORDER BY NOTICE_BOARD_NO DESC)
+     WHERE ROWNUM <![CDATA[<=]]> 6
+	</select>
+	
+	<!-- 메인페이지 질분&답변 글 불러오기 -->
+	<select id="getQuestionBoardMainPage" resultType="QuestionVO2">
+        SELECT * FROM(
+	                SELECT m.id, 
+	                	m.profile_image,
+	                	m.nickname,
+	                	m.ACCUM_ACTIVITY_POINT,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    q.TITLE,
+	                    q.RECOMMEND_CNT,
+	                    q.ANSWER_CNT,
+	                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+	            FROM QUESTION_BOARD q
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            ORDER BY QUESTION_BOARD_NO DESC)
+     WHERE ROWNUM <![CDATA[<=]]> 6
+	</select>
+	
+	<!-- 메인페이지 사이드 프로젝트 글 불러오기(모집중) -->
+	<select id="getSideProjectBoardMainPage" resultType="SideVO2">
+             SELECT *
+    FROM (
+        SELECT    
+            side_board_no, 
+	        title, 
+	        writer, 
+	        view_cnt,
+	        reply_cnt,
+	        A.member_no,
+            nickname,
+            ACCUM_ACTIVITY_POINT,
+            B.profile_image,
+	        ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+	FROM side_project_board A
+    JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+	WHERE publishing_status = 'Q001' 
+    ORDER BY SIDE_BOARD_NO DESC)
+    WHERE ROWNUM <![CDATA[<=]]> 6
+	</select>
+	
+	<!-- 메인페이지 통합 검색 -->
+	  <select id="getMainTotalSearch" resultType="MainTotalVO">  
+	   
+          
+SELECT * 
+   FROM 
+   ( SELECT ROWNUM AS RN, C.* FROM(   
+      SELECT 'F' BOARDS,
+			  		FBOARD_NO AS BOARD_NO,
+                    WRITE_DATE,
+	 				TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                     B.MEMBER_NO,
+                   ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+     	 FROM FREE_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+      	 WHERE 
+      	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENT
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
+      	 
+         UNION ALL
+      	 
+      SELECT 'S',
+     				 SIDE_BOARD_NO,
+                     WRITE_DATE,
+      				 TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                     B.MEMBER_NO,
+                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+      	 FROM SIDE_PROJECT_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+     	 WHERE 
+
+		   	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENT
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
+         
+     	 UNION ALL
+         
+               SELECT 'Q',
+     				 QUESTION_BOARD_NO,
+                     WRITE_DATE,
+      				 TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                     B.MEMBER_NO,
+                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+      	 FROM QUESTION_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+     	 WHERE    	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENTS
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
+         
+     	 UNION ALL
+     	 
+      SELECT 'N',
+      				 NOTICE_BOARD_NO,
+                     WRITE_DATE,
+      				 TITLE,
+                    PROFILE_IMAGE,
+                    ACCUM_ACTIVITY_POINT,
+                    B.MEMBER_NO,
+                    ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE,
+                   B.NICKNAME,
+                    VIEW_CNT
+                    
+      	 FROM NOTICE_BOARD A 
+         JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+
+      	 WHERE    	     CASE 
+                WHEN #{searchType} = 'title' THEN TITLE
+                WHEN #{searchType} = 'content' THEN CONTENT
+                WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+         END LIKE '%'||#{search}||'%'
+      	 )C)
+
+      	<![CDATA[
+   		WHERE RN > ((#{pg}-1) * 10) AND RN <= (#{pg} * 10)
+		]]>	
+		 ORDER BY MINUTE
+      	
+	</select>
+	
+	<select id="getMainTotalSearchCnt" resultType="int">
+	
+ SELECT SUM(CNT) AS TOTAL_CNT FROM (
+        SELECT COUNT(*) AS CNT FROM FREE_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+        CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENT
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+        UNION ALL
+        SELECT COUNT(*) FROM NOTICE_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+        CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENT
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+        UNION ALL
+        SELECT COUNT(*) FROM SIDE_PROJECT_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+        CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENT
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+        UNION ALL
+        SELECT COUNT(*) FROM QUESTION_BOARD A JOIN MEMBER B ON A.MEMBER_NO = B.MEMBER_NO
+        WHERE 
+     CASE 
+            WHEN #{searchType} = 'title' THEN A.TITLE
+            WHEN #{searchType} = 'content' THEN A.CONTENTS
+            WHEN #{searchType} = 'nickname' THEN B.NICKNAME
+        END LIKE '%'||#{search}||'%'
+    )
+		
+	</select>
+	
+	<!-- 댓글수 업데이트 -->
+	<update id="updateReplyCnt" parameterType="int">
+		UPDATE FREE_BOARD 
+		   SET REPLY_CNT = REPLY_CNT + 1 - #{value} 
+		 WHERE FBOARD_NO = #{fboardNo}
+	</update>
+	
+
+</mapper>
+

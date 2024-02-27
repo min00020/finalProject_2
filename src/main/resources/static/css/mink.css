@@ -1,31 +1,198 @@
 @charset "UTF-8";
 
-#mainBody {
-	min-height : 1200px;
+.min-rounded {
+	padding-left: 3rem;
+	padding-right: 3rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background-color: white;
+	border-radius: 0.5rem;
+	border: 0.5px solid black;
+	border-color: hsla(220, 9%, 46%, .3);
 }
+
+.min-small-rounded {
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background-color: white;
+	border-radius: 0.5rem;
+	border: 0.5px solid black;
+	border-color: hsla(220, 9%, 46%, .3);
+}
+
+#answercnt10{
+		color : #3e6ce3;
+		border-width : 1px;
+	    border-style : solid;
+	    border-radius: 15%;
+	    border-color: #989daa !important;
+	    width: 80px; 
+	    height: 80px; 
+	    text-align: center; 
+	    display: flex; 
+	    flex-direction: column; 
+	    justify-content: center;
+}
+
+.qna_box3 {
+   width: 100px;
+   height: 100px;
+   overflow: hidden;
+   float: left;
+   border-radius: 50%;
+   position: relative; 
+}
+
+
+.min-default-color {
+	background-color: #3e6ce3;
+	color: white;
+}
+
+.min-tagify {
+	width: 100%;
+	max-width: 20.5rem;
+	border-radius: 0.5rem;
+	border: 0.5px solid black;
+	border-color: hsla(220, 9%, 46%, .3);
+}
+
+input[name="profileImg"] {
+	position: absolute;
+	padding: 0;
+	width: 0;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 0;
+}
+
+#clickFile {
+	cursor: pointer;
+	margin-left: 0.3rem;
+}
+
+.min-upload-name {
+	display: inline-block;
+	height: 40px;
+	padding: 0 10px;
+	vertical-align: middle;
+	border: 1px solid #dddddd;
+	width: 78%;
+	color: #999999;
+}
+
+#comment_box {
+	display: none;
+}
+
+#comment_togglebutton {
+	cursor: pointer;
+}
+
+#attached_content {
+	display: none;
+}
+
+#attached_toggleButton {
+	cursor: pointer;
+}
+.mink_li_highlight {
+	font-size: 1.5rem; 
+	text-decoration: none;
+	color:black;
+}
+
+.mink_li_highlight:hover {
+    color: #3e6ce3;
+    cursor: pointer;
+}
+
+.mink_scroll_ul {
+	border : 1px solid black;
+	overflow-y:scroll;
+	list-style: none;
+	height : 100px;
+	padding:10px;
+}
+
+/* 프로필 이미지 원형 */
+.mink_box {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    float: left;
+    margin: 5px;
+    border-radius: 50%;
+    position: relative; 
+	border : 0.5px solid black;
+	border-color : hsla(220,9%,46%,.3);
+   
+}
+
+.mink_profile {
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+    object-position: center top; 
+    position: absolute;
+    top: 50%; /* 부모 요소에서 50% 위쪽으로 이동 */
+    transform: translateY(-50%); /* 이미지의 중앙을 부모 요소의 중앙에 위치시킴 */
+}
+
+.mink_btn_border_background_none {
+	background-color:white;
+	border:none;
+}
+
+.mink_searchImg {
+	position: absolute;
+	width: 2px;
+	top: 297px;
+	right: 326px;
+}
+
+#mink_answercnt{
+	color : #3e6ce3;
+	border-width : 1px;
+	border-style : solid;
+	border-radius : 1rem;
+	border-color: #989daa !important;
+	width: 110px; 
+	height: 80px; 
+	text-align: center; 
+	display: flex; 
+	flex-direction: column; 
+	justify-content: center;
+}
+/* #mainBody { */
+/* 	min-height : 1200px; */
+/* } */
 		
-.common-width {
-	margin: 0 auto;
-	width: 70%;
-}
-.search {
-  	position: relative;
-  	margin-left : 30px;
-  	width: 300px;
-}
+/* .common-width { */
+/* 	margin: 0 auto; */
+/* 	width: 70%; */
+} 
+/* .search { */
+/*   	position: relative; */
+/*   	margin-left : 30px; */
+/*   	width: 300px; */
+/* } */
 
-.searchInput {
-  	width: 100%;
-  	border: 1px solid #bbb;
-  	border-radius: 38px;
-  	padding: 10px 12px;
-  	font-size: 14px;
-}
+/* .park_searchInput { */
+/*   	width: 100%; */
+/*   	border: 1px solid #bbb; */
+/*   	border-radius: 38px; */
+/*   	padding: 10px 12px; */
+/*   	font-size: 14px; */
+/* } */
 
-.searchImg {
-  	position : absolute;
-  	width: 17px;
-  	top: 10px;
-  	right: 12px;
-  	margin: 0;
-}
+/* .searchImg { */
+/*   	position : absolute; */
+/*   	width: 17px; */
+/*   	top: 10px; */
+/*   	right: 12px; */
+/*   	margin: 0; */
+/* } */

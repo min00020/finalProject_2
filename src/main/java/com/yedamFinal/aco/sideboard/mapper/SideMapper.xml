@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedamFinal.aco.sideboard.mapper.SideMapper">
+
+<!-- 모집중list 가져오기 -->
+<select id="selectRecruitingList" resultType="SideVO">
+	SELECT *
+    FROM (
+        SELECT ROWNUM AS RN, B.*
+        FROM (SELECT  
+	            s.side_board_no, 
+		        s.publishing_status, 
+		        s.title, 
+		        s.content, 
+		        s.project_outline,
+		        s.writer, 
+		        s.write_date, 
+		        s.recruit_personnel, 
+		        s.dev_period, 
+		        s.git_address, 
+		        s.view_cnt,
+		        s.reply_cnt,
+		        s.tech_of_use,
+		        s.member_no,
+		        m.profile_image,
+		        m.nickname,
+		        m.accum_activity_point,
+		        ROUND((SYSDATE - WRITE_DATE) * 24 * 60) AS MINUTE
+			 FROM side_project_board s
+			 JOIN member m ON s.member_no = m.member_no
+			 WHERE s.publishing_status = #{status}
+	    	 ORDER BY s.write_date desc
+	    	)B
+    )A
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10]]>
+</select>
+
+<select id="selectListAll" resultType="SideVO">
+	SELECT *
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            side_board_no, 
+	        publishing_status, 
+	        title, 
+	        content, 
+	        project_outline,
+	        writer, 
+	        write_date, 
+	        recruit_personnel, 
+	        dev_period, 
+	        git_address, 
+	        view_cnt,
+	        reply_cnt,
+	        tech_of_use,
+	        member_no	
+	FROM side_project_board
+    ORDER BY write_date desc
+    )
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5]]>
+</select>
+
+
+<select id="selectProjectListAllCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM side_project_board
+</select>
+
+<select id="selectProjectListCnt" resultType="int">
+	SELECT 
+        COUNT(*) AS CNT
+    FROM side_project_board
+    WHERE publishing_status = #{status}
+</select>
+
+<!-- 내가 작성한 사이드프로젝트 목록 조회 -->
+<select id="selectParticipateList" resultType="com.yedamFinal.aco.sideboard.SideVO">
+
+	SELECT *
+	FROM 
+		(SELECT ROWNUM AS RN,
+		        b.member_no, 
+		        a.side_board_no, 
+		        a.title, 
+		        a.project_outline, 
+		        a.dev_period, 
+		        a.recruit_personnel, 
+		        a.write_date
+		FROM side_project_board a 
+		JOIN member b ON a.member_no = b.member_no
+		WHERE b.member_no = #{memberNo}
+		ORDER BY a.write_date desc
+		) A
+	<![CDATA[
+    WHERE RN > 0 AND RN <= 3]]>
+		
+</select>
+
+
+<update id="updatereviewCnt">
+	UPDATE side_project_board 
+	SET view_cnt = view_cnt + 1 where side_board_no = #{bno}
+</update>
+
+
+<!-- 게시글 단건조회 가져오기 -->
+<select id="selectSideInfo" parameterType="int" resultType="SideVO">
+	SELECT a.side_board_no, 
+	       a.publishing_status, 
+	       a.title, 
+	       a.content, 
+	       a.project_outline,
+	       a.writer, 
+	       a.write_date, 
+	       a.recruit_personnel, 
+	       a.dev_period, 
+	       a.git_address, 
+	       a.view_cnt,
+	       a.reply_cnt,
+	       a.tech_of_use,
+	       a.member_no,
+	       b.profile_image
+	FROM side_project_board a
+	JOIN member b ON a.member_no = b.member_no
+	WHERE a.side_board_no= #{bno}
+</select>
+
+<update id="updateStatus" parameterType="SideVO">
+	UPDATE 	side_project_board
+	SET publishing_status = #{status}
+	WHERE side_board_no= #{bno}
+</update>
+
+<insert id="insertSideProject" parameterType="SideVO">
+	INSERT INTO side_project_board(side_board_no, 
+	                              publishing_status, 
+	                              title, 
+	                              content, 
+	                              project_outline,
+	                              writer, 
+	                              write_date, 
+	                              recruit_personnel, 
+	                              dev_period, 
+	                              git_address, 
+	                              view_cnt,
+	                              reply_cnt,
+	                              tech_of_use,
+	                              member_no
+	                              )
+	VALUES (side_project_board_seq.NEXTVAL,
+	         'Q001',
+			 #{title},
+			 #{content},
+			 #{projectOutline},
+			 #{writer},
+			 sysdate,
+			 #{recruitPersonnel},
+			 #{devPeriod},
+			 #{gitAddress},
+			 0,
+			 0,
+			 #{techOfUse}, 
+			 #{memberNo}
+			 )
+	<selectKey keyProperty="pk" resultType="int" order="AFTER">
+		SELECT side_project_board_seq.currval 
+		FROM dual
+	</selectKey>
+</insert>
+<!-- 협업중 상태변경 -->
+<update id="updateSide" parameterType="SideVO">
+	UPDATE side_project_board
+	SET publishing_status = #{status}, 
+	    title = #{title}, 
+	    content = #{content}, 
+	    project_outline = #{projectOutline}, 
+	    recruit_personnel = #{recruitPersonnel},  
+	    dev_period = #{devPeriod}, 
+	    git_address = #{gitAddress}, 
+	    tech_of_use = #{techOfUse}
+	WHERE side_board_no = #{bno}
+</update>
+<!-- 사이드프로젝트 게시글 삭제 -->
+<delete id="deleteSide" parameterType="SideVO">
+	DELETE FROM side_project_board
+	WHERE side_board_no = #{bno}
+</delete>
+
+
+<select id="selectListAllByMember" resultType="SideVO">
+	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+			SELECT 
+				s.side_board_no, 
+	        	s.publishing_status, 
+	        	s.title, 
+	        	s.content, 
+	        	s.project_outline,
+	        	s.writer, 
+	        	s.write_date, 
+	        	s.recruit_personnel, 
+	        	s.dev_period, 
+	        	s.git_address, 
+	        	s.view_cnt,
+	        	s.reply_cnt,
+	        	s.tech_of_use,
+	        	s.member_no,
+	        	M.profile_image,
+	        	M.nickname
+			FROM side_project_board s
+			JOIN MEMBER M ON S.MEMBER_NO = M.MEMBER_NO
+			WHERE S.member_no = #{memNo}
+    		ORDER BY S.write_date desc
+	            )B	        )A
+	<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5]]>
+</select>
+
+<select id="selectListAllCntByMember" resultType="int">
+	SELECT COUNT(*) AS CNT
+		FROM SIDE_PROJECT_BOARD
+		WHERE MEMBER_NO = #{memberNo}
+</select>
+
+
+<!-- 댓글수 증감-->
+<update id="updateReplyCnt" parameterType="int">
+	UPDATE SIDE_PROJECT_BOARD 
+	   SET REPLY_CNT = REPLY_CNT + 1 - #{value} 
+	 WHERE side_board_no = #{bno}
+</update>
+
+</mapper>

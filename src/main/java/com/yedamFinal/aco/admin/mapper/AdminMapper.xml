@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedamFinal.aco.admin.mapper.AdminMapper">
+<select id="getAdNoticeList" resultType="AdminMainVO">
+	 SELECT C.*
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            B.* FROM(
+            SELECT
+            NOTICE_BOARD_NO, TITLE, CONTENT, WRITE_DATE, VIEW_CNT, RECOMMEND_CNT 
+            FROM NOTICE_BOARD
+				ORDER BY WRITE_DATE DESC)B
+				)C
+   <![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5    
+    ]]>  
+</select>
+<select id="selectAdNoticeCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM NOTICE_BOARD
+</select>
+<delete id="deleteNotice" parameterType="int">
+	DELETE NOTICE_BOARD
+	WHERE NOTICE_BOARD_NO=#{noticeBoardNo} 	
+</delete>
+<select id="getAdMemberList" resultType="AdminMemberVO">
+SELECT C.*
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            B.* FROM(
+            SELECT
+	            ID,
+				NAME,
+				NICKNAME,
+				EMAIL,
+				PHONE_NUM,
+				ACCUM_ACTIVITY_POINT,
+				ACO_MONEY,
+				ACO_POINT,
+				LEAVE_DATE
+					FROM MEMBER
+					ORDER BY MEMBER_NO DESC)B
+					)C
+  <![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+  ]]>
+</select>
+<select id="getAdReportList" resultType="AdminReportVO">
+SELECT C.*
+        FROM (
+        SELECT  
+            ROWNUM AS RN,
+            B.*
+            FROM (
+            SELECT 
+                r.REPORT_TYPE,
+                r.REPORT_NO,
+                r.REPORT_CONTENT,
+                m.NAME as reporter_name,
+                r.REPORT_DATE,
+                r.REPORT_STATE,
+                r.BOARD_TYPE,
+                r.BOARD_NO,
+                r.REPLY_CONTENT,
+                r.REPORTEE,
+                o.BAN_TYPE,
+                o.NAME as reportee_name
+            FROM REPORT r
+            JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
+            JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
+            ORDER BY r.REPORT_NO DESC
+            ) B
+        ) C
+    <![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+  ]]>
+</select>
+<select id="getAdQnaList" resultType="AdminQnaVO">
+		SELECT C.*
+    		FROM (
+        		SELECT  
+            		ROWNUM AS RN,
+					B.* FROM(
+					SELECT
+						Q.QNA_BOARD_NO, 
+						M.NAME as qna_name, 
+						Q.TITLE, 
+						Q.CONTENT,
+						Q.QNA_ANSWER_CONTENT,
+					  	Q.WRITE_DATE,
+					    Q.CHANGE_DATE,
+					    S.SUB_CODE_NAME as qna_state, 
+					    Q.VIEW_CNT  
+							FROM QNA_BOARD Q 
+							JOIN MEMBER M ON Q.MEMBER_NO = M.MEMBER_NO
+							JOIN SUB_CODE_TBL S ON Q.ANSWER_STATE = S.SUB_CODE
+							ORDER BY Q.QNA_BOARD_NO DESC)B
+							)C
+							<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]>
+</select>
+<select id="getAdSettleList" resultType="AdminSettleVO">
+			SELECT C.*
+    		FROM (
+        		SELECT  
+            		ROWNUM AS RN, 			 
+				    B.* FROM(
+				    SELECT
+					 S.SETTLEMENT_NO,
+					 S.MEMBER_NO,
+					 S.PROCESS_STATUS,
+					 M.NAME as settle_name, 
+					 S.SETTLEMENT_REQ_POINT, 
+					 S.REQ_ACCOUNT, 
+					 S.REQ_ACCOUNT_NAME, 
+					 S.REQ_ACCOUNT_BANKCODE, 
+					 S.REQ_BANKNAME, 
+					 C.SUB_CODE_NAME as settle_state
+						FROM SETTLEMENT S
+						JOIN MEMBER M ON S.MEMBER_NO = M.MEMBER_NO
+						JOIN SUB_CODE_TBL C ON S.PROCESS_STATUS = C.SUB_CODE
+						ORDER BY S.SETTLEMENT_NO DESC)B
+						)C
+						<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]> 
+</select>
+<select id="getAdAllSettleList" >
+			SELECT *
+    		FROM			 
+			SETTLEMENT		
+			WHERE PROCESS_STATUS = 'O001'			
+</select>
+
+<select id="getAdEmoList" resultType="AdminEmoVO">
+	SELECT C.*
+    	FROM (
+        SELECT  
+            ROWNUM AS RN,  
+			B.* FROM(
+			SELECT
+				E.EMO_NO, 
+				E.EMO_NAME, 
+				E.EMO_PRICE, 
+				E.EMO_DESC, 
+				E.EMO_FIRSTIMG, 
+				E.EMO_INNERIMG, 
+				E.EMO_PATH, 
+				C.SUB_CODE_NAME AS EMOTICON_STATE
+					FROM EMOTICON E
+					JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
+					ORDER BY E.EMO_NO DESC)B
+					)C
+				<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]>
+</select>
+<select id="getMainEmoList" resultType="AdminEmoVO">
+	SELECT C.*
+    	FROM (
+        SELECT  
+            ROWNUM AS RN, 
+            B.*
+            FROM(
+	            SELECT
+		            E.EMO_NO, 
+					E.EMO_NAME, 
+					E.EMO_PRICE, 
+					E.EMO_DESC, 
+					E.EMO_FIRSTIMG, 
+					E.EMO_INNERIMG, 
+					E.EMO_PATH, 
+					C.SUB_CODE_NAME AS EMOTICON_STATE
+						FROM EMOTICON E
+						JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
+						WHERE E.EMO_STATE = 'D001'
+						ORDER BY E.EMO_NO DESC)B
+						)C
+				<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 9) AND RN <= (#{pageNo}) * 9    
+    ]]>
+</select>
+
+<select id="MainEmoListCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM EMOTICON
+            WHERE EMO_STATE = 'D001'
+</select>
+
+<!-- 이모티콘 등록 -->
+<insert id="insertEmo" parameterType="AdminEmoVO" useGeneratedKeys="false">
+	 	INSERT INTO EMOTICON (
+  			 		EMO_NO
+  				 	,EMO_NAME
+  					,EMO_PRICE
+  					,EMO_DESC
+  					,EMO_FIRSTIMG
+  					,EMO_INNERIMG
+  					,EMO_PATH
+  					,EMO_STATE
+  			)
+  			VALUES(
+  					EMOTICON_SEQ.NEXTVAL
+  				 	,#{emoName}
+  					,#{emoPrice}
+  					,#{emoDesc}
+  					,#{emoFirstimg}
+  					,#{emoInnerimg}
+  					,#{emoPath}
+  					,'D001'
+  			)
+		<selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT EMOTICON_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
+</insert>
+
+<insert id="insertUseEmo" parameterType="AdminEmoUseImgVO">
+	INSERT INTO EMOTICON_IMG ( 
+				EMO_USEIMG_NO
+					,EMO_NO
+					,EMO_USEIMG
+	)
+	VALUES(
+			EMOTICON_IMG_SEQ.NEXTVAL
+			,#{emoNo}
+			,#{emoUseimg}
+	)
+</insert>
+<!-- 이모티콘 판매종료 -->
+<update id="updateEmo" parameterType="int">
+	UPDATE EMOTICON  
+	SET EMO_STATE = 'D002' 
+	WHERE EMO_NO=#{emoNo} 	
+</update>
+<!-- 이모티콘 판매재개 -->
+<update id="updateEmo2" parameterType="int">
+	UPDATE EMOTICON  
+	SET EMO_STATE = 'D001' 
+	WHERE EMO_NO=#{emoNo} 	
+</update>
+<!-- 이모티콘 상세화면 -->
+<select id="getEmoDetail" resultType="AdminEmoVO">
+	SELECT * 
+	FROM EMOTICON
+	WHERE EMO_NO=#{emoNo}
+</select>
+
+<!-- 이모티콘 구매내역 -->
+<select id="getEmoBuyList" resultType="AdminEmoVO">
+	SELECT E.EMO_FIRSTIMG, E.EMO_NAME, E.EMO_PRICE, M.EMO_BUYDATE, E.EMO_PATH, E.EMO_NO, M.MEMBER_NO
+	FROM MY_EMOTICON M 
+	JOIN EMOTICON E ON M.EMO_NO = E.EMO_NO
+	WHERE M.MEMBER_NO=#{memberNo}
+	ORDER BY M.EMO_BUYDATE DESC
+</select>
+
+<!-- //내이모티콘 (댓글) -->
+<select id="getMyEmoList">
+	SELECT * 
+    FROM EMOTICON_IMG E
+    LEFT JOIN MY_EMOTICON M ON E.EMO_NO = M.EMO_NO
+    WHERE M.MEMBER_NO = #{membeNo}
+</select>
+
+<select id="getAdCntList" resultType="AdminMainVO">
+	SELECT COUNT(CASE WHEN REPORT_STATE = 'B001' THEN 1 END)AS SCOUNT FROM REPORT UNION ALL
+    SELECT COUNT(CASE WHEN ANSWER_STATE = 'P001' THEN 1 END) FROM QNA_BOARD UNION ALL
+    SELECT COUNT(CASE WHEN PROCESS_STATUS = 'O001' THEN 1 END) FROM SETTLEMENT
+</select>
+
+<!-- 공지등록 --> 
+<insert id="insertNotice">
+		INSERT INTO
+		NOTICE_BOARD (
+					NOTICE_BOARD_NO
+					,MEMBER_NO
+					,TITLE
+					,CONTENT
+					,VIEW_CNT
+					,RECOMMEND_CNT
+					,WRITE_DATE
+		)
+		VALUES (
+					NOTICE_BOARD_SEQ.NEXTVAL
+					,50
+					,#{title}
+					,#{content}
+					,0
+					,0
+					,SYSDATE
+		)
+	</insert>
+<!-- 멤버 드롭박스 -->
+<select id="getAdDropMemberList" resultType="AdminMemberVO">
+SELECT C.*
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            B.* FROM(
+            SELECT
+	            ID,
+				NAME,
+				NICKNAME,
+				EMAIL,
+				PHONE_NUM,
+				ACCUM_ACTIVITY_POINT,
+				ACO_MONEY,
+				ACO_POINT,
+				LEAVE_DATE
+					FROM MEMBER
+					<choose>
+						<when test="leaveStatus.equals('Leave')">WHERE LEAVE_DATE IS NOT NULL</when>
+	    				<otherwise>WHERE LEAVE_DATE IS NULL</otherwise>
+					</choose>
+					ORDER BY MEMBER_NO DESC)B
+					)C
+				<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]>
+</select>
+<select id="selectAdMemberCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM MEMBER
+</select>
+<select id="selectAdLeaveMemberCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM MEMBER
+            <choose>
+					<when test="leaveStatus.equals('Leave')">WHERE LEAVE_DATE IS NOT NULL</when>
+    				<otherwise>WHERE LEAVE_DATE IS NULL</otherwise>
+			</choose>
+</select>
+<!-- 신고 드롭박스 -->
+<select id="getAdDropReportList" resultType="AdminReportVO">
+SELECT C.*
+    FROM (
+        SELECT  
+            ROWNUM AS RN,
+            B.* FROM(
+            SELECT
+	            r.REPORT_TYPE,
+	            r.REPORT_NO,
+				r.REPORT_CONTENT,
+				m.NAME as reporter_name,
+				r.REPORT_DATE,
+				r.REPORT_STATE,
+				r.BOARD_TYPE,
+				r.BOARD_NO,
+				r.REPLY_CONTENT,
+				o.NAME as reportee_name
+					FROM REPORT r
+					JOIN MEMBER m on r.REPORTER = m.MEMBER_NO
+					JOIN MEMBER o on r.REPORTEE = o.MEMBER_NO
+					WHERE REPORT_STATE = #{reportStatus}
+					ORDER BY r.REPORT_NO DESC)B
+					)C
+				<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]>
+</select>
+<select id="selectAdReportCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM REPORT
+</select>
+<select id="selectAdStateReportCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM REPORT
+            WHERE REPORT_STATE = #{reportStatus}
+</select>
+
+<!-- 문의 드롭박스 -->
+<select id="getAdDropQnaList" resultType="AdminQnaVO">
+		SELECT C.*
+    		FROM (
+        		SELECT  
+            		ROWNUM AS RN,
+					B.* FROM(
+					SELECT
+						Q.QNA_BOARD_NO, 
+						M.NAME as qna_name, 
+						Q.TITLE, 
+						Q.CONTENT,
+						Q.QNA_ANSWER_CONTENT,
+					  	Q.WRITE_DATE,
+					    Q.CHANGE_DATE,
+					    S.SUB_CODE_NAME as qna_state, 
+					    Q.VIEW_CNT  
+							FROM QNA_BOARD Q 
+							JOIN MEMBER M ON Q.MEMBER_NO = M.MEMBER_NO
+							JOIN SUB_CODE_TBL S ON Q.ANSWER_STATE = S.SUB_CODE
+							<choose>
+								<when test="answerStatus.equals('wait')">WHERE ANSWER_STATE = 'P001'</when>
+								<when test="answerStatus.equals('answer')">WHERE ANSWER_STATE = 'P002'</when>
+								<when test="answerStatus.equals('resolve')">WHERE ANSWER_STATE = 'P003'</when>
+							</choose>
+							ORDER BY Q.QNA_BOARD_NO DESC)B
+							)C
+						<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]>
+</select>
+<select id="selectAdQnaCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM QNA_BOARD
+</select>
+<select id="selectAdStateQnaCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM QNA_BOARD
+           		<choose>
+					<when test="answerStatus.equals('wait')">WHERE ANSWER_STATE = 'P001'</when>
+					<when test="answerStatus.equals('answer')">WHERE ANSWER_STATE = 'P002'</when>
+					<when test="answerStatus.equals('resolve')">WHERE ANSWER_STATE = 'P003'</when>
+				</choose>
+</select>
+<!-- 정산 드롭박스 -->
+<select id="getAdDropSettleList" resultType="AdminSettleVO">
+		SELECT C.*
+    		FROM (
+        		SELECT  
+            		ROWNUM AS RN, 			 
+					 B.* FROM(
+					 SELECT
+						 S.SETTLEMENT_NO,
+						 S.MEMBER_NO,
+						 S.PROCESS_STATUS,
+						 M.NAME as settle_name, 
+						 S.SETTLEMENT_REQ_POINT, 
+						 S.REQ_ACCOUNT, 
+						 S.REQ_ACCOUNT_NAME, 
+						 S.REQ_ACCOUNT_BANKCODE, 
+						 S.REQ_BANKNAME, 
+						 C.SUB_CODE_NAME as settle_state
+							FROM SETTLEMENT S
+							JOIN MEMBER M ON S.MEMBER_NO = M.MEMBER_NO
+							JOIN SUB_CODE_TBL C ON S.PROCESS_STATUS = C.SUB_CODE
+							<choose>
+								<when test="processStatus.equals('wait')">WHERE PROCESS_STATUS = 'O001'</when>
+								<when test="processStatus.equals('complete')">WHERE PROCESS_STATUS = 'O002'</when>
+							</choose>
+							ORDER BY S.SETTLEMENT_NO DESC)B
+							)C
+						<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]> 
+</select>
+<update id="updateSettlementStatus">
+	UPDATE SETTLEMENT
+    SET PROCESS_STATUS = 'O002' 
+    WHERE SETTLEMENT_NO =#{settlementNo}
+</update>
+<update id="updateAllSettlementStatus">
+	UPDATE SETTLEMENT
+    SET PROCESS_STATUS = 'O002' 
+    WHERE PROCESS_STATUS = 'O001'
+</update>
+<select id="selectAdSettleCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM SETTLEMENT
+</select>
+<select id="selectAdStateSettleCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM SETTLEMENT
+           		<choose>
+						<when test="processStatus.equals('wait')">WHERE PROCESS_STATUS = 'O001'</when>
+						<when test="processStatus.equals('complete')">WHERE PROCESS_STATUS = 'O002'</when>
+				</choose>
+</select>
+<!-- 이모티콘 드롭박스 -->
+<select id="getAdDropEmoList" resultType="AdminEmoVO">
+	SELECT C.*
+    FROM (
+        SELECT  
+            ROWNUM AS RN, 
+			B.* FROM(
+			SELECT
+				E.EMO_NO, 
+				E.EMO_NAME, 
+				E.EMO_PRICE, 
+				E.EMO_DESC, 
+				E.EMO_FIRSTIMG, 
+				E.EMO_INNERIMG, 
+				E.EMO_PATH, 
+				C.SUB_CODE_NAME AS EMOTICON_STATE
+					FROM EMOTICON E
+					JOIN SUB_CODE_TBL C ON E.EMO_STATE = C.SUB_CODE
+					<choose>
+							<when test="emoStatus.equals('sale')">WHERE EMO_STATE = 'D001'</when>
+							<when test="emoStatus.equals('end')">WHERE EMO_STATE = 'D002'</when>
+					</choose>
+					ORDER BY E.EMO_NO DESC)B
+					)C
+				<![CDATA[
+    WHERE RN > ((#{pageNo}-1) * 10) AND RN <= (#{pageNo}) * 10    
+    ]]>
+</select>
+<select id="selectAdEmoCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM EMOTICON
+</select>
+<select id="selectAdStateEmoCount" resultType="int">
+	SELECT 
+        	COUNT(*) AS CNT
+            FROM EMOTICON
+            	<choose>
+						<when test="emoStatus.equals('sale')">WHERE EMO_STATE = 'D001'</when>
+						<when test="emoStatus.equals('end')">WHERE EMO_STATE = 'D002'</when>
+				</choose>
+</select>
+<select id="getTagListByCount" resultType="AdminTagChartVO">
+WITH DATA AS (
+  SELECT 
+    TAG, 
+    ROW_NUMBER() OVER (ORDER BY TAG) AS ID
+  FROM 
+    QUESTION_BOARD
+    			<choose>
+						<when test='date =="0"'>WHERE WRITE_DATE BETWEEN  sysdate AND SYSDATE</when>
+						<when test="date.equals('1'.toString())">WHERE WRITE_DATE BETWEEN  sysdate-7 AND SYSDATE</when>
+						<when test="date.equals('2'.toString())">WHERE WRITE_DATE BETWEEN  add_months(sysdate,-1) AND SYSDATE</when>
+						<when test="date.equals('3'.toString())">WHERE WRITE_DATE BETWEEN  add_months(sysdate,-3) AND SYSDATE</when>
+						<when test="date.equals('4'.toString())">WHERE WRITE_DATE BETWEEN  add_months(sysdate,-6) AND SYSDATE</when>
+				</choose> 
+),
+<![CDATA[
+SPLIT_DATA AS (
+  SELECT 
+    ID,
+    REGEXP_SUBSTR(TAG, '[^,]+', 1, LEVEL) AS SPLIT_VALUE,
+    LEVEL AS LVL
+  FROM 
+    DATA
+  CONNECT BY 
+    REGEXP_SUBSTR(TAG, '[^,]+', 1, LEVEL) IS NOT NULL
+    AND PRIOR ID = ID
+    AND PRIOR SYS_GUID() IS NOT NULL
+    AND LEVEL <= REGEXP_COUNT(TAG, '[^,]+')
+)
+SELECT DISTINCT SPLIT_VALUE as tag, COUNT(SPLIT_VALUE) as cnt
+FROM 
+  SPLIT_DATA
+GROUP BY SPLIT_VALUE
+ORDER BY SPLIT_VALUE
+]]>
+</select>
+<select id="getEmoSaleList" resultType="AdminEmoVO">
+	SELECT 
+	EMO_NAME, 
+	COUNT(*) AS CNT 
+	FROM MY_EMOTICON
+				<choose>
+						<when test="date.equals('0'.toString())">WHERE EMO_BUYDATE BETWEEN  sysdate AND SYSDATE</when>
+						<when test="date.equals('1'.toString())">WHERE EMO_BUYDATE BETWEEN  sysdate-7 AND SYSDATE</when>
+						<when test="date.equals('2'.toString())">WHERE EMO_BUYDATE BETWEEN  add_months(sysdate,-1) AND SYSDATE</when>
+						<when test="date.equals('3'.toString())">WHERE EMO_BUYDATE BETWEEN  add_months(sysdate,-3) AND SYSDATE</when>
+						<when test="date.equals('4'.toString())">WHERE EMO_BUYDATE BETWEEN  add_months(sysdate,-6) AND SYSDATE</when>
+				</choose> 
+	GROUP BY EMO_NAME
+</select>
+<select id="getTagListByCountByPeriod" resultType="AdminTagChartVO">
+WITH DATA AS (
+  SELECT 
+    TAG, 
+    ROW_NUMBER() OVER (ORDER BY TAG) AS ID
+  FROM 
+    QUESTION_BOARD
+    			WHERE WRITE_DATE BETWEEN TO_DATE(#{sday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') 
+),
+<![CDATA[
+SPLIT_DATA AS (
+  SELECT 
+    ID,
+    REGEXP_SUBSTR(TAG, '[^,]+', 1, LEVEL) AS SPLIT_VALUE,
+    LEVEL AS LVL
+  FROM 
+    DATA
+  CONNECT BY 
+    REGEXP_SUBSTR(TAG, '[^,]+', 1, LEVEL) IS NOT NULL
+    AND PRIOR ID = ID
+    AND PRIOR SYS_GUID() IS NOT NULL
+    AND LEVEL <= REGEXP_COUNT(TAG, '[^,]+')
+)
+SELECT DISTINCT SPLIT_VALUE as tag, COUNT(SPLIT_VALUE) as cnt
+FROM 
+  SPLIT_DATA
+GROUP BY SPLIT_VALUE
+ORDER BY SPLIT_VALUE
+]]>
+</select>
+<select id="getEmoSaleListByPeriod" resultType="AdminEmoVO">
+	SELECT 
+	EMO_NAME, 
+	COUNT(*) AS CNT 
+	FROM MY_EMOTICON
+				WHERE EMO_BUYDATE BETWEEN TO_DATE(#{sday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') AND TO_DATE(#{eday} || ' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+	GROUP BY EMO_NAME
+</select>
+<update id="buyEmo">
+	UPDATE MEMBER
+	<choose>
+		<when test="((acoPoint - emoPrice) >= 0)">
+			SET ACO_POINT = #{acoPoint} - #{emoPrice}
+		</when>
+		<otherwise>
+			SET ACO_POINT = 0, 
+			ACO_MONEY = #{acoMoney} + #{acoPoint} - #{emoPrice} 
+		</otherwise>
+	</choose>
+		WHERE MEMBER_NO = #{memberNo}
+</update>
+<insert id="insertMyemoticon">
+	INSERT INTO MY_EMOTICON
+	VALUES(
+		#{memberNo}
+		,#{emoNo}
+		,SYSDATE
+		,0
+		,#{emoName}
+	)
+</insert>
+<delete id="deleteEmo">
+	DELETE MY_EMOTICON
+	WHERE MEMBER_NO=#{memberNo}
+	AND EMO_NO=#{emoNo}
+</delete>
+<update id="updateAdminReportI">
+	UPDATE REPORT
+        SET
+        REPORT_STATE = 'B002'
+    WHERE REPORT_NO = #{reportNo}
+</update>
+<update id="updateAdminReportB">
+	UPDATE REPORT
+        SET
+        REPORT_STATE = 'B003'
+    WHERE REPORT_NO = #{reportNo}
+</update>
+<update id="updateBanMember">
+	UPDATE MEMBER
+        SET 
+        <choose>
+        <when test="banType.equals('M004'.toString())">BAN_TYPE = 'M004' , BAN_DATE = SYSDATE</when>
+        <when test="banType.equals('M005'.toString())">BAN_TYPE = 'M005' , BAN_DATE = SYSDATE</when>
+        <when test="banType.equals('M006'.toString())">BAN_TYPE = 'M006' , BAN_DATE = SYSDATE</when>
+        </choose>
+    WHERE MEMBER_NO = #{reportee}
+</update>
+</mapper>

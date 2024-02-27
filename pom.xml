@@ -18,6 +18,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+			<version>3.0.4.RELEASE</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
@@ -71,9 +76,49 @@
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
+		
+		<!-- cool sms -->
+		<dependency>
+            <groupId>net.nurigo</groupId>
+            <artifactId>sdk</artifactId>
+            <version>4.2.7</version>
+        </dependency>
+        
+        <!-- WEB CLIENT -->
+        <dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		
+		<!-- mail service -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        
+        <!-- github api -->
+        <dependency>
+    		<groupId>org.kohsuke</groupId>
+    		<artifactId>github-api</artifactId>
+    		<version>1.317</version>
+		</dependency>
+        
 	</dependencies>
 
 	<build>
+	
+		<resources>
+		<resource>
+			<directory>src/main/resources</directory>
+		</resource>
+		<resource>
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.xml</include>
+			</includes>
+		</resource>
+	</resources>
+	
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -87,7 +132,17 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-surefire-plugin</artifactId>
+		        <version>2.19.1</version>
+		        <configuration>
+		          <skipTests>true</skipTests>
+		        </configuration>
+	      </plugin>
 		</plugins>
+		
+
 	</build>
 
 </project>

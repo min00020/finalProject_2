@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Ask Code 관리자 페이지</title>
+	<!-- 제이쿼리 -->
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+		
+	<!-- 부트스트랩 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin?pageNo=1">
+                <div class="sidebar-brand-text mx-3">관리자 페이지 </div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                조회
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                 <a class="nav-link" href="/adminMember?pageNo=1">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>회원조회</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="/adminStat">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>통계조회</span>
+                </a>
+            </li>
+			<!-- Divider -->
+            <hr class="sidebar-divider">
+            
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                관리
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+               <a class="nav-link" href="/adminReport?pageNo=1">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>신고관리</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                 <a class="nav-link" href="/adminQna?pageNo=1">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>문의관리</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="/adminSettle?pageNo=1">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>정산관리</span></a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/adminEmo?pageNo=1">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>이모티콘관리</span></a>
+            </li>
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+					<div style="text-align: center;">
+						<a href="/" style="width:15%">
+		    			<img id="logoImage" src="commonResource/askcodeLogo.png" alt="logo" style="width:11%">
+						</a>
+					</div>
+
+                    <!-- Topbar Navbar -->
+                   <form action="/logout" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button class="btn btn-secondary" type="submit">Logout</button>
+                    </form>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">회원조회</h1>
+			            
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <div class="dropdown" style="text-align: right">
+                            <h6 class="m-0 font-weight-bold text-primary" style="float: left;">회원리스트</h6>
+						</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>회원ID</th>
+                                            <th>이름</th>
+                                            <th>E-Mail</th>
+                                            <th>연락처</th>
+                                            <th>누적활동점수</th>
+                                            <th>포인트</th>
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody>
+                                        <tr th:each="members : ${adminMember}">
+                                            <td th:text="${members.id}"></td>
+                                            <td th:text="${members.name}"></td>
+                                            <td th:text="${members.email}"></td>
+                                            <td th:text="${members.phoneNum}"></td>
+                                            <td th:text="${members.accumActivityPoint}"></td>
+                                            <td th:text="${members.acoMoney + members.acoPoint}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                             <!-- Pagination -->
+  						 <th:block th:if="${pageDTO != null}">
+						    <ul class="pagination justify-content-center">
+						        <li class="page-item" th:if="${pageDTO.prev}">
+						        	<th:block th:if="${leaveStatus == null}">
+						            <a class="page-link" th:href="|/adminMember?pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+						                <span aria-hidden="true">&laquo;</span>
+						                <span class="sr-only">Previous</span>
+						            </a>
+						            </th:block>
+						        	<th:block th:unless="${leaveStatus == null}">
+						            <a class="page-link" th:href="|/adminMember?leaveStatus=${leaveStatus}&pageNo=${pageDTO.curPage-1}|" aria-label="Previous">
+						                <span aria-hidden="true">&laquo;</span>
+						                <span class="sr-only">Previous</span>
+						            </a>
+						            </th:block>
+						        </li>
+						        <li th:class="${pageNo == pageDTO.curPage}? 'page-item active' : 'page-item'" th:each="pageNo : ${#numbers.sequence(pageDTO.startPage, pageDTO.endPage)}">
+						        	<th:block th:if="${leaveStatus == null}">
+						        		<a class="page-link" th:href="|/adminMember?pageNo=${pageNo}|">[[${pageNo}]]</a>
+						        	</th:block>
+						        	<th:block th:unless="${leaveStatus == null}">
+						        		<a class="page-link" th:href="|/adminMember?leaveStatus=${leaveStatus}&pageNo=${pageNo}|">[[${pageNo}]]</a>
+						        	</th:block>
+						        </li>
+						        <li class="page-item">
+						        	<th:block th:if="${leaveStatus == null}">
+						            <a class="page-link" th:href="|/adminMember?pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+						                <span aria-hidden="true">&raquo;</span>
+						                <span class="sr-only">Next</span>
+						            </a>
+						            </th:block>
+						        	<th:block th:unless="${leaveStatus == null}">
+						            <a class="page-link" th:href="|/adminMember?leaveStatus=${leaveStatus}&pageNo=${pageDTO.curPage+1}|" aria-label="Next" th:if="${pageDTO.next}">
+						                <span aria-hidden="true">&raquo;</span>
+						                <span class="sr-only">Next</span>
+						            </a>
+						            </th:block>
+						        </li>
+						    </ul>
+                        </div>
+                        
+                    </div>
+						
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright © 2024 AskCode, Inc</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+</body>
+
+</html>

@@ -1,0 +1,1123 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{layout/member/mainTemplate.html}"
+	layout:fragment="content">
+	<div class="d-flex">
+		<section class="d-flex" id="tae-section">
+			<aside class="tae-aside">
+				<div class="flex-shrink-0">
+					<!-- 프로필-->
+					<div class="card justify-content-center align-items-center" id="tae-card">
+						<!-- 프사 -->
+						<div class="box-1">
+							<th:block th:if="${memberInfo.profileImage} == null">
+								<img class="tae-profile-1  mx-auto d-block" th:src="|commonResource/default_profile.jpg|"
+									 alt="profile">
+							</th:block>
+							<th:block th:unless="${memberInfo.profileImage} == null">
+								<img class="tae-profile-1 mx-auto d-block"
+									th:src="|upload/profile/${memberInfo.profileImage}|" alt="...">
+							</th:block>
+						</div>
+						<!-- grade image -->
+						<div class="card-body">
+							<h6 class="tae-card-text"
+								th:text="${memberInfo.nickname}">\</h6>
+							<h6 class="card-text" th:text="${memberInfo.email}">\</h6>
+							<img class="tae-gradeImage"
+								th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|"
+								logo=""> <span class="card-text"
+								th:text="${memberInfo.gradeName}">\</span>
+							<h6 class="card-text" th:text="|${#numbers.formatInteger(memberInfo.accumActivityPoint, 0, 'COMMA')} P|">\</h6>
+
+						</div>
+					</div>
+
+					<!-- summary -->
+
+					<div class="card container" id="tae-container3">
+						<h5 id="tae-sum-h5">SUMMARY</h5>
+						<!-- 정산요청 div -->
+						<div class="tae-container4">
+							<div class="row" id="tae-row">
+								<div class="tae-box1 col-1">
+									<img class="img1" src="commonResource/icon/point.png">
+								</div>
+								<div class="tae-box2 col-2" id="tae-box2">
+									<h6 class="tae-h6">POINT</h6>
+									<h6 id="pointMypage" class="card-text"
+										th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h6>
+								</div>
+								<div class="col-1" id="tae-col-1">
+									<!-- 모달버튼 -->
+									<button type="button" class="btn btn-modal"  id="tae-modal-btn"
+										data-bs-toggle="modal" data-bs-target="#point">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+									<!-- 모달시작 -->
+									<div class="modal fade" id="point" tabindex="-1" role="dialog"
+										aria-labelledby="pointModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-xl" role="document">
+											<div class="modal-content">
+												<div class="modal-header" style="height:90px;">
+
+													<h3 class="modal-title" id="pointModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/point.png"
+															style="width: 70px; height: 70px;">포인트뱅크
+													</h3>
+
+												</div>
+												<div class="modal-body">
+													<!-- 포인트뱅크모달영역 -->
+													<div style="height:350px;">
+														<div class="d-flex">
+															<div class="point-image" style="width:350px;">
+																<img src="/commonResource/taefolder/pointacc.png" style="width:350px;">
+																<h4 class="tae-h4-1">누적 애코포인트 현황</h4>
+																<h3 id="totalPointMypage" th:text="|${#numbers.formatInteger(memberInfo.acoTotal, 0, 'COMMA')} P|"></h3>
+															</div>
+																<div class="point-acc" style="margin-top:-20px;">
+																	<div class="point-acc-1">
+																		<h4 class="tae-h4-2">애코포인트 정산</h4>
+																		<br>
+																		<p class="tae-p-1">* 최소 5,000P 부터 정산가능하며 포인트샵에서 충전한 포인트는 정산 불가</p>
+																		<br>
+																		<div class="input-group mb-3" style="height:50px;">
+																			<input type="text" id="accumPointMypage" class="tae-form-control" name="accPoint" th:placeholder="|원하는 환전 포인트를 입력하세요|" aria-label="Recipient's username" aria-describedby="button-addon2">
+																			<button class="btn btn-outline-secondary" id="accountApprove" type="button">정산요청</button>
+																		</div>
+																	</div>
+																	<div class="point-acc-1">
+																		<h4 class="tae-h4-2">활동점수 포인트 전환</h4>
+																		<br>
+																		<p class="tae-p-1">* 5,000점 이상부터 1,000점 단위로 전환가능</p>
+																		<br>
+																		<div class="input-group mb-3" style="height:50px;">
+																			<input type="text" class="tae-form-control" id="activityMypage" name="resPoint" th:placeholder="|가용 활동점수 ${#numbers.formatInteger(memberInfo.availableActivityPoint, 0, 'COMMA')} 점|"  aria-label="Recipient's username" aria-describedby="button-addon2">
+																			<button class="btn btn-outline-secondary" type="button" id="changepoint">환전요청</button>
+																		</div>
+																	</div>
+																</div>
+														</div>
+													</div>
+														<div id="activityList">
+															<div>
+																<h4 style="padding-left:30px;font-weight:bold;">포인트 정산 및 환전 내역</h4>
+																<hr>
+																	<ul class="scroll type3" id="accumList">
+																		<li class="activity1" th:each="pol:${pointList}">
+																		<span style="font-weight:bold;font-size:large;" th:text="${pol.historyType}"></span>
+																		<span class="increase-point" th:if="${pol.accType} == '0'" th:text="|+ ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
+																		<span class="decrease-point" th:unless="${pol.accType} == '0'" th:text="| ${#numbers.formatInteger(pol.incDecPoint, 0, 'COMMA')}P |"></span>
+																		<br>
+																		<span class="tae_date" th:text="${#dates.format(pol.historyDate, 'yy-MM-dd')}">[[${pol.historyDate}]]</span>
+																		<hr>
+																		</li>
+																	</ul>
+																
+															</div>
+														</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">닫기</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달 끝 -->
+									
+								</div>
+							</div>
+						</div>
+						<!-- 활동점수 -->
+						<div class="tae-container4">
+							<div class="row" id="tae-row">
+								<div class="tae-box1 col-1">
+									<img class="img1" src="commonResource/icon/activity.png">
+								</div>
+								<div class="tae-box2 col-2" id="tae-box2">
+									<h6 class="tae-h6">내 활동 관리</h6>
+									<h6 class="card-text">활동/등급 관리</h6>
+								</div>
+								<div class="col-1" id="tae-col-1">
+									<!-- 모달버튼 -->
+									<button type="button" class="btn btn-modal" id="tae-modal-btn"
+										data-bs-toggle="modal" data-bs-target="#activity">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+									<!-- 모달시작 -->
+									<div class="modal fade" id="activity" tabindex="-1"
+										role="dialog" aria-labelledby="activityModalLabel"
+										aria-hidden="true">
+										<div class="modal-dialog modal-xl" role="document">
+											<div class="modal-content">
+												<div class="modal-header" style="height:90px;">
+													<h3 class="modal-title" id="activityModalLabel"
+														style="font-weight: bold;">
+														<img src="commonResource/icon/activity.png"
+															style="width: 70px; height: 70px;">내활동관리
+													</h3>
+												</div>
+												<div class="modal-body">
+													<div class="d-flex" style="hegiht:600px;">
+														<div class="activity-image" style="width:350px;hegiht:700px;padding-left:100px;margin-top:-20px;">
+															<img th:src="|commonResource/gradeimage/${memberInfo.gradeName}.png|" style="width:210px;margin-top:20px;margin-left:20px;padding-top: 30px;">
+															<h4 style="text-align:center;font-weight:bold;padding-top:20px;">내 등급</h4>
+														</div>
+														<div class="grade" style="hegiht:700px;padding-left:150px;margin-top: -20px;">
+															<div class="point-acc-1" style="width:750px;hegiht:450px;margin-top:40px;">
+																<div class="grade">
+																	<div class="gradeinfo" style="float:left;">
+																		<img class="gradeimage" src="commonResource/gradeimage/루키.png">
+																	</div>
+																	<div class="gradecontent" style="display:inline-block;padding-left:20px;" >
+																		<h5 class="grade-h5" style="font-weight:bold;padding-top:9px;">LV1. 루키</h5>
+																		<br>
+																		<p class="grade-p" style="margin-top:-30px;">가입한 모든 회원</p>
+																	</div>
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/브론즈.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV2. 브론즈</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 20개 이상이면서 누적 활동점수 30,000점 이상인 회원</p>
+																	</div>
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/실버.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV3. 실버</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 100개 이상이면서 누적 활동점수 200,000점 이상인 회원</p>
+																	</div>																
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage" src="commonResource/gradeimage/골드.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV4. 골드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 500개 이상이면서 누적 활동점수 500,000점 이상인 회원</p>
+																	</div>	
+																</div>
+																<div class="grade">
+																	<div class="gradeinfo">
+																		<img class="gradeimage"  src="commonResource/gradeimage/다이아몬드.png">
+																	</div>
+																	<div class="gradecontent">
+																		<h5 class="grade-h5">LV5. 다이아몬드</h5>
+																		<br>
+																		<p class="grade-p">작성된 질의글 및 답변이 1000개 이상이면서 누적 활동점수 1,000,000점 이상인 회원</p>
+																	</div>	
+																</div>
+															</div>
+															
+														</div>
+													</div>
+													<div id="activityList">
+															<div>
+																<h4 class="tae-h4-3">내 활동 내역</h4><hr>
+																	<ul id="accumList2" class="scroll type3" style="overflow-y: scroll; height: 300px; overflow-x: hidden;">
+																		<li class="activity2" th:each="acp:${activityList}">
+																			<span style="font-weight:bold;font-size:large;" th:if="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 증가되었습니다.|"></span>
+																			<span style="font-weight:bold;font-size:large;" th:unless="${acp.incDecActivityPoint} >= 0" th:text="|${acp.historyType}로 인하여 활동점수가 차감되었습니다.|"></span>
+																			<span class="increase-point" th:if="${acp.incDecActivityPoint} >= '0'" th:text="|+ ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점 |"></span>
+																			<span class="decrease-point" th:unless="${acp.incDecActivityPoint} >= '0'" th:text="| ${#numbers.formatInteger(acp.incDecActivityPoint, 0, 'COMMA')}점|"></span>
+																			<br>
+																			<span class="tae_date" th:text="${#dates.format(acp.activityPointDate, 'yy-MM-dd')}">[[${acp.activityPointDate}]]</span>
+																			<hr>
+																		</li>
+																	</ul>
+																
+															</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">닫기</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달 끝 -->
+									<!-- 정산 계좌 Modal -->
+									
+										<div th:if="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											      </div>
+											      <div class="modal-body">
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+												      	<div class="bankcard">
+												       		<p style="text-align:center;color:#979da9;">"현재 등록된 계좌가 없습니다."</p>
+													        <button type="button" class="btn btn-primary" style="padding-left: 150px;text-align:center;background-color:#fff;color:#979da9;border:0px;" 
+													        th:onclick="goRegAccount()">계좌 등록하러가기 〉</button>
+												       	</div>
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
+										<div th:unless="${#lists.size(accountList)} == 0">
+											<div class="modal fade" id="accountList" tabindex="-1" aria-labelledby="accountApproveLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h3 class="modal-title fs-5" id="accountApproveLabel">정산 받을 계좌를 선택해주세요</h3>
+											      </div>
+											      <div class="modal-body">
+											       	<h5 style="font-weight:bold;color:#54545d;">은행선택</h5>
+														<div class="bank" th:id="${acc.accountNo}" th:each="acc:${accountList}"  >
+												       		<button type="button" style="border:0;background-color:transparent;"
+												       		 th:onclick="choiceAccount([[${acc.accountNo}]])">
+												       			<img class="tae-bank-1" th:src="|commonResource/bankImage/${acc.bankName}.png|">
+													       		<p th:text="${acc.bankName}" style="float:left;padding-left:12px;">/</p>
+															</button>											       		
+												       </div>												       
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <button type="button" th:onclick="sendSettlementRequest()" class="btn btn-primary">정산요청</button>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 회원정보수정 -->
+						<div class="tae-container4">
+							<div class="row" id="tae-row">
+								<div class="tae-box1 col-1">
+									<img class="img1" src="commonResource/icon/modifyinfo.png">
+								</div>
+								<div class="tae-box2 col-2" id="tae-box2">
+									<h6 class="tae-h6">회원정보수정</h6>
+									<h6 class="card-text">정보,비밀번호</h6>
+								</div>
+								<div class="col-1" id="tae-col-1">
+									<!-- 모달버튼 -->
+									<button type="button" class="btn btn-modal"  id="tae-modal-btn"
+										data-bs-toggle="modal" data-bs-target="#modify">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+									<!-- 모달시작 -->
+									<div class="modal fade" id="modify" tabindex="-1" role="dialog"
+										aria-labelledby="modifyModalLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h3 class="modal-title" id="modifyModalLabel"
+														style="font-weight: bold;">
+														<img src="/commonResource/icon/modifyinfo.png"
+															style="width: 70px; height: 70px;">회원정보수정
+													</h3>
+												</div>
+												<!--/* 회원정보수정모달영역 전민교가 연동하기로함 -> 완료 */-->
+												<div class="modal-body">
+													<!--/*  */-->
+													<div class="d-flex justify-content-center">
+														<button type="button" id="modAcc0" class="btn" style="width:49%; border:1px solid #979da9; background-color:#3e6ce3; color:white;" onclick="changeModifyAccountView('0')">회원정보 수정</button>
+														<button type="button" id="modAcc1" class="btn" style="width:49%; border:1px solid #979da9;" onclick="changeModifyAccountView('1')">비밀번호 수정</button>
+													</div>
+													<!--/* 회원정보수정 */-->
+													<div id="modAccDiv0">
+														<div class="my-3">
+															<label for="email" class="px-3">이메일</label>
+															<div class="px-3 mt-2">
+																<input id="email" type="text"
+																	class="px-3 py-2 w-75 min-rounded"
+																	placeholder="ask@help.com" name="email" th:value="${memberInfo.email}">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem;" type="button"
+																	onclick="checkDuplicateEmail()">중복체크</button>
+															</div>
+														</div>
+
+														<div class="my-3">
+															<label for="name" class="px-3">실명</label>
+															<div class="px-3 mt-2">
+																<input id="name" type="text"
+																	class="px-3 py-2 w-75 min-rounded" placeholder="홍길동"
+																	name="name" th:value="${memberInfo.name}">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem; visibility: hidden;">인증하기</button>
+															</div>
+														</div>
+
+														<div class="my-3">
+															<label for="nickname" class="px-3">닉네임</label>
+															<div class="px-3 mt-2">
+																<input id="nickname" type="text"
+																	class="px-3 py-2 w-75 min-rounded"
+																	placeholder="알파벳,한글,숫자 20자 이하입력" name="nickname" th:value="${memberInfo.nickname}">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem;" onclick="checkDuplicateNickname()">중복체크</button>
+															</div>
+														</div>
+
+														<div class="my-3">
+															<p class="px-3 mt-2" style="margin-bottom: 0;">프로필
+																사진 등록</p>
+															<div class="px-3 mt-2">
+																<input class="upload-name px-3 py-2 w-75 min-rounded"
+																	value="" placeholder="첨부파일" id="customFileInput"
+																	disabled> <label for="profileImg"
+																	class="min-small-rounded min-default-color" id="clickFile">파일추가</label>
+																<input id="profileImg" type="file"
+																	class="px-3 py-2 w-25 min-rounded" name="profileImg"
+																	style="display: none;">
+															</div>
+														</div>
+
+														<div class="my-3">
+															<label for="tags" class="px-3">관심
+																주제</label>
+															<div class="mt-1 px-3">
+																<input name='tags' class=min-tagify placeholder='태그추가' data-blacklist='.NET,PHP' id="tags">
+																<button class="min-small-rounded min-default-color"
+																	style="margin-left: 0.3rem; visibility: hidden;">인증하기</button>
+															</div>
+															<p
+																style="color: hsla(220, 30%, 1%, .4); margin-right: 16.5rem;"
+																class="px-3 mt-2">최대 5개까지 등록가능</p>
+														</div>
+													</div>
+													<!--/* 비밀번호 수정 */-->
+													<div id="modAccDiv1" style="display:none;">
+														<div class="container">
+															<form>
+																<div class="my-4 center">
+																	<label for="userpw" class="w-100">새 비밀번호</label>
+																	<div class="mt-1 d-flex justify-content-center">
+																		<input id="userpw" type="password" class="px-3 py-2 min-rounded w-100" name="userpw" placeholder="8자리 이상 기호,영문,숫자 조합 입력" autoComplete="off">
+																	</div>
+																</div>
+																<div class="my-4 center">
+																	<label for="userpwverify" class="w-100">새 비밀번호 확인</label>
+																	<div class="mt-1 d-flex justify-content-center">
+																		<input id="userpwverify" type="password" class="px-3 py-2 min-rounded w-100" name="userpwverify" placeholder="8자리 이상 기호,영문,숫자 조합 입력" autoComplete="off">
+																	</div>
+																</div>
+															</form>
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">닫기</button>
+													<button type="button" class="btn btn-primary" onclick="changeAccountInfo()">변경하기</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달 끝 -->
+								</div>
+								
+							</div>
+						</div>
+						<!-- 위에까지 회원정보 수정 끝 -->
+					</div>
+				</div>
+			</aside>
+		</section>
+		<!-- 메인바디영역 -->
+		<!-- mypage1 -->
+		<div class="container" id="tae-container-3">
+			<div class="container" id="tae-container-1">
+				<div class="card" id="myTabContent">
+					<ul class="nav nav-tabs" id="myTab" role="tablist" style="--bs-nav-tabs-border-width:0px;">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+							data-bs-target="#profile-tab-pane" type="button" role="tab"
+							aria-controls="profile-tab-pane" aria-selected="true"
+							style="width: 380px;">🏃‍♀️내가 주최한 프로젝트</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="tae-profile-tab-2"
+							data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+							type="button" role="tab" aria-controls="home-tab-pane"
+							aria-selected="false" style="width: 380px;" onclick="location.href='/myPage2'">🙋‍♀️내 질답‍통계</button>
+						</li>
+
+					</ul>
+					
+					
+					<h5 style="padding-left:40px;padding-top:30px;font-weight:bold;">최근 주최한 사이드프로젝트 TOP3🏆
+					<button type="button" class="btn btn-modal" id="tae-modal-btn" onclick="gotoMemberProfileSide()">더보기
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+					stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+					</h5>
+					<div class="d-flex" style="margin-top:-20px;">
+						<div class="card" style="box-shadow: 9px 6px 10px 1px #d5d8df;border-radius:30px;width:285px;height:230px;margin-top:30px;margin-left:20px;"th:each="side:${sideList}">
+							<div class="card-body" id="card-1">
+								<ul class="tab-ul-2" style="margin-top:10px;">
+									<li style="margin-top:-10px;" class="clearfix">
+										<p style="font-size:15px;color:#3a3a3a;"> 프로젝트명 |<span style="padding-left:10px;" th:text="${#strings.abbreviate(side.title,10)}"></span></p>
+										<br>
+											
+											<div style="height: 40px;margin-top:20px;">
+												<h6 style="text-align:center;font-weight:bold;overflow:hidden;text-overflow:ellipsis;" th:text="|${#strings.abbreviate(side.projectOutline,20)}|">"[[${side.projectOutline}]]"</h6>
+											</div>
+												<p style="margin-top:30px;color:#3a3a3a;margin-bottom:30px;">개발기간 : [[${side.devPeriod}]] 모집인원 : [[${side.recruitPersonnel}]]</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div style="margin-top:40px;">
+
+						<div class="card d-flex" id="tae-card-2" style="border-radius: 30px;">
+							<div class="card-body" id="tae-card-1">
+								<h5 style="text-align: center; font-weight: bold;">내 관심주제</h5>
+								<ul class="tab-ul" id="topic">
+								</ul>
+							</div>
+						</div>
+						<div class="card d-flex" id="tae-card-2" style="border-radius: 30px;">
+							<div class="card-body" id="tae-card-1">
+								<h5 style="margin-bottom: -8px; font-weight: bold;">
+									😉 이모티콘 구매내역
+									<button type="button" class="btn btn-modal" id="tae-modal-btn"
+										onclick="goEmoShop()" data-bs-toggle="modal"
+										data-bs-target="#bookmark"
+										>
+										더보기
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor"
+											stroke-width="2" stroke-linecap="round"
+											stroke-linejoin="round" class="feather feather-chevron-right">
+										<polyline points="9 18 15 12 9 6"></polyline></svg>
+									</button>
+								</h5>
+									<hr>
+								<ul class="tab-ul-3">
+									<li th:each="emo:${emoInfo}">[[ ${emo.emoName} ]] 
+										<span class="tae-ul-list" th:text="|구매날짜 ${#dates.format(emo.emoBuydate, 'yyyy-MM-dd')}|">
+										[[${emo.emoBuydate}]] </span>
+										<hr>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript" th:inline="javascript">
+	
+	//데이터를 콤마로 분리하여 배열로 변환
+	var hashtag = [[${memberInfo.topicHashtag}]];
+	if(hashtag != null) {
+		var topics = hashtag.split(',');
+		
+		// ul 요소를 가져오기
+		var ul = document.querySelector('#topic');
+		
+		// 각 주제에 대해 li 요소를 생성하여 ul에 추가
+		topics.forEach(function(topic) {
+		    var li = document.createElement('li');
+		    li.textContent = topic.trim(); // 주제 양쪽의 공백 제거
+		    ul.appendChild(li);
+		
+		    // 콤마 추가
+		    ul.insertAdjacentHTML('beforeend', '<span> </span>');
+		});
+		
+		// 마지막 콤마 제거
+		ul.lastElementChild.remove();	
+	}
+	
+	let dbTagList = [[${tagList}]];
+	//tagify
+	var inputElm = document.querySelector('input[name=tags]');
+	
+	let insertTagList = [];
+	// 나중에 바꿔치기해야함.
+	const data = dbTagList;
+	const insertData = []
+	for(let object in data) {
+		insertData.push(data[object].tagName);
+	}
+	whitelist = insertData;//["A# .NET", "A# (Axiom)", "A-0 System", "A+", "A++", "ABAP", "ABC", "ABC ALGOL", "ABSET", "ABSYS", "ACC", "Accent", "Ace DASL", "ACL2", "Avicsoft", "ACT-III", "Action!", "ActionScript", "Ada", "Adenine", "Agda", "Agilent VEE", "Agora", "AIMMS", "Alef", "ALF", "ALGOL 58", "ALGOL 60", "ALGOL 68", "ALGOL W", "Alice", "Alma-0", "AmbientTalk", "Amiga E", "AMOS", "AMPL", "Apex (Salesforce.com)", "APL", "AppleScript", "Arc", "ARexx", "Argus", "AspectJ", "Assembly language", "ATS", "Ateji PX", "AutoHotkey", "Autocoder", "AutoIt", "AutoLISP / Visual LISP", "Averest", "AWK", "Axum", "Active Server Pages", "ASP.NET", "B", "Babbage", "Bash", "BASIC", "bc", "BCPL", "BeanShell", "Batch (Windows/Dos)", "Bertrand", "BETA", "Bigwig", "Bistro", "BitC", "BLISS", "Blockly", "BlooP", "Blue", "Boo", "Boomerang", "Bourne shell (including bash and ksh)", "BREW", "BPEL", "B", "C--", "C++ – ISO/IEC 14882", "C# – ISO/IEC 23270", "C/AL", "Caché ObjectScript", "C Shell", "Caml", "Cayenne", "CDuce", "Cecil", "Cesil", "Céu", "Ceylon", "CFEngine", "CFML", "Cg", "Ch", "Chapel", "Charity", "Charm", "Chef", "CHILL", "CHIP-8", "chomski", "ChucK", "CICS", "Cilk", "Citrine (programming language)", "CL (IBM)", "Claire", "Clarion", "Clean", "Clipper", "CLIPS", "CLIST", "Clojure", "CLU", "CMS-2", "COBOL – ISO/IEC 1989", "CobolScript – COBOL Scripting language", "Cobra", "CODE", "CoffeeScript", "ColdFusion", "COMAL", "Combined Programming Language (CPL)", "COMIT", "Common Intermediate Language (CIL)", "Common Lisp (also known as CL)", "COMPASS", "Component Pascal", "Constraint Handling Rules (CHR)", "COMTRAN", "Converge", "Cool", "Coq", "Coral 66", "Corn", "CorVision", "COWSEL", "CPL", "CPL", "Cryptol", "csh", "Csound", "CSP", "CUDA", "Curl", "Curry", "Cybil", "Cyclone", "Cython", "Java", "Javascript", "M2001", "M4", "M#", "Machine code", "MAD (Michigan Algorithm Decoder)", "MAD/I", "Magik", "Magma", "make", "Maple", "MAPPER now part of BIS", "MARK-IV now VISION:BUILDER", "Mary", "MASM Microsoft Assembly x86", "MATH-MATIC", "Mathematica", "MATLAB", "Maxima (see also Macsyma)", "Max (Max Msp – Graphical Programming Environment)", "Maya (MEL)", "MDL", "Mercury", "Mesa", "Metafont", "Microcode", "MicroScript", "MIIS", "Milk (programming language)", "MIMIC", "Mirah", "Miranda", "MIVA Script", "ML", "Model 204", "Modelica", "Modula", "Modula-2", "Modula-3", "Mohol", "MOO", "Mortran", "Mouse", "MPD", "Mathcad", "MSIL – deprecated name for CIL", "MSL", "MUMPS", "Mystic Programming L"];
+	
+
+	//initialize Tagify on the above input node reference
+	var tagify = new Tagify(inputElm, {
+		enforceWhitelist: true,
+		maxTags: 5, // 최대 태그 갯수 설정가능.
+		// make an array from the initial input value
+		whitelist: whitelist 
+	})
+
+	//Chainable event listeners
+	tagify.on('add', onAddTag)
+  	.on('remove', onRemoveTag)
+  	.on('input', onInput)
+  	.on('edit', onTagEdit)
+  	.on('invalid', onInvalidTag)
+  	.on('click', onTagClick)
+  	.on('focus', onTagifyFocusBlur)
+  	.on('blur', onTagifyFocusBlur)
+  	.on('dropdown:hide dropdown:show', e => e.type)
+  	.on('dropdown:select', onDropdownSelect)
+	
+	var mockAjax = (function mockAjax(){
+		var timeout;
+		return function(duration){
+    		clearTimeout(timeout); // abort last request
+    		return new Promise(function(resolve, reject){
+        	timeout = setTimeout(resolve, duration || 100, whitelist)
+    	})}
+	})()
+	
+	//tag added callback
+	function onAddTag(e){
+		// 이미 추가되었다면 무시.
+		if(insertTagList.indexOf(e.detail.data.value) >= 0) 
+			return;
+		
+		if(insertTagList.length >= 5) {
+			showWarningAlert('최대 5개까지만 등록가능합니다.');
+			for(let i = 0; i < tagify.value.length; i++) {
+	    		if (tagify.value[i].value == e.detail.data.value) {
+	    			tagify.value.splice(i, 1);
+	        		break;
+	    		}
+			}
+		}
+		insertTagList.push(e.detail.data.value); // 데이터 추가하기.
+		//tagify.off('add', onAddTag) // exmaple of removing a custom Tagify event
+	}
+
+	//tag remvoed callback
+	function onRemoveTag(e){
+		//요소 제거
+		for(let i = 0; i < insertTagList.length; i++) {
+    		if (insertTagList[i] == e.detail.data.value) {
+    			insertTagList.splice(i, 1);
+        		break;
+    		}
+		}
+	}
+
+	//on character(s) added/removed (user is typing/deleting)
+	function onInput(e){
+		tagify.settings.whitelist.length = 0; // reset current whitelist
+		tagify.loading(true).dropdown.hide.call(tagify) // show the loader animation
+
+		// get new whitelist from a delayed mocked request (Promise)
+		mockAjax()
+    	.then(function(result){
+        	// replace tagify "whitelist" array values with new values
+        	// and add back the ones already choses as Tags
+        	tagify.settings.whitelist.push(...result, ...tagify.value)
+
+        	// render the suggestions dropdown.
+        	tagify.loading(false).dropdown.show.call(tagify, e.detail.value);
+    	})
+	}
+
+	function onTagEdit(e){
+	}
+
+	//invalid tag added callback
+	function onInvalidTag(e){
+	}
+
+	//invalid tag added callback
+	function onTagClick(e){
+	}
+
+	function onTagifyFocusBlur(e){
+	}
+
+	function onDropdownSelect(e){
+		// 이미 추가되었다면 무시.
+		if(insertTagList.indexOf(e.detail.data.value) >= 0) 
+			return;
+		
+		if(insertTagList.length >= 5) {
+			showWarningAlert('최대 5개까지만 등록가능합니다.');
+			return;
+		}
+		insertTagList.push(e.detail.data.value); // 데이터 추가하기.
+	}
+	
+
+	// tagify 객체생성후 추가.(객체생성후 일정시간 지나야 동작되는듯..)
+	// 기존에 있던거 추가하는법(수정폼이라면 밑의 코드 수행을 if문으로 체크해야함.)
+	setTimeout(function() {
+		const myTagStr = [[${memberInfo.topicHashtag}]];
+		if(typeof myTagStr != 'undefined' && myTagStr != null) {
+			const myTagList = myTagStr.split(',');
+			myTagList.forEach(obj => {
+				tagify.addTags(obj);
+			});
+		}
+	}, 500);
+</script>
+
+<!--/* 개인정보수정 */-->
+<script th:inline="javascript">
+	const memberInfo = [[${memberInfo}]];
+	let originalFileName = null;
+	const pwReg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^])(?=.*[0-9]).{8,30}$/;
+	const checkInfo = {
+		emailDuplicateCheck : false,
+		nicknameDuplicateCheck : false
+	}
+	
+	function changeAccountInfo() {
+		const result = $('#modAccDiv0').css('display');
+		if(result != 'none') { // 개인정보 수정
+			const formData = new FormData();
+			
+			// 변경된것들만 체크해서 요청
+			const inputEmail = $('input[name="email"]').val();
+			if(inputEmail != memberInfo.email) {
+				if(!checkInfo.emailDuplicateCheck) {
+					showWarningAlert('이메일 중복체크 해주세요.');
+					return;
+				}
+				formData.append('email',inputEmail);
+			}
+			
+			const inputName = $('input[name="name"]').val();
+			if(inputName != memberInfo.name) {
+				formData.append('name',inputName);
+			}
+				
+			const inputNickName = $('input[name="nickname"]').val();
+			if(inputNickName != memberInfo.nickname) {
+				formData.append('nickname',inputNickName);
+			}
+			
+			const fileName = $('#customFileInput').val();
+			if(fileName != originalFileName) {
+				const file = $("#profileImg")[0].files[0];
+				formData.append('profileImage',file);
+			}
+			
+			const hashTag = insertTagList.join(',');
+			if(hashTag != memberInfo.topicHashtag) {
+				formData.append('tag', hashTag);
+			}
+			
+			// 값이 있는지 체크
+			let isSendable = false;
+			for(let key of formData.keys()) {
+				isSendable = true;
+				break;
+			}
+			
+			if(!isSendable) {
+				showWarningAlert('변경된 정보가 없습니다.');
+				return;
+			}
+			else {
+				formData.append(csrfPara, csrfToken);
+				$.ajax('/changeAccountInfo', {
+					type : "POST",
+					data : formData,
+					contentType : false,
+					processData : false  
+			    })
+			    .done(res => {
+			    	if(res.result == "200") {
+			    		window.location.href = window.location.href;
+			    		return;
+			    	}
+			    })
+			    .fail(err => {
+			    	showWarningAlert('다시 시도해주세요.');
+			    })
+			}
+		}
+		else { // 비밀번호 변경
+			const userPw = $('input[name="userpw"]').val();
+			const userPwVerify = $('input[name="userpwverify"]').val();
+			if(userPw == '' || userPwVerify == '') {
+				showWarningAlert('변경할 비밀번호를 입력해주세요');
+				return;
+			}
+			
+			if(userPw != userPwVerify) {
+				showWarningAlert('비밀번호가 일치하지 않습니다.');
+				return;	
+			}
+			
+			if(!pwReg.test(userPw)) {
+				showWarningAlert('비밀번호 양식에 맞추어 작성해주세요.');
+				return;	
+			}
+			
+			let object = {
+				password : userPw,
+				passwordVerify : userPwVerify
+			}
+			
+			$.ajax('/changePasswordMypage', {
+				type : "POST",
+				data : object,
+				beforeSend : function(xhr){
+					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+				}
+		    })
+		    .done(res => {
+		    	if(res.result == "200") {
+		    		showSuccessAlert('변경 성공!');
+		    		$('input[name="userpw"]').val('');
+		    		$('input[name="userpwverify"]').val('');
+		    	}
+		    	else {
+		    		showFailAlert('비밀번호 변경에 실패했습니다.');
+		    	}
+		    })
+		    .fail(err => {
+		    	showWarningAlert('다시 시도해주세요.');
+		    })
+		}
+		
+		
+	}
+	
+	if(memberInfo.profileImage != null) {
+		originalFileName = memberInfo.profileImage.split('_').slice(2).join('');
+		$('#customFileInput').val(originalFileName);	
+	}
+	
+	
+	const allowImgExtension = ['jpg','jpeg','png'];
+	$("#profileImg").on('change', (e) => {
+		const fileName = $("#profileImg")[0].files[0].name;
+		const extensionName = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase();
+	
+		if(allowImgExtension.indexOf(extensionName) < 0) {
+			showWarningAlert('이미지파일만 삽입해주세요');
+			return;
+		}
+	
+		$('#customFileInput').val($("#profileImg")[0].files[0].name);
+	})
+	
+	$("input[name='nickname']").on('change', (e) => {
+		checkInfo.nicknameDuplicateCheck = false;
+	})
+	
+	$("input[name='email']").on('change', (e) => {
+		checkInfo.emailDuplicateCheck = false;
+	})
+
+	function changeModifyAccountView(curView) {
+		let notHighlitView = curView == '0' ? "1" : "0"; 
+		$('#modAcc' + curView).css('background-color','#3e6ce3');
+		$('#modAcc' + curView).css('color','white');
+		$('#modAcc' + notHighlitView).css('background-color','');
+		$('#modAcc' + notHighlitView).css('color','black');
+		$('#modAccDiv' + curView).css('display', 'block');
+		$('#modAccDiv' + notHighlitView).css('display', 'none');
+	}
+	
+	// 닉네임 중복체크
+	function checkDuplicateNickname() {
+		const reqNickname = $('input[name="nickname"]').val();
+		if(reqNickname == '' || reqNickname.length > 20) {
+			showWarningAlert('닉네임 길이제한 확인해주세요.');
+			return;
+		}
+		
+		const url = "/checkNickname?nickName="+reqNickname;
+		$.ajax(url,{
+	        type : "GET",
+	    })
+	    .done(res => {
+	    	if(res.result == "200") {
+	    		showSuccessAlert('사용가능한 닉네임 입니다.');
+	    		//$("input[name='nickname']").prop("disabled", true);
+	    		checkInfo.nicknameDuplicateCheck = true;
+	    	}
+	    	else {
+	    		showFailAlert('이미 사용중인 닉네임 입니다.');
+	    	}
+	    })
+	    .fail(err => {
+	    	showWarningAlert('다시 시도해주세요.');
+	    })
+	}
+	
+
+	function checkDuplicateEmail() {
+		const reqEmail = $('input[name="email"]').val();
+		const regEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+		
+		if(!regEmail.test(reqEmail)) {
+			showWarningAlert("이메일 양식에 맞춰 작성해주세요.");
+			return;
+		}
+		
+		const url = "/checkEmail?email="+reqEmail;
+		
+		$.ajax(url,{
+	        type : "GET",
+	    })
+	    .done(res => {
+	    	if(!res.result) {
+	    		showSuccessAlert('사용가능한 이메일 입니다.');
+	    		checkInfo.emailDuplicateCheck = true;
+	    	}
+	    	else {
+	    		showFailAlert('사용불가능한 이메일 입니다.');
+	    	}
+	    })
+	    .fail(err => {
+	    	showWarningAlert('다시 시도해주세요.');
+	    })
+	}
+</script>
+
+<script type="text/javascript" th:inline="javascript">
+	
+let csrfPara = $('meta[name="csrfPara"]').attr("content");
+let csrfToken = $('meta[name="csrf"]').attr("content");
+	const memberno = [[${session.member.memberNo}]]
+	function goEmoShop(){
+		location.href = '/emoBuyList';
+	}
+	
+	
+	//활동점수환전
+	$('#changepoint').on('click', pointUpdateAjax);
+	
+		function pointUpdateAjax(event){
+			if (!validation()) return;
+			let resPoint = $('input[name="resPoint"]');
+			let obj = {
+				resPoint : resPoint.val(),
+			}
+			//post 에서만 사용
+			obj[csrfPara] = csrfToken;
+			
+			$.ajax('/updateMemberPoint',{
+				type:"POST",
+				data : obj				
+			}).done(result =>{
+				showSuccessAlert('정상적으로 환전되었습니다.');
+				
+				function dateFormat(date) {
+					let dateFormat2 = date.getFullYear() +
+						'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+						'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+					return dateFormat2;
+				}
+
+				const toDate = dateFormat(new Date());
+				const commaIncDecPoint = Number(resPoint.val()).toLocaleString();
+				
+				const commaActivityPoint = Number(result.memberInfo.availableActivityPoint).toLocaleString();
+				const commaAccummPoint = Number(result.memberInfo.availableAccumPoint).toLocaleString();
+				const commaTotalPoint = Number(result.memberInfo.acoTotal).toLocaleString();
+				const liString = `
+									<li class="activity1">
+										<span style="font-weight:bold;font-size:large;">포인트 전환</span>
+										<span class="increase-point">+ ${commaIncDecPoint}P</span>
+										<br>
+										<span class="tae_date">${toDate}</span>
+										<hr>
+									</li>`;
+				
+				$('#activityMypage').val('');
+				
+				
+				const accumList = $('#accumList');
+				accumList.prepend(liString);
+				
+				const liString2 = `
+									<li class="activity2">
+										<span style="font-weight:bold;font-size:large;">포인트 전환으로 인하여 활동점수가 차감되었습니다.</span>
+										<span class="decrease-point">- ${commaIncDecPoint}점</span>
+										<br>
+										<span class="tae_date">${toDate}</span>
+										<hr>
+									</li>`;
+					
+				$('#activityMypage').val('');
+				
+				const accumList2 = $('#accumList2');
+				accumList2.prepend(liString2);
+				$('#accumPointMypage').val('');
+				
+				$('#pointMypage').text(commaTotalPoint);
+				$('#totalPointMypage').text(commaTotalPoint);
+				$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+				$('#activityMypage').attr("placeholder", "가용 활동점수 " + commaActivityPoint + " 점");
+				
+			}).fail(err => console.log(err));
+		}
+			
+		function validation(){
+			let resPoint = $('input[name="resPoint"]');
+			const numPoint = Number(resPoint.val());
+			if(numPoint < 5000 || (numPoint % 1000) != 0){
+				showWarningAlert("5,000점 이상부터 1,000점 단위로 환전 가능합니다");
+				return false;
+			}
+			return true;
+		}	
+		
+	   $('#accountApprove').on('click', validation2);
+		
+	   // 계좌모달
+	   const myAccountModal = new bootstrap.Modal('#accountList', {
+		  keyboard: false
+	   })
+	   
+	   function validation2(){
+		   const memberGrade = [[${memberInfo.memberLevel}]]
+		   let accPoint = $('input[name="accPoint"]').val();
+		   accPoint = Number(accPoint);
+		   if(memberGrade == 'K001' && (accPoint < 15000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'루키'등급은 15,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K002' && (accPoint < 12000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'브론즈'등급은 12,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K003' && (accPoint < 9000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'실버'등급은 9,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K004' && (accPoint < 7000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'골드'등급은 7,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }else if(memberGrade == 'K005' && (accPoint < 5000 || (accPoint % 1000) != 0)){
+			   showWarningAlert("'다이아몬드'등급은 5,000P부터 1,000점 단위로 정산요청가능");
+			   return false;
+		   }
+		   
+		   const modalToggle = document.getElementById('accountApprove');		   
+		   myAccountModal.show(modalToggle);
+		   return true;
+	   }
+	   
+		let choiceAccountObj = null;
+		function sendSettlementRequest(){
+			if (choiceAccountObj == null){
+				showWarningAlert('정산받을 계좌를 선택해주세요.');
+				return;
+			}
+			
+			let accPoint = $('input[name="accPoint"]');
+			let processStatus = 'O001';
+			let obj = {
+				memberNo : memberno,
+				reqAccount : choiceAccountObj,
+				processStatus : processStatus,
+				settlementReqPoint : accPoint.val()
+			}
+			
+			$.ajax('/updateSettlement', {
+		        type: 'POST',
+		        data: obj,
+		        beforeSend : function(xhr){
+					xhr.setRequestHeader("X-CSRF-Token", csrfToken); 
+				}
+			}).done(result =>{
+				showSuccessAlert('정산 요청이 전달되었습니다.');
+				function dateFormat(date) {
+					let dateFormat2 = date.getFullYear() +
+						'-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
+						'-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
+					return dateFormat2;
+				}
+
+				const toDate = dateFormat(new Date());
+				const originalIntValue = Number(accPoint.val());
+				accPoint = originalIntValue.toLocaleString();
+				
+				const commaAccummPoint = Number(result.memberInfo2.availableAccumPoint - originalIntValue).toLocaleString();
+				const commaTotalPoint = Number(result.memberInfo2.acoTotal - originalIntValue).toLocaleString();
+				const liString = `
+									<li class="activity1">
+										<span style="font-weight:bold;font-size:large;">정산 요청</span>
+										<span class="decrease-point">- ${accPoint}P</span>
+										<br>
+										<span class="tae_date">${toDate}</span>
+										<hr>
+									</li>`;
+				
+				$('#activityMypage').val('');
+				
+				
+				const accumList = $('#accumList');
+				accumList.prepend(liString);
+				
+				$('#accumPointMypage').val('');
+				
+				$('#pointMypage').text(commaTotalPoint);
+				$('#totalPointMypage').text(commaTotalPoint);
+				$('#accumPointMypage').attr("placeholder", "정산 가능포인트 " + commaAccummPoint + " P");
+				
+				const modalToggle = document.getElementById('accountApprove');		   
+				myAccountModal.hide(modalToggle);
+				
+			}).fail(err => console.log(err));
+		        
+		}
+		
+		
+		function goRegAccount(){
+			window.location.href="/accountConnect";
+		}
+		
+		
+	function choiceAccount(accountObj){
+		if(choiceAccountObj != null  || choiceAccountObj == accountObj){
+			$('#'+ choiceAccountObj).css("border", "");
+		if(choiceAccountObj == accountObj) {
+			choiceAccountObj = null;
+			return;
+		}
+	}	
+	choiceAccountObj = accountObj
+			
+	$('#'+ accountObj).css("border", "1px solid #aebfec");
+			
+	}
+	
+	function gotoMemberProfileSide() {
+		
+		window.location.href = "/member/" + memberno + "?pg=1&tp=2"
+	}
+
+</script>

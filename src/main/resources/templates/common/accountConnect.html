@@ -1,0 +1,130 @@
+<div xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{layout/member/mainTemplate.html}"
+	layout:fragment="content">
+
+	<div class="d-flex">
+
+		<aside th:replace="@{layout/member/pointAsideMain.html}"></aside>
+
+		<section class="main">
+			<div class="park_pointCharegingMain" style="height: 800px;">
+				<div style="width: 80%; margin: 0 auto; margin-top: 30px; margin-bottom: 30px;">
+					<div class="park_chargePointSelect">
+						<div class="park_input-container">
+							<h4 style="font-weight: bold;">간편 계좌 등록</h4>
+						</div>
+						<hr style="margin-top: 0;">
+						<h6>본인 명의 자유입출금 계좌만 등록할 수 있어요</h6>
+						<div class="park_accountSelect row" style="justify-content: center;">
+							<br> <br>
+							<h3>은행 선택</h3>
+							<hr><br>
+					<div class="park_bank col-3"
+							th:data-bankcode="${bank.bankCode}" th:data-bankname="${bank.bankName}"  th:each="bank : ${getBankList}">
+								<div class="bankImage"
+									style="display: flex; justify-content: center;">
+									<img th:src="|/commonResource/bankImage/${bank.bankName}.png|" th:alt="${bank.bankName}"
+										style="height: 40px; margin-top: 10px;">
+								</div>
+								<p>[[${bank.bankName}]]</p>
+							</div>
+						
+					</div>
+					<p class="selected-bank text-center" style="color: #808080;">선택:</p>
+				</div>
+				<div class="nextBtn" style="text-align: right; margin-right : 80px;">
+				<button style="font-weight : bold; background-color : transparent; color : #3e6ce3; border : none;" onclick="nextStep()">다음 →</button>
+				</div>
+			</div>
+		</div>
+
+	</section>
+</div>
+
+</div>
+<script th:inline="javascript">
+	
+	function nextStep() {
+		const idName = document.querySelector('.selected-bank').id;
+		if(idName == '') {
+			showWarningAlert('은행을 선택해주세요!');
+			return;
+		}
+		const bankList = idName.split('&');
+		
+		window.location.href = "/insertAccountNo?bankCode=" + bankList[1] + "&bankName=" + bankList[0];
+		console.log(idName.split('&'));
+		
+	}
+
+</script>
+
+<style>
+
+</style>
+
+<script>
+	function formatNumber(input) {
+		let numbers = input.value.replace(/\D/g, '');
+
+		// 문자열을 정수로 변환(10진수).
+		let integerNumber = parseInt(numbers, 10);
+
+		// 숫자가 1,000,000을 초과하는 경우 1,000,000으로 설정.
+		if (integerNumber > 1000000) {
+			integerNumber = 1000000;
+		}
+
+		// 숫자를 콤마 형식으로 변환하여 input 값으로 설정.
+		input.value = integerNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+				',');
+	}
+	
+	// 은행 요소를 선택합니다.
+	const bankElements = document.querySelectorAll('.park_bank');
+
+	// 각 은행 요소에 클릭 이벤트를 추가합니다.
+	bankElements.forEach((bankElement) => {
+	  bankElement.addEventListener('click', () => {
+	    // 클릭된 은행의 데이터 속성(th:data-bankcode)에서 은행명을 가져옵니다.
+	 
+	    const selectedBank = bankElement.getAttribute('data-bankName');
+	    const selectedCode = bankElement.getAttribute('data-bankCode');
+
+	    // 선택된 은행명을 원하는 위치에 표시합니다.
+	    const selectionText = document.querySelector('.selected-bank');
+	    //removeAttribute : 새 은행을 선택할 때마다 이전에 선택된 은행의 id 정보를 제거하기 위해 사용
+	    selectionText.removeAttribute("id");
+	    selectionText.id = selectedBank + '&' + selectedCode; 
+	    selectionText.textContent = `선택: ${selectedBank}`;
+	  });
+	});
+	
+	// 은행 요소를 선택합니다.
+	const bankElements2 = document.querySelectorAll('.park_bank');
+
+	// 이전에 선택한 은행 요소를 저장할 변수를 초기화합니다.
+	let previousSelectedBank = null;
+
+	// 각 은행 요소에 클릭 이벤트를 추가합니다.
+	bankElements2.forEach((bankElement) => {
+	  bankElement.addEventListener('click', () => {
+	
+
+
+	    // 클릭 시 푸른 테두리를 추가합니다.
+	    bankElement.style.border = '2px solid #3e6ce3';
+
+	    // 이전에 선택한 은행의 테두리를 제거합니다.
+	    if (previousSelectedBank !== null) {
+	      previousSelectedBank.style.border = '1px solid #BDBDBD';
+	    }
+	    
+
+	    // 현재 선택한 은행을 이전에 선택한 은행 변수에 저장합니다.
+	    previousSelectedBank = bankElement;
+	  });
+	});
+
+</script>

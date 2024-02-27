@@ -1,0 +1,39 @@
+<div 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="@{layout/member/mainTemplate.html}"
+	layout:fragment="content"	  
+	style="margin: 0 auto;"
+>
+	<section>
+		<div id="qna_banner" style="width:1100px;">
+			<h3>랭킹</h3>
+			<p style="color:#76767e">좋은 질문에 좋은 답변으로 함께 토론해봐요 </p>
+		</div>
+
+		<div style="width:800px; margin:0 auto;">
+			<hr>
+			<div class="row">
+				<div class="col-2" style="text-align:center; margin:auto;"><h5 style="font-weight:bold">순위</h5></div>
+				<div class="col-2" style="text-align:center; margin:auto;"><h5 style="font-weight:bold">닉네임</h5></div>
+				<!-- <div class="col-2" style="text-align:center; margin:auto;"><h5 style="font-weight:bold">활동 등급</h5></div> -->
+				<div class="col-4" style="text-align:center; margin:auto;"><h5 style="font-weight:bold">실시간 활동 점수</h5></div>
+			</div>
+			<hr>
+			<div class="row" th:each = "ranking : ${mainRanking}"> 
+				<div class="col-2" style="text-align:center; margin: 15px auto;"><h6 th:text="${ranking.rank}" style="">순위</h6></div>
+				<div class="col-2" style="text-align:center; margin:auto;">
+					<img class="qna_profile" th:src="|/upload/profile/${ranking.profileImage}|" alt="profile">
+					<h6 th:text="${ranking.nickname}" style="">닉네임</h6>
+				</div>
+				<!-- <div class="col-2" style="text-align:center; margin:auto;"><h6 style="">활동 등급</h6></div> -->
+				<div class="col-4" style="text-align:center; margin:auto;"><h6 style="">[[${ranking.activityPoint}]]점</h6></div>
+			</div>
+		<hr>
+		</div>
+	</section>
+</div>
+
+<script th:inline="javascript">
+	const test = [[${mainRanking}]];
+</script>

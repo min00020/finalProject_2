@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.yedamFinal.aco.question.mapper.QuestionMapper">
+	<!-- 질문글 전체조회 -->
+	<select id="getQuestionList" resultType="QuestionVO">
+	  SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	                SELECT m.id,
+	                	   m.nickname,
+	                	   m.ACCUM_ACTIVITY_POINT,
+	                	   m.profile_image,
+ 	                       q.QUESTION_BOARD_NO,
+	                       q.MEMBER_NO,
+	                       SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+	                       q.POINT,
+	                       q.TITLE,
+	                       q.TAG,
+	                       q.CONTENTS,
+	                       q.WRITE_DATE,
+	                       q.VIEW_CNT,
+	                       q.RECOMMEND_CNT,
+	                       q.BOOKMARK_CNT,
+	                       q.ANSWER_CNT
+	                 FROM QUESTION_BOARD q
+	                 JOIN MEMBER m
+	           		   ON q.MEMBER_NO = m.MEMBER_NO
+	         <if test='search != null'>
+	            WHERE UPPER(q.TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	         </if>
+	            ORDER BY WRITE_DATE DESC
+	             
+	            )B	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	
+	<select id="getQuestionCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+         <if test='search != null'>
+	        WHERE UPPER(TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	     </if>
+	</select>
+	
+	<!-- 질문글 분류 조회 -->
+	<select id="getQuestionListTopic" resultType="QuestionVO">
+	 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+			SELECT m.id, 
+				   m.profile_image,
+				   m.nickname,
+				   m.ACCUM_ACTIVITY_POINT,
+			       q.QUESTION_BOARD_NO,
+			       q.MEMBER_NO,
+			       q.TOPIC,
+			       q.POINT,
+			       q.TITLE,
+			       q.TAG,
+			       q.CONTENTS,
+			       q.WRITE_DATE,
+			       q.VIEW_CNT,
+			       q.RECOMMEND_CNT,
+			       q.BOOKMARK_CNT,
+			       q.ANSWER_CNT
+			       
+			 FROM QUESTION_BOARD q
+			 JOIN MEMBER m  ON q.MEMBER_NO = m.MEMBER_NO
+			 
+			WHERE q.TOPIC = #{topic}
+		<if test='search != null'>
+	          AND UPPER(q.TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	    </if>
+			ORDER BY WRITE_DATE DESC
+			
+		) B  ) A 
+		<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+		]]>
+	</select>
+	
+	<select id="getQuestionTopicCount" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+            WHERE TOPIC = #{topic}
+         <if test='search != null'>
+	          AND UPPER(TITLE) LIKE '%' || UPPER(#{search}) || '%'
+	     </if>
+	</select>
+	
+	
+	<select id="getQuestionListByMember" resultType="QuestionVO">
+		SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	  
+	                SELECT m.nickname, 
+	                	m.profile_image,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    SUBCODE_TO_NAME(q.TOPIC) as TOPIC,
+	                    q.POINT,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    q.WRITE_DATE,
+	                    q.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.BOOKMARK_CNT,
+	                    q.ANSWER_CNT
+	            FROM QUESTION_BOARD q
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            WHERE q.member_no = #{memNo}
+	            ORDER BY WRITE_DATE DESC
+	             
+	            
+	            )B	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	
+	<select id="getQuestionListCntByMember" resultType="int">
+		SELECT 
+        	COUNT(*) AS CNT
+            FROM QUESTION_BOARD
+            WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="getAnswerListByMember" resultType="QuestionVO">
+		 SELECT  *  FROM (	        SELECT             ROWNUM AS RN,B.*	            FROM(
+	  
+	  
+	                SELECT m.nickname, 
+	                	m.profile_image,
+	                    q.ANSWER_BOARD_NO,
+	                    q.QUESTION_BOARD_NO,
+	                    q.MEMBER_NO,
+	                    q.TITLE,
+	                    q.TAG,
+	                    q.CONTENTS,
+	                    q.WRITE_DATE,
+	                    P.VIEW_CNT,
+	                    q.RECOMMEND_CNT,
+	                    q.ADOPT_STATUS
+	            FROM answer_board q
+	            JOIN QUESTION_BOARD P
+	            ON Q.QUESTION_BOARD_NO = P.QUESTION_BOARD_NO
+	            JOIN MEMBER m
+	            ON q.MEMBER_NO = m.MEMBER_NO
+	            WHERE q.MEMBER_NO = #{memNo}
+	            ORDER BY WRITE_DATE DESC
+	             
+	            
+	            )B	        )A
+	<![CDATA[
+        	WHERE RN > ((#{pageNo}-1) * 5) AND RN <= (#{pageNo}) * 5
+	]]>
+	</select>
+	
+	<select id="getAnswerListCntByMember" resultType="int">
+		SELECT COUNT(*) AS CNT
+			FROM answer_board
+			WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	
+	<!-- 질문글,답변글 단건조회 -->
+	<select id="getQuestionInfo" resultType="QuestionVO">	
+		SELECT m.ID, 
+			   m.nickname, 
+			   m.PROFILE_IMAGE,SUBCODE_TO_NAME(m.MEMBER_LEVEL) as member_level,
+		 	   m2.ID as answer_id,
+		 	   m2.nickname as answer_nickname,  
+		 	   m2.PROFILE_IMAGE as answer_profile_image,
+		 	   SUBCODE_TO_NAME(m2.MEMBER_LEVEL) as answer_member_level,
+		 	   
+			   q.QUESTION_BOARD_NO,
+			   q.MEMBER_NO,
+			   q.TOPIC,
+			   q.POINT,
+			   q.TITLE,
+			   q.TAG,
+			   q.CONTENTS,
+			   q.WRITE_DATE,
+			   q.VIEW_CNT,
+			   q.RECOMMEND_CNT,
+			   q.BOOKMARK_CNT,
+			   q.ANSWER_CNT,
+			   q.REPLY_CNT,
+			   
+	           a.ANSWER_BOARD_NO,a.QUESTION_BOARD_NO,
+	           a.MEMBER_NO as answer_member_no,
+	           a.TITLE as answer_title,
+	           a.CONTENTS as answer_contents, 
+	           a.WRITE_DATE as ANSWER_WRITE_DATE,
+	           a.RECOMMEND_CNT,
+	           a.ADOPT_STATUS as answer_adopt_status,
+	           a.REPLY_CNT as answer_reply_cnt,
+	           
+	           d.QUESTION_ADD_NO,
+	           d.ANSWER_BOARD_NO,
+	           d.CONTENTS as add_contents,
+	           d.WRITER_TYPE as add_writer_type,
+	           d.WRITE_DATE as add_write_date, 
+	           d.ADD_STATUS,
+	           d.ADOPT_STATUS as add_adopt_status
+			
+			FROM QUESTION_BOARD q LEFT JOIN MEMBER m          ON q.MEMBER_NO = m.MEMBER_NO
+	                              LEFT JOIN ANSWER_BOARD a    ON q.QUESTION_BOARD_NO = a.QUESTION_BOARD_NO
+	                              LEFT JOIN QUESTION_ADD d    ON a.ANSWER_BOARD_NO = d.ANSWER_BOARD_NO
+	                              LEFT JOIN MEMBER m2         ON a.MEMBER_NO = m2.MEMBER_NO
+	       
+	        WHERE q.QUESTION_BOARD_NO = #{questionBoardNo}
+	        ORDER BY a.ADOPT_STATUS DESC, 
+	        		 a.WRITE_DATE DESC
+	</select>
+	<!-- 개별게시글 북마크 조회/ +1 / -1/ 해당 게시글 cnt update -->
+	<select id="questionBookmarkInfo" resultType="MybookmarkVO">
+		SELECT MEMBER_NO,
+			   QUESTION_BOARD_NO,
+			   REGIST_DATE,
+		       TITLE
+	      FROM MY_BOOKMARK 
+	     WHERE MEMBER_NO = #{memberNo} AND QUESTION_BOARD_NO = #{questionBoardNo}
+	</select>
+	<insert id="insertBookmark" parameterType="MybookmarkVO">
+		INSERT INTO MY_BOOKMARK(
+			   MEMBER_NO,
+			   QUESTION_BOARD_NO,
+			   REGIST_DATE,
+		       TITLE
+		)
+		VALUES(
+			#{memberNo},
+			#{questionBoardNo},
+			#{registDate},
+			#{title}
+		)
+	</insert>
+	<delete id="deleteBookmark">
+		DELETE MY_BOOKMARK
+		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</delete>
+	<update id="updateBookmarkCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET BOOKMARK_CNT = BOOKMARK_CNT + 1 - #{value} 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+
+	<!-- 댓글 / 댓글수 증감-->
+	<update id="updateReplyCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET REPLY_CNT = REPLY_CNT + 1 - #{value} 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	
+	<!-- 질문글 작성 -->
+	<insert id="insertQuestion" parameterType="QuestionVO">
+		INSERT INTO QUESTION_BOARD (
+			    QUESTION_BOARD_NO,
+			    MEMBER_NO,
+			    TOPIC, 
+			    POINT, 
+			    TITLE, 
+			    TAG, 
+			    CONTENTS, 
+			    WRITE_DATE, 
+			    VIEW_CNT, 
+			    RECOMMEND_CNT, 
+			    BOOKMARK_CNT, 
+			    ANSWER_CNT
+	    )
+	    VALUES(
+			    question_board_seq.NEXTVAL, 
+			    #{memberNo}, 
+			    #{topic}, 
+			    #{point}, 
+			    #{title}, 
+			    #{tag},
+			    #{contents},
+			    SYSDATE,
+			    0,
+			    0,
+			    0,
+			    0
+	    )
+	    <selectKey keyProperty="pk" resultType="int" order="AFTER">
+    		SELECT question_board_seq.CURRVAL FROM DUAL
+    	</selectKey>
+	</insert>
+	
+	<!-- 질문글 작성: 포인트차감 -->
+	<update id="updatePoint" parameterType="int">
+		UPDATE MEMBER
+	       SET ACCUM_ACTIVITY_POINT = #{accumActivityPoint} + 50,
+	           AVAILABLE_ACTIVITY_POINT = #{availableActivityPoint} +50,
+		<choose>
+			<when test="((acoPoint - point) >= 0)">
+				ACO_POINT = #{acoPoint} - #{point}
+			</when>
+			<otherwise>
+				ACO_POINT = 0, ACO_MONEY = #{acoMoney} + #{acoPoint} - #{point} 
+			</otherwise>
+		</choose>
+	     WHERE MEMBER_NO = #{memberNo}
+	</update>
+	<!-- 질문글 작성: 활동점수 지급 -->
+	<insert id="updateActivityPoint">
+		INSERT INTO ACTIVITY_POINT_DETAIL(
+		            ACTIVITY_POINT_NO,
+		            MEMBER_NO,
+		            ACCUM_ACTIVITY_POINT,
+		            CUR_ACTIVITY_POINT,
+		            ACTIVITY_POINT_TYPE,
+		            ACTIVITY_POINT_DATE,
+		            INC_DEC_ACTIVITY_POINT
+		)
+		VALUES(
+					activity_point_detail_seq.NEXTVAL,
+					#{memberNo},
+					#{accumActivityPoint},
+					#{curActivityPoint},
+					#{activityPointType},
+					#{activityPointDate},
+					#{incDecActivityPoint}
+		)
+	</insert>
+	
+	<!-- 질문글 수정 -->
+	<update id="updateQuestion" parameterType="QuestionVO">
+		UPDATE QUESTION_BOARD
+		   SET TOPIC = #{topic}, 
+		       POINT = #{point}, 
+		       TITLE = #{title}, 
+		       TAG = #{tag}, 
+		       CONTENTS = #{contents}
+	     WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	
+	<!-- 질문글 삭제 -->
+	<delete id="deleteQuestion">
+		DELETE QUESTION_BOARD
+		WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</delete>
+	
+	<!-- 조회수 -->
+	<update id="updateQuestionViewCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET VIEW_CNT = VIEW_CNT + 1 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	
+	<!-- 1-1.답변글 작성 -->
+	<insert id="insertAnswer" parameterType="QuestionVO">
+		INSERT INTO ANSWER_BOARD (
+			    ANSWER_BOARD_NO, 
+			    QUESTION_BOARD_NO, 
+			    MEMBER_NO, 
+			    TITLE, 
+			    CONTENTS, 
+			    WRITE_DATE, 
+			    ADOPT_STATUS, 
+			    ADD_STATUS
+		)
+		VALUES(
+				answer_board_seq.NEXTVAL, 
+				#{questionBoardNo},
+				#{answerMemberNo}, 
+				#{answerTitle}, 
+				#{answerContents}, 
+				SYSDATE, 
+				'I001',
+				'R001'
+		)
+	</insert>
+	<!-- 1-2. 답변글 작성 : 답변수 +1 -->
+	<update id="plusAnswerCnt" parameterType="int">
+		UPDATE QUESTION_BOARD 
+		   SET ANSWER_CNT = ANSWER_CNT + 1 
+		 WHERE QUESTION_BOARD_NO = #{questionBoardNo}
+	</update>
+	<!-- 1-3. 답변글 작성 : 활동점수 +50점 -->
+	<update id="updateAnsWritePoint" parameterType="int">
+		UPDATE MEMBER
+	       SET ACCUM_ACTIVITY_POINT = #{accumActivityPoint} + 50,
+	           AVAILABLE_ACTIVITY_POINT = #{availableActivityPoint} +50
+	     WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	<!-- 답변글 수정 -->
+	<update id="updateAnswer" parameterType="QuestionVO">
+		UPDATE ANSWER_BOARD 
+		   SET TITLE = #{answerTitle}, 
+			   CONTENTS = #{answerContents}
+	     WHERE ANSWER_BOARD_NO = #{answerBoardNo}
+	</update>
+
+	<!-- 답변글 채택, 채택 답변글 조회 -->
+	<update id="adoptAnswer" parameterType="int">
+		UPDATE ANSWER_BOARD
+		   SET ADOPT_STATUS = 'I002'
+		 WHERE ANSWER_BOARD_NO = #{answerBoardNo}
+	</update>
+	<select id="selectAdoptAnswer" parameterType="int">
+		 SELECT a.ANSWER_BOARD_NO,
+		        a.QUESTION_BOARD_NO,
+		        a.MEMBER_NO,
+		        a.TITLE,
+		        a.TAG,
+		        a.CONTENTS,
+		        a.WRITE_DATE,
+		        a.VIEW_CNT,
+		        a.RECOMMEND_CNT,
+		        a.ADOPT_STATUS,
+		        a.REPLY_CNT,
+		        a.ADD_STATUS,
+		        q.point
+		   FROM ANSWER_BOARD a
+		   JOIN QUESTION_BOARD q ON a.QUESTION_BOARD_NO = q.QUESTION_BOARD_NO
+		  WHERE ANSWER_BOARD_NO = #{ano}
+	</select>
+
+	<!-- 답변글 채택 포인트 지급 -->
+	<update id="updateAdoptPoint" parameterType="int">
+		UPDATE MEMBER
+	       SET ACCUM_ACTIVITY_POINT = #{accumActivityPoint} + 20,
+	           AVAILABLE_ACTIVITY_POINT = #{availableActivityPoint} +20,
+ 			   ACO_POINT = #{acoPoint} + #{point}
+	     WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	
+	<!-- 추가질문답변 등록 -->
+	<insert id="insertQuestionAdd" parameterType="QuestionVO">
+		INSERT INTO question_add(
+		    QUESTION_ADD_NO,
+		    ANSWER_BOARD_NO,
+		    CONTENTS,
+		    WRITER_TYPE,
+		    WRITE_DATE
+		) 
+		VALUES (
+		    question_add_seq.NEXTVAL,
+		    #{answerBoardNo},
+		    #{addContents},
+		    #{addWriterType},
+		    SYSDATE
+		)
+	</insert>
+	
+	<!-- 추가질문 답변채택, 활동점수 지급 -->
+	<update id="adoptAddAnswer" parameterType="int">
+		UPDATE QUESTION_ADD
+   		   SET ADOPT_STATUS = 'S002'
+ 		 WHERE QUESTION_ADD_NO = #{questionAddNo}
+	</update>
+	
+	<select id="mainRanking" parameterType="int">
+   		SELECT ROWNUM, A.* FROM(
+		    SELECT RANK() OVER (ORDER BY ACTIVITY_POINT DESC) as RANK,
+					   MEMBER_NO,
+					   NICKNAME,
+					   ACTIVITY_POINT,
+					   PROFILE_IMAGE
+				  FROM RANK
+				  ORDER BY RANK
+		    ) A
+ 		WHERE ROWNUM <![CDATA[ <= ]]> 5
+	</select>
+	
+	<select id="accumRanking" parameterType="int">
+		SELECT NICKNAME, 
+			   PROFILE_IMAGE, 
+			   SUBCODE_TO_NAME(MEMBER_LEVEL) AS MEMBER_LEVEL, 
+			   ACCUM_ACTIVITY_POINT
+		  FROM MEMBER
+      ORDER BY ACCUM_ACTIVITY_POINT DESC;
+	</select>
+	
+</mapper>
